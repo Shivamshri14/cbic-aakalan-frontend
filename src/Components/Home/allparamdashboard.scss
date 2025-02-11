@@ -1,0 +1,301 @@
+.switches-container {
+    width: 16rem;
+    position: relative;
+    display: flex;
+    padding: 0;
+    position: relative;
+    background-image: linear-gradient(to right, #1A2980 0%, #26D0CE  51%, #1A2980  100%);
+   
+    line-height: 3rem;
+    border-radius: 3rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* input (radio) for toggling. hidden - use labels for clicking on */
+.switches-container input {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+}
+
+/* labels for the input (radio) boxes - something to click on */
+.switches-container label {
+    width: 50%;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    cursor: pointer;
+    color: #fff;
+}
+
+/* switch highlighters wrapper (sliding left / right) 
+    - need wrapper to enable the even margins around the highlight box
+*/
+.switch-wrapper {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    padding: 0.15rem;
+    z-index: 3;
+    transition: transform .5s cubic-bezier(.77, 0, .175, 1);
+    /* transition: transform 1s; */
+}
+
+/* switch box highlighter */
+.switch {
+    border-radius: 3rem;
+    background: #fff;
+    height: 100%;
+}
+
+/* switch box labels
+    - default setup
+    - toggle afterwards based on radio:checked status 
+*/
+.switch div {
+    width: 100%;
+    text-align: center;
+    opacity: 0;
+    display: block;
+   
+     color: #0885ad ;
+    transition: opacity .2s cubic-bezier(.77, 0, .175, 1) .125s;
+    will-change: opacity;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* slide the switch box from right to left */
+.switches-container input:nth-of-type(1):checked~.switch-wrapper {
+    transform: translateX(0%);
+}
+
+/* slide the switch box from left to right */
+.switches-container input:nth-of-type(2):checked~.switch-wrapper {
+    transform: translateX(100%);
+}
+
+/* toggle the switch box labels - first checkbox:checked - show first switch div */
+.switches-container input:nth-of-type(1):checked~.switch-wrapper .switch div:nth-of-type(1) {
+    opacity: 1;
+}
+
+/* toggle the switch box labels - second checkbox:checked - show second switch div */
+.switches-container input:nth-of-type(2):checked~.switch-wrapper .switch div:nth-of-type(2) {
+    opacity: 1;
+}
+
+
+
+
+
+.switches-container2 {
+    width: 18rem;
+    position: relative;
+    display: flex;
+    padding: 0;
+    position: relative;
+    // background: #0885ad;
+    background-image: linear-gradient(to right, #1A2980 0%, #26D0CE  51%, #1A2980  100%);
+    line-height: 3rem;
+    border-radius: 3rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* input (radio) for toggling. hidden - use labels for clicking on */
+.switches-container2 input {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+}
+
+/* labels for the input (radio) boxes - something to click on */
+.switches-container2 label {
+    width: 50%;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    cursor: pointer;
+    color: #fff;
+}
+
+/* switch highlighters wrapper (sliding left / right) 
+    - need wrapper to enable the even margins around the highlight box
+*/
+.switch-wrapper2 {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    padding: 0.15rem;
+    z-index: 3;
+    transition: transform .5s cubic-bezier(.77, 0, .175, 1);
+    /* transition: transform 1s; */
+}
+
+/* switch box highlighter */
+.switch2 {
+    border-radius: 3rem;
+    background: #fff;
+    height: 100%;
+}
+
+/* switch box labels
+    - default setup
+    - toggle afterwards based on radio:checked status 
+*/
+.switch2 div {
+    width: 100%;
+    text-align: center;
+    opacity: 0;
+    display: block;
+    color: #0885ad ;
+   
+    transition: opacity .2s cubic-bezier(.77, 0, .175, 1) .125s;
+    will-change: opacity;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* slide the switch box from right to left */
+.switches-container2 input:nth-of-type(1):checked~.switch-wrapper2 {
+    transform: translateX(0%);
+}
+
+/* slide the switch box from left to right */
+.switches-container2 input:nth-of-type(2):checked~.switch-wrapper2 {
+    transform: translateX(100%);
+}
+
+/* toggle the switch box labels - first checkbox:checked - show first switch div */
+.switches-container2 input:nth-of-type(1):checked~.switch-wrapper2 .switch2 div:nth-of-type(1) {
+    opacity: 1;
+}
+
+/* toggle the switch box labels - second checkbox:checked - show second switch div */
+.switches-container2 input:nth-of-type(2):checked~.switch-wrapper2 .switch2 div:nth-of-type(2) {
+    opacity: 1;
+}
+
+
+.cgst-sec .card {
+    height: 100%;
+    min-height: 300px;
+}
+
+.card.text-white.bg-red {
+    background-color: #fe7869;
+}
+
+.card.text-white.bg-light-blue{
+    background-color: #95e2dc;
+}
+
+.card.text-white.bg-violet{
+    background-color: #d68cf0;
+}
+
+.card.text-white.bg-medium-blue{
+    background-color: #149eca;
+}
+
+.card.text-white.bg-purple{
+    background-color: #0885ad;
+}
+
+.lft-box{
+    font-size: 1.1rem !important;
+    font-weight: 600;
+}
+
+.MuiTooltip-tooltip {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    font-size: 1rem !important;
+  border-radius: 10px !important;
+  padding: 10px 15px !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+  }
+
+
+  .custom-sec .card {
+    height: 100%;
+    min-height: 300px;
+}
+.card.text-white.bg-green {
+    background-color: #5ab7a6;
+}
+
+.bg-red{
+    background-color:#d00000;
+}
+
+.card.text-white.bg-lightblue {
+    background-color: #3399ff;
+}
+
+.card.text-white.bg-sand {
+    background-color: #f9b115;
+}
+
+.card.text-white.bg-lightred {
+    background-color: #E55353;
+}
+
+.card.text-white.bg-successdarkpurple {
+    background-color: #8F64EA;
+}
+
+.card.text-white.bg-medium-blue{
+    background-color: #149eca;
+}
+.card.text-white.bg-navy-blue {
+    background-color: #5456d5;
+}
+
+
+
+.card.text-white.bg-pink{
+    background-color: #C37892;
+}
+
+.card.text-white.bg-dark-green{
+    background-color: #7A2A36;
+}
+
+.col2 {
+    background-color: #E55353;
+}
+
+.col3 {
+    background-color: #d68cf0;
+}
+
+// .col4 {
+//     background-color: #7a2a36 ;
+// }
+
+.col5 {
+    background-color: #B8BF2D;
+}
+
+.col6 {
+    background-color: #0885ad;
+}
+
+.col7 {
+    background-color: #95E2DC;
+}
+
+.col8{
+    background-color: #d4a752;
+}
+
+.card.text-white.bg-green1 {
+    background-color: #b8bf2d;
+}
