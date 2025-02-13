@@ -1190,7 +1190,7 @@ const AllParamDashboard = ({
                     <div>
                       <div className="fs-4 fw-semibold text-danger">
                         <Link
-                          className="text-danger sub-h"
+                          className="text-white sub-h"
                           to="/custompara?name=epcg"
                         >
                           Management of Export Obligation(EPCG)

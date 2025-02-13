@@ -1075,7 +1075,9 @@ const CustomAllPara = ({
           label:
             name === "investigation" ||
               name === "epcg" ||
-              name === "export_obligation(AA)"
+              name === "export_obligation(AA)" ||
+              name === "arrest_and_prosecution" ||
+              name === "disposal/pendency"
               ? selectedOption1 === "Zones"
                 ? index.zone_name || "Unknown Zone"
                 : index.commissionerate_name || "Unknown Commissionerate"
@@ -1091,7 +1093,9 @@ const CustomAllPara = ({
           label:
             name === "investigation" ||
               name === "epcg" ||
-              name === "export_obligation(AA)"
+              name === "export_obligation(AA)" ||
+              name === "arrest_and_prosecution" ||
+              name === "disposal/pendency"
               ? selectedOption1 === "Zones"
                 ? item.zone_name || "Unknown Zone"
                 : item.commissionerate_name || "Unknown Commissionerate"
