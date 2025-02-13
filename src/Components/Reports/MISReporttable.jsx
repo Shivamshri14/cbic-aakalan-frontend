@@ -1740,444 +1740,444 @@ const MISReporttable = ({
         
       }
 
-      else if (name === "epcg") {
-        const endpoints = [
-          "cus2a",
-          "cus2b",
-          "cus2c"
-        ];
+      // else if (name === "epcg") {
+      //   const endpoints = [
+      //     "cus2a",
+      //     "cus2b",
+      //     "cus2c"
+      //   ];
         
 
-        // Make API calls for both endpoints
-        const responses1 = await Promise.all(
-          endpoints.map((endpoint) =>
-            apiClient
-              .get(`/cbic/custom/${endpoint}`, {
-                params: { month_date: newdate, type: "zone" },
-              })
-              .then((response) => ({
-                data: response.data
-              }))
-          )
-        );
-
-        const responses2 = await Promise.all(
-          endpoints.map((endpoint) =>
-            apiClient
-              .get(`/cbic/custom/${endpoint}`, {
-                params: { month_date: previousmonth1, type: "zone" },
-              })
-              .then((response) => ({
-                data: response.data
-              }))
-          )
-        );
-
-        const responses3 = await Promise.all(
-          endpoints.map((endpoint) =>
-            apiClient
-              .get(`/cbic/custom/${endpoint}`, {
-                params: { month_date: previousmonth2, type: "zone" },
-              })
-              .then((response) => ({
-                data: response.data
-              }))
-          )
-        );
-
-        const responses4 = await Promise.all(
-          endpoints.map((endpoint) =>
-            apiClient
-              .get(`/cbic/custom/${endpoint}`, {
-                params: { month_date: previousmonth3, type: "zone" },
-              })
-              .then((response) => ({
-                data: response.data
-              }))
-          )
-        );
-
-        const responses5 = await Promise.all(
-          endpoints.map((endpoint) =>
-            apiClient
-              .get(`/cbic/custom/${endpoint}`, {
-                params: { month_date: previousmonth4, type: "zone" },
-              })
-              .then((response) => ({
-                data: response.data
-              }))
-          )
-        );
-
-        const responses6 = await Promise.all(
-          endpoints.map((endpoint) =>
-            apiClient
-              .get(`/cbic/custom/${endpoint}`, {
-                params: { month_date: previousmonth5, type: "zone" },
-              })
-              .then((response) => ({
-                data: response.data
-              }))
-          )
-        );
-
-        console.log("response1",responses1);
-        console.log("response2",responses2);
-        console.log("response3",responses3);
-        console.log("response4",responses4);
-        console.log("response5",responses5);
-        console.log("response6",responses6);
-
-        if (responses1 && responses2 && responses3 && responses4 && responses5 && responses6) {
-          setLoading(false);
-        }
-
-        // Combine the responses from all endpoints into a single array
-        const allData1 = responses1.flatMap((response) =>
-          response.data.map((item) => ({ ...item, gst: response.gst }))
-        );
-        console.log("FINALRESPONSE1", allData1);
-
-        const summedByZone1 = allData1.reduce((acc, item) => {
-          const zoneCode = item.zone_code;
-          const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
-
-          // If zone_code is encountered for the first time, initialize it
-          if (!acc[zoneCode]) {
-            acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
-          }
-
-          // Sum only the sub_parameter_weighted_average for each zone_code
-          acc[zoneCode].sub_parameter_weighted_average += value;
-
-          return acc;
-        }, {});
-
-        const reducedAllData1 = Object.values(summedByZone1).map((item) => ({
-          ...item,
-          weighted_average:
-            item.sub_parameter_weighted_average.toFixed(2),
-        }));
-
-        console.log("Reduced All Data:", reducedAllData1);
-
-        const sorted1 = reducedAllData1.sort(
-          (a, b) =>
-            a.zone_code- b.zone_code
-        );
-        console.log("Sorted", sorted1);
-
-        const enhancedData1 = sorted1.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" }; // Top 5 entries
-          } else if (total < 7.5 && total >= 5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" }; // Bottom 5 entries
-          } else {
-            props = { color: "primary" }; // Remaining entries
-          }
-
-          return {
-            ...item,
-            _cellProps: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const allData2 = responses2.flatMap((response) =>
-          response.data.map((item) => ({ ...item, gst: response.gst }))
-        );
-        console.log("FINALRESPONSE2", allData2);
-
-        const summedByZone2 = allData2.reduce((acc, item) => {
-          const zoneCode = item.zone_code;
-          const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
-
-          // If zone_code is encountered for the first time, initialize it
-          if (!acc[zoneCode]) {
-            acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
-          }
-
-          // Sum only the sub_parameter_weighted_average for each zone_code
-          acc[zoneCode].sub_parameter_weighted_average += value;
-
-          return acc;
-        }, {});
-
-        const reducedAllData2 = Object.values(summedByZone2).map((item) => ({
-          ...item,
-          weighted_average:
-            item.sub_parameter_weighted_average.toFixed(2),
-        }));
-
-        console.log("Reduced All Data:", reducedAllData1);
-
-        const sorted2 = reducedAllData2.sort(
-          (a, b) =>
-            a.zone_code- b.zone_code
-        );
-        console.log("Sorted", sorted1);
-
-        const enhancedData2 = sorted2.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" }; // Top 5 entries
-          } else if (total < 7.5 && total >= 5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" }; // Bottom 5 entries
-          } else {
-            props = { color: "primary" }; // Remaining entries
-          }
-
-          return {
-            ...item,
-            _cellProps: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const allData3 = responses3.flatMap((response) =>
-          response.data.map((item) => ({ ...item, gst: response.gst }))
-        );
-        console.log("FINALRESPONSE3", allData3);
-
-        const summedByZone3 = allData3.reduce((acc, item) => {
-          const zoneCode = item.zone_code;
-          const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
-
-          // If zone_code is encountered for the first time, initialize it
-          if (!acc[zoneCode]) {
-            acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
-          }
-
-          // Sum only the sub_parameter_weighted_average for each zone_code
-          acc[zoneCode].sub_parameter_weighted_average += value;
-
-          return acc;
-        }, {});
-
-        const reducedAllData3 = Object.values(summedByZone3).map((item) => ({
-          ...item,
-          weighted_average:
-            item.sub_parameter_weighted_average.toFixed(2),
-        }));
-
-        console.log("Reduced All Data:", reducedAllData3);
-
-        const sorted3 = reducedAllData3.sort(
-          (a, b) =>
-            a.zone_code- b.zone_code
-        );
-        console.log("Sorted", sorted3);
-
-        const enhancedData3 = sorted3.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" }; // Top 5 entries
-          } else if (total < 7.5 && total >= 5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" }; // Bottom 5 entries
-          } else {
-            props = { color: "primary" }; // Remaining entries
-          }
-
-          return {
-            ...item,
-            _cellProps: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const allData4 = responses4.flatMap((response) =>
-          response.data.map((item) => ({ ...item, gst: response.gst }))
-        );
-        console.log("FINALRESPONSE4", allData4);
-
-        const summedByZone4 = allData4.reduce((acc, item) => {
-          const zoneCode = item.zone_code;
-          const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
-
-          // If zone_code is encountered for the first time, initialize it
-          if (!acc[zoneCode]) {
-            acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
-          }
-
-          // Sum only the sub_parameter_weighted_average for each zone_code
-          acc[zoneCode].sub_parameter_weighted_average += value;
-
-          return acc;
-        }, {});
-
-        const reducedAllData4 = Object.values(summedByZone4).map((item) => ({
-          ...item,
-          weighted_average:
-            item.sub_parameter_weighted_average.toFixed(2),
-        }));
-
-        console.log("Reduced All Data:", reducedAllData1);
-
-        const sorted4 = reducedAllData4.sort(
-          (a, b) =>
-            a.zone_code- b.zone_code
-        );
-        console.log("Sorted", sorted4);
-
-        const enhancedData4 = sorted4.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" }; // Top 5 entries
-          } else if (total < 7.5 && total >= 5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" }; // Bottom 5 entries
-          } else {
-            props = { color: "primary" }; // Remaining entries
-          }
-
-          return {
-            ...item,
-            _cellProps: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const allData5 = responses5.flatMap((response) =>
-          response.data.map((item) => ({ ...item, gst: response.gst }))
-        );
-        console.log("FINALRESPONSE5", allData5);
-
-        const summedByZone5 = allData5.reduce((acc, item) => {
-          const zoneCode = item.zone_code;
-          const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
-
-          // If zone_code is encountered for the first time, initialize it
-          if (!acc[zoneCode]) {
-            acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
-          }
-
-          // Sum only the sub_parameter_weighted_average for each zone_code
-          acc[zoneCode].sub_parameter_weighted_average += value;
-
-          return acc;
-        }, {});
-
-        const reducedAllData5 = Object.values(summedByZone5).map((item) => ({
-          ...item,
-          weighted_average:
-            item.sub_parameter_weighted_average.toFixed(2),
-        }));
-
-        console.log("Reduced All Data:", reducedAllData5);
-
-        const sorted5 = reducedAllData5.sort(
-          (a, b) =>
-            a.zone_code- b.zone_code
-        );
-        console.log("Sorted", sorted1);
-
-        const enhancedData5 = sorted5.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" }; // Top 5 entries
-          } else if (total < 7.5 && total >= 5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" }; // Bottom 5 entries
-          } else {
-            props = { color: "primary" }; // Remaining entries
-          }
-
-          return {
-            ...item,
-            _cellProps: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const allData6 = responses6.flatMap((response) =>
-          response.data.map((item) => ({ ...item, gst: response.gst }))
-        );
-        console.log("FINALRESPONSE6", allData6);
-
-        const summedByZone6 = allData6.reduce((acc, item) => {
-          const zoneCode = item.zone_code;
-          const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
-
-          // If zone_code is encountered for the first time, initialize it
-          if (!acc[zoneCode]) {
-            acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
-          }
-
-          // Sum only the sub_parameter_weighted_average for each zone_code
-          acc[zoneCode].sub_parameter_weighted_average += value;
-
-          return acc;
-        }, {});
-
-        const reducedAllData6 = Object.values(summedByZone6).map((item) => ({
-          ...item,
-          weighted_average:
-            item.sub_parameter_weighted_average.toFixed(2),
-        }));
-
-        console.log("Reduced All Data:", reducedAllData6);
-
-        const sorted6 = reducedAllData6.sort(
-          (a, b) =>
-            a.zone_code- b.zone_code
-        );
-        console.log("Sorted", sorted6);
-
-        const enhancedData6 = sorted6.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" }; // Top 5 entries
-          } else if (total < 7.5 && total >= 5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" }; // Bottom 5 entries
-          } else {
-            props = { color: "primary" }; // Remaining entries
-          }
-
-          return {
-            ...item,
-            _cellProps: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        console.log("ed1",enhancedData1);
-        console.log("ed2",enhancedData2);
-        console.log("ed3",enhancedData3);
-        console.log("ed4",enhancedData4);
-        console.log("ed5",enhancedData5);
-        console.log("ed6",enhancedData6);
-
-        setData1(enhancedData6);
-        setData2(enhancedData5);
-        setData3(enhancedData4);
-        setData4(enhancedData3);
-        setData5(enhancedData2);
-        setData6(enhancedData1);
+      //   // Make API calls for both endpoints
+      //   const responses1 = await Promise.all(
+      //     endpoints.map((endpoint) =>
+      //       apiClient
+      //         .get(`/cbic/custom/${endpoint}`, {
+      //           params: { month_date: newdate, type: "zone" },
+      //         })
+      //         .then((response) => ({
+      //           data: response.data
+      //         }))
+      //     )
+      //   );
+
+      //   const responses2 = await Promise.all(
+      //     endpoints.map((endpoint) =>
+      //       apiClient
+      //         .get(`/cbic/custom/${endpoint}`, {
+      //           params: { month_date: previousmonth1, type: "zone" },
+      //         })
+      //         .then((response) => ({
+      //           data: response.data
+      //         }))
+      //     )
+      //   );
+
+      //   const responses3 = await Promise.all(
+      //     endpoints.map((endpoint) =>
+      //       apiClient
+      //         .get(`/cbic/custom/${endpoint}`, {
+      //           params: { month_date: previousmonth2, type: "zone" },
+      //         })
+      //         .then((response) => ({
+      //           data: response.data
+      //         }))
+      //     )
+      //   );
+
+      //   const responses4 = await Promise.all(
+      //     endpoints.map((endpoint) =>
+      //       apiClient
+      //         .get(`/cbic/custom/${endpoint}`, {
+      //           params: { month_date: previousmonth3, type: "zone" },
+      //         })
+      //         .then((response) => ({
+      //           data: response.data
+      //         }))
+      //     )
+      //   );
+
+      //   const responses5 = await Promise.all(
+      //     endpoints.map((endpoint) =>
+      //       apiClient
+      //         .get(`/cbic/custom/${endpoint}`, {
+      //           params: { month_date: previousmonth4, type: "zone" },
+      //         })
+      //         .then((response) => ({
+      //           data: response.data
+      //         }))
+      //     )
+      //   );
+
+      //   const responses6 = await Promise.all(
+      //     endpoints.map((endpoint) =>
+      //       apiClient
+      //         .get(`/cbic/custom/${endpoint}`, {
+      //           params: { month_date: previousmonth5, type: "zone" },
+      //         })
+      //         .then((response) => ({
+      //           data: response.data
+      //         }))
+      //     )
+      //   );
+
+      //   console.log("response1",responses1);
+      //   console.log("response2",responses2);
+      //   console.log("response3",responses3);
+      //   console.log("response4",responses4);
+      //   console.log("response5",responses5);
+      //   console.log("response6",responses6);
+
+      //   if (responses1 && responses2 && responses3 && responses4 && responses5 && responses6) {
+      //     setLoading(false);
+      //   }
+
+      //   // Combine the responses from all endpoints into a single array
+      //   const allData1 = responses1.flatMap((response) =>
+      //     response.data.map((item) => ({ ...item, gst: response.gst }))
+      //   );
+      //   console.log("FINALRESPONSE1", allData1);
+
+      //   const summedByZone1 = allData1.reduce((acc, item) => {
+      //     const zoneCode = item.zone_code;
+      //     const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
+
+      //     // If zone_code is encountered for the first time, initialize it
+      //     if (!acc[zoneCode]) {
+      //       acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+      //     }
+
+      //     // Sum only the sub_parameter_weighted_average for each zone_code
+      //     acc[zoneCode].sub_parameter_weighted_average += value;
+
+      //     return acc;
+      //   }, {});
+
+      //   const reducedAllData1 = Object.values(summedByZone1).map((item) => ({
+      //     ...item,
+      //     weighted_average:
+      //       item.sub_parameter_weighted_average.toFixed(2),
+      //   }));
+
+      //   console.log("Reduced All Data:", reducedAllData1);
+
+      //   const sorted1 = reducedAllData1.sort(
+      //     (a, b) =>
+      //       a.zone_code- b.zone_code
+      //   );
+      //   console.log("Sorted", sorted1);
+
+      //   const enhancedData1 = sorted1.map((item, index) => {
+      //     const total = item.sub_parameter_weighted_average;
+
+      //     let props = {};
+      //     if (total <= 10 && total >= 7.5) {
+      //       props = { color: "success" }; // Top 5 entries
+      //     } else if (total < 7.5 && total >= 5) {
+      //       props = { color: "warning" };
+      //     } else if (total >= 0 && total <= 2.5) {
+      //       props = { color: "danger" }; // Bottom 5 entries
+      //     } else {
+      //       props = { color: "primary" }; // Remaining entries
+      //     }
+
+      //     return {
+      //       ...item,
+      //       _cellProps: props, // Add _props field dynamically
+      //       s_no: index + 1,
+      //     };
+      //   });
+
+      //   const allData2 = responses2.flatMap((response) =>
+      //     response.data.map((item) => ({ ...item, gst: response.gst }))
+      //   );
+      //   console.log("FINALRESPONSE2", allData2);
+
+      //   const summedByZone2 = allData2.reduce((acc, item) => {
+      //     const zoneCode = item.zone_code;
+      //     const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
+
+      //     // If zone_code is encountered for the first time, initialize it
+      //     if (!acc[zoneCode]) {
+      //       acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+      //     }
+
+      //     // Sum only the sub_parameter_weighted_average for each zone_code
+      //     acc[zoneCode].sub_parameter_weighted_average += value;
+
+      //     return acc;
+      //   }, {});
+
+      //   const reducedAllData2 = Object.values(summedByZone2).map((item) => ({
+      //     ...item,
+      //     weighted_average:
+      //       item.sub_parameter_weighted_average.toFixed(2),
+      //   }));
+
+      //   console.log("Reduced All Data:", reducedAllData1);
+
+      //   const sorted2 = reducedAllData2.sort(
+      //     (a, b) =>
+      //       a.zone_code- b.zone_code
+      //   );
+      //   console.log("Sorted", sorted1);
+
+      //   const enhancedData2 = sorted2.map((item, index) => {
+      //     const total = item.sub_parameter_weighted_average;
+
+      //     let props = {};
+      //     if (total <= 10 && total >= 7.5) {
+      //       props = { color: "success" }; // Top 5 entries
+      //     } else if (total < 7.5 && total >= 5) {
+      //       props = { color: "warning" };
+      //     } else if (total >= 0 && total <= 2.5) {
+      //       props = { color: "danger" }; // Bottom 5 entries
+      //     } else {
+      //       props = { color: "primary" }; // Remaining entries
+      //     }
+
+      //     return {
+      //       ...item,
+      //       _cellProps: props, // Add _props field dynamically
+      //       s_no: index + 1,
+      //     };
+      //   });
+
+      //   const allData3 = responses3.flatMap((response) =>
+      //     response.data.map((item) => ({ ...item, gst: response.gst }))
+      //   );
+      //   console.log("FINALRESPONSE3", allData3);
+
+      //   const summedByZone3 = allData3.reduce((acc, item) => {
+      //     const zoneCode = item.zone_code;
+      //     const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
+
+      //     // If zone_code is encountered for the first time, initialize it
+      //     if (!acc[zoneCode]) {
+      //       acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+      //     }
+
+      //     // Sum only the sub_parameter_weighted_average for each zone_code
+      //     acc[zoneCode].sub_parameter_weighted_average += value;
+
+      //     return acc;
+      //   }, {});
+
+      //   const reducedAllData3 = Object.values(summedByZone3).map((item) => ({
+      //     ...item,
+      //     weighted_average:
+      //       item.sub_parameter_weighted_average.toFixed(2),
+      //   }));
+
+      //   console.log("Reduced All Data:", reducedAllData3);
+
+      //   const sorted3 = reducedAllData3.sort(
+      //     (a, b) =>
+      //       a.zone_code- b.zone_code
+      //   );
+      //   console.log("Sorted", sorted3);
+
+      //   const enhancedData3 = sorted3.map((item, index) => {
+      //     const total = item.sub_parameter_weighted_average;
+
+      //     let props = {};
+      //     if (total <= 10 && total >= 7.5) {
+      //       props = { color: "success" }; // Top 5 entries
+      //     } else if (total < 7.5 && total >= 5) {
+      //       props = { color: "warning" };
+      //     } else if (total >= 0 && total <= 2.5) {
+      //       props = { color: "danger" }; // Bottom 5 entries
+      //     } else {
+      //       props = { color: "primary" }; // Remaining entries
+      //     }
+
+      //     return {
+      //       ...item,
+      //       _cellProps: props, // Add _props field dynamically
+      //       s_no: index + 1,
+      //     };
+      //   });
+
+      //   const allData4 = responses4.flatMap((response) =>
+      //     response.data.map((item) => ({ ...item, gst: response.gst }))
+      //   );
+      //   console.log("FINALRESPONSE4", allData4);
+
+      //   const summedByZone4 = allData4.reduce((acc, item) => {
+      //     const zoneCode = item.zone_code;
+      //     const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
+
+      //     // If zone_code is encountered for the first time, initialize it
+      //     if (!acc[zoneCode]) {
+      //       acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+      //     }
+
+      //     // Sum only the sub_parameter_weighted_average for each zone_code
+      //     acc[zoneCode].sub_parameter_weighted_average += value;
+
+      //     return acc;
+      //   }, {});
+
+      //   const reducedAllData4 = Object.values(summedByZone4).map((item) => ({
+      //     ...item,
+      //     weighted_average:
+      //       item.sub_parameter_weighted_average.toFixed(2),
+      //   }));
+
+      //   console.log("Reduced All Data:", reducedAllData1);
+
+      //   const sorted4 = reducedAllData4.sort(
+      //     (a, b) =>
+      //       a.zone_code- b.zone_code
+      //   );
+      //   console.log("Sorted", sorted4);
+
+      //   const enhancedData4 = sorted4.map((item, index) => {
+      //     const total = item.sub_parameter_weighted_average;
+
+      //     let props = {};
+      //     if (total <= 10 && total >= 7.5) {
+      //       props = { color: "success" }; // Top 5 entries
+      //     } else if (total < 7.5 && total >= 5) {
+      //       props = { color: "warning" };
+      //     } else if (total >= 0 && total <= 2.5) {
+      //       props = { color: "danger" }; // Bottom 5 entries
+      //     } else {
+      //       props = { color: "primary" }; // Remaining entries
+      //     }
+
+      //     return {
+      //       ...item,
+      //       _cellProps: props, // Add _props field dynamically
+      //       s_no: index + 1,
+      //     };
+      //   });
+
+      //   const allData5 = responses5.flatMap((response) =>
+      //     response.data.map((item) => ({ ...item, gst: response.gst }))
+      //   );
+      //   console.log("FINALRESPONSE5", allData5);
+
+      //   const summedByZone5 = allData5.reduce((acc, item) => {
+      //     const zoneCode = item.zone_code;
+      //     const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
+
+      //     // If zone_code is encountered for the first time, initialize it
+      //     if (!acc[zoneCode]) {
+      //       acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+      //     }
+
+      //     // Sum only the sub_parameter_weighted_average for each zone_code
+      //     acc[zoneCode].sub_parameter_weighted_average += value;
+
+      //     return acc;
+      //   }, {});
+
+      //   const reducedAllData5 = Object.values(summedByZone5).map((item) => ({
+      //     ...item,
+      //     weighted_average:
+      //       item.sub_parameter_weighted_average.toFixed(2),
+      //   }));
+
+      //   console.log("Reduced All Data:", reducedAllData5);
+
+      //   const sorted5 = reducedAllData5.sort(
+      //     (a, b) =>
+      //       a.zone_code- b.zone_code
+      //   );
+      //   console.log("Sorted", sorted1);
+
+      //   const enhancedData5 = sorted5.map((item, index) => {
+      //     const total = item.sub_parameter_weighted_average;
+
+      //     let props = {};
+      //     if (total <= 10 && total >= 7.5) {
+      //       props = { color: "success" }; // Top 5 entries
+      //     } else if (total < 7.5 && total >= 5) {
+      //       props = { color: "warning" };
+      //     } else if (total >= 0 && total <= 2.5) {
+      //       props = { color: "danger" }; // Bottom 5 entries
+      //     } else {
+      //       props = { color: "primary" }; // Remaining entries
+      //     }
+
+      //     return {
+      //       ...item,
+      //       _cellProps: props, // Add _props field dynamically
+      //       s_no: index + 1,
+      //     };
+      //   });
+
+      //   const allData6 = responses6.flatMap((response) =>
+      //     response.data.map((item) => ({ ...item, gst: response.gst }))
+      //   );
+      //   console.log("FINALRESPONSE6", allData6);
+
+      //   const summedByZone6 = allData6.reduce((acc, item) => {
+      //     const zoneCode = item.zone_code;
+      //     const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
+
+      //     // If zone_code is encountered for the first time, initialize it
+      //     if (!acc[zoneCode]) {
+      //       acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+      //     }
+
+      //     // Sum only the sub_parameter_weighted_average for each zone_code
+      //     acc[zoneCode].sub_parameter_weighted_average += value;
+
+      //     return acc;
+      //   }, {});
+
+      //   const reducedAllData6 = Object.values(summedByZone6).map((item) => ({
+      //     ...item,
+      //     weighted_average:
+      //       item.sub_parameter_weighted_average.toFixed(2),
+      //   }));
+
+      //   console.log("Reduced All Data:", reducedAllData6);
+
+      //   const sorted6 = reducedAllData6.sort(
+      //     (a, b) =>
+      //       a.zone_code- b.zone_code
+      //   );
+      //   console.log("Sorted", sorted6);
+
+      //   const enhancedData6 = sorted6.map((item, index) => {
+      //     const total = item.sub_parameter_weighted_average;
+
+      //     let props = {};
+      //     if (total <= 10 && total >= 7.5) {
+      //       props = { color: "success" }; // Top 5 entries
+      //     } else if (total < 7.5 && total >= 5) {
+      //       props = { color: "warning" };
+      //     } else if (total >= 0 && total <= 2.5) {
+      //       props = { color: "danger" }; // Bottom 5 entries
+      //     } else {
+      //       props = { color: "primary" }; // Remaining entries
+      //     }
+
+      //     return {
+      //       ...item,
+      //       _cellProps: props, // Add _props field dynamically
+      //       s_no: index + 1,
+      //     };
+      //   });
+
+      //   console.log("ed1",enhancedData1);
+      //   console.log("ed2",enhancedData2);
+      //   console.log("ed3",enhancedData3);
+      //   console.log("ed4",enhancedData4);
+      //   console.log("ed5",enhancedData5);
+      //   console.log("ed6",enhancedData6);
+
+      //   setData1(enhancedData6);
+      //   setData2(enhancedData5);
+      //   setData3(enhancedData4);
+      //   setData4(enhancedData3);
+      //   setData5(enhancedData2);
+      //   setData6(enhancedData1);
         
-      }
+      // }
       else if (name === "aa") {
         const endpoints = [
           "cus3a",

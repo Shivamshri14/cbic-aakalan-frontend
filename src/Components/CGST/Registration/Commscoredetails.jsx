@@ -65,9 +65,9 @@ const Commscoredetails = ({
     {
       key:
         name === "adjudication(legacy cases)" ||
-        name === "appeals" ||
-        name === "recovery_of_arrears" ||
-        name === "arrest_and_prosecution"|| name==="registration"|| name==="investigation" || name==="audit"|| name==="scrutiny/assessment"
+          name === "appeals" ||
+          name === "recovery_of_arrears" ||
+          name === "arrest_and_prosecution" || name === "registration" || name === "investigation" || name === "audit" || name === "scrutiny/assessment"
           ? "zone_name"
           : "zoneName",
       label: "Zone",
@@ -75,9 +75,9 @@ const Commscoredetails = ({
     {
       key:
         name === "adjudication(legacy cases)" ||
-        name === "appeals" ||
-        name === "recovery_of_arrears" ||
-        name === "arrest_and_prosecution"|| name==="registration"|| name==="investigation" || name==="audit"|| name==="scrutiny/assessment"
+          name === "appeals" ||
+          name === "recovery_of_arrears" ||
+          name === "arrest_and_prosecution" || name === "registration" || name === "investigation" || name === "audit" || name === "scrutiny/assessment"
           ? "commissionerate_name"
           : "commName",
       label: "Commissionerate",
@@ -308,7 +308,7 @@ const Commscoredetails = ({
       key: "sub_parameter_weighted_average",
       label: "Weighted Average(out of 10)",
     });
-  } 
+  }
   else {
     columns.splice(3, 0, {
       key: "gst",
@@ -335,12 +335,12 @@ const Commscoredetails = ({
   const fetchDatacomm = async (name) => {
     try {
       if (name === "arrest_and_prosecution") {
-        const endpoints = ["gst9a", "gst9b"];
+        const endpoints = ["cus7a", "cus7b"];
 
         const responses = await Promise.all(
           endpoints.map((endpoint) =>
             apiClient
-              .get(`/cbic/${endpoint}`, {
+              .get(`/cbic/custom/${endpoint}`, {
                 params: { month_date: newdate, type: "all_commissary" },
               })
               .then((response) => ({
@@ -444,8 +444,7 @@ const Commscoredetails = ({
         console.log("RES", res);
 
         setData(res.map((item, index) => ({ ...item, s_no: index + 1 })));
-      } 
-      else if (name === "investigation") {
+      } else if (name === "investigation") {
         const endpoints = [
           "gst4a",
           "gst4b",
@@ -484,8 +483,7 @@ const Commscoredetails = ({
         console.log("RES", res);
 
         setData(res.map((item, index) => ({ ...item, s_no: index + 1 })));
-      }
-      else if (name === "audit") {
+      } else if (name === "audit") {
         const endpoints = [
           "gst10a",
           "gst10b",
@@ -523,8 +521,7 @@ const Commscoredetails = ({
         console.log("RES", res);
 
         setData(res.map((item, index) => ({ ...item, s_no: index + 1 })));
-      }
-      else if (name === "scrutiny/assessment") {
+      } else if (name === "scrutiny/assessment") {
         const endpoints = [
           "gst3a",
           "gst3b"
@@ -561,8 +558,7 @@ const Commscoredetails = ({
         console.log("RES", res);
 
         setData(res.map((item, index) => ({ ...item, s_no: index + 1 })));
-      }
-      else if (name === "appeals") {
+      } else if (name === "appeals") {
         const response01 = await apiClient.get(`/cbic/gst11a`, {
           params: {
             month_date: newdate,
@@ -664,8 +660,81 @@ const Commscoredetails = ({
             s_no: index + 1,
           }))
         );
-      }
-       else {
+      } else if (name === "adjudication(legacy cases)") {
+        try {
+          const endpoints = ["gst6a", "gst6b", "gst6c", "gst6d"];
+
+          // Fetch data from all endpoints in parallel
+          const responses = await Promise.all(
+            endpoints.map((endpoint) =>
+              apiClient.get(`/cbic/${endpoint}`, {
+                params: { month_date: newdate, type: "all_commissary" },
+              }).then((response) => response.data)
+            )
+          );
+
+          console.log("API Responses:", responses);
+          setloading(false); // Set loading to false after API calls complete
+
+          // Flatten all responses into a single array
+          const appeals = responses.flat();
+          console.log("FINAL RESPONSE", appeals);
+
+          // Add serial numbers to each entry
+          const updatedAppeals = appeals.map((item, index) => ({
+            ...item,
+            s_no: index + 1,
+          }));
+
+          // Group data by zone_code -> commissionerate_name
+          const appealsByZone = updatedAppeals.reduce((acc, item) => {
+            const zoneCode = item.zone_code;
+            const commName = item.commissionerate_name;
+
+            if (!acc[zoneCode]) {
+              acc[zoneCode] = {};
+            }
+
+            if (!acc[zoneCode][commName]) {
+              acc[zoneCode][commName] = [];
+            }
+
+            acc[zoneCode][commName].push(item);
+            return acc;
+          }, {});
+
+          // Replace these with actual values
+          const targetZoneCode = "your_zone_code_here";
+          const targetCommName = "your_comm_name_here";
+
+          console.log("Zone Code:", targetZoneCode);
+          console.log("Comm Name:", targetCommName);
+
+          if (
+            appealsByZone[targetZoneCode] &&
+            appealsByZone[targetZoneCode][targetCommName]
+          ) {
+            const gstValues = ["GST6A", "GST6B", "GST6C", "GST6D"];
+
+            // Assign GST values correctly
+            const updatedData = appealsByZone[targetZoneCode][targetCommName].map(
+              (item, index) => ({
+                ...item,
+                gst: gstValues[index % gstValues.length] || "NO_GST",
+                s_no: index + 1,
+              })
+            );
+
+            console.log("Filtered Data:", updatedData);
+            setData(updatedData);
+          } else {
+            console.log("No matching items found.");
+            setData([]);
+          }
+        } catch (error) {
+          console.error("Error fetching adjudication data:", error);
+        }
+      } else {
         // Make a GET request to the specified endpoint
         const response = await apiClient.get(`/cbic/t_score/${name}`, {
           params: {
@@ -1040,6 +1109,7 @@ const Commscoredetails = ({
     name === "returnFiling" ||
     name === "refunds" ||
     name === "scrutiny/assessment" ||
+    name === "adjudication(legacy cases)" ||
     name === "adjudication"
   ) {
     scopedColumns.gst = (item) => (
@@ -1077,8 +1147,8 @@ const Commscoredetails = ({
     })),
   };
 
-  const checkSpecialChar=(e)=>{
-    if(!/[0-9a-zA-Z]/.test(e.key)){
+  const checkSpecialChar = (e) => {
+    if (!/[0-9a-zA-Z]/.test(e.key)) {
       e.preventDefault();
     }
   }
@@ -1124,8 +1194,8 @@ const Commscoredetails = ({
                         renderInput={(params) => <TextField {...params} />}
                         shouldDisableYear={shouldDisableYear}
                         slotProps={{
-                          field:{
-                            readOnly:true
+                          field: {
+                            readOnly: true
                           }
                         }}
                       />
@@ -1270,7 +1340,7 @@ const Commscoredetails = ({
                   tableBodyProps={{
                     className: "align-middle",
                   }}
-                  onKeyDown={(e)=>checkSpecialChar(e)}
+                  onKeyDown={(e) => checkSpecialChar(e)}
                 />
               </div>
             </div>

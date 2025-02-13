@@ -374,8 +374,8 @@ const CustomZonewisecomm = ({
       else if (name === "arrest_and_prosecution") {
 
         const cusendpoints = [
-          "cus8a",
-          "cus8b",
+          "cus7a",
+          "cus7b",
         ];
 
         const responses = await Promise.all(

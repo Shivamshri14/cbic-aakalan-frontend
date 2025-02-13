@@ -630,12 +630,12 @@ const AllParamDashboard = ({
                   <div className="card-body pb-0 d-flex justify-content-between align-items-start bg-box">
                     <div>
                       <div className="fs-4 fw-semibold">
-                        <Link
+                        {/* <Link
                           to="/zoneparameters?name=adjudication(legacy cases)"
                           className="text-white sub-h"
-                        >
+                        > */}
                           Adjudication(Legacy Cases)
-                        </Link>
+                        {/* </Link> */}
                       </div>
                       <ol className="par-list b-4">
                         <li>
@@ -868,12 +868,12 @@ const AllParamDashboard = ({
                     <div>
                       <div className="fs-4 fw-semibold text-danger">
                         {""}{" "}
-                         <Link
+                         {/* <Link
                       to="/zoneparameters?name=arrest_and_prosecution"
                       className="text-white sub-h"
-                    > 
+                    >  */}
                         Arrest and Prosecution
-                         </Link>
+                         {/* </Link> */}
                         {""}
                       </div>
                       <ol className="par-list b-4">
@@ -1692,12 +1692,12 @@ const AllParamDashboard = ({
                   <div className="card-body pb-0 d-flex justify-content-between align-items-start">
                     <div class="g1-box">
                       <div className="fs-4 fw-semibold text-dark">
-                        {/* <Link
+                        <Link
                           className="text-white sub-h"
                           to="/custompara?name=arrest_and_prosecution"
-                        > */}
+                        >
                           Arrests and Prosecution
-                        {/* </Link> */}
+                        </Link>
                       </div>
                       <ol className="par-list">
                         <li className="text-white">

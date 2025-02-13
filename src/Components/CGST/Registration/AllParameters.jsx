@@ -157,8 +157,7 @@ const AllParameters = ({
         );
         console.log("Sorted", sorted);
         setBarData([...sorted]);
-      } 
-      else if (name === "registration") {
+      } else if (name === "registration") {
 
         const endpoints = ["gst1a", "gst1b","gst1c", "gst1d","gst1e", "gst1f"]; 
 
@@ -214,8 +213,7 @@ const AllParameters = ({
         );
         console.log("Sorted", sorted);
         setBarData([...sorted]);
-      }
-      else if (name === "investigation") {
+      } else if (name === "investigation") {
 
         const endpoints = ["gst4a", "gst4b","gst4c", "gst4d"]; 
 
@@ -271,9 +269,7 @@ const AllParameters = ({
         );
         console.log("Sorted", sorted);
         setBarData([...sorted]);
-      }
-
-      else if (name === "audit") {
+      } else if (name === "audit") {
 
         const endpoints = ["gst10a", "gst10b","gst10c"]; 
 
@@ -329,8 +325,7 @@ const AllParameters = ({
         );
         console.log("Sorted", sorted);
         setBarData([...sorted]);
-      }
-      else if (name === "scrutiny/assessment") {
+      } else if (name === "scrutiny/assessment") {
 
         const endpoints = ["gst3a", "gst3b"]; 
 
@@ -386,8 +381,55 @@ const AllParameters = ({
         );
         console.log("Sorted", sorted);
         setBarData([...sorted]);
+      } else if (name === "adjudication(legacy cases)") {
+        try {
+          const endpoints = ["gst6a", "gst6b", "gst6c", "gst6d"];
+      
+          const responses = await Promise.all(
+            endpoints.map((endpoint) =>
+              apiClient.get(`/cbic/${endpoint}`, {
+                params: { month_date: newdate, type: "zone" },
+              }).then((response) => response.data)
+            )
+          );
+      
+          console.log("Responses", responses);
+          setloading(false); // Ensure loading is set to false after API calls complete
+      
+          // Flatten responses
+          const allData = responses.flat();
+      
+          console.log("FINAL RESPONSE", allData);
+      
+          // Aggregate data by zone_code
+          const summedByZone = allData.reduce((acc, item) => {
+            const zoneCode = item.zone_code;
+            acc[zoneCode] = acc[zoneCode] || { ...item, sub_parameter_weighted_average: 0 };
+      
+            acc[zoneCode].sub_parameter_weighted_average += item.sub_parameter_weighted_average || 0;
+            return acc;
+          }, {});
+      
+          const reducedAllData = Object.values(summedByZone).map((item) => ({
+            ...item,
+            sub_parameter_weighted_average: Number(item.sub_parameter_weighted_average.toFixed(2)), // Ensuring number format
+          }));
+      
+          console.log("Reduced All Data:", reducedAllData);
+      
+          // Sort data in descending order
+          const sorted = reducedAllData.sort(
+            (a, b) => b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+          );
+      
+          console.log("Sorted", sorted);
+          setBarData([...sorted]);
+      
+        } catch (error) {
+          console.error("Error fetching adjudication data:", error);
+        }
       }
-      else {
+       else {
         const response = await apiClient.get(`/cbic/t_score/${name}`, {
           params: {
             month_date: newdate,
@@ -400,89 +442,7 @@ const AllParameters = ({
           setloading(false);
         }
 
-        if (name === "adjudication(legacy cases)") {
-          const endpoints = ["gst6a", "gst6b", "gst6c", "gst6d"];
-
-          const responses = await Promise.all(
-            endpoints.map((endpoint) =>
-              apiClient
-                .get(`/cbic/${endpoint}`, {
-                  params: { month_date: newdate, type: "zone" },
-                })
-                .then((response) => ({
-                  data: response.data,
-                }))
-            )
-          );
-
-          console.log("Responses", responses);
-
-          const totalsByZone = {};
-          const totalByParam = {};
-
-          // Process each response
-          responses.forEach((response) => {
-            response.data.forEach((item) => {
-              const zoneCode = item.zone_code;
-              const value = item.sub_parameter_weighted_average;
-              const total = item.total_score;
-
-              // Initialize or update the total for the zone_code
-              if (!totalsByZone[zoneCode]) {
-                totalsByZone[zoneCode] = 0;
-              }
-
-              if (!totalByParam[zoneCode]) {
-                totalByParam[zoneCode] = 0;
-              }
-
-              totalsByZone[zoneCode] += value;
-              totalByParam[zoneCode] += total;
-            });
-          });
-
-          response.data.forEach((item) => {
-            const zoneCode = item.zone_code;
-            const value = item.sub_parameter_weighted_average;
-            const total = item.totalScore;
-
-            if (!totalsByZone[zoneCode]) {
-              totalsByZone[zoneCode] = 0;
-            }
-
-            if (!totalByParam[zoneCode]) {
-              totalsByZone[zoneCode] = 0;
-            }
-
-            totalsByZone[zoneCode] += value;
-            totalByParam[zoneCode] += total;
-          });
-
-          // Log the results
-          console.log("Totals by Zone Code:", totalsByZone);
-          console.log("Total Score", totalByParam);
-
-          const sorted = response.data.sort(
-            (a, b) => b.totalScore - a.totalScore
-          );
-
-          const sortedserial0 = sorted.map((item, index) => {
-            // const value = totalsByZone[item.zone_code];
-            const total = totalByParam[item.zone_code];
-            return {
-              ...item, // Spread the existing properties
-              // sub_parameter_weighted_average:
-              //   value !== undefined ? value : item.sub_parameter_weighted_average,
-              totalScore: total !== undefined ? total : item.total_score,
-              s_no: index + 1,
-            };
-          });
-
-          console.log("Sortedserial0", sortedserial0);
-
-          setData(sortedserial0);
-          setBarData([...sortedserial0]);
-        }
+        
 
         if (name === "appeals") {
           const endpoints = ["gst11a", "gst11b", "gst11c", "gst11d"];
@@ -600,12 +560,12 @@ const AllParameters = ({
     try {
 
       if (name === "arrest_and_prosecution") {
-        const endpoints = ["gst9a", "gst9b"];
+        const endpoints = ["cus7a", "cus7b"];
 
         const responses = await Promise.all(
           endpoints.map((endpoint) =>
             apiClient
-              .get(`/cbic/${endpoint}`, {
+              .get(`/cbic/custom/${endpoint}`, {
                 params: { month_date: newdate, type: "all_commissary" },
               })
               .then((response) => ({
@@ -713,9 +673,7 @@ const AllParameters = ({
         console.log("Sorted", sorted);
         setData(sorted.map((item,index)=>({...item, s_no:index+1})));
         setBarData([...sorted]);
-      } 
-
-      else if (name === "registration") {
+      } else if (name === "registration") {
 
         const endpoints = ["gst1a", "gst1b","gst1c", "gst1d","gst1e", "gst1f"]; 
 
@@ -772,8 +730,58 @@ const AllParameters = ({
         console.log("Sorted", sorted);
         setData(sorted.map((item,index)=>({...item, s_no:index+1})));
         setBarData([...sorted]);
-      } 
-      else{
+      } else if (name === "adjudication(legacy cases)") {
+        try {
+          const endpoints = ["gst6a", "gst6b", "gst6c", "gst6d"];
+      
+          const responses = await Promise.all(
+            endpoints.map((endpoint) =>
+              apiClient.get(`/cbic/${endpoint}`, {
+                params: { month_date: newdate, type: "all_commissary" },
+              }).then((response) => response.data)
+            )
+          );
+      
+          console.log("Responses", responses);
+          setloading(false); // Ensure loading is set to false after API calls complete
+      
+          // Flatten responses into a single array
+          const allData = responses.flat();
+          console.log("FINAL RESPONSE", allData);
+      
+          // Aggregate data by commissionerate_name
+          const summedByComm = allData.reduce((acc, item) => {
+            const commName = item.commissionerate_name;
+            acc[commName] = acc[commName] || { ...item, sub_parameter_weighted_average: 0 };
+      
+            acc[commName].sub_parameter_weighted_average += item.sub_parameter_weighted_average || 0;
+            return acc;
+          }, {});
+      
+          // Convert to array and format the values
+          const reducedAllData = Object.values(summedByComm).map((item) => ({
+            ...item,
+            sub_parameter_weighted_average: Number(item.sub_parameter_weighted_average.toFixed(2)),
+          }));
+      
+          console.log("Reduced All Data:", reducedAllData);
+      
+          // Sort data in descending order
+          const sorted = reducedAllData.sort(
+            (a, b) => b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+          );
+      
+          console.log("Sorted", sorted);
+      
+          // Add serial numbers
+          setData(sorted.map((item, index) => ({ ...item, s_no: index + 1 })));
+          setBarData([...sorted]);
+      
+        } catch (error) {
+          console.error("Error fetching adjudication data:", error);
+        }
+      }
+       else{
       // Make a GET request to the specified endpoint
       const response = await apiClient.get(`/cbic/t_score/${name}`, {
         params: {
@@ -884,6 +892,8 @@ const AllParameters = ({
         );
         setBarData([...sorted]);
       }
+
+
 
       if (name === "appeals") {
         setBarData([...appealserial]);
@@ -1021,7 +1031,7 @@ const AllParameters = ({
         // :name === "adjudication" ? `${formatString(name)} (Score)`:
         selectedOption1 === "Zones" ? "All Zones" : "All Commissionerates",
       yaxisname:
-        name === "refunds" || name === "returnFiling"
+        name === "refunds" || name === "returnFiling" || name === "adjudication(legacy cases)"
           ? "Percentage"
           : "Total Score",
       // decimals:'1',
@@ -1029,7 +1039,7 @@ const AllParameters = ({
       showvalues: "0",
       numDivLines: "10",
       plottooltext:
-        name === "refunds" || name === "returnFiling"
+        name === "refunds" || name === "returnFiling"|| name === "adjudication(legacy cases)"
           ? selectedOption1 === "Zones"
             ? "<b>Zone Name:$label</b>{br}Percentage:$value"
             : "<b>Commissionerate Name:$label</b>{br}Percentage:$value"

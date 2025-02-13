@@ -64,7 +64,7 @@ const MISReport = ({
 
   const optionscustom = [
     { idc: 12, labelc: "Timely payment of Refunds", value:"TimelyPaymentOfRefunds" },
-    { idc: 13, labelc: "Management of Export Obligation(EPCG)", value:"epcg",color:"red" },
+    { idc: 13, labelc: "Management of Export Obligation(EPCG)", /* value:"epcg", */ color:"red" },
     { idc: 14, labelc: "Management of Export Obligation(AA)",value:"aa", color:"red" },
     { idc: 15, labelc: "Disposal/Pendency Of Provisional Assessments", color:"red" },
     { idc: 16, labelc: "Adjudication", value:"Adjudication" },

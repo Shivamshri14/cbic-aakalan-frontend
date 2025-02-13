@@ -88,12 +88,12 @@ const Zoneparameters = ({
   const fetchData = async (name) => {
     try {
       if (name === "arrest_and_prosecution") {
-        const endpoints = ["gst9a", "gst9b"];
+        const endpoints = ["cus7a", "cus7b"];
 
         const responses = await Promise.all(
           endpoints.map((endpoint) =>
             apiClient
-              .get(`/cbic/${endpoint}`, {
+              .get(`/cbic/custom/${endpoint}`, {
                 params: { month_date: newdate, type: "zone" },
               })
               .then((response) => ({
@@ -286,7 +286,109 @@ const Zoneparameters = ({
         const topfive = sorted.slice(0, 5);
         const bottomfive = sorted.slice(-5);
         setBarData([...topfive, ...bottomfive]);
-      } else if (name === "registration") {
+      }else if (name === "adjudication(legacy cases)") {
+        const endpoints = ["gst6a", "gst6b"]; // You can modify this array as needed
+
+        // Make API calls for both endpoints
+        const responses = await Promise.all(
+          endpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/${endpoint}`, {
+                params: { month_date: newdate, type: "zone" },
+              })
+              .then((response) => ({
+                data: response.data,
+                gst: endpoint.toUpperCase(),
+              }))
+          )
+        );
+
+        console.log("Responses", responses);
+
+        if (responses) {
+          setloading(false);
+        }
+
+        relevantAspects = "ADJUDICATION(LEGACY CASES)";
+
+        // Combine the responses from all endpoints into a single array
+        const allData = responses.flatMap((response) =>
+          response.data.map((item) => ({ ...item, gst: response.gst }))
+        );
+        console.log("FINALRESPONSE", allData);
+
+        const summedByZone = allData.reduce((acc, item) => {
+          const zoneCode = item.zone_code;
+          const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
+
+          // If zone_code is encountered for the first time, initialize it
+          if (!acc[zoneCode]) {
+            acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+          }
+
+          // Sum only the sub_parameter_weighted_average for each zone_code
+          acc[zoneCode].sub_parameter_weighted_average += value;
+
+          return acc;
+        }, {});
+
+        const reducedAllData = Object.values(summedByZone).map((item) => ({
+          ...item,
+          sub_parameter_weighted_average:
+            item.sub_parameter_weighted_average.toFixed(2),
+        }));
+
+        console.log("Reduced All Data:", reducedAllData);
+
+        const sorted = reducedAllData.sort(
+          (a, b) =>
+            b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+        );
+        console.log("Sorted", sorted);
+
+        const scoreIndexMap = new Map();
+        let currentIndex = 1;
+
+        for (let i = 0; i < sorted.length; i++) {
+          const score = sorted[i].sub_parameter_weighted_average;
+
+          // If this score hasn't been assigned an index yet, assign it
+          if (!scoreIndexMap.has(score)) {
+            scoreIndexMap.set(score, currentIndex);
+            currentIndex++;
+          }
+
+          // Assign the index to each item based on its score
+          sorted[i].zonal_rank = scoreIndexMap.get(score);
+        }
+
+        const enhancedData = sorted.map((item, index) => {
+          const total = item.sub_parameter_weighted_average;
+
+          let props = {};
+          if (total <= 10 && total >= 7.5) {
+            props = { scope: "row", color: "success" }; // Top 5 entries
+          } else if (total < 7.5 && total >= 5) {
+            props = { scope: "row", color: "warning" };
+          } else if (total >= 0 && total <= 2.5) {
+            props = { scope: "row", color: "danger" }; // Bottom 5 entries
+          } else {
+            props = { scope: "row", color: "primary" }; // Remaining entries
+          }
+
+          return {
+            ...item,
+            _props: props, // Add _props field dynamically
+            s_no: index + 1,
+          };
+        });
+
+        setData(enhancedData);
+        const topfive = sorted.slice(0, 5);
+        const bottomfive = sorted.slice(-5);
+        setBarData([...topfive, ...bottomfive]);
+      }
+       else if (name === "registration") {
         const endpoints = [
           "gst1a",
           "gst1b",
@@ -1138,12 +1240,12 @@ const Zoneparameters = ({
   const fetchDatacomm = async (name) => {
     try {
       if (name === "arrest_and_prosecution") {
-        const endpoints = ["gst9a", "gst9b"];
+        const endpoints = ["cus7a", "cus7b"];
 
         const responses = await Promise.all(
           endpoints.map((endpoint) =>
             apiClient
-              .get(`/cbic/${endpoint}`, {
+              .get(`/cbic/custom/${endpoint}`, {
                 params: { month_date: newdate, type: "all_commissary" },
               })
               .then((response) => ({
@@ -1257,6 +1359,87 @@ const Zoneparameters = ({
         }
 
         relevantAspects = "RECOVERY OF ARREARS";
+
+        // Combine the responses from all endpoints into a single array
+        const allData = responses.flatMap((response) =>
+          response.data.map((item) => ({ ...item, gst: response.gst }))
+        );
+        console.log("FINALRESPONSE", allData);
+
+        const summedByZone = allData.reduce((acc, item) => {
+          const zoneCode = item.commissionerate_name;
+          const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
+
+          // If zone_code is encountered for the first time, initialize it
+          if (!acc[zoneCode]) {
+            acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+          }
+
+          // Sum only the sub_parameter_weighted_average for each zone_code
+          acc[zoneCode].sub_parameter_weighted_average += value;
+
+          return acc;
+        }, {});
+
+        const reducedAllData = Object.values(summedByZone).map((item) => ({
+          ...item,
+          sub_parameter_weighted_average:
+            item.sub_parameter_weighted_average.toFixed(2), // Format to 2 decimal places
+        }));
+
+        console.log("Reduced All Data:", reducedAllData);
+
+        const sorted = reducedAllData.sort(
+          (a, b) =>
+            b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+        );
+        console.log("Sorted", sorted);
+
+        const scoreIndexMap = new Map();
+        let currentIndex = 1;
+
+        for (let i = 0; i < sorted.length; i++) {
+          const score = sorted[i].sub_parameter_weighted_average;
+
+          // If this score hasn't been assigned an index yet, assign it
+          if (!scoreIndexMap.has(score)) {
+            scoreIndexMap.set(score, currentIndex);
+            currentIndex++;
+          }
+
+          // Assign the index to each item based on its score
+          sorted[i].zonal_rank = scoreIndexMap.get(score);
+        }
+
+        setData(sorted.map((item, index) => ({ ...item, s_no: index + 1 })));
+        const topfive = sorted.slice(0, 5);
+        const bottomfive = sorted.slice(-5);
+        setBarData([...topfive, ...bottomfive]);
+      }
+      else if (name === "adjudication(legacy cases)") {
+        const endpoints = ["gst6a", "gst6b"]; // You can modify this array as needed
+
+        // Make API calls for both endpoints
+        const responses = await Promise.all(
+          endpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/${endpoint}`, {
+                params: { month_date: newdate, type: "all_commissary" },
+              })
+              .then((response) => ({
+                data: response.data,
+                gst: endpoint.toUpperCase(),
+              }))
+          )
+        );
+
+        console.log("Responses", responses);
+
+        if (responses) {
+          setloading(false);
+        }
+
+        relevantAspects = "ADJUDICATION(LEGACY CASES)";
 
         // Combine the responses from all endpoints into a single array
         const allData = responses.flatMap((response) =>
@@ -1940,7 +2123,7 @@ const Zoneparameters = ({
       key:
         name === "recovery_of_arrears" ||
           name === "arrest_and_prosecution" ||
-          name === "registration" || name === "investigation" || name === "audit" || name === "scrutiny/assessment"
+          name === "registration" || name === "investigation" || name === "audit" || name === "scrutiny/assessment" || name === "adjudication(legacy cases)"
           ? "zone_name"
           : "zoneName",
       label: "Zone ",
@@ -1950,7 +2133,7 @@ const Zoneparameters = ({
       key:
         name === "recovery_of_arrears" ||
           name === "arrest_and_prosecution" ||
-          name === "registration" || name === "investigation" || name === "audit" || name === "scrutiny/assessment"
+          name === "registration" || name === "investigation" || name === "audit" || name === "scrutiny/assessment" || name === "adjudication(legacy cases)"
           ? "commissionerate_name"
           : "commName",
       label: "Commissionerate",
@@ -1986,7 +2169,7 @@ const Zoneparameters = ({
       key:
         name === "recovery_of_arrears" ||
           name === "arrest_and_prosecution" ||
-          name === "registration" || name === "investigation" || name === "audit" || name === "scrutiny/assessment"
+          name === "registration" || name === "investigation" || name === "audit" || name === "scrutiny/assessment" || name === "adjudication(legacy cases)"
           ? "commissionerate_name"
           : "commName",
       label: "Commissionerate",
@@ -1996,7 +2179,7 @@ const Zoneparameters = ({
       key:
         name === "recovery_of_arrears" ||
           name === "arrest_and_prosecution" ||
-          name === "registration" || name === "investigation" || name === "audit" || name === "scrutiny/assessment"
+          name === "registration" || name === "investigation" || name === "audit" || name === "scrutiny/assessment" || name === "adjudication(legacy cases)"
           ? "zone_name"
           : "zoneName",
       label: "Zone",
@@ -2186,9 +2369,7 @@ const Zoneparameters = ({
       key: "parameter_wise_weighted_average",
       label: "Weighted Average(out of 12)",
     });
-  }
-
-  else if (name === "recovery_of_arrears") {
+  } else if (name === "recovery_of_arrears") {
     columns.splice(4, 0, {
       key: "sub_parameter_weighted_average",
       label: " Score (out of 10)",
@@ -2206,8 +2387,7 @@ const Zoneparameters = ({
       key: "sub_parameter_weighted_average",
       label: " Weighted Average (out of 10)",
     });
-  }
-  else if (name === "arrest_and_prosecution") {
+  } else if (name === "arrest_and_prosecution") {
     columns.splice(4, 0, {
       key: "sub_parameter_weighted_average",
       label: " Score (out of 10)",
@@ -2225,8 +2405,7 @@ const Zoneparameters = ({
       key: "sub_parameter_weighted_average",
       label: " Weighted Average (out of 10)",
     });
-  }
-  else if (name === "registration") {
+  } else if (name === "registration") {
     columns.splice(4, 0, {
       key: "sub_parameter_weighted_average",
       label: " Score (out of 10)",
@@ -2244,8 +2423,7 @@ const Zoneparameters = ({
       key: "sub_parameter_weighted_average",
       label: " Weighted Average (out of 10)",
     });
-  }
-  else if (name === "investigation") {
+  } else if (name === "investigation") {
     columns.splice(4, 0, {
       key: "sub_parameter_weighted_average",
       label: " Score (out of 10)",
@@ -2263,8 +2441,7 @@ const Zoneparameters = ({
       key: "sub_parameter_weighted_average",
       label: " Weighted Average (out of 10)",
     });
-  }
-  else if (name === "audit") {
+  } else if (name === "audit") {
     columns.splice(4, 0, {
       key: "sub_parameter_weighted_average",
       label: " Score (out of 10)",
@@ -2282,8 +2459,7 @@ const Zoneparameters = ({
       key: "sub_parameter_weighted_average",
       label: " Weighted Average (out of 10)",
     });
-  }
-  else if (name === "scrutiny/assessment") {
+  } else if (name === "scrutiny/assessment") {
     columns.splice(4, 0, {
       key: "sub_parameter_weighted_average",
       label: " Score (out of 10)",
@@ -2591,7 +2767,6 @@ const Zoneparameters = ({
               : "Bottom 5 Commissionerates (Highest % pendency of refunds beyond 60 days)"
             : name === "scrutiny/assessment" ||
               name === "adjudication" ||
-              name === "adjudication(legacy cases)" ||
               name === "adjudication(legacy cases)" ||
               name === "arrest_and_prosecution" ||
               name === "audit" ||
@@ -3166,7 +3341,7 @@ const Zoneparameters = ({
           <Link
             to={`/commscoredetails?zone_code=${item.zone_code
               }&name=${name}&come_name=${name === "recovery_of_arrears" ||
-                name === "arrest_and_prosecution" || name === "registration" || name === "investigation" || name === "audit" || name === "scrutiny/assessment"
+                name === "arrest_and_prosecution" || name === "registration" || name === "investigation" || name === "audit" || name === "scrutiny/assessment" || name === "adjudication(legacy cases)"
                 ? item.commissionerate_name
                 : item.commName
               }`}
@@ -3346,7 +3521,6 @@ const Zoneparameters = ({
                         ) : name === "scrutiny/assessment" ||
                           name === "adjudication" ||
                           name === "adjudication(legacy cases)" ||
-                          name === "adjudication(legacy cases)" ||
                           name === "arrest_and_prosecution" ||
                           name === "audit" ||
                           name === "appeals" ? (
@@ -3374,7 +3548,6 @@ const Zoneparameters = ({
                           </strong>
                         ) : name === "scrutiny/assessment" ||
                           name === "adjudication" ||
-                          name === "adjudication(legacy cases)" ||
                           name === "adjudication(legacy cases)" ||
                           name === "arrest_and_prosecution" ||
                           name === "audit" ||
@@ -3435,7 +3608,6 @@ const Zoneparameters = ({
                         ) : name === "scrutiny/assessment" ||
                           name === "adjudication" ||
                           name === "adjudication(legacy cases)" ||
-                          name === "adjudication(legacy cases)" ||
                           name === "arrest_and_prosecution" ||
                           name === "audit" ||
                           name === "appeals" ? (
@@ -3463,7 +3635,6 @@ const Zoneparameters = ({
                           </strong>
                         ) : name === "scrutiny/assessment" ||
                           name === "adjudication" ||
-                          name === "adjudication(legacy cases)" ||
                           name === "adjudication(legacy cases)" ||
                           name === "arrest_and_prosecution" ||
                           name === "audit" ||
