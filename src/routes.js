@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import AllParamDashboard from "./Components/Home/AllParamDashboard";
 import { Dashboard } from "./Components/Home/Dashboard";
+import Login from "./Components/Pages/Login.jsx";
+import ChangePassword from "./Components/Pages/ChangePassword.jsx";
 import Zonescoredetails from "./Components/CGST/Registration/Zonescoredetails";
 import MISReport from "./Components/Reports/MISReport";
 import Kolkata from "./Components/CGST/Kolkata";
@@ -27,6 +29,8 @@ import CustomAllPara from "./Components/CUSTOM/CustomParameters/CustomAllPara";
 import CustomZonewisecomm from "./Components/CUSTOM/CustomParameters/CustomZonewisecomm";
 import CustomZonescoredetails from "./Components/CUSTOM/CustomParameters/CustomZonescoredetails";
 import CustomCommscoredetails from "./Components/CUSTOM/CustomParameters/CustomCommscoredetails";
+import ForgetPassword from "./Components/Pages/ForgetPassword.jsx";
+
 
 
 const RouteData = () => {
@@ -34,18 +38,18 @@ const RouteData = () => {
 
   const handleChangeDate = (newdate) => {
 
-    if(newdate){
+    if (newdate) {
       setSelectedDate(newdate);
     }
-    else{
+    else {
       setSelectedDate(dayjs("2024-04-01"));
     }
-    
+
   };
   // zone || commissionarate toggle option
 
-  const [selectedOption, setSelectedOption]=useState("CGST");
-  const handleChange=(value)=>{
+  const [selectedOption, setSelectedOption] = useState("CGST");
+  const handleChange = (value) => {
     setSelectedOption(value);
   }
 
@@ -68,8 +72,15 @@ const RouteData = () => {
           }
         /> */}
 
-          <Route
-          path="/"
+        {/* Login Page */}
+        <Route path="/" element={<Login />} />
+
+        {/* Change Password Page */}
+        <Route path="/changepassword" element={<ChangePassword />} />
+        <Route path="/forgetpassword" element={<ForgetPassword />} />
+
+        <Route
+          path="/dashboard"
           element={
             <AllParamDashboard
               selectedDate={selectedDate}
@@ -95,16 +106,16 @@ const RouteData = () => {
             />
           }*/}
 
-          <Route
+        <Route
           path="cgst"
           element={
-           <Dashboard
+            <Dashboard
               selectedDate={selectedDate}
               onChangeDate={handleChangeDate}
               selectedOption={selectedOption}
               onSelectedOption={handleChange}
             />}
-          /> 
+        />
         {/*==== CGST/parameter-zone=====*/}
         <Route
           path="zoneparameters"
@@ -140,7 +151,7 @@ const RouteData = () => {
             />
           }
         />
-        
+
         <Route
           path="commscoredetails"
           element={
@@ -153,11 +164,11 @@ const RouteData = () => {
           }
         />
 
-        <Route path="allsubparameters" element={<AllSubParameters   
-              selectedDate={selectedDate}
-              onChangeDate={handleChangeDate}
-              selectedOption1={selectedOption1}
-              onSelectedOption1={handleChange1}/>} />
+        <Route path="allsubparameters" element={<AllSubParameters
+          selectedDate={selectedDate}
+          onChangeDate={handleChangeDate}
+          selectedOption1={selectedOption1}
+          onSelectedOption1={handleChange1} />} />
 
         <Route
           path="allparameters"
@@ -184,36 +195,36 @@ const RouteData = () => {
         />
 
         <Route path="custompara" element={<CustomPara selectedDate={selectedDate}
-              onChangeDate={handleChangeDate}
-              selectedOption1={selectedOption1}
-              onSelectedOption1={handleChange1} />} />
+          onChangeDate={handleChangeDate}
+          selectedOption1={selectedOption1}
+          onSelectedOption1={handleChange1} />} />
 
         <Route path="customallpara" element={<CustomAllPara selectedDate={selectedDate}
-              onChangeDate={handleChangeDate}
-              selectedOption1={selectedOption1}
-              onSelectedOption1={handleChange1} />} />
+          onChangeDate={handleChangeDate}
+          selectedOption1={selectedOption1}
+          onSelectedOption1={handleChange1} />} />
 
-              <Route path="customzonewisecomm" element={<CustomZonewisecomm selectedDate={selectedDate}
-              onChangeDate={handleChangeDate}
-              selectedOption1={selectedOption1}
-              onSelectedOption1={handleChange1} />} />
+        <Route path="customzonewisecomm" element={<CustomZonewisecomm selectedDate={selectedDate}
+          onChangeDate={handleChangeDate}
+          selectedOption1={selectedOption1}
+          onSelectedOption1={handleChange1} />} />
 
 
-              <Route path="customzonescoredetails" element={<CustomZonescoredetails selectedDate={selectedDate}
-              onChangeDate={handleChangeDate}
-              selectedOption1={selectedOption1}
-              onSelectedOption1={handleChange1}/>} />
+        <Route path="customzonescoredetails" element={<CustomZonescoredetails selectedDate={selectedDate}
+          onChangeDate={handleChangeDate}
+          selectedOption1={selectedOption1}
+          onSelectedOption1={handleChange1} />} />
 
-              <Route path="customcommscoredetails" element={<CustomCommscoredetails selectedDate={selectedDate}
-              onChangeDate={handleChangeDate}
-              selectedOption1={selectedOption1}
-              onSelectedOption1={handleChange1}/>} />
+        <Route path="customcommscoredetails" element={<CustomCommscoredetails selectedDate={selectedDate}
+          onChangeDate={handleChangeDate}
+          selectedOption1={selectedOption1}
+          onSelectedOption1={handleChange1} />} />
 
-        <Route path="customsubcom" element={<CustomSubcom selectedDate={selectedDate} 
-        onChangeDate={handleChangeDate} selectedOption1={selectedOption1} onSelectedOption1={handleChange1} />} />
+        <Route path="customsubcom" element={<CustomSubcom selectedDate={selectedDate}
+          onChangeDate={handleChangeDate} selectedOption1={selectedOption1} onSelectedOption1={handleChange1} />} />
 
         <Route path="allcustomsubparameters" element={<AllCustomSubpara selectedDate={selectedDate} onChangeDate={handleChangeDate}
-         selectedOption1={selectedOption1} onSelectedOption1={handleChange1} />} />
+          selectedOption1={selectedOption1} onSelectedOption1={handleChange1} />} />
 
         <Route
           path="kolkata"
@@ -236,7 +247,7 @@ const RouteData = () => {
           }
         />
 
-         
+
 
         {/*===== CGST/parameter-zone/Subparameter-Zone==== */}
         Gst1a
@@ -261,7 +272,7 @@ const RouteData = () => {
             />
           }
         />
-        
+
 
         {/*=========================== pages =====================================*/}
         <Route
@@ -292,12 +303,12 @@ const RouteData = () => {
           path="monthlyreport"
           element={
             <MonthlyReport
-            selectedDate={selectedDate}
-            onChangeDate={handleChangeDate}
-            selectedOption1={selectedOption1}
-            onSelectedOption1={handleChange1}
-            selectedOption={selectedOption}
-            onSelectedOption={handleChange}
+              selectedDate={selectedDate}
+              onChangeDate={handleChangeDate}
+              selectedOption1={selectedOption1}
+              onSelectedOption1={handleChange1}
+              selectedOption={selectedOption}
+              onSelectedOption={handleChange}
             />
           }
         />
@@ -305,12 +316,12 @@ const RouteData = () => {
           path="comparativereport"
           element={
             <ComparativeReport
-            selectedDate={selectedDate}
-            onChangeDate={handleChangeDate}
-            selectedOption1={selectedOption1}
-            onSelectedOption1={handleChange1}
-            selectedOption={selectedOption}
-            onSelectedOption={handleChange}
+              selectedDate={selectedDate}
+              onChangeDate={handleChangeDate}
+              selectedOption1={selectedOption1}
+              onSelectedOption1={handleChange1}
+              selectedOption={selectedOption}
+              onSelectedOption={handleChange}
             />
           }
         />

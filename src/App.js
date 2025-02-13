@@ -86,18 +86,19 @@ function App() {
   }, []); // Empty dependency array ensures the effect runs once on mount
 
   // Redirect the user to the dashboard if they are logged in, else to login page
-  // useEffect(() => {
-  //   if (storedUserString) {
-  //     if (["/", "/changepassword", "/registration"].includes(pathname)) {
-  //       navigate("/dashboard");
-  //     }
-  //   } else {
-  //     const path = ["/", "/changepassword", "/registration", "/forgetpassword"];
-  //     if (!path.includes(pathname)) {
-  //       navigate("/"); // Navigate to the login page if the current pathname is not in the allowed paths
-  //     }
-  //   }
-  // }, [pathname, storedUserString, navigate]);
+  useEffect(() => {
+    if (storedUserString) {
+      if (pathname === "/") {
+        navigate("/dashboard"); // Redirect to Dashboard if already logged in
+      }
+    } else {
+      const allowedPaths = ["/", "/changepassword", "/registration", "/forgetpassword"];
+      if (!allowedPaths.includes(pathname)) {
+        navigate("/"); // Redirect to Login only if not on allowed pages
+      }
+    }
+  }, [pathname, storedUserString, navigate]);
+  
 
   const handleSidebarDataChange = (newData) => {
     setSidebarData(newData);
@@ -134,12 +135,12 @@ function App() {
   };
 
   return (
-    // <>
-    //   {sessionExpired ? (
-    //     <Login />
-    //   ) : (
-    //     <>
-    //       {storedUserString ? (
+    <>
+      {sessionExpired ? (
+        <Login />
+      ) : (
+        <>
+          {storedUserString ? (
             <>
               <Sidebar data={sidebarData} />
               <div className="wrapper d-flex flex-column min-vh-100">
@@ -148,43 +149,41 @@ function App() {
                 <Footer />
               </div>
             </>
-      //     ) : (
-      //       <Routes>
-      //         <Route path="/" element={<Login />} />
-      //         <Route path="/changepassword" element={<ChangePassword />} />
-      //         <Route path="/forgetpassword" element={<ForgetPassword />} />
-      //         <Route path="/registration" element={<Registration />} />
-      //       </Routes>
-      //     )}
+          ) : (
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route path="/forgetpassword" element={<ForgetPassword />} />
+            </Routes>
+          )}
 
-      //     <Dialog
-      //       open={openDialog}
-      //       onClose={handleCloseDialog}
-      //       aria-labelledby="alert-dialog-title"
-      //       aria-describedby="alert-dialog-description"
-      //       PaperProps={{ style: dialogStyles }}
-      //       disableRestoreFocus
-      //     >
-      //       <DialogTitle id="alert-dialog-title" style={titleStyles}>
-      //         {"Message"}
-      //       </DialogTitle>
-      //       <DialogContent>
-      //         <DialogContentText
-      //           id="alert-dialog-description"
-      //           style={contentTextStyles}
-      //         >
-      //           {dialogText}
-      //         </DialogContentText>
-      //       </DialogContent>
-      //       <DialogActions style={dialogActionsStyles}>
-      //         <Button onClick={handleCloseDialog} color="primary">
-      //           OK
-      //         </Button>
-      //       </DialogActions>
-      //     </Dialog>
-      //   </>
-      // )}
-    //</>
+          <Dialog
+            open={openDialog}
+            onClose={handleCloseDialog}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            PaperProps={{ style: dialogStyles }}
+            disableRestoreFocus
+          >
+            <DialogTitle id="alert-dialog-title" style={titleStyles}>
+              {"Message"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText
+                id="alert-dialog-description"
+                style={contentTextStyles}
+              >
+                {dialogText}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions style={dialogActionsStyles}>
+              <Button onClick={handleCloseDialog} color="primary">
+                OK
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </>
+      )}
+    </>
   );
 }
 

@@ -17,6 +17,7 @@ import CryptoJS from "crypto-js";
 import Cookies from "js-cookie";
 import Spinner from "../Spinner";
 import ReCAPTCHA from "react-google-recaptcha";
+import { useEffect } from "react";
 
 const Login = () => {
   const [user, setUser] = useState({
@@ -155,6 +156,18 @@ const Login = () => {
     setOpenDialog(false);
     
   };
+  useEffect(() => {
+    const handleTabClose = () => {
+      sessionStorage.removeItem("token"); // Clear session on tab close
+      sessionStorage.removeItem("userSession");
+    };
+  
+    window.addEventListener("beforeunload", handleTabClose);
+    return () => {
+      window.removeEventListener("beforeunload", handleTabClose);
+    };
+  }, []);
+  
 
   // Custom CSS styling for the dialog
   const dialogStyles = {

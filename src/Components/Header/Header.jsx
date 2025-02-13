@@ -57,8 +57,7 @@ export const Header = ({ onDataChange = () => {} }) => {
   }
 
   const handlePasswordChange=()=>{
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    
     navigate("/changepassword")
   }
 

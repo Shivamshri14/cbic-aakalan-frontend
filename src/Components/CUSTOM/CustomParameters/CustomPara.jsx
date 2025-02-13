@@ -762,8 +762,8 @@ const CustomPara = ({
       else if (name === "unclaimed_cargo") {
 
         const cusendpoints = [
-          "cus9a",
-          "cus9b",
+          "cus8a",
+          "cus8b",
         ];
 
         const responses = await Promise.all(
@@ -822,7 +822,7 @@ const CustomPara = ({
           finalData
         );
 
-        relevantAspects = (name === "investigation" ? "INVESTIGATION" : finalData.map((item) => item.ra)[0]);
+        relevantAspects = (name === "unclaimed_cargo" ? "Monitoring Of Un-cleared and Unclaimed cargo" : finalData.map((item) => item.ra)[0]);
 
         const sorted = finalData.sort(
           (a, b) =>
@@ -1762,8 +1762,8 @@ const CustomPara = ({
       }
       else  if (name === "unclaimed_cargo") {
         const cusendpoints = [
-          "cus9a",
-          "cus9b",
+          "cus8a",
+          "cus8b",
         ];
 
         const responses = await Promise.all(

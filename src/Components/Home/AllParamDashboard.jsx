@@ -1764,12 +1764,12 @@ const AllParamDashboard = ({
                   <div className="card-body pb-0 d-flex justify-content-between align-items-start col7">
                     <div>
                       <div className="fs-4 fw-semibold text-danger">
-                        {/* <Link
+                         <Link
                           className="text-white sub-h"
                           to="/custompara?name=unclaimed_cargo"
-                        > */}
+                        > 
                           Monitoring Of Un-cleared and Unclaimed cargo
-                        {/* </Link> */}
+                         </Link> 
                       </div>
                       <ol className="par-list b-4">
                         <li className="text-white">

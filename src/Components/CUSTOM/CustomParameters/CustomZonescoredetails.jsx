@@ -220,8 +220,8 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
       }
       else if (name === "unclaimed_cargo") {
         const cusendpoints = [
-          "cus9a",
-          "cus9b",
+          "cus8a",
+          "cus8b",
         ];
 
         const responses = await Promise.all(
