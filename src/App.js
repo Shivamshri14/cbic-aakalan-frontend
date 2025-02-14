@@ -33,7 +33,7 @@ function App() {
   const storedUserString = localStorage.getItem("user");
   const token = sessionStorage.getItem("token");
 
-  // ✅ Set session timeout for 10 minutes
+  // ✅ Set session timeout for 3 minutes
   const resetSessionTimeout = () => {
     const expirationTime = new Date().getTime() + 3 * 60 * 1000;
     localStorage.setItem("expirationTime", expirationTime);
@@ -87,7 +87,7 @@ function App() {
   useEffect(() => {
     checkSessionTimeout();
 
-    const intervalId = setInterval(checkSessionTimeout, 18000); // 10 minutes
+    const intervalId = setInterval(checkSessionTimeout, 18000); // 3 minutes
     window.addEventListener("mousemove", resetSessionTimeout);
     window.addEventListener("keydown", resetSessionTimeout);
 

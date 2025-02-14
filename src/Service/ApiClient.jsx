@@ -11,8 +11,8 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   function (config) {
-    const userId = "CBIC";
-    const password = "Cbic@2024@";
+    const userId = process.env.REACT_APP_API_USERNAME;
+    const password = process.env.REACT_APP_API_PASSWORD;
 
     if (userId && password) {
       // Base64 encode the user ID and password
