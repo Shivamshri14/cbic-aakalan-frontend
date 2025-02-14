@@ -2502,8 +2502,9 @@ const CustomPara = ({
 
   // Disable watermark
   FusionCharts.options.license({
-    creditLabel: false,
+    creditLabel: false, // Hides the watermark completely
   });
+
 
   const colorstopzone = ["#00FF00", "#00FF00", "#00FF00", "#00FF00", "#00FF00"];
 

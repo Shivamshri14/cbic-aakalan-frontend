@@ -23,3 +23,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+svg g[transform*="translate"][fill="#b1b2b7"] {
+  pointer-events: none !important; /* Disable clicks */
+  opacity: 0 !important; /* Hide it completely */
+  display: none !important; /* Remove it */
+}
