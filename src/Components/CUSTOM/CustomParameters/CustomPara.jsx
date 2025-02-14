@@ -813,7 +813,7 @@ const CustomPara = ({
           item.sub_parameter_weighted_average = parseFloat(
             item.sub_parameter_weighted_average.toFixed(1)
           );
-          item.weighted_average_out_of_12 = ((item.sub_parameter_weighted_average * 12) / 10).toFixed(1);
+          item.weighted_average_out_of_6 = ((item.sub_parameter_weighted_average * 6) / 10).toFixed(1);
           item.total_score = parseFloat(item.total_score.toFixed(1));
           return item;
         });
@@ -1204,7 +1204,7 @@ const CustomPara = ({
 
   const fetchDatacomm = async (name) => {
     try {
-      
+
       if (name === "investigation") {
         const cusendpoints = [
           "cus6a",
@@ -1301,7 +1301,7 @@ const CustomPara = ({
         const bottomfive = sorted.slice(-5);
         setBarData([...topfive, ...bottomfive]);
       }
-      else  if (name === "export_obligation(AA)") {
+      else if (name === "export_obligation(AA)") {
         const cusendpoints = [
           "cus3a",
           "cus3b",
@@ -1393,7 +1393,7 @@ const CustomPara = ({
         const bottomfive = sorted.slice(-5);
         setBarData([...topfive, ...bottomfive]);
       }
-      else  if (name === "epcg") {
+      else if (name === "epcg") {
         const cusendpoints = [
           "cus2a",
           "cus2b",
@@ -1485,7 +1485,7 @@ const CustomPara = ({
         const bottomfive = sorted.slice(-5);
         setBarData([...topfive, ...bottomfive]);
       }
-      else  if (name === "disposal/pendency") {
+      else if (name === "disposal/pendency") {
         const cusendpoints = [
           "cus4a",
           "cus4b",
@@ -1578,7 +1578,7 @@ const CustomPara = ({
         const bottomfive = sorted.slice(-5);
         setBarData([...topfive, ...bottomfive]);
       }
-      else  if (name === "arrest_and_prosecution") {
+      else if (name === "arrest_and_prosecution") {
         const cusendpoints = [
           "cus7a",
           "cus7b",
@@ -1669,7 +1669,7 @@ const CustomPara = ({
         const bottomfive = sorted.slice(-5);
         setBarData([...topfive, ...bottomfive]);
       }
-      else  if (name === "DisposalOfConfiscatedGoldAndNDPS") {
+      else if (name === "DisposalOfConfiscatedGoldAndNDPS") {
         const cusendpoints = [
           "cus9a",
           "cus9b",
@@ -1760,7 +1760,7 @@ const CustomPara = ({
         const bottomfive = sorted.slice(-5);
         setBarData([...topfive, ...bottomfive]);
       }
-      else  if (name === "unclaimed_cargo") {
+      else if (name === "unclaimed_cargo") {
         const cusendpoints = [
           "cus8a",
           "cus8b",
@@ -1812,7 +1812,7 @@ const CustomPara = ({
           item.sub_parameter_weighted_average = parseFloat(
             item.sub_parameter_weighted_average.toFixed(1)
           );
-          item.weighted_average_out_of_12 = ((item.sub_parameter_weighted_average * 12) / 10).toFixed(1);
+          item.weighted_average_out_of_6 = ((item.sub_parameter_weighted_average * 6) / 10).toFixed(1);
           item.total_score = parseFloat(item.total_score.toFixed(1));
 
           item.total_score = parseFloat(item.total_score.toFixed(1));
@@ -1851,7 +1851,7 @@ const CustomPara = ({
         const bottomfive = sorted.slice(-5);
         setBarData([...topfive, ...bottomfive]);
       }
-      else  if (name === "recovery_of_arrears") {
+      else if (name === "recovery_of_arrears") {
         const cusendpoints = [
           "cus10a",
           "cus10b",
@@ -1941,8 +1941,8 @@ const CustomPara = ({
         const topfive = sorted.slice(0, 5);
         const bottomfive = sorted.slice(-5);
         setBarData([...topfive, ...bottomfive]);
-      } 
-      else  if (name === "management_of_warehousing_bonds") {
+      }
+      else if (name === "management_of_warehousing_bonds") {
         const cusendpoints = [
           "cus11a",
           "cus11b",
@@ -2086,7 +2086,7 @@ const CustomPara = ({
 
 
 
-      } 
+      }
     } catch (error) {
       // Log any errors that occur during fetching
       console.error("Error fetching data:", error);
@@ -2120,13 +2120,13 @@ const CustomPara = ({
       label: "S.No.",
     },
     {
-      key: name === "investigation"|| name ==="epcg"||name ==="disposal/pendency"||
-       name ==="arrest_and_prosecution"||name ==="unclaimed_cargo"||name ==="recovery_of_arrears"||name ==="management_of_warehousing_bonds"||name ==="export_obligation(AA)"||name ==="DisposalOfConfiscatedGoldAndNDPS" ? "zone_name" : "zoneName",
+      key: name === "investigation" || name === "epcg" || name === "disposal/pendency" ||
+        name === "arrest_and_prosecution" || name === "unclaimed_cargo" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name === "export_obligation(AA)" || name === "DisposalOfConfiscatedGoldAndNDPS" ? "zone_name" : "zoneName",
       label: "Zone ",
     },
     {
-      key: name === "investigation"|| name ==="epcg"||name ==="disposal/pendency"||
-      name ==="arrest_and_prosecution"||name ==="unclaimed_cargo"||name ==="recovery_of_arrears"||name ==="management_of_warehousing_bonds"|| name ==="export_obligation(AA)"||name ==="DisposalOfConfiscatedGoldAndNDPS" ? "commissionerate_name" : "commName",
+      key: name === "investigation" || name === "epcg" || name === "disposal/pendency" ||
+        name === "arrest_and_prosecution" || name === "unclaimed_cargo" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name === "export_obligation(AA)" || name === "DisposalOfConfiscatedGoldAndNDPS" ? "commissionerate_name" : "commName",
       label: "Commissionerate",
     },
     {
@@ -2149,11 +2149,11 @@ const CustomPara = ({
       label: "S.No.",
     },
     {
-      key: name === "investigation"|| name ==="epcg"||name ==="disposal/pendency"||name ==="recovery_of_arrears"||name ==="management_of_warehousing_bonds"||name ==="unclaimed_cargo"||name ==="arrest_and_prosecution"|| name ==="export_obligation(AA)"||name ==="DisposalOfConfiscatedGoldAndNDPS" ? "commissionerate_name" : "commName",
+      key: name === "investigation" || name === "epcg" || name === "disposal/pendency" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name === "unclaimed_cargo" || name === "arrest_and_prosecution" || name === "export_obligation(AA)" || name === "DisposalOfConfiscatedGoldAndNDPS" ? "commissionerate_name" : "commName",
       label: "Commissionerate",
     },
     {
-      key: name === "investigation"|| name ==="epcg" ||name ==="disposal/pendency"||name ==="unclaimed_cargo"||name ==="recovery_of_arrears"||name ==="management_of_warehousing_bonds"||name ==="arrest_and_prosecution"|| name ==="export_obligation(AA)"||name ==="DisposalOfConfiscatedGoldAndNDPS" ? "zone_name" : "zoneName",
+      key: name === "investigation" || name === "epcg" || name === "disposal/pendency" || name === "unclaimed_cargo" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name === "arrest_and_prosecution" || name === "export_obligation(AA)" || name === "DisposalOfConfiscatedGoldAndNDPS" ? "zone_name" : "zoneName",
       label: "Zone",
     },
     {
@@ -2232,148 +2232,171 @@ const CustomPara = ({
       });
 
       break;
-    
-      case "epcg":
-        columns.splice(4, 0, {
-          key: "sub_parameter_weighted_average",
-          label: "Score (Out of 10)",
-  
-        });
-        columns.splice(5, 0, {
-          key: "weighted_average_out_of_7",
-          label: "Weighted average (Out of 7)",
-        });
-  
-        commcolumns.splice(4, 0, {
-          key: "sub_parameter_weighted_average",
-          label: "Score (Out of 10)",
-  
-        }); 
-        
-        commcolumns.splice(5, 0, {
-          key: "weighted_average_out_of_7",
-          label: "Weighted average (Out of 7)",
-        });
-  
-        break;
-        case "export_obligation(AA)":
-        columns.splice(4, 0, {
-          key: "sub_parameter_weighted_average",
-          label: "Score (Out of 10)",
-  
-        });
-        columns.splice(5, 0, {
-          key: "weighted_average_out_of_7",
-          label: "Weighted average (Out of 7)",
-        });
-  
-        commcolumns.splice(4, 0, {
-          key: "sub_parameter_weighted_average",
-          label: "Score (Out of 10)",
-  
-        }); 
-        
-        commcolumns.splice(5, 0, {
-          key: "weighted_average_out_of_7",
-          label: "Weighted average (Out of 7)",
-        });
-  
-        break;
-        case "disposal/pendency":
-          columns.splice(4, 0, {
-            key: "sub_parameter_weighted_average",
-            label: "Score (Out of 10)",
-    
-          });
-          columns.splice(5, 0, {
-            key: "weighted_average_out_of_11",
-            label: "Weighted average (Out of 11)",
-          });
-    
-          commcolumns.splice(4, 0, {
-            key: "sub_parameter_weighted_average",
-            label: "Score (Out of 10)",
-    
-          }); 
-           
-          commcolumns.splice(5, 0, {
-            key: "weighted_average_out_of_11",
-            label: "Weighted average (Out of 11)",
-          });
-    
-          break;
-          case "disposal/pendency":
-          columns.splice(4, 0, {
-            key: "sub_parameter_weighted_average",
-            label: "Score (Out of 10)",
-    
-          });
-          columns.splice(5, 0, {
-            key: "weighted_average_out_of_6",
-            label: "Weighted average (Out of 6)",
-          });
-    
-          commcolumns.splice(4, 0, {
-            key: "sub_parameter_weighted_average",
-            label: "Score (Out of 10)",
-    
-          }); 
-          
-          commcolumns.splice(5, 0, {
-            key: "weighted_average_out_of_6",
-            label: "Weighted average (Out of 6)",
-          });
-    
-          break;
-          case "arrest_and_prosecution":
-          columns.splice(4, 0, {
-            key: "sub_parameter_weighted_average",
-            label: "Score (Out of 10)",
-    
-          });
-          columns.splice(5, 0, {
-            key: "weighted_average_out_of_6",
-            label: "Weighted average (Out of 6)",
-          });
-    
-          commcolumns.splice(4, 0, {
-            key: "sub_parameter_weighted_average",
-            label: "Score (Out of 10)",
-    
-          }); 
-          
-          commcolumns.splice(5, 0, {
-            key: "weighted_average_out_of_6",
-            label: "Weighted average (Out of 6)",
-          });
-    
-          break;
 
-          case "DisposalOfConfiscatedGoldAndNDPS":
-          columns.splice(4, 0, {
-            key: "sub_parameter_weighted_average",
-            label: "Score (Out of 10)",
-    
-          });
-          columns.splice(5, 0, {
-            key: "weighted_average_out_of_6",
-            label: "Weighted average (Out of 6)",
-          });
-    
-          commcolumns.splice(4, 0, {
-            key: "sub_parameter_weighted_average",
-            label: "Score (Out of 10)",
-    
-          }); 
-          
-          commcolumns.splice(5, 0, {
-            key: "weighted_average_out_of_6",
-            label: "Weighted average (Out of 6)",
-          });
-    
-          break;
+    case "epcg":
+      columns.splice(4, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Score (Out of 10)",
 
-      case "adjudication":
+      });
+      columns.splice(5, 0, {
+        key: "weighted_average_out_of_7",
+        label: "Weighted average (Out of 7)",
+      });
+
+      commcolumns.splice(4, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Score (Out of 10)",
+
+      });
+
+      commcolumns.splice(5, 0, {
+        key: "weighted_average_out_of_7",
+        label: "Weighted average (Out of 7)",
+      });
+
+      break;
+    case "export_obligation(AA)":
+      columns.splice(4, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Score (Out of 10)",
+
+      });
+      columns.splice(5, 0, {
+        key: "weighted_average_out_of_7",
+        label: "Weighted average (Out of 7)",
+      });
+
+      commcolumns.splice(4, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Score (Out of 10)",
+
+      });
+
+      commcolumns.splice(5, 0, {
+        key: "weighted_average_out_of_7",
+        label: "Weighted average (Out of 7)",
+      });
+
+      break;
+    case "disposal/pendency":
+      columns.splice(4, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Score (Out of 10)",
+
+      });
+      columns.splice(5, 0, {
+        key: "weighted_average_out_of_11",
+        label: "Weighted average (Out of 11)",
+      });
+
+      commcolumns.splice(4, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Score (Out of 10)",
+
+      });
+
+      commcolumns.splice(5, 0, {
+        key: "weighted_average_out_of_11",
+        label: "Weighted average (Out of 11)",
+      });
+
+      break;
+    case "disposal/pendency":
+      columns.splice(4, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Score (Out of 10)",
+
+      });
+      columns.splice(5, 0, {
+        key: "weighted_average_out_of_6",
+        label: "Weighted average (Out of 6)",
+      });
+
+      commcolumns.splice(4, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Score (Out of 10)",
+
+      });
+
+      commcolumns.splice(5, 0, {
+        key: "weighted_average_out_of_6",
+        label: "Weighted average (Out of 6)",
+      });
+
+      break;
+    case "arrest_and_prosecution":
+      columns.splice(4, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Score (Out of 10)",
+
+      });
+      columns.splice(5, 0, {
+        key: "weighted_average_out_of_6",
+        label: "Weighted average (Out of 6)",
+      });
+
+      commcolumns.splice(4, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Score (Out of 10)",
+
+      });
+
+      commcolumns.splice(5, 0, {
+        key: "weighted_average_out_of_6",
+        label: "Weighted average (Out of 6)",
+      });
+
+      break;
+    case "unclaimed_cargo":
+      columns.splice(4, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Score (Out of 10)",
+
+      });
+      columns.splice(5, 0, {
+        key: "weighted_average_out_of_6",
+        label: "Weighted average (Out of 6)",
+      });
+
+      commcolumns.splice(4, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Score (Out of 10)",
+
+      });
+
+      commcolumns.splice(5, 0, {
+        key: "weighted_average_out_of_6",
+        label: "Weighted average (Out of 6)",
+      });
+
+      break;
+
+    case "DisposalOfConfiscatedGoldAndNDPS":
+      columns.splice(4, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Score (Out of 10)",
+
+      });
+      columns.splice(5, 0, {
+        key: "weighted_average_out_of_6",
+        label: "Weighted average (Out of 6)",
+      });
+
+      commcolumns.splice(4, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Score (Out of 10)",
+
+      });
+
+      commcolumns.splice(5, 0, {
+        key: "weighted_average_out_of_6",
+        label: "Weighted average (Out of 6)",
+      });
+
+      break;
+
+    case "adjudication":
       columns.splice(4, 0, {
         key: "sub_parameter_weighted_average",
         label: "Score (Out of 10)",
@@ -2573,7 +2596,7 @@ const CustomPara = ({
     },
     data: bardata.slice(0, 5).map((item, index) => ({
       label:
-        name === "investigation"|| name === "epcg"||name ==="recovery_of_arrears"||name ==="management_of_warehousing_bonds"|| name === "disposal/pendency"||name ==="arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS"|name ==="unclaimed_cargo"|| name === "export_obligation(AA)"
+        name === "investigation" || name === "epcg" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name === "disposal/pendency" || name === "arrest_and_prosecution" || name === "DisposalOfConfiscatedGoldAndNDPS" || name === "unclaimed_cargo" || name === "export_obligation(AA)"
           ? selectedOption1 === "Zones"
             ? item.zone_name
             : item.commissionerate_name
@@ -2626,7 +2649,7 @@ const CustomPara = ({
     },
     data: bardata.slice(-5).map((item, index) => ({
       label:
-        name === "investigation" || name ==="epcg"||name ==="recovery_of_arrears"||name ==="management_of_warehousing_bonds"|| name === "disposal/pendency"||name ==="unclaimed_cargo"||name ==="arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS"|| name ==="export_obligation(AA)"
+        name === "investigation" || name === "epcg" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name === "disposal/pendency" || name === "unclaimed_cargo" || name === "arrest_and_prosecution" || name === "DisposalOfConfiscatedGoldAndNDPS" || name === "export_obligation(AA)"
           ? selectedOption1 === "Zones"
             ? item.zone_name
             : item.commissionerate_name
@@ -2661,10 +2684,10 @@ const CustomPara = ({
               return {
                 SNo: user.s_no,
                 "Zone name ": user.zone_name,
-                "Commissionerate Name":user.commissionerate_name,
+                "Commissionerate Name": user.commissionerate_name,
                 "Score Details": "Show",
-                "Score Out of 10":user.sub_parameter_weighted_average,
-                "Weighted Average (out of 7)":user.weighted_average_out_of_7,
+                "Score Out of 10": user.sub_parameter_weighted_average,
+                "Weighted Average (out of 7)": user.weighted_average_out_of_7,
                 "Zonal Rank": user.zonal_rank,
               };
             }
@@ -2672,10 +2695,10 @@ const CustomPara = ({
               return {
                 SNo: user.s_no,
                 "Zone name ": user.zone_name,
-                "Commissionerate Name":user.commissionerate_name,
+                "Commissionerate Name": user.commissionerate_name,
                 "Score Details": "Show",
-                "Score Out of 10":user.sub_parameter_weighted_average,
-                "Weighted Average (out of 7)":user.weighted_average_out_of_7,
+                "Score Out of 10": user.sub_parameter_weighted_average,
+                "Weighted Average (out of 7)": user.weighted_average_out_of_7,
                 "Zonal Rank": user.zonal_rank,
               };
             }
@@ -2683,10 +2706,10 @@ const CustomPara = ({
               return {
                 SNo: user.s_no,
                 "Zone name ": user.zone_name,
-                "Commissionerate Name":user.commissionerate_name,
+                "Commissionerate Name": user.commissionerate_name,
                 "Score Details": "Show",
-                "Score Out of 10":user.sub_parameter_weighted_average,
-                "Weighted Average (out of 11)":user.weighted_average_out_of_11,
+                "Score Out of 10": user.sub_parameter_weighted_average,
+                "Weighted Average (out of 11)": user.weighted_average_out_of_11,
                 "Zonal Rank": user.zonal_rank,
               };
             }
@@ -2694,10 +2717,21 @@ const CustomPara = ({
               return {
                 SNo: user.s_no,
                 "Zone name ": user.zone_name,
-                "Commissionerate Name":user.commissionerate_name,
+                "Commissionerate Name": user.commissionerate_name,
                 "Score Details": "Show",
-                "Score Out of 10":user.sub_parameter_weighted_average,
-                "Weighted Average (out of 6)":user.weighted_average_out_of_6,
+                "Score Out of 10": user.sub_parameter_weighted_average,
+                "Weighted Average (out of 6)": user.weighted_average_out_of_6,
+                "Zonal Rank": user.zonal_rank,
+              };
+            }
+            case "unclaimed_cargo": {
+              return {
+                SNo: user.s_no,
+                "Zone name ": user.zone_name,
+                "Commissionerate Name": user.commissionerate_name,
+                "Score Details": "Show",
+                "Score Out of 10": user.sub_parameter_weighted_average,
+                "Weighted Average (out of 6)": user.weighted_average_out_of_6,
                 "Zonal Rank": user.zonal_rank,
               };
             }
@@ -2705,10 +2739,10 @@ const CustomPara = ({
               return {
                 SNo: user.s_no,
                 "Zone name ": user.zone_name,
-                "Commissionerate Name":user.commissionerate_name,
+                "Commissionerate Name": user.commissionerate_name,
                 "Score Details": "Show",
-                "Score Out of 10":user.sub_parameter_weighted_average,
-                "Weighted Average (out of 6)":user.weighted_average_out_of_6,
+                "Score Out of 10": user.sub_parameter_weighted_average,
+                "Weighted Average (out of 6)": user.weighted_average_out_of_6,
                 "Zonal Rank": user.zonal_rank,
               };
             }
@@ -2773,6 +2807,20 @@ const CustomPara = ({
             }
 
             case "arrest_and_prosecution": {
+              return {
+                SNo: user.s_no,
+                "Commissionerate": user.commissionerate_name,
+                "Zone": user.zone_name,
+                // "Absolute Number": user.absval,
+                // "Percentage (For the Month)": user.totalScore,
+                // "Way to Grade (Score out of 10)": user.way_to_grade
+                "Score out of 10": user.sub_parameter_weighted_average,
+                "Weighted Average (out of 6)": user.weighted_average_out_of_6,
+                "Score Details": "Show",
+                "Commissionerate Rank": user.zonal_rank,
+              };
+            }
+            case "unclaimed_cargo": {
               return {
                 SNo: user.s_no,
                 "Commissionerate": user.commissionerate_name,

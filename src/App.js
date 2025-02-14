@@ -23,11 +23,9 @@ import ForgetPassword from "./Components/Pages/ForgetPassword";
 
 function App() {
   const [sidebarData, setSidebarData] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [sessionExpired, setSessionExpired] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogText, setDialogText] = useState("");
-  const [sessionExpired, setSessionExpired] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { pathname } = location;
@@ -35,83 +33,81 @@ function App() {
   const storedUserString = localStorage.getItem("user");
   const token = sessionStorage.getItem("token");
 
-  // Reset session timeout to 10 minutes
+  // ✅ Set session timeout for 10 minutes
   const resetSessionTimeout = () => {
-    const expirationTime = new Date().getTime() + 10 * 60 * 1000; // Set expiration time to 10 minutes from current time
+    const expirationTime = new Date().getTime() + 10 * 60 * 1000;
     localStorage.setItem("expirationTime", expirationTime);
   };
 
-  // Check for session timeout and log the user out if necessary
+  // ✅ Check for session expiration
   const checkSessionTimeout = () => {
     const expirationTime = localStorage.getItem("expirationTime");
-    const currentTime = new Date().getTime(); // Get current time
+    const currentTime = new Date().getTime();
 
-    const currentPath = window.location.pathname;
-    const loginPagePath = "/";
-
-    // Skip session timeout check if the user is on the login page
-    if (currentPath === loginPagePath) {
-      return;
-    }
-
-    // If expirationTime exists and current time is greater than expirationTime, log the user out
     if (expirationTime && currentTime > parseInt(expirationTime, 10)) {
-      const storedUserString = localStorage.getItem("user"); // Ensure user is logged in
-
       if (storedUserString) {
-        setSessionExpired(true); // Set session expired state
-        localStorage.clear(); // Clear local storage to log the user out
+        setSessionExpired(true);
+        localStorage.clear();
         alert("Your session has expired. Please log in again.");
-        navigate("/"); // Navigate to the login page
+        navigate("/");
       }
     }
   };
 
-  // Add event listeners to track user activity and reset session timeout
+  // ✅ Handle tab close (expire session only on tab close, NOT refresh)
   useEffect(() => {
-    
+    const handleTabClose = (event) => {
+      if (!event.persisted) {
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("userSession");
+      }
+    };
+
+    window.addEventListener("visibilitychange", handleTabClose);
+    return () => {
+      window.removeEventListener("visibilitychange", handleTabClose);
+    };
+  }, []);
+
+  // ✅ Track user activity and reset session timeout
+  useEffect(() => {
     checkSessionTimeout();
 
-    const intervalId = setInterval(checkSessionTimeout, 600000);  // 10 minutes interval
-
-    // Set up event listeners to reset session timeout on user activity (mouse move or key press)
+    const intervalId = setInterval(checkSessionTimeout, 600000); // 10 minutes
     window.addEventListener("mousemove", resetSessionTimeout);
     window.addEventListener("keydown", resetSessionTimeout);
 
     return () => {
-      clearInterval(intervalId); // Clear the interval
-      window.removeEventListener("mousemove", resetSessionTimeout); // Remove mousemove listener
-      window.removeEventListener("keydown", resetSessionTimeout); // Remove keydown listener
+      clearInterval(intervalId);
+      window.removeEventListener("mousemove", resetSessionTimeout);
+      window.removeEventListener("keydown", resetSessionTimeout);
     };
-  }, []); // Empty dependency array ensures the effect runs once on mount
+  }, []);
 
-  // Redirect the user to the dashboard if they are logged in, else to login page
+  // ✅ Redirect on app start (Show login page first)
   useEffect(() => {
-    if (storedUserString) {
-      if (pathname === "/") {
-        navigate("/dashboard"); // Redirect to Dashboard if already logged in
-      }
-    } else {
-      const allowedPaths = ["/", "/changepassword", "/registration", "/forgetpassword"];
-      if (!allowedPaths.includes(pathname)) {
-        navigate("/"); // Redirect to Login only if not on allowed pages
-      }
-    }
-  }, [pathname, storedUserString, navigate]);
-  
+    const allowedPaths = ["/", "/forgetpassword"]; // Allow login & forget password page
 
+    if (!storedUserString || !token) {
+      if (!allowedPaths.includes(pathname)) {
+        navigate("/"); // Redirect to login page if not logged in
+      }
+
+    } else if (pathname === "/") {
+      navigate("/dashboard"); // If logged in, go to dashboard
+    }
+  }, [pathname, storedUserString, token, navigate]);
+
+  // ✅ Handle Sidebar Data Change
   const handleSidebarDataChange = (newData) => {
     setSidebarData(newData);
   };
 
-  const handleOpenDialog = () => {
-    setOpenDialog(true);
-  };
-
+  // ✅ Handle Dialog Close
   const handleCloseDialog = () => {
     setOpenDialog(false);
-    setLoading(true);
   };
+
 
   // Custom CSS styling for the dialog
   const dialogStyles = {
@@ -137,16 +133,20 @@ function App() {
   return (
     <>
       {sessionExpired ? (
+        <>
         <Login />
+        <ForgetPassword />
+        </>
       ) : (
         <>
           {storedUserString ? (
             <>
-              <Sidebar data={sidebarData} />
+              {/* Show Sidebar & Header only if NOT on the Login Page */}
+              {pathname !== "/" && <Sidebar data={sidebarData} />}
               <div className="wrapper d-flex flex-column min-vh-100">
-                <Header onDataChange={handleSidebarDataChange} />
+                {pathname !== "/" && <Header onDataChange={handleSidebarDataChange} />}
                 <RouteData />
-                <Footer />
+                {pathname !== "/" && <Footer />}
               </div>
             </>
           ) : (
@@ -155,6 +155,7 @@ function App() {
               <Route path="/forgetpassword" element={<ForgetPassword />} />
             </Routes>
           )}
+
 
           <Dialog
             open={openDialog}

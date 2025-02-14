@@ -1239,7 +1239,7 @@ const Subpara = ({
 
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average (Out of 5)",
+      label: "Weighted Average (Out of 6)",
     });
 
     columnscomm.splice(3, 0, {
@@ -1255,7 +1255,7 @@ const Subpara = ({
 
     columnscomm.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average (Out of 5)",
+      label: "Weighted Average (Out of 6)",
     });
   } else if (name === "gst9b") {
     columns.splice(3, 0, {

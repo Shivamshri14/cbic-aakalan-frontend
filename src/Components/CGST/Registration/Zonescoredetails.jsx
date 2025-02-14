@@ -68,6 +68,7 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
     {
       key:
         name === "arrest_and_prosecution" ||
+        name === "gst_arrest_and_prosecution" ||
         name === "recovery_of_arrears" ||
         name === "registration" ||
         name === "investigation" ||
@@ -290,6 +291,32 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
       break;
 
     case "arrest_and_prosecution":
+      columns.splice(2, 0, {
+        key: "gst",
+        label: "Sub Parameters",
+      });
+
+      columns.splice(4, 0, {
+        key: "total_score",
+        label: " Percentage for the month",
+      });
+
+      columns.splice(3, 0, {
+        key: "absolutevale",
+        label: "Absolute Number",
+      });
+
+      columns.splice(5, 0, {
+        key: "way_to_grade",
+        label: "Way to Grade (Marks) out of 10",
+      });
+
+      columns.splice(6, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average (out of 10)",
+      });
+break;
+case "gst_arrest_and_prosecution":
       columns.splice(2, 0, {
         key: "gst",
         label: "Sub Parameters",
@@ -632,7 +659,42 @@ break;
         console.log("RES", res);
 
         setData(res.map((item, index) => ({ ...item, s_no: index + 1 })));
-      } else {
+      } else if (name === "gst_arrest_and_prosecution") {
+        const endpoints = ["gst9a", "gst9b"];
+
+        // Make API calls for both endpoints
+        const responses = await Promise.all(
+          endpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/${endpoint}`, {
+                params: { month_date: newdate, type: "zone" },
+              })
+              .then((response) => ({
+                data: response.data,
+                gst: endpoint.toUpperCase(),
+              }))
+          )
+        );
+
+        if(responses){
+          setLoading(false);
+        }
+
+        relevantAspects = name.toUpperCase();
+
+        const allData = responses.flatMap((response) =>
+          response.data.map((item) => ({
+            ...item, // Keep all the data intact
+            gst: response.gst,
+          }))
+        );
+
+        const res = allData.filter((item) => item.zone_code === zone_code);
+        console.log("RES", res);
+
+        setData(res.map((item, index) => ({ ...item, s_no: index + 1 })));
+      }
+      else {
         const response = await apiClient.get(`/cbic/t_score/${name}`, {
           params: {
             month_date: newdate,
@@ -934,6 +996,17 @@ break;
         }
 
         case "arrest_and_prosecution": {
+          return {
+            "S.No.": user.s_no,
+            Zone: user.zone_name,
+            "Sub Parameters": user.gst,
+            "Absolute Number": user.absolutevale,
+            "Percentage for the month": user.total_score,
+            "Weighted Average (out of 5)": user.sub_parameter_weighted_average,
+          };
+        }
+
+        case "gst_arrest_and_prosecution": {
           return {
             "S.No.": user.s_no,
             Zone: user.zone_name,

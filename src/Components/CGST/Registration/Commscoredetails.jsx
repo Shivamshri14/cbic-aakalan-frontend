@@ -67,7 +67,7 @@ const Commscoredetails = ({
         name === "adjudication(legacy cases)" ||
           name === "appeals" ||
           name === "recovery_of_arrears" ||
-          name === "arrest_and_prosecution" || name === "registration" || name === "investigation" || name === "audit" || name === "scrutiny/assessment"
+          name === "arrest_and_prosecution" || name === "gst_arrest_and_prosecution" || name === "registration" || name === "investigation" || name === "audit" || name === "scrutiny/assessment"
           ? "zone_name"
           : "zoneName",
       label: "Zone",
@@ -77,7 +77,7 @@ const Commscoredetails = ({
         name === "adjudication(legacy cases)" ||
           name === "appeals" ||
           name === "recovery_of_arrears" ||
-          name === "arrest_and_prosecution" || name === "registration" || name === "investigation" || name === "audit" || name === "scrutiny/assessment"
+          name === "arrest_and_prosecution" || name === "gst_arrest_and_prosecution" || name === "registration" || name === "investigation" || name === "audit" || name === "scrutiny/assessment"
           ? "commissionerate_name"
           : "commName",
       label: "Commissionerate",
@@ -267,7 +267,28 @@ const Commscoredetails = ({
       key: "sub_parameter_weighted_average",
       label: "Weighted Average(out of 10)",
     });
-  } else if (name === "registration") {
+  }  else if (name === "gst_arrest_and_prosecution") {
+    columns.splice(3, 0, {
+      key: "gst",
+      label: "Sub Parameters",
+    });
+
+    columns.splice(5, 0, {
+      key: "way_to_grade",
+      label: "Way to Grade (Marks) Score out of 10",
+    });
+
+    columns.splice(4, 0, {
+      key: "absolutevale",
+      label: "Absolute Number",
+    });
+
+    columns.splice(6, 0, {
+      key: "sub_parameter_weighted_average",
+      label: "Weighted Average(out of 10)",
+    });
+  }
+   else if (name === "registration") {
     columns.splice(3, 0, {
       key: "gst",
       label: "Sub Parameters",
@@ -734,7 +755,45 @@ const Commscoredetails = ({
         } catch (error) {
           console.error("Error fetching adjudication data:", error);
         }
-      } else {
+      } else if (name === "gst_arrest_and_prosecution") {
+        const endpoints = [
+          "gst9a",
+          "gst9b"
+        ];
+
+        // Make API calls for both endpoints
+        const responses = await Promise.all(
+          endpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/${endpoint}`, {
+                params: { month_date: newdate, type: "all_commissary" },
+              })
+              .then((response) => ({
+                data: response.data,
+                gst: endpoint.toUpperCase(),
+              }))
+          )
+        );
+
+        if (responses) {
+          setloading(false);
+        }
+
+        const allData = responses.flatMap((response) =>
+          response.data.map((item) => ({
+            ...item, // Keep all the data intact
+            gst: response.gst,
+          }))
+        );
+
+        const res = allData.filter(
+          (item) => item.commissionerate_name === come_name
+        );
+        console.log("RES", res);
+
+        setData(res.map((item, index) => ({ ...item, s_no: index + 1 })));
+      } 
+      else {
         // Make a GET request to the specified endpoint
         const response = await apiClient.get(`/cbic/t_score/${name}`, {
           params: {

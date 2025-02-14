@@ -62,7 +62,7 @@ export const Sidebar = ({ data }) => {
         </div>
         <ul className="sidebar-nav" data-coreui="navigation" data-simplebar>
           <li className="nav-item">
-            <Link to="/" className="nav-link">
+            <Link to="/dashboard" className="nav-link">
               <DashboardIcon />
               Dashboard
               <span className="badge badge-sm bg-info ms-auto">NEW</span>

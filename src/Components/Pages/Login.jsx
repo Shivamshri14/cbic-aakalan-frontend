@@ -148,6 +148,18 @@ const Login = () => {
     }));
   };
 
+  useEffect(() => {
+  const handleTabClose = () => {
+    sessionStorage.clear(); // Clears all session data
+  };
+
+  window.addEventListener("beforeunload", handleTabClose);
+  return () => {
+    window.removeEventListener("beforeunload", handleTabClose);
+  };
+}, []);
+
+
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };

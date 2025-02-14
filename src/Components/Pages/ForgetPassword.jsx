@@ -162,7 +162,7 @@ const ForgetPassword = () => {
           }}
         >
           <Typography component="h1" variant="h5" className="mb-4">
-            FORGOT PASSWORD
+            FORGET PASSWORD
           </Typography>
 
           <form onSubmit={handleSubmit}>

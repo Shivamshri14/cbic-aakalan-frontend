@@ -868,12 +868,12 @@ const AllParamDashboard = ({
                     <div>
                       <div className="fs-4 fw-semibold text-danger">
                         {""}{" "}
-                         {/* <Link
-                      to="/zoneparameters?name=arrest_and_prosecution"
+                          <Link
+                      to="/zoneparameters?name=gst_arrest_and_prosecution"
                       className="text-white sub-h"
-                    >  */}
+                    >   
                         Arrest and Prosecution
-                         {/* </Link> */}
+                         </Link>
                         {""}
                       </div>
                       <ol className="par-list b-4">
