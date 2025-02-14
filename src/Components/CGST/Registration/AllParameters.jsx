@@ -1042,6 +1042,8 @@ const AllParameters = ({
 
   charts(FusionCharts);
   Zune(FusionCharts);
+  
+  
 
   const colorsallcomm = [
     "#00FF00",

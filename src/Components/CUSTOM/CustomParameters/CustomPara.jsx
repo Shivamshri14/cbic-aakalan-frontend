@@ -2500,6 +2500,11 @@ const CustomPara = ({
   charts(FusionCharts);
   Zune(FusionCharts);
 
+  // Disable watermark
+  FusionCharts.options.license({
+    creditLabel: false,
+  });
+
   const colorstopzone = ["#00FF00", "#00FF00", "#00FF00", "#00FF00", "#00FF00"];
 
   const getBarColor = (index) => {

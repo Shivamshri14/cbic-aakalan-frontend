@@ -35,7 +35,7 @@ function App() {
 
   // ✅ Set session timeout for 10 minutes
   const resetSessionTimeout = () => {
-    const expirationTime = new Date().getTime() + 10 * 60 * 1000;
+    const expirationTime = new Date().getTime() + 3 * 60 * 1000;
     localStorage.setItem("expirationTime", expirationTime);
   };
 
@@ -44,7 +44,7 @@ function App() {
     const expirationTime = localStorage.getItem("expirationTime");
     const currentTime = new Date().getTime();
 
-    if (expirationTime && currentTime > parseInt(expirationTime, 10)) {
+    if (expirationTime && currentTime > parseInt(expirationTime, 1000)) {
       if (storedUserString) {
         setSessionExpired(true);
         localStorage.clear();
@@ -55,25 +55,39 @@ function App() {
   };
 
   // ✅ Handle tab close (expire session only on tab close, NOT refresh)
+
   useEffect(() => {
     const handleTabClose = (event) => {
-      if (!event.persisted) {
-        sessionStorage.removeItem("token");
-        sessionStorage.removeItem("userSession");
+      if (!sessionStorage.getItem("pageReloaded")) {
+        // ✅ Only clear session when the tab is truly closed (NOT on refresh)
+        console.log("Tab Closed: Clearing Session...");
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
       }
     };
 
-    window.addEventListener("visibilitychange", handleTabClose);
+    const handleRefresh = () => {
+      // ✅ Mark that the page was refreshed (so session stays intact)
+      sessionStorage.setItem("pageReloaded", "true");
+    };
+
+    window.addEventListener("beforeunload", handleRefresh);
+    window.addEventListener("unload", handleTabClose);
+
     return () => {
-      window.removeEventListener("visibilitychange", handleTabClose);
+      window.removeEventListener("beforeunload", handleRefresh);
+      window.removeEventListener("unload", handleTabClose);
     };
   }, []);
+
+
+
 
   // ✅ Track user activity and reset session timeout
   useEffect(() => {
     checkSessionTimeout();
 
-    const intervalId = setInterval(checkSessionTimeout, 600000); // 10 minutes
+    const intervalId = setInterval(checkSessionTimeout, 18000); // 10 minutes
     window.addEventListener("mousemove", resetSessionTimeout);
     window.addEventListener("keydown", resetSessionTimeout);
 
@@ -86,17 +100,19 @@ function App() {
 
   // ✅ Redirect on app start (Show login page first)
   useEffect(() => {
-    const allowedPaths = ["/", "/forgetpassword"]; // Allow login & forget password page
+    const allowedPaths = ["/", "/forgetpassword"];
+    const isLoggedIn = localStorage.getItem("user") && sessionStorage.getItem("token");
 
-    if (!storedUserString || !token) {
-      if (!allowedPaths.includes(pathname)) {
-        navigate("/"); // Redirect to login page if not logged in
+    if (isLoggedIn) {
+      if (pathname === "/" || pathname === "/forgetpassword") {
+        navigate("/dashboard", { replace: true }); // Prevents history stack issues
       }
-
-    } else if (pathname === "/") {
-      navigate("/dashboard"); // If logged in, go to dashboard
+    } else if (!allowedPaths.includes(pathname)) {
+      navigate("/", { replace: true }); // Redirect to login only if needed
     }
-  }, [pathname, storedUserString, token, navigate]);
+  }, [pathname, navigate]);
+
+
 
   // ✅ Handle Sidebar Data Change
   const handleSidebarDataChange = (newData) => {
@@ -134,8 +150,8 @@ function App() {
     <>
       {sessionExpired ? (
         <>
-        <Login />
-        <ForgetPassword />
+          <Login />
+          <ForgetPassword />
         </>
       ) : (
         <>
