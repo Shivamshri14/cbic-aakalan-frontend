@@ -1160,7 +1160,7 @@ const AllParameters = ({
     categories: [
       {
         category: 
-        (name==="recovery_of_arrears"|| name==="arrest_and_prosecution" || name === "gst_arrest_and_prosecution" ||name==="audit"|| name==="registration")?
+        (name==="recovery_of_arrears"|| name==="arrest_and_prosecution" || name === "gst_arrest_and_prosecution" ||  name === "adjudication(legacy cases)" || name==="audit"|| name==="registration")?
         selectedOption1 === "Zones"
             ? bardata.map((index) => ({ label: index.zone_name }))
             : bardata.map((index) => ({ label: index.commissionerate_name })):
@@ -1173,7 +1173,7 @@ const AllParameters = ({
       {
         data: bardata.map((item, index) => ({
           label:
-            (name === "recovery_of_arrears" || name === "arrest_and_prosecution" || name==="gst_arrest_and_prosecution" ||name==="audit"|| name==="registration")
+            (name === "recovery_of_arrears" || name === "arrest_and_prosecution" || name==="gst_arrest_and_prosecution" || name === "adjudication(legacy cases)" || name==="audit"|| name==="registration")
               ? selectedOption1 === "Zones"
                 ? item.zone_name
                 : item.commissionerate_name
@@ -1193,7 +1193,7 @@ const AllParameters = ({
               : name === "appeals" ||
                 name === "recovery_of_arrears" ||
                 name === "audit" ||
-                name === "arrest_and_prosecution"|| name==="registration" || name === "gst_arrest_and_prosecution"
+                name === "arrest_and_prosecution"|| name==="registration" || name === "gst_arrest_and_prosecution" || name === "adjudication(legacy cases)" 
               ? item.sub_parameter_weighted_average
               : name === "scrutiny/assessment"
               ? item.sub_parameter_weighted_average

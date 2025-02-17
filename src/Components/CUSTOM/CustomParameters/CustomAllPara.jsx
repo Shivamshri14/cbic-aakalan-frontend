@@ -281,6 +281,76 @@ const CustomAllPara = ({
         setData(sorted.map((item, index) => ({ ...item, s_no: index + 1 })));
 
       }
+      else if (name === "recovery_of_arrears") {
+
+        const cusendpoints = [
+          "cus10a",
+          "cus10b",
+        ];
+
+        const responses = await Promise.all(
+          cusendpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/custom/${endpoint}`, {
+                params: { month_date: newdate, type: "zone" },
+              })
+              .then((response) => ({
+                data: response.data,
+                gst: endpoint.toUpperCase(),
+              }))
+          )
+        );
+
+        if (responses) {
+          setloading(false);
+        }
+
+        console.log("Response", responses);
+
+        const accumulationMap = new Map();
+
+        responses.flatMap((response) =>
+          response.data.forEach((item) => {
+            const key = item.zone_name;
+            if (!accumulationMap.has(key)) {
+              accumulationMap.set(key, {
+                ...item,
+                sub_parameter_weighted_average: 0,
+                total_score: 0,
+                gst: response.gst,
+              });
+            }
+            const accumulatedItem = accumulationMap.get(key);
+            accumulatedItem.sub_parameter_weighted_average +=
+              item.sub_parameter_weighted_average;
+            accumulatedItem.total_score += item.total_score; // Update the map with the new summed values
+            accumulationMap.set(key, accumulatedItem);
+          })
+        );
+        const allData = Array.from(accumulationMap.values());
+        console.log("Consolidated and Summed Data", allData);
+
+        const finalData = allData.map((item) => {
+          item.sub_parameter_weighted_average = parseFloat(
+            item.sub_parameter_weighted_average.toFixed(1)
+          );
+          item.total_score = parseFloat(item.total_score.toFixed(1));
+          return item;
+        });
+        console.log(
+          "Final Summed Data with Total Score and Weighted Average",
+          finalData
+        );
+
+        const sorted = finalData.sort(
+          (a, b) =>
+            b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+        );
+
+        setBarData([...sorted]);
+        setData(sorted.map((item, index) => ({ ...item, s_no: index + 1 })));
+
+      }
       else if (name === "disposal/pendency") {
 
         const cusendpoints = [
@@ -812,6 +882,75 @@ const CustomAllPara = ({
         setBarData([...sorted]);
         setData(sorted.map((item, index) => ({ ...item, s_no: index + 1 })));
       }
+      else if (name === "recovery_of_arrears") {
+
+        const cusendpoints = [
+          "cus10a",
+          "cus10b",
+        ];
+
+        const responses = await Promise.all(
+          cusendpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/custom/${endpoint}`, {
+                params: { month_date: newdate, type: "all_commissary" },
+              })
+              .then((response) => ({
+                data: response.data,
+                gst: endpoint.toUpperCase(),
+              }))
+          )
+        );
+
+        if (responses) {
+          setloading(false);
+        }
+
+        console.log("Response", responses);
+
+        const accumulationMap = new Map();
+
+        responses.flatMap((response) =>
+          response.data.forEach((item) => {
+            const key = item.commissionerate_name;
+            if (!accumulationMap.has(key)) {
+              accumulationMap.set(key, {
+                ...item,
+                sub_parameter_weighted_average: 0,
+                total_score: 0,
+                gst: response.gst,
+              });
+            }
+            const accumulatedItem = accumulationMap.get(key);
+            accumulatedItem.sub_parameter_weighted_average +=
+              item.sub_parameter_weighted_average;
+            accumulatedItem.total_score += item.total_score; // Update the map with the new summed values
+            accumulationMap.set(key, accumulatedItem);
+          })
+        );
+        const allData = Array.from(accumulationMap.values());
+        console.log("Consolidated and Summed Data", allData);
+
+        const finalData = allData.map((item) => {
+          item.sub_parameter_weighted_average = parseFloat(
+            item.sub_parameter_weighted_average.toFixed(1)
+          );
+          item.total_score = parseFloat(item.total_score.toFixed(1));
+          return item;
+        });
+        console.log(
+          "Final Summed Data with Total Score and Weighted Average",
+          finalData
+        );
+
+        const sorted = finalData.sort(
+          (a, b) =>
+            b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+        );
+
+        setBarData([...sorted]);
+        setData(sorted.map((item, index) => ({ ...item, s_no: index + 1 })));
+      }
       else if (name === "disposal/pendency") {
 
         const cusendpoints = [
@@ -1214,7 +1353,8 @@ const CustomAllPara = ({
           label:
             name === "investigation" ||
               name === "epcg" ||
-              name === "export_obligation(AA)" ||
+              name === "export_obligation(AA)" || 
+              name === "recovery_of_arrears" ||
               name === "arrest_and_prosecution" ||
               name === "disposal/pendency" ||
               name === "unclaimed_cargo"
@@ -1234,6 +1374,7 @@ const CustomAllPara = ({
             name === "investigation" ||
               name === "epcg" ||
               name === "export_obligation(AA)" ||
+              name === "recovery_of_arrears" ||
               name === "arrest_and_prosecution" ||
               name === "disposal/pendency" ||
               name === "unclaimed_cargo"

@@ -58,7 +58,7 @@ const Commpiechart = () => {
         color: "#5B9BD5",
       },
       {
-        label: "Adjudication(Legacy Cases)",
+        label: "adjudication(legacy cases)",
         value: 15,
         color: "#6EAC44",
       },

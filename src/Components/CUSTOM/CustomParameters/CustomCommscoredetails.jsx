@@ -54,23 +54,23 @@ const CustomCommscoredetails = ({
       label: "S.No.",
     },
     {
-      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency"|| name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)" || name === "unclaimed_cargo" ? "zone_name" : "zoneName",
+      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency"|| name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)" || name === "unclaimed_cargo" || name === "recovery_of_arrears" ? "zone_name" : "zoneName",
       label: "Zone",
     },
     {
-      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)"  || name === "unclaimed_cargo" ? "commissionerate_name" : "commName",
+      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)"  || name === "unclaimed_cargo" || name === "recovery_of_arrears"? "commissionerate_name" : "commName",
       label: "Commissionerate",
     },
     {
-      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)"  || name === "unclaimed_cargo" ? "gst" : "custom",
+      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)"  || name === "unclaimed_cargo" || name === "recovery_of_arrears"? "gst" : "custom",
       label: "Sub Parameters",
     },
     {
-      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)" || name === "unclaimed_cargo"  ? "absolutevale" : "absval",
+      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)" || name === "unclaimed_cargo"  || name === "recovery_of_arrears"? "absolutevale" : "absval",
       label: "Absolute Figures (N/D)",
     },
     {
-      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)" || name === "unclaimed_cargo"  ? "total_score" : "totalScore",
+      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)" || name === "unclaimed_cargo" || name === "recovery_of_arrears" ? "total_score" : "totalScore",
       label: "Percentage for the month",
     },
     // {
@@ -96,7 +96,7 @@ const CustomCommscoredetails = ({
   const fetchDatacomm = async (name) => {
     try {
       // Handle the case where name is neither "export_obligation(AA)", "epcg", "disposal/pendency", or "arrest_and_prosecution"
-      if (name !== "export_obligation(AA)" && name !== "epcg" && name !== "disposal/pendency" && name !== "arrest_and_prosecution" && name !== "DisposalOfConfiscatedGoldAndNDPS" && name !== "adjudication(legacy cases)" && name !=="unclaimed_cargo") {
+      if (name !== "export_obligation(AA)" && name !== "epcg" && name !== "disposal/pendency" && name !== "arrest_and_prosecution" && name !== "DisposalOfConfiscatedGoldAndNDPS" && name !== "adjudication(legacy cases)" && name !=="unclaimed_cargo" && name !=="recovery_of_arrears") {
         const response = await apiClient.get(`/cbic/custom/parameter/${name}`, {
           params: {
             month_date: newdate,
@@ -167,6 +167,54 @@ const CustomCommscoredetails = ({
           setloading(false);
         }
   
+        setData(
+          filteredData.map((item, index) => ({
+            ...item,
+            s_no: index + 1,
+          }))
+        );
+      }
+      else if (name === "recovery_of_arrears") {
+        const cusendpoints = ["cus10a", "cus10b"];
+
+        const responses = await Promise.all(
+          cusendpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/custom/${endpoint}`, {
+                params: { month_date: newdate, type: "all_commissary" },
+              })
+              .then((response) => ({
+                data: response.data,
+                gst: endpoint.toUpperCase(),
+              }))
+          )
+        );
+
+        console.log("Response", responses);
+
+        if (responses) {
+          setloading(false);
+        }
+
+        const allData = responses.flatMap((response) =>
+          response.data.map((item) => ({
+            ...item,
+            gst: response.gst, // Adding the commissionerate name (gst) to each item
+          }))
+        );
+        console.log("FINAL RESPONSE", allData);
+
+        const filteredData = allData.filter(
+          (item) =>
+            item.zone_code === zone_code && item.commissionerate_name === come_name
+        );
+        console.log("Filtered Data by Zone Code and Commissionerate:", filteredData);
+
+        if (filteredData.length === 0) {
+          console.error("No data found for the specified zone_code and come_name");
+          setloading(false);
+        }
+
         setData(
           filteredData.map((item, index) => ({
             ...item,
@@ -509,6 +557,7 @@ const CustomCommscoredetails = ({
 
       break;
 
+
     case "DisposalOfConfiscatedGoldAndNDPS":
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
@@ -520,10 +569,19 @@ const CustomCommscoredetails = ({
       case "export_obligation(AA)":
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
-        label: "Weighted average (Out of 3)",
+        label: "Weighted average (Out of 10)",
       });
 
       break;
+      case "recovery_of_arrears":
+        columns.splice(6, 0, {
+          key: "sub_parameter_weighted_average",
+          label: "Weighted average (Out of 3)",
+        });
+  
+        break;
+  
+      
 
     case "CommissionerAppeals":
       columns.splice(6, 0, {

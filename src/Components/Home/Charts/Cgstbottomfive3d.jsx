@@ -165,7 +165,7 @@ const Cgstbottomfive3d = () => {
     let series6 = chart.series.push(new am4charts.ColumnSeries3D());
     series6.dataFields.categoryX = "category";
     series6.dataFields.valueY = "value6";
-    series6.name = "Adjudication(Legacy Cases)";
+    series6.name = "adjudication(legacy cases)";
     series6.columns.template.tooltipText = "{name}: [bold]{valueY}[/]";
     series6.stacked = true;
     series6.fill = "#00FBFF";

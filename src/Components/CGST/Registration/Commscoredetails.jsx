@@ -330,6 +330,29 @@ const Commscoredetails = ({
       label: "Weighted Average(out of 10)",
     });
   }
+
+  else if (name === "audit") {
+    columns.splice(3, 0, {
+      key: "gst",
+      label: "Sub Parameters",
+    });
+
+    columns.splice(5, 0, {
+      key: "total_score",
+      label: "Score of Sub Parameters (%)",
+    });
+
+    columns.splice(4, 0, {
+      key: "absolutevale",
+      label: "Absolute Number",
+    });
+
+    columns.splice(6, 0, {
+      key: "sub_parameter_weighted_average",
+      label: "Weighted Average(out of 12)",
+    });
+  }
+  
   else {
     columns.splice(3, 0, {
       key: "gst",
@@ -682,79 +705,44 @@ const Commscoredetails = ({
           }))
         );
       } else if (name === "adjudication(legacy cases)") {
-        try {
-          const endpoints = ["gst6a", "gst6b", "gst6c", "gst6d"];
+        const endpoints = [
+          "gst6a",
+          "gst6b",
+          "gst6c",
+          "gst6d"
+        ];
 
-          // Fetch data from all endpoints in parallel
-          const responses = await Promise.all(
-            endpoints.map((endpoint) =>
-              apiClient.get(`/cbic/${endpoint}`, {
+        // Make API calls for both endpoints
+        const responses = await Promise.all(
+          endpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/${endpoint}`, {
                 params: { month_date: newdate, type: "all_commissary" },
-              }).then((response) => response.data)
-            )
-          );
-
-          console.log("API Responses:", responses);
-          setloading(false); // Set loading to false after API calls complete
-
-          // Flatten all responses into a single array
-          const appeals = responses.flat();
-          console.log("FINAL RESPONSE", appeals);
-
-          // Add serial numbers to each entry
-          const updatedAppeals = appeals.map((item, index) => ({
-            ...item,
-            s_no: index + 1,
-          }));
-
-          // Group data by zone_code -> commissionerate_name
-          const appealsByZone = updatedAppeals.reduce((acc, item) => {
-            const zoneCode = item.zone_code;
-            const commName = item.commissionerate_name;
-
-            if (!acc[zoneCode]) {
-              acc[zoneCode] = {};
-            }
-
-            if (!acc[zoneCode][commName]) {
-              acc[zoneCode][commName] = [];
-            }
-
-            acc[zoneCode][commName].push(item);
-            return acc;
-          }, {});
-
-          // Replace these with actual values
-          const targetZoneCode = "your_zone_code_here";
-          const targetCommName = "your_comm_name_here";
-
-          console.log("Zone Code:", targetZoneCode);
-          console.log("Comm Name:", targetCommName);
-
-          if (
-            appealsByZone[targetZoneCode] &&
-            appealsByZone[targetZoneCode][targetCommName]
-          ) {
-            const gstValues = ["GST6A", "GST6B", "GST6C", "GST6D"];
-
-            // Assign GST values correctly
-            const updatedData = appealsByZone[targetZoneCode][targetCommName].map(
-              (item, index) => ({
-                ...item,
-                gst: gstValues[index % gstValues.length] || "NO_GST",
-                s_no: index + 1,
               })
-            );
+              .then((response) => ({
+                data: response.data,
+                gst: endpoint.toUpperCase(),
+              }))
+          )
+        );
 
-            console.log("Filtered Data:", updatedData);
-            setData(updatedData);
-          } else {
-            console.log("No matching items found.");
-            setData([]);
-          }
-        } catch (error) {
-          console.error("Error fetching adjudication data:", error);
+        if (responses) {
+          setloading(false);
         }
+
+        const allData = responses.flatMap((response) =>
+          response.data.map((item) => ({
+            ...item, // Keep all the data intact
+            gst: response.gst,
+          }))
+        );
+
+        const res = allData.filter(
+          (item) => item.commissionerate_name === come_name
+        );
+        console.log("RES", res);
+
+        setData(res.map((item, index) => ({ ...item, s_no: index + 1 })));
       } else if (name === "gst_arrest_and_prosecution") {
         const endpoints = [
           "gst9a",

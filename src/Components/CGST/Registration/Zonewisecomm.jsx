@@ -60,14 +60,14 @@ const Zonewisecomm = ({
     },
     {
       key:
-        name === "recovery_of_arrears" || name === "arrest_and_prosecution"|| name === "gst_arrest_and_prosecution" || name==="registration"|| name==="investigation" || name==="audit"|| name==="scrutiny/assessment"
+        name === "recovery_of_arrears" || name === "arrest_and_prosecution"|| name === "gst_arrest_and_prosecution" || name==="registration"|| name==="investigation" || name==="audit"|| name==="scrutiny/assessment" || name === "adjudication(legacy cases)" 
           ? "zone_name"
           : "zoneName",
       label: `Zone`,
     },
     {
       key:
-        name === "recovery_of_arrears" || name === "arrest_and_prosecution" || name === "gst_arrest_and_prosecution" || name==="registration"|| name==="investigation" || name==="audit"|| name==="scrutiny/assessment"
+        name === "recovery_of_arrears" || name === "arrest_and_prosecution" || name === "gst_arrest_and_prosecution" || name==="registration"|| name==="investigation" || name==="audit"|| name==="scrutiny/assessment" || name === "adjudication(legacy cases)"
           ? "commissionerate_name"
           : "commName",
       label: "Commissionerate",
@@ -279,6 +279,12 @@ const Zonewisecomm = ({
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
       label: "Weighted Average(Out of 10)",
+    });
+  } 
+  else if (name === "audit") {
+    columns.splice(6, 0, {
+      key: "sub_parameter_weighted_average",
+      label: "Weighted Average(Out of 12)",
     });
   } 
   else if (name === "adjudication") {
@@ -589,6 +595,62 @@ const Zonewisecomm = ({
       }
       else if (name === "gst_arrest_and_prosecution") {
         const endpoints = ["gst9a", "gst9b"];
+
+        // Make API calls for both endpoints
+        const responses = await Promise.all(
+          endpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/${endpoint}`, {
+                params: { month_date: newdate, type: "all_commissary" },
+              })
+              .then((response) => ({
+                data: response.data,
+                gst: endpoint.toUpperCase(),
+              }))
+          )
+        );
+
+        if (responses) {
+          setloading(false);
+        }
+
+        const allData = responses.flatMap((response) =>
+          response.data.map((item) => ({
+            ...item, // Keep all the data intact
+            gst: response.gst,
+          }))
+        );
+
+        const res = allData.filter((item) => item.zone_code === zone_code);
+
+        const summedByZone = res.reduce((acc, item) => {
+          const zoneCode = item.commissionerate_name;
+          const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
+
+          // If zone_code is encountered for the first time, initialize it
+          if (!acc[zoneCode]) {
+            acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+          }
+
+          // Sum only the sub_parameter_weighted_average for each zone_code
+          acc[zoneCode].sub_parameter_weighted_average += value;
+
+          return acc;
+        }, {});
+
+        const reducedAllData = Object.values(summedByZone).map((item)=>({
+          ...item,
+          sub_parameter_weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+        }));
+
+        console.log("Reduced All Data:", reducedAllData);
+
+        setData(
+          reducedAllData.map((item, index) => ({ ...item, s_no: index + 1 }))
+        );
+      }
+      else if (name === "adjudication(legacy cases)") {
+        const endpoints = ["gst6a", "gst6b","gst6c","gst6d"];
 
         // Make API calls for both endpoints
         const responses = await Promise.all(

@@ -23,6 +23,7 @@ const Allzones = ({
 }) => {
   const [toggle, setToggle] = useState(true);
   const navigate = useNavigate();
+  const [loading, setloading] = useState(true);
   const handleBack = () => {
     navigate(-1);
   };
@@ -43,6 +44,8 @@ const Allzones = ({
 
   const newdate = dayjs(selectedDate).format("YYYY-MM-DD");
 
+  
+
   const [datas, setDatas] = useState([]);
   const [data1, setData1] = useState([]);
   const [data2, setData2] = useState([]);
@@ -56,150 +59,153 @@ const Allzones = ({
 
   const fetchData = async () => {
     try {
+      console.log("🚀 Starting API requests...");
+  
       const endpoints = [
         "returnFiling",
-       // "scrutiny/assessment",
+        // "scrutiny/assessment",
         "adjudication",
         "adjudication(legacy cases)",
         "refunds",
         "appeals",
       ];
+  
+      console.log("✅ Endpoints:", endpoints);
+  
+      // Fetch data from all endpoints
       const responses = await Promise.all(
-        endpoints.map((endpoint) =>
-          apiClient
-            .get(`/cbic/t_score/${endpoint}`, {
+        endpoints.map(async (endpoint) => {
+          try {
+            const response = await apiClient.get(`/cbic/t_score/${endpoint}`, {
               params: { month_date: newdate, type: "parameter" },
-            })
-            .then((response) => ({
+            });
+  
+            console.log(`✅ Success for ${endpoint}:`, response.data);
+  
+            return {
               data: response.data,
               parameter: endpoint.toUpperCase(),
-            }))
-        )
+            };
+          } catch (error) {
+            console.error(`❌ Error fetching ${endpoint}:`, error.response?.data || error.message);
+            return { data: null, parameter: endpoint.toUpperCase(), error: error.message };
+          }
+        })
       );
-
-      const rest = responses.map((item) => ({ ...item }));
-      console.log("Responses", responses);
-      console.log("Rest", rest);
-
-      const response1 = responses[0];
-      const response2 = responses[1];
-      const response3 = responses[2];
-      const response4 = responses[3];
-      const response5 = responses[4];
-      const response6 = responses[5];
-
-      console.log("rest1",response1.data);
-      console.log("rest2",response2.data);
-      console.log("rest3",response3.data);
-      console.log("rest4",response4.data);
-      console.log("rest5",response5.data);
-
+  
+      console.log("✅ Final Responses:", responses);
+  
+      // Store responses safely
+      const response1 = responses[0] || {};
+      const response2 = responses[1] || {};
+      const response3 = responses[2] || {};
+      const response4 = responses[3] || {};
+      const response5 = responses[4] || {};
+      const response6 = responses[5] || {};
+  
+      console.log("✅ Response 1:", response1);
+      console.log("✅ Response 2:", response2);
+      console.log("✅ Response 3:", response3);
+      console.log("✅ Response 4:", response4);
+      console.log("✅ Response 5:", response5);
+      console.log("✅ Response 6:", response6);
+  
+      if (response1 && response2 && response3 && response4 && response5) {
+        setloading(false);
+      }
+  
+      // Ensure datas (state) is populated before using it
+      const datas = response1.data || [];
+  
       if (
         response2 &&
         response2.data &&
         response2.data.map((item) => item.totalScore) !== undefined
       ) {
         const totalScore = response2.data.map((item) => item.totalScore);
-
+  
         // Iterate through the items in response3 and set sub_parameter_weighted_average to totalScore
         response2.data.forEach((item, index) => {
           item.sub_parameter_weighted_average = totalScore[index];
         });
-
-        console.log("Updated response3 data with totalScore:", response3.data);
+  
+        console.log("Updated response2 data with totalScore:", response2.data);
       } else {
-        console.log("totalScore not found in response3 data.");
+        console.log("totalScore not found in response2 data.");
       }
-
-
+  
       if (
         response5 &&
         response5.data &&
-        response5.data.map((item) => item.parameter_wise_weighted_average) !== undefined
+        response5.data.map((item) => item.totalScore) !== undefined
       ) {
         const totalScore = response5.data.map((item) => item.parameter_wise_weighted_average);
-
-        // Iterate through the items in response3 and set sub_parameter_weighted_average to totalScore
+  
+        // Iterate through the items in response5 and set sub_parameter_weighted_average to totalScore
         response5.data.forEach((item, index) => {
           item.sub_parameter_weighted_average = totalScore[index];
         });
-
+  
         console.log("Updated response5 data with totalScore:", response5.data);
       } else {
-        console.log("totalScore not found in response3 data.");
+        console.log("totalScore not found in response5 data.");
       }
-
-
-
+  
       const accumulationMap = new Map();
-
-      responses.flatMap((response) =>
-        response.data.forEach((item) => {
+  
+      responses.flatMap((response, index) => {
+        if (!response.data || response.data.length === 0) {
+          console.log(`⚠️ Response ${index + 1} has no data.`);
+        }
+        return (response.data || []).forEach((item, index) => {
           const key = item.zone_code;
+          console.log(`Processing item ${index}:`, item);
+  
           if (!accumulationMap.has(key)) {
+            console.log(`Adding new key to map: ${key}`);
             accumulationMap.set(key, {
               ...item,
               sub_parameter_weighted_average: 0,
             });
           }
+  
           const accumulatedItem = accumulationMap.get(key);
-          accumulatedItem.sub_parameter_weighted_average +=
-            item.sub_parameter_weighted_average;
+          accumulatedItem.sub_parameter_weighted_average += item.sub_parameter_weighted_average || 0;
           accumulationMap.set(key, accumulatedItem);
-        })
-      );
+          console.log("Accumulation Map after item:", accumulationMap);
+        });
+      });
+  
       const allData = Array.from(accumulationMap.values());
-      console.log("Consolidated and Summed Data", allData);
-
+      console.log("Consolidated and Summed Data:", allData);
+  
+      if (allData.length === 0) {
+        console.warn("⚠️ No data accumulated!");
+      }
+  
       const finalData = allData.map((item) => {
-        item.sub_parameter_weighted_average = parseFloat(
-          item.sub_parameter_weighted_average
-        );
+        item.sub_parameter_weighted_average = parseFloat(item.sub_parameter_weighted_average);
         return item;
       });
-      console.log(
-        "Final Summed Data with Total Score and Weighted Average",
-        finalData
-      );
-
-      const sorted = finalData.sort(
-        (a, b) =>
-          b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
-      );
-
-      console.log("Sorted", sorted);
-
+  
+      console.log("Final Summed Data with Total Score and Weighted Average", finalData);
+  
+      const sorted = finalData.sort((a, b) => b.sub_parameter_weighted_average - a.sub_parameter_weighted_average);
+      console.log("Sorted Data:", sorted);
+  
       setDatas(sorted.map((item, index) => ({ ...item, s_no: index + 1 })));
-
-      setData1(
-        response1.data.map((item, index) => ({ ...item, s_no: index + 1 }))
-      );
-
-      setData2(
-        response2.data.map((item, index) => ({ ...item, s_no: index + 1 }))
-      );
-
-      setData3(
-        response3.data.map((item, index) => ({ ...item, s_no: index + 1 }))
-      );
-
-      setData4(
-        response4.data.map((item, index) => ({ ...item, s_no: index + 1 }))
-      );
-
-      setData5(
-        response5.data.map((item, index) => ({ ...item, s_no: index + 1 }))
-      );
-
-      // setData6(
-      //   response6.data.map((item, index) => ({ ...item, s_no: index + 1 }))
-      // );
-
-      // Log the fetched data to the console
+  
+      setData1(response1?.data?.map((item, index) => ({ ...item, s_no: index + 1 })) || []);
+      setData2(response2?.data?.map((item, index) => ({ ...item, s_no: index + 1 })) || []);
+      setData3(response3?.data?.map((item, index) => ({ ...item, s_no: index + 1 })) || []);
+      setData4(response4?.data?.map((item, index) => ({ ...item, s_no: index + 1 })) || []);
+      setData5(response5?.data?.map((item, index) => ({ ...item, s_no: index + 1 })) || []);
+      setData6(response6?.data?.map((item, index) => ({ ...item, s_no: index + 1 })) || []);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+  
 
   useEffect(() => {
     fetchData();
@@ -233,7 +239,7 @@ const Allzones = ({
         color: "#5B9BD5",
       },
       {
-        name: "Adjudication(Legacy Cases)",
+        name: "adjudication(legacy cases)",
         data: [15, 2, 14, 11, 12],
         color: "#6EAC44",
       },
@@ -619,47 +625,48 @@ const Allzones = ({
       color: "#cc0077",
     },
   ];
-  const rearrangedData1 = datas.map((zone) => {
+  const rearrangedData1 = (datas || []).map((zone) => {
     return (
-      data1.find((item) => item.zone_code === zone.zone_code) || {
+      (data1 || []).find((item) => item.zone_code === zone.zone_code) || {
         sub_parameter_weighted_average: 0,
       }
     );
   });
-
-  const rearrangedData2 = datas.map((zone) => {
+  
+  const rearrangedData2 = (datas || []).map((zone) => {
     return (
-      data2.find((item) => item.zone_code === zone.zone_code) || {
+      (data2 || []).find((item) => item.zone_code === zone.zone_code) || {
         sub_parameter_weighted_average: 0,
       }
     );
   });
-
-  const rearrangedData3 = datas.map((zone) => {
+  
+  const rearrangedData3 = (datas || []).map((zone) => {
     return (
-      data3.find((item) => item.zone_code === zone.zone_code) || {
+      (data3 || []).find((item) => item.zone_code === zone.zone_code) || {
         sub_parameter_weighted_average: 0,
       }
     );
   });
-
+  
   console.log("Adjudication", rearrangedData3);
-
-  const rearrangedData4 = datas.map((zone) => {
+  
+  const rearrangedData4 = (datas || []).map((zone) => {
     return (
-      data4.find((item) => item.zone_code === zone.zone_code) || {
+      (data4 || []).find((item) => item.zone_code === zone.zone_code) || {
         sub_parameter_weighted_average: 0,
       }
     );
   });
-
-  const rearrangedData5 = datas.map((zone) => {
+  
+  const rearrangedData5 = (datas || []).map((zone) => {
     return (
-      data5.find((item) => item.zone_code === zone.zone_code) || {
+      (data5 || []).find((item) => item.zone_code === zone.zone_code) || {
         parameter_wise_weighted_average: 0,
       }
     );
   });
+  
 
   // const rearrangedData6 = datas.map((zone) => {
   //   return (
@@ -756,7 +763,7 @@ const Allzones = ({
         })),
       },
       {
-        seriesname: "Adjudication(Legacy Cases)",
+        seriesname: "adjudication(legacy cases)",
         data: rearrangedData3.map((item, index) => ({
           value: item.sub_parameter_weighted_average,
           color: getBarColor(index),

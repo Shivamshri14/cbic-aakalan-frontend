@@ -904,7 +904,7 @@ const CustomPara = ({
               accumulationMap.set(key, {
                 ...item,
                 sub_parameter_weighted_average: 0,
-                weighted_average_out_of_12: 0,
+                weighted_average_out_of_6: 0,
                 total_score: 0,
                 gst: response.gst,
               });
@@ -923,7 +923,7 @@ const CustomPara = ({
           item.sub_parameter_weighted_average = parseFloat(
             item.sub_parameter_weighted_average.toFixed(1)
           );
-          item.weighted_average_out_of_12 = ((item.sub_parameter_weighted_average * 12) / 10).toFixed(1);
+          item.weighted_average_out_of_6 = ((item.sub_parameter_weighted_average * 6) / 10).toFixed(1);
           item.total_score = parseFloat(item.total_score.toFixed(1));
           return item;
         });
@@ -932,7 +932,7 @@ const CustomPara = ({
           finalData
         );
 
-        relevantAspects = (name === "investigation" ? "INVESTIGATION" : finalData.map((item) => item.ra)[0]);
+        relevantAspects = (name === "recovery_of_arrears" ? "RECOVERY OF ARREARS" : finalData.map((item) => item.ra)[0]);
 
         const sorted = finalData.sort(
           (a, b) =>
@@ -1642,6 +1642,10 @@ const CustomPara = ({
         );
 
 
+        relevantAspects = (name === "recovery_of_arrears" ? "RECOVERY OF ARREARS" : finalData.map((item) => item.ra)[0]);
+
+
+
         const sorted = finalData.sort(
           (a, b) =>
             b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
@@ -1903,10 +1907,9 @@ const CustomPara = ({
           item.sub_parameter_weighted_average = parseFloat(
             item.sub_parameter_weighted_average.toFixed(1)
           );
-          item.weighted_average_out_of_12 = ((item.sub_parameter_weighted_average * 12) / 10).toFixed(1);
+          item.weighted_average_out_of_6 = ((item.sub_parameter_weighted_average * 6) / 10).toFixed(1);
           item.total_score = parseFloat(item.total_score.toFixed(1));
 
-          item.total_score = parseFloat(item.total_score.toFixed(1));
           return item;
         });
         console.log(
@@ -2372,6 +2375,30 @@ const CustomPara = ({
 
       break;
 
+    case "recovery_of_arrears":
+      columns.splice(4, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Score (Out of 10)",
+
+      });
+      columns.splice(5, 0, {
+        key: "weighted_average_out_of_6",
+        label: "Weighted average (Out of 6)",
+      });
+
+      commcolumns.splice(4, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Score (Out of 10)",
+
+      });
+
+      commcolumns.splice(5, 0, {
+        key: "weighted_average_out_of_6",
+        label: "Weighted average (Out of 6)",
+      });
+
+      break;
+
     case "DisposalOfConfiscatedGoldAndNDPS":
       columns.splice(4, 0, {
         key: "sub_parameter_weighted_average",
@@ -2741,6 +2768,17 @@ const CustomPara = ({
                 "Zonal Rank": user.zonal_rank,
               };
             }
+            case "recovery_of_arrears": {
+              return {
+                SNo: user.s_no,
+                "Zone name ": user.zone_name,
+                "Commissionerate Name": user.commissionerate_name,
+                "Score Details": "Show",
+                "Score Out of 10": user.sub_parameter_weighted_average,
+                "Weighted Average (out of 6)": user.weighted_average_out_of_6,
+                "Zonal Rank": user.zonal_rank,
+              };
+            }
             case "DisposalOfConfiscatedGoldAndNDPS": {
               return {
                 SNo: user.s_no,
@@ -2827,6 +2865,20 @@ const CustomPara = ({
               };
             }
             case "unclaimed_cargo": {
+              return {
+                SNo: user.s_no,
+                "Commissionerate": user.commissionerate_name,
+                "Zone": user.zone_name,
+                // "Absolute Number": user.absval,
+                // "Percentage (For the Month)": user.totalScore,
+                // "Way to Grade (Score out of 10)": user.way_to_grade
+                "Score out of 10": user.sub_parameter_weighted_average,
+                "Weighted Average (out of 6)": user.weighted_average_out_of_6,
+                "Score Details": "Show",
+                "Commissionerate Rank": user.zonal_rank,
+              };
+            }
+            case "recovery_of_arrears": {
               return {
                 SNo: user.s_no,
                 "Commissionerate": user.commissionerate_name,

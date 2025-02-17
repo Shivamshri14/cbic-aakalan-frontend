@@ -304,7 +304,7 @@ const Breadcrumb = ({selectedDate, onChangeDate}) => {
       }
     }
 
-    //Adjudication(Legacy Cases)
+    //adjudication(legacy cases)
     if (
       name === "gst6a" ||
       name === "gst6b" ||

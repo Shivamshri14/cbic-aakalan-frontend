@@ -217,7 +217,7 @@ const Commdata = ({selectedDate}) => {
     //     ,"#DFF5FF"
     //   },
     //   {
-    //     seriesname: "Adjudication(Legacy Cases)",
+    //     seriesname: "adjudication(legacy cases)",
     //     data: [
     //       {
     //         value: "6"

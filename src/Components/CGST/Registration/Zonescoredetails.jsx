@@ -46,7 +46,7 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
   const [details, setDetails] = useState([]);
   const [selectedRow, setSelectedRow] = useState();
   // const [selected, setSelected] = useState("Zones");
-  const [loading, setLoading]= useState(true);
+  const [loading, setLoading] = useState(true);
 
   const location = useLocation();
   const queryParams = queryString.parse(location.search);
@@ -68,12 +68,13 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
     {
       key:
         name === "arrest_and_prosecution" ||
-        name === "gst_arrest_and_prosecution" ||
-        name === "recovery_of_arrears" ||
-        name === "registration" ||
-        name === "investigation" ||
-        name === "audit" ||
-        name === "scrutiny/assessment"
+          name === "gst_arrest_and_prosecution" ||
+          name === "adjudication(legacy cases)" ||
+          name === "recovery_of_arrears" ||
+          name === "registration" ||
+          name === "investigation" ||
+          name === "audit" ||
+          name === "scrutiny/assessment"
           ? "zone_name"
           : "zoneName",
       label: "Zone",
@@ -218,16 +219,16 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
       });
 
       columns.splice(4, 0, {
-        key: "totalScore",
-        label: "Percentage for the month",
+        key: "total_score",
+        label: " Percentage for the month",
       });
 
       columns.splice(3, 0, {
-        key: "absval",
+        key: "absolutevale",
         label: "Absolute Number",
       });
 
-     columns.splice(5, 0, {
+      columns.splice(5, 0, {
         key: "way_to_grade",
         label: "Way to Grade (Marks) out of 10",
       });
@@ -236,7 +237,7 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
         key: "sub_parameter_weighted_average",
         label: "Weighted Average (out of 10)",
       });
-    break;
+      break;
     case "appeals":
       columns.splice(2, 0, {
         key: "gst",
@@ -315,8 +316,8 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
         key: "sub_parameter_weighted_average",
         label: "Weighted Average (out of 10)",
       });
-break;
-case "gst_arrest_and_prosecution":
+      break;
+    case "gst_arrest_and_prosecution":
       columns.splice(2, 0, {
         key: "gst",
         label: "Sub Parameters",
@@ -341,7 +342,7 @@ case "gst_arrest_and_prosecution":
         key: "sub_parameter_weighted_average",
         label: "Weighted Average (out of 10)",
       });
-break;
+      break;
     case "registration":
       columns.splice(2, 0, {
         key: "gst",
@@ -463,7 +464,7 @@ break;
 
         console.log("Responses", responses);
 
-        if(responses){
+        if (responses) {
           setLoading(false);
         }
 
@@ -497,7 +498,7 @@ break;
           )
         );
 
-        if(responses){
+        if (responses) {
           setLoading(false);
         }
 
@@ -538,7 +539,7 @@ break;
           )
         );
 
-        if(responses){
+        if (responses) {
           setLoading(false);
         }
 
@@ -573,7 +574,7 @@ break;
           )
         );
 
-        if(responses){
+        if (responses) {
           setLoading(false);
         }
 
@@ -608,7 +609,7 @@ break;
           )
         );
 
-        if(responses){
+        if (responses) {
           setLoading(false);
         }
 
@@ -642,7 +643,7 @@ break;
           )
         );
 
-        if(responses){
+        if (responses) {
           setLoading(false);
         }
 
@@ -676,7 +677,41 @@ break;
           )
         );
 
-        if(responses){
+        if (responses) {
+          setLoading(false);
+        }
+
+        relevantAspects = name.toUpperCase();
+
+        const allData = responses.flatMap((response) =>
+          response.data.map((item) => ({
+            ...item, // Keep all the data intact
+            gst: response.gst,
+          }))
+        );
+
+        const res = allData.filter((item) => item.zone_code === zone_code);
+        console.log("RES", res);
+
+        setData(res.map((item, index) => ({ ...item, s_no: index + 1 })));
+      } else if (name === "adjudication(legacy cases)") {
+        const endpoints = ["gst6a", "gst6b", "gst6c", "gst6d"];
+
+        // Make API calls for both endpoints
+        const responses = await Promise.all(
+          endpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/${endpoint}`, {
+                params: { month_date: newdate, type: "zone" },
+              })
+              .then((response) => ({
+                data: response.data,
+                gst: endpoint.toUpperCase(),
+              }))
+          )
+        );
+
+        if (responses) {
           setLoading(false);
         }
 
@@ -703,7 +738,7 @@ break;
           },
         });
 
-        if(response){
+        if (response) {
           setLoading(false);
         }
         console.log(name);
@@ -964,11 +999,11 @@ break;
         case "adjudication(legacy cases)": {
           return {
             "S.No.": user.s_no,
-            Zone: user.zoneName,
+            Zone: user.zone_name,
             "Sub Parameters": user.gst,
-            "Absolute Number": user.absval,
-            "Percentage for the month": user.totalScore,
-            "Weighted Average (out of 10)": user.sub_parameter_weighted_average,
+            "Absolute Number": user.absolutevale,
+            "Percentage for the month": user.total_score,
+            "Weighted Average (out of 5)": user.sub_parameter_weighted_average,
           };
         }
 
@@ -1106,7 +1141,8 @@ break;
     name === "returnFiling" ||
     name === "refunds" ||
     name === "scrutiny/assessment" ||
-    name === "adjudication"
+    name === "adjudication" ||
+    name === "adjudication(legacy cases)"
   ) {
     scopedColumns.gst = (item) => (
       <td>
@@ -1146,66 +1182,66 @@ break;
     })),
   };
 
-  const checkSpecialChar=(e)=>{
-    if(!/[0-9a-zA-Z]/.test(e.key)){
+  const checkSpecialChar = (e) => {
+    if (!/[0-9a-zA-Z]/.test(e.key)) {
       e.preventDefault();
     }
   }
 
   return (
     <>
-    {loading?(<Spinner/>):(
-      <div>
-        <div className="body flex-grow-1 custom-sec">
-          <div className="row">
-            <div className="msg-box">
-              <div className="lft-box col-md-11">
-                <div className="mid-sec">
-                  <div className="card-white">
-                    <p>{relevantAspects}</p>
+      {loading ? (<Spinner />) : (
+        <div>
+          <div className="body flex-grow-1 custom-sec">
+            <div className="row">
+              <div className="msg-box">
+                <div className="lft-box col-md-11">
+                  <div className="mid-sec">
+                    <div className="card-white">
+                      <p>{relevantAspects}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="rgt-box">
+                  <div className="view-btn">
+                    <Button
+                      variant="contained"
+                      className="ml-4  cust-btn"
+                      onClick={handleBack}
+                    >
+                      Back
+                    </Button>
                   </div>
                 </div>
               </div>
-              <div className="rgt-box">
-                <div className="view-btn">
-                  <Button
-                    variant="contained"
-                    className="ml-4  cust-btn"
-                    onClick={handleBack}
-                  >
-                    Back
-                  </Button>
+            </div>
+            <div className="date-sec">
+              <div className="lft-sec">
+                <div className="date-main">
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer
+                      components={["DatePicker", "DatePicker", "DatePicker"]}
+                    >
+                      <DatePicker
+                        label={"Month and Year"}
+                        views={["month", "year"]}
+                        maxDate={dayjs().subtract(1, "month").startOf("month")}
+                        value={selectedDate}
+                        onChange={handleDateChange}
+                        renderInput={(params) => <TextField {...params} />}
+                        shouldDisableYear={shouldDisableYear}
+                        slotProps={{
+                          field: {
+                            readOnly: true
+                          }
+                        }}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
                 </div>
               </div>
-            </div>
-          </div>
-          <div className="date-sec">
-            <div className="lft-sec">
-              <div className="date-main">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer
-                    components={["DatePicker", "DatePicker", "DatePicker"]}
-                  >
-                    <DatePicker
-                      label={"Month and Year"}
-                      views={["month", "year"]}
-                      maxDate={dayjs().subtract(1, "month").startOf("month")}
-                      value={selectedDate}
-                      onChange={handleDateChange}
-                      renderInput={(params) => <TextField {...params} />}
-                      shouldDisableYear={shouldDisableYear}
-                      slotProps={{
-                        field:{
-                          readOnly:true
-                        }
-                      }}
-                    />
-                  </DemoContainer>
-                </LocalizationProvider>
-              </div>
-            </div>
 
-            {/* <div className="rgt-sec">
+              {/* <div className="rgt-sec">
               <div className="switches-container2">
                 <input
                   type="radio"
@@ -1233,9 +1269,9 @@ break;
                 </div>
               </div>
             </div> */}
-          </div>
+            </div>
 
-          {/* {name==="scrutiny/assessment"?(
+            {/* {name==="scrutiny/assessment"?(
               <div className="box-main bg-blue">
                 <div className="row  custom-tb mb">
                   <div className="container mt-2">
@@ -1301,56 +1337,56 @@ break;
               </div>
                  
               </div>):( */}
-          <div className="box-main bg-blue">
-            <div className="row  custom-tb mb">
-              <div className="export-btn">
-                <CSVLink
-                  data={handleExport()}
-                  filename="my_data.csv"
-                  className="btn btn-primary m-3"
-                >
-                  Export CSV
-                </CSVLink>
+            <div className="box-main bg-blue">
+              <div className="row  custom-tb mb">
+                <div className="export-btn">
+                  <CSVLink
+                    data={handleExport()}
+                    filename="my_data.csv"
+                    className="btn btn-primary m-3"
+                  >
+                    Export CSV
+                  </CSVLink>
+                </div>
+                <CSmartTable
+                  activePage={3}
+                  cleaner
+                  clickableRows={false}
+                  columns={columns}
+                  columnSorter
+                  items={data}
+                  itemsPerPage={10}
+                  pagination
+                  onRowClick={onRowClick}
+                  onFilteredItemsChange={(items) => {
+                    console.log(items);
+                  }}
+                  onSelectedItemsChange={(items) => {
+                    console.log(items);
+                  }}
+                  scopedColumns={scopedColumns}
+                  sorterValue={{ column: "status", state: "asc" }}
+                  tableFilter
+                  tableProps={{
+                    className: "add-this-class custom-table",
+                    responsive: true,
+                    //striped: true,
+                    hover: true,
+                    align: "middle",
+                    border: "primary",
+                  }}
+                  tableBodyProps={{
+                    className: "align-middle",
+                  }}
+                  onKeyDown={(e) => checkSpecialChar(e)}
+                />
               </div>
-              <CSmartTable
-                activePage={3}
-                cleaner
-                clickableRows={false}
-                columns={columns}
-                columnSorter
-                items={data}
-                itemsPerPage={10}
-                pagination
-                onRowClick={onRowClick}
-                onFilteredItemsChange={(items) => {
-                  console.log(items);
-                }}
-                onSelectedItemsChange={(items) => {
-                  console.log(items);
-                }}
-                scopedColumns={scopedColumns}
-                sorterValue={{ column: "status", state: "asc" }}
-                tableFilter
-                tableProps={{
-                  className: "add-this-class custom-table",
-                  responsive: true,
-                  //striped: true,
-                  hover: true,
-                  align: "middle",
-                  border: "primary",
-                }}
-                tableBodyProps={{
-                  className: "align-middle",
-                }}
-                onKeyDown={(e)=>checkSpecialChar(e)}
-              />
             </div>
+            {/* )} */}
           </div>
-          {/* )} */}
         </div>
-      </div>
-    )
-    }
+      )
+      }
     </>
   );
 };

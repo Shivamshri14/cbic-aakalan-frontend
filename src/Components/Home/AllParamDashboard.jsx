@@ -630,12 +630,12 @@ const AllParamDashboard = ({
                   <div className="card-body pb-0 d-flex justify-content-between align-items-start bg-box">
                     <div>
                       <div className="fs-4 fw-semibold">
-                        {/* <Link
+                        <Link
                           to="/zoneparameters?name=adjudication(legacy cases)"
                           className="text-white sub-h"
-                        > */}
-                          Adjudication(Legacy Cases)
-                        {/* </Link> */}
+                        > 
+                          adjudication(legacy cases)
+                        </Link>
                       </div>
                       <ol className="par-list b-4">
                         <li>
@@ -1915,12 +1915,12 @@ const AllParamDashboard = ({
                   <div className="card-body pb-0 d-flex justify-content-between align-items-start">
                     <div class="g1-box">
                       <div className="fs-4 fw-semibold text-dark">
-                        {/* <Link
+                        <Link
                           className="text-white sub-h"
                           to="/custompara?name=recovery_of_arrears"
-                        > */}
+                        >
                           Recovery of Arrears
-                        {/* </Link> */}
+                        </Link> 
                       </div>
                       <ol className="par-list">
                         <li className="text-white">

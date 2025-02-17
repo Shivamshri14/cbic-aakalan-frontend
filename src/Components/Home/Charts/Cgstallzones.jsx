@@ -566,7 +566,7 @@ const Cgstallzones = () => {
         color: "#DFF5FF",
       },
       {
-        seriesname: "Adjudication(Legacy Cases)",
+        seriesname: "adjudication(legacy cases)",
         data: [
           {
             value: "15",

@@ -133,7 +133,7 @@ const Cgsttopfive = () => {
         color : "#DFF5FF"
       },
       {
-        seriesname: "Adjudication(Legacy Cases)",
+        seriesname: "adjudication(legacy cases)",
         data: [
           { value: "15"  , toolText: generateToolText("<b>Zone Name-: $label</b>{br}Zone Parameter-: $seriesName{br}Score-: $percentValue</div>", "#ffff00", "#000000", false)},
           { value: "2" , toolText: generateToolText("<b>Zone Name-: $label</b>{br}Zone Parameter-: $seriesName{br}Score-: $percentValue</div>", "#ffff00", "#000000", false)},

@@ -98,7 +98,15 @@ const Login = () => {
 
           localStorage.setItem("user", JSON.stringify(user));
           sessionStorage.setItem("token", token);
-          sessionStorage.setItem("userSession",JSON.stringify(user));
+          sessionStorage.setItem("userSession", JSON.stringify(user));
+
+          // localStorage.setItem("token", token);
+          // localStorage.setItem("userSession", JSON.stringify(user));
+          localStorage.setItem("user", JSON.stringify(user));  // Store user in localStorage
+          localStorage.setItem("token", token);  // Store token in localStorage
+
+
+
           const storedUserString = localStorage.getItem("user");
           const u = JSON.parse(storedUserString);
 
@@ -107,7 +115,7 @@ const Login = () => {
           if (!isFirstLogin) {
             setDialogText(response.data.message);
             handleOpenDialog();
-        
+
             setTimeout(() => {
               handleCloseDialog();
               navigate("/dashboard");
@@ -115,7 +123,7 @@ const Login = () => {
             }, 3000);
 
           } else {
-            Cookies.set("hasLoggedInBefore","true");
+            Cookies.set("hasLoggedInBefore", "true");
             setDialogText(
               "For security reasons, we request you to please change your password"
             );
@@ -125,7 +133,7 @@ const Login = () => {
               handleCloseDialog();
               navigate("/changepassword");
             }, 3000);
-          
+
           }
         }
       } else {
@@ -149,15 +157,15 @@ const Login = () => {
   };
 
   useEffect(() => {
-  const handleTabClose = () => {
-    sessionStorage.clear(); // Clears all session data
-  };
+    const handleTabClose = () => {
+      sessionStorage.clear(); // Clears all session data
+    };
 
-  window.addEventListener("beforeunload", handleTabClose);
-  return () => {
-    window.removeEventListener("beforeunload", handleTabClose);
-  };
-}, []);
+    window.addEventListener("beforeunload", handleTabClose);
+    return () => {
+      window.removeEventListener("beforeunload", handleTabClose);
+    };
+  }, []);
 
 
   const handleOpenDialog = () => {
@@ -166,20 +174,20 @@ const Login = () => {
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
-    
+
   };
   useEffect(() => {
     const handleTabClose = () => {
       sessionStorage.removeItem("token"); // Clear session on tab close
       sessionStorage.removeItem("userSession");
     };
-  
+
     window.addEventListener("beforeunload", handleTabClose);
     return () => {
       window.removeEventListener("beforeunload", handleTabClose);
     };
   }, []);
-  
+
 
   // Custom CSS styling for the dialog
   const dialogStyles = {

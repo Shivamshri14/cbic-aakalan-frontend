@@ -63,6 +63,7 @@ function App() {
         console.log("Tab Closed: Clearing Session...");
         localStorage.removeItem("token");
         localStorage.removeItem("user");
+
       }
     };
 
@@ -99,18 +100,36 @@ function App() {
   }, []);
 
   // ✅ Redirect on app start (Show login page first)
+  // useEffect(() => {
+  //   const allowedPaths = ["/", "/forgetpassword"];
+  //   const isLoggedIn = localStorage.getItem("user") && sessionStorage.getItem("token");
+
+  //   const storedUserString = localStorage.getItem("user");  // Get user from localStorage
+  //   const token = localStorage.getItem("token");  // Get token from localStorage
+
+
+  //   if (isLoggedIn) {
+  //     if (pathname === "/" || pathname === "/forgetpassword") {
+  //       navigate("/dashboard", { replace: true }); // Prevents history stack issues
+  //     }
+  //   } else if (!allowedPaths.includes(pathname)) {
+  //     navigate("/", { replace: true }); // Redirect to login only if needed
+  //   }
+  // }, [pathname, navigate]);
+
   useEffect(() => {
     const allowedPaths = ["/", "/forgetpassword"];
-    const isLoggedIn = localStorage.getItem("user") && sessionStorage.getItem("token");
-
+    const isLoggedIn = localStorage.getItem("user") && localStorage.getItem("token");
+  
     if (isLoggedIn) {
       if (pathname === "/" || pathname === "/forgetpassword") {
-        navigate("/dashboard", { replace: true }); // Prevents history stack issues
+        navigate("/dashboard", { replace: true });
       }
     } else if (!allowedPaths.includes(pathname)) {
-      navigate("/", { replace: true }); // Redirect to login only if needed
+      navigate("/", { replace: true });
     }
   }, [pathname, navigate]);
+  
 
 
 
@@ -151,7 +170,6 @@ function App() {
       {sessionExpired ? (
         <>
           <Login />
-          <ForgetPassword />
         </>
       ) : (
         <>
