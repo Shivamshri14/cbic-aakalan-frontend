@@ -16,7 +16,7 @@ import Custombottomfive from "../Home/Charts/Custombottomfive";
 import Customtopfive from "../Home/Charts/Customtopfive";
 import apiClient from '../../Service/ApiClient'
 import { useNavigate } from "react-router-dom";
-import FusionCharts from "fusioncharts";
+import FusionCharts, { items } from "fusioncharts";
 import { default as charts } from "fusioncharts/fusioncharts.charts";
 import ZuneTheme from 'fusioncharts/themes/fusioncharts.theme.zune';
 import ReactFusioncharts from "react-fusioncharts";
@@ -48,30 +48,50 @@ export const Dashboard = ({
   const [totalWeightedAvg, setTotalWeightedAvg] = useState(0); // For displaying the total sum of weighted averages
   const [relevantAspects, setRelevantAspects] = useState("");
 
-  
-
 
   // Function to disable years less than 2022
   const shouldDisableYear = (year) => {
     return year.year() < 2023;
   };
-
-  const handleClick = (event) => {
-    setToggle(!toggle);
-
-    if (toggle) {
-      setloading(false);
-    } else {
-      setloading(false);
-    }
-
-    onSelectedOption(event.target.value);
-    console.log(event.target.value);
-  };
-
   const handleChangeDate = (value) => {
     onChangeDate(value);
   };
+  const handleClick = (event) => {
+    setToggle(!toggle);
+    onSelectedOption(event.target.value);
+    console.log(event.target.value);
+  };
+  // const location = useLocation();
+
+  const newdate = dayjs(selectedDate).format("YYYY-MM-DD");
+
+  // const [value2, setValue] = useState(
+  //   dayjs().subtract(1, "month").subtract(1, "year").startOf("month")
+  // );
+
+  // const newdate = dayjs(selectedDate).format("YYYY-MM-DD");
+  // console.log("test", selectedDate);
+
+  // const handleDateChange = (value) => {
+  //   onChangeDate(value);
+  // };
+  // // Function to disable years less than 2022
+  // const shouldDisableYear = (year) => {
+  //   return year.year() < 2023;
+  // };
+
+  // const handleClick = (event) => {
+  //   setToggle(!toggle);
+
+  //   if (toggle) {
+  //     setloading(false);
+  //   } else {
+  //     setloading(false);
+  //   }
+
+  //   onSelectedOption(event.target.value);
+  //   console.log(event.target.value);
+  // };
 
 
   const [data, setData] = useState([]);
@@ -79,303 +99,523 @@ export const Dashboard = ({
   const [data2, setData2] = useState([]);
   const [data3, setData3] = useState([]);
   const [data4, setData4] = useState([]);
-  const [data5, setData5] = useState([]);
+  //const [data5, setData5] = useState([]);
   const [data6, setData6] = useState([]);
-
-  const newdate = dayjs(selectedDate).format("YYYY-MM-DD");
-
-  // const fetchData = async () => {
-  //   try {
-  //     // const response = await apiClient.get(`/cbic/allParameter/total/parameter`,{
-  //     //   params: {
-
-  //     //     month_date: newdate,
-  //     //     type: "parameter",
-
-  //     //   },
-  //     // });
-
-  //     console.log("🚀 Starting API requests...");
-
-  //     const endpoints = [
-  //       "returnFiling",
-  //       // "scrutiny/assessment",
-  //       "adjudication",
-  //       "adjudication(legacy cases)",
-  //       "refunds",
-  //       "appeals",
-  //     ];
-
-  //     console.log("✅ Endpoints:", endpoints);
-
-  //     // Fetch data from all endpoints
-  //     const responses = await Promise.all(
-  //       endpoints.map(async (endpoint) => {
-  //         try {
-  //           const response = await apiClient.get(`/cbic/t_score/${endpoint}`, {
-  //             params: { month_date: newdate, type: "parameter" },
-  //           });
-
-  //           console.log(`✅ Success for ${endpoint}:`, response.data);
-
-  //           return {
-  //             data: response.data,
-  //             parameter: endpoint.toUpperCase(),
-  //           };
-  //         } catch (error) {
-  //           console.error(`❌ Error fetching ${endpoint}:`, error.response?.data || error.message);
-  //           return { data: null, parameter: endpoint.toUpperCase(), error: error.message };
-  //         }
-  //       })
-  //     );
-
-  //     console.log("✅ Final Responses:", responses);
-
-  //     // Store responses safely
-  //     const response1 = responses[0] || {};
-  //     const response2 = responses[1] || {};
-  //     const response3 = responses[2] || {};
-  //     const response4 = responses[3] || {};
-  //     const response5 = responses[4] || {};
-  //     const response6 = responses[5] || {};
-
-  //     console.log("✅ Response 1:", response1);
-  //     console.log("✅ Response 2:", response2);
-  //     console.log("✅ Response 3:", response3);
-  //     console.log("✅ Response 4:", response4);
-  //     console.log("✅ Response 5:", response5);
-  //     console.log("✅ Response 6:", response6);
-
-  //     if (response1 && response2 && response3 && response4 && response5) {
-  //       setloading(false);
-  //     }
-
-  //     if (
-  //       response2 &&
-  //       response2.data &&
-  //       response2.data.map((item) => item.totalScore) !== undefined
-  //     ) {
-  //       const totalScore = response2.data.map((item) => item.totalScore);
-
-  //       // Iterate through the items in response3 and set sub_parameter_weighted_average to totalScore
-  //       response2.data.forEach((item, index) => {
-  //         item.sub_parameter_weighted_average = totalScore[index];
-  //       });
-
-  //       console.log("Updated response3 data with totalScore:", response3.data);
-  //     } else {
-  //       console.log("totalScore not found in response3 data.");
-  //     }
+  const [data7, setData7] = useState([]);
+  const [data8, setData8] = useState([]);
+  const [data9, setData9] = useState([]);
+  const [data10, setData10] = useState([]);
+  const [data11, setData11] = useState([]);
+  const [data12, setData12] = useState([]);
+  const [data13, setData13] = useState([]);
 
 
-  //     if (
-  //       response5 &&
-  //       response5.data &&
-  //       response5.data.map((item) => item.totalScore) !== undefined
-  //     ) {
-  //       const totalScore = response5.data.map((item) => item.parameter_wise_weighted_average);
 
-  //       // Iterate through the items in response3 and set sub_parameter_weighted_average to totalScore
-  //       response5.data.forEach((item, index) => {
-  //         item.sub_parameter_weighted_average = totalScore[index];
-  //       });
-
-  //       console.log("Updated response3 data with totalScore:", response5.data);
-  //     } else {
-  //       console.log("totalScore not found in response3 data.");
-  //     }
-
-  //     const accumulationMap = new Map();
-
-  //     responses.flatMap((response, index) => {
-  //       if (!response.data || response.data.length === 0) {
-  //         console.log(`⚠️ Response ${index + 1} has no data.`);
-  //       }
-  //       return (response.data || []).forEach((item, index) => {
-  //         const key = item.zone_code;
-  //         console.log(`Processing item ${index}:`, item);
-
-  //         if (!accumulationMap.has(key)) {
-  //           console.log(`Adding new key to map: ${key}`);
-  //           accumulationMap.set(key, {
-  //             ...item,
-  //             sub_parameter_weighted_average: 0,
-  //           });
-  //         }
-
-  //         const accumulatedItem = accumulationMap.get(key);
-  //         accumulatedItem.sub_parameter_weighted_average += item.sub_parameter_weighted_average || 0;
-  //         accumulationMap.set(key, accumulatedItem);
-  //         console.log("Accumulation Map after item:", accumulationMap);
-  //       });
-  //     });
-
-  //     const allData = Array.from(accumulationMap.values());
-  //     console.log("Consolidated and Summed Data:", allData);
-
-  //     if (allData.length === 0) {
-  //       console.warn("⚠️ No data accumulated!");
-  //     }
-
-  //     const finalData = allData.map((item) => {
-  //       item.sub_parameter_weighted_average = parseFloat(item.sub_parameter_weighted_average);
-  //       return item;
-  //     });
-
-  //     console.log("Final Summed Data with Total Score and Weighted Average", finalData);
-
-  //     const sorted = finalData.sort((a, b) => b.sub_parameter_weighted_average - a.sub_parameter_weighted_average);
-  //     console.log("Sorted Data:", sorted);
-
-  //     setData(sorted.map((item, index) => ({ ...item, s_no: index + 1 })));
-
-  //     setData1(response1?.data?.map((item, index) => ({ ...item, s_no: index + 1 })) || []);
-  //     setData2(response2?.data?.map((item, index) => ({ ...item, s_no: index + 1 })) || []);
-  //     setData3(response3?.data?.map((item, index) => ({ ...item, s_no: index + 1 })) || []);
-  //     setData4(response4?.data?.map((item, index) => ({ ...item, s_no: index + 1 })) || []);
-  //     setData5(response5?.data?.map((item, index) => ({ ...item, s_no: index + 1 })) || []);
-  //     setData6(response6?.data?.map((item, index) => ({ ...item, s_no: index + 1 })) || []);
-  //   }
-
-  //   catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
-  const fetchData = async (name) => {
+  const fetchData = async () => {
     try {
-        console.log("🚀 Starting API requests...");
+      // const response = await apiClient.get(`/cbic/allParameter/total/parameter`,{
+      //   params: {
 
-        // Define the endpoints based on the parameter `name`
-        let cusendpoints = [];
-        if (name === "recovery_of_arrears") {
-            cusendpoints = ["gst8a", "gst8b"];
-        } else if (name === "adjudication(legacy cases)") {
-            cusendpoints = ["gst6a", "gst6b", "gst6c", "gst6d"];
-        } else {
-            console.error("Unknown parameter name:", name);
-            return;
-        }
+      //     month_date: newdate,
+      //     type: "parameter",
 
-        console.log("✅ Endpoints for", name, cusendpoints);
+      //   },
+      // });
 
-        // Fetch data from all relevant endpoints
-        const responses = await Promise.all(
-            cusendpoints.map((endpoint) =>
-                apiClient
-                    .get(`/cbic/${endpoint}`, {
-                        params: { month_date: newdate, type: "zone" },
-                    })
-                    .then((response) => ({
-                        data: response.data,
-                        gst: endpoint.toUpperCase(),
-                    }))
-            )
-        );
+      console.log("🚀 Starting API requests...");
 
-        console.log("Responses", responses);
+      const endpoints = [
+        "returnFiling",
+        // "scrutiny/assessment",
+        "adjudication",
+        //"adjudication(legacy cases)",
+        //"refunds",
+        //"appeals",
+      ];
 
-        // Initialize a map to accumulate data
-        const accumulationMap = new Map();
-        responses.forEach((response) => {
-            if (response.data) {
-                response.data.forEach((item) => {
-                    const zoneCode = item.zone_code;
-                    const value = item.sub_parameter_weighted_average || 0;
+      console.log("✅ Endpoints:", endpoints);
 
-                    // If zoneCode is not in the map, initialize it
-                    if (!accumulationMap.has(zoneCode)) {
-                        accumulationMap.set(zoneCode, {
-                            ...item,
-                            sub_parameter_weighted_average: 0,
-                        });
-                    }
+      // Fetch data from all endpoints
+      const responses = await Promise.all(
+        endpoints.map(async (endpoint) => {
+          try {
+            const response = await apiClient.get(`/cbic/t_score/${endpoint}`, {
+              params: { month_date: newdate, type: "parameter" },
+            });
 
-                    // Accumulate the values
-                    const accumulatedItem = accumulationMap.get(zoneCode);
-                    accumulatedItem.sub_parameter_weighted_average += value;
-                    accumulationMap.set(zoneCode, accumulatedItem);
-                });
-            }
-        });
-
-        // Convert the map to an array
-        const allData = Array.from(accumulationMap.values());
-        console.log("Consolidated and Summed Data:", allData);
-
-        // Sort the data by sub_parameter_weighted_average
-        const sorted = allData.sort(
-            (a, b) => b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
-        );
-
-        // Add rankings to the sorted data
-        const scoreIndexMap = new Map();
-        let currentIndex = 1;
-        sorted.forEach((item) => {
-            const score = item.sub_parameter_weighted_average;
-
-            if (!scoreIndexMap.has(score)) {
-                scoreIndexMap.set(score, currentIndex);
-                currentIndex++;
-            }
-
-            item.zonal_rank = scoreIndexMap.get(score);
-        });
-
-        // Enhance the data with properties like color based on score
-        const enhancedData = sorted.map((item, index) => {
-            let props = {};
-            const total = item.sub_parameter_weighted_average;
-
-            if (total <= 10 && total >= 7.5) {
-                props = { scope: "row", color: "success" }; // Top entries
-            } else if (total < 7.5 && total >= 5) {
-                props = { scope: "row", color: "warning" };
-            } else if (total >= 0 && total <= 2.5) {
-                props = { scope: "row", color: "danger" }; // Bottom entries
-            } else {
-                props = { scope: "row", color: "primary" }; // Remaining entries
-            }
+            console.log(`✅ Success for ${endpoint}:`, response.data);
 
             return {
-                ...item,
-                _props: props, // Add _props field dynamically
-                s_no: index + 1,
+              data: response.data,
+              parameter: endpoint.toUpperCase(),
             };
+          } catch (error) {
+            console.error(`❌ Error fetching ${endpoint}:`, error.response?.data || error.message);
+            return { data: null, parameter: endpoint.toUpperCase(), error: error.message };
+          }
+        })
+      );
+
+      // Store responses safely
+      const response1 = responses[0] || {};
+      const response2 = responses[1] || {};
+      const response3 = responses[2] || {};
+      const response4 = responses[3] || {};
+      const response5 = responses[4] || {};
+      const response6 = responses[5] || {};
+
+
+      const endpoints_arrest_prosecution = ["gst9a", "gst9b"];
+      const response_arrest_prosecution = await Promise.all(
+        endpoints_arrest_prosecution.map((endpoint) =>
+          apiClient
+            .get(`/cbic/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data,
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+      console.log("Responses", response_arrest_prosecution);
+
+      // Combine the responses from all endpoints into a single array
+      const Data_arrest_prosecution = response_arrest_prosecution.flatMap((response) =>
+        response.data.map((item) => ({ ...item }))
+      );
+
+      const summedByZone_arrest_prosecution = Data_arrest_prosecution.reduce((acc, item) => {
+        const zoneCode = item.zone_code;
+        const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
+
+        // If zone_code is encountered for the first time, initialize it
+        if (!acc[zoneCode]) {
+          acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+        }
+
+        // Sum only the sub_parameter_weighted_average for each zone_code
+        acc[zoneCode].sub_parameter_weighted_average += value;
+
+        return acc;
+      }, {});
+
+      const reducedAllData_arrest_prosecution = Object.values(summedByZone_arrest_prosecution);
+
+      const sorted_arrest_prosecution = reducedAllData_arrest_prosecution.sort(
+        (a, b) =>
+          b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+      );
+      // tilll here
+      console.log("arrest_prosecution", sorted_arrest_prosecution);
+
+
+
+      const endpoints_scrutiny_assessment = ["gst3a", "gst3b"];
+      const responses_scrutiny_assessment = await Promise.all(
+        endpoints_scrutiny_assessment.map((endpoint) =>
+          apiClient
+            .get(`/cbic/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data,
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+      console.log("Responses", responses_scrutiny_assessment);
+
+      // Combine the responses from all endpoints into a single array
+      const Data_scrutiny_assessment = responses_scrutiny_assessment.flatMap((response) =>
+        response.data.map((item) => ({ ...item }))
+      );
+
+      const summedByZone_scrutiny_assessment = Data_scrutiny_assessment.reduce((acc, item) => {
+        const zoneCode = item.zone_code;
+        const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
+
+        // If zone_code is encountered for the first time, initialize it
+        if (!acc[zoneCode]) {
+          acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+        }
+
+        // Sum only the sub_parameter_weighted_average for each zone_code
+        acc[zoneCode].sub_parameter_weighted_average += value;
+
+        return acc;
+      }, {});
+
+      const reducedAllData_scrutiny_assessment = Object.values(summedByZone_scrutiny_assessment);
+
+      const sorted_scrutiny_assessment = reducedAllData_scrutiny_assessment.sort(
+        (a, b) =>
+          b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+      );
+      console.log("arrest_prosecution", sorted_scrutiny_assessment);
+
+
+      const endpoints_recovery_of_arrears = ["gst8a", "gst8b"];
+      const responses_recovery_of_arrears = await Promise.all(
+        endpoints_recovery_of_arrears.map((endpoint) =>
+          apiClient
+            .get(`/cbic/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data,
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+      console.log("Responses", responses_recovery_of_arrears);
+
+      // Combine the responses from all endpoints into a single array
+      const Data_recovery_of_arrears = responses_recovery_of_arrears.flatMap((response) =>
+        response.data.map((item) => ({ ...item }))
+      );
+
+      const summedByZone_recovery_of_arrears = Data_recovery_of_arrears.reduce((acc, item) => {
+        const zoneCode = item.zone_code;
+        const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
+
+        // If zone_code is encountered for the first time, initialize it
+        if (!acc[zoneCode]) {
+          acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+        }
+
+        // Sum only the sub_parameter_weighted_average for each zone_code
+        acc[zoneCode].sub_parameter_weighted_average += value;
+
+        return acc;
+      }, {});
+
+      const reducedAllData_recovery_of_arrears = Object.values(summedByZone_recovery_of_arrears);
+
+      const sorted_recovery_of_arrears = reducedAllData_recovery_of_arrears.sort(
+        (a, b) =>
+          b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+      );
+      console.log("recovery_of_arrears", sorted_recovery_of_arrears);
+
+
+
+
+
+      const endpoints_audit = ["gst10a", "gst10b", "gst10c"];
+      const responses_audit = await Promise.all(
+        endpoints_audit.map((endpoint) =>
+          apiClient
+            .get(`/cbic/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data,
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+      console.log("Responses", responses_audit);
+
+      // Combine the responses from all endpoints into a single array
+      const Data_audit = responses_audit.flatMap((response) =>
+        response.data.map((item) => ({ ...item }))
+      );
+
+      const summedByZone_audit = Data_audit.reduce((acc, item) => {
+        const zoneCode = item.zone_code;
+        const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
+
+        // If zone_code is encountered for the first time, initialize it
+        if (!acc[zoneCode]) {
+          acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+        }
+
+        // Sum only the sub_parameter_weighted_average for each zone_code
+        acc[zoneCode].sub_parameter_weighted_average += value;
+
+        return acc;
+      }, {});
+
+      const reducedAllData_audit = Object.values(summedByZone_audit);
+
+      const sorted_audit = reducedAllData_audit.sort(
+        (a, b) =>
+          b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+      );
+      console.log("recovery_of_arrears", sorted_audit);
+
+
+
+      const endpoints_adjudication_legacy_cases = ["gst6a", "gst6b", "gst6c", "gst6d"];
+      const responses_adjudication_legacy_cases = await Promise.all(
+        endpoints_adjudication_legacy_cases.map((endpoint) =>
+          apiClient
+            .get(`/cbic/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data,
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+      console.log("Responses", responses_adjudication_legacy_cases);
+
+      // Combine the responses from all endpoints into a single array
+      const Data_adjudication_legacy_cases = responses_adjudication_legacy_cases.flatMap((response) =>
+        response.data.map((item) => ({ ...item }))
+      );
+
+      const summedByZone_adjudication_legacy_cases = Data_adjudication_legacy_cases.reduce((acc, item) => {
+        const zoneCode = item.zone_code;
+        const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
+
+        // If zone_code is encountered for the first time, initialize it
+        if (!acc[zoneCode]) {
+          acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+        }
+
+        // Sum only the sub_parameter_weighted_average for each zone_code
+        acc[zoneCode].sub_parameter_weighted_average += value;
+
+        return acc;
+      }, {});
+
+      const reducedAllData_adjudication_legacy_cases = Object.values(summedByZone_adjudication_legacy_cases);
+
+      const sorted_adjudication_legacy_cases = reducedAllData_adjudication_legacy_cases.sort(
+        (a, b) =>
+          b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+      );
+      console.log("recovery_of_arrears", sorted_adjudication_legacy_cases);
+
+
+
+
+      const endpoints_appeals = ["gst11a", "gst11b", "gst11c", "gst11d"];
+      const responses_appeals = await Promise.all(
+        endpoints_appeals.map((endpoint) =>
+          apiClient
+            .get(`/cbic/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data,
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+      console.log("Responses", responses_appeals);
+
+      // Combine the responses from all endpoints into a single array
+      const Data_appeals = responses_appeals.flatMap((response) =>
+        response.data.map((item) => ({ ...item }))
+      );
+
+      const summedByZone_appeals = Data_appeals.reduce((acc, item) => {
+        const zoneCode = item.zone_code;
+        const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
+
+        // If zone_code is encountered for the first time, initialize it
+        if (!acc[zoneCode]) {
+          acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+        }
+
+        // Sum only the sub_parameter_weighted_average for each zone_code
+        acc[zoneCode].sub_parameter_weighted_average += value;
+
+        return acc;
+      }, {});
+
+      const reducedAllData_appeals = Object.values(summedByZone_appeals);
+
+      const sorted_appeals = reducedAllData_appeals.sort(
+        (a, b) =>
+          b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+      );
+      console.log("Appeals", sorted_appeals);
+
+
+
+
+      const endpoints_refunds = ["gst7"];
+      const responses_refunds = await Promise.all(
+        endpoints_refunds.map((endpoint) =>
+          apiClient
+            .get(`/cbic/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data,
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+      console.log("Responses", responses_refunds);
+
+      // Combine the responses from all endpoints into a single array
+      const Data_refunds = responses_refunds.flatMap((response) =>
+        response.data.map((item) => ({ ...item }))
+      );
+
+      const summedByZone_refunds = Data_refunds.reduce((acc, item) => {
+        const zoneCode = item.zone_code;
+        const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
+
+        // If zone_code is encountered for the first time, initialize it
+        if (!acc[zoneCode]) {
+          acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+        }
+
+        // Sum only the sub_parameter_weighted_average for each zone_code
+        acc[zoneCode].sub_parameter_weighted_average += value;
+
+        return acc;
+      }, {});
+
+      const reducedAllData_refunds = Object.values(summedByZone_refunds);
+
+      const sorted_refunds = reducedAllData_refunds.sort(
+        (a, b) =>
+          b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+      );
+      console.log("refunds", sorted_refunds);
+
+
+
+
+
+
+
+
+
+      console.log("✅ Final Responses:", responses);
+
+      console.log("✅ Response 1:", response1);
+      console.log("✅ Response 2:", response2);
+      console.log("✅ Response 3:", response3);
+      console.log("✅ Response 4:", response4);
+      console.log("✅ Response 5:", response5);
+      console.log("✅ Response 6:", response_arrest_prosecution);
+      console.log("✅ Response 7:", responses_scrutiny_assessment);
+      console.log("✅ Response 8:", responses_recovery_of_arrears);
+      console.log("✅ Response 9:", responses_audit);
+      console.log("✅ Response 10:", responses_adjudication_legacy_cases);
+      console.log("✅ Response 12:", responses_appeals);
+      console.log("✅ Response 13:", responses_refunds);
+
+      if (response1 && response2 && response3 && response4 && response5 && response6 && response_arrest_prosecution && responses_scrutiny_assessment && responses_recovery_of_arrears && responses_audit && responses_adjudication_legacy_cases && responses_appeals && responses_refunds) {
+        setloading(false);
+      }
+
+      if (
+        response2 &&
+        response2.data &&
+        response2.data.map((item) => item.totalScore) !== undefined
+      ) {
+        const totalScore = response2.data.map((item) => item.totalScore);
+
+        // Iterate through the items in response3 and set sub_parameter_weighted_average to totalScore
+        response2.data.forEach((item, index) => {
+          item.sub_parameter_weighted_average = totalScore[index];
         });
 
-        // Set the data in the state
-        setData(enhancedData);
+        console.log("Updated response3 data with totalScore:", response3.data);
+      } else {
+        console.log("totalScore not found in response3 data.");
+      }
 
-        // Optionally, set specific top and bottom five entries
-        const topfive = sorted.slice(0, 5);
-        const bottomfive = sorted.slice(-5);
-        setBarData([...topfive, ...bottomfive]);
 
-        // Sum of all weighted averages
-        const totalSumOfWeightedAvg = allData.reduce(
-            (sum, item) => sum + item.sub_parameter_weighted_average,
-            0
-        );
-        console.log("Total Sum of Weighted Averages:", totalSumOfWeightedAvg);
+      if (
+        response5 &&
+        response5.data &&
+        response5.data.map((item) => item.totalScore) !== undefined
+      ) {
+        const totalScore = response5.data.map((item) => item.sub_parameter_weighted_average);
 
-        // Store the total sum in the state
-        setTotalWeightedAvg(totalSumOfWeightedAvg);
+        // Iterate through the items in response3 and set sub_parameter_weighted_average to totalScore
+        response5.data.forEach((item, index) => {
+          item.sub_parameter_weighted_average = totalScore[index];
+        });
 
-        // Finish loading
-        setloading(false);
+        console.log("Updated response3 data with totalScore:", response5.data);
+      } else {
+        console.log("totalScore not found in response3 data.");
+      }
 
-    } catch (error) {
-        console.error("❌ Error fetching data:", error);
+      const accumulationMap = new Map();
+
+      responses.flatMap((response, index) => {
+        if (!response.data || response.data.length === 0) {
+          console.log(`⚠️ Response ${index + 1} has no data.`);
+        }
+        return (response.data || []).forEach((item, index) => {
+          const key = item.zone_code;
+          console.log(`Processing item ${index}:`, item);
+
+          if (!accumulationMap.has(key)) {
+            console.log(`Adding new key to map: ${key}`);
+            accumulationMap.set(key, {
+              ...item,
+              sub_parameter_weighted_average: 0,
+            });
+          }
+
+          const accumulatedItem = accumulationMap.get(key);
+          accumulatedItem.sub_parameter_weighted_average += item.sub_parameter_weighted_average || 0;
+          accumulationMap.set(key, accumulatedItem);
+          console.log("Accumulation Map after item:", accumulationMap);
+        });
+      });
+
+      const allData = Array.from(accumulationMap.values());
+      console.log("Consolidated and Summed Data:", allData);
+
+      if (allData.length === 0) {
+        console.warn("⚠️ No data accumulated!");
+      }
+
+      const finalData = allData.map((item) => {
+        item.sub_parameter_weighted_average = parseFloat(item.sub_parameter_weighted_average);
+        return item;
+      });
+
+      console.log("Final Summed Data with Total Score and Weighted Average", finalData);
+
+      const sorted = finalData.sort((a, b) => b.sub_parameter_weighted_average - a.sub_parameter_weighted_average);
+      console.log("Sorted Data:", sorted);
+
+      setData(sorted.map((item, index) => ({ ...item, s_no: index + 1 })));
+
+      setData1(response1?.data?.map((item, index) => ({ ...item, s_no: index + 1 })) || []);
+      setData2(response2?.data?.map((item, index) => ({ ...item, s_no: index + 1 })) || []);
+      setData3(response3?.data?.map((item, index) => ({ ...item, s_no: index + 1 })) || []);
+      setData4(response4?.data?.map((item, index) => ({ ...item, s_no: index + 1 })) || []);
+      setData6(response6?.data?.map((item, index) => ({ ...item, s_no: index + 1 })) || []);
+      // setData7(sorted_arrest_prosecution.map((item, index) => ({ ...item, s_no: index + 1 })));
+      // setData8(sorted_scrutiny_assessment.map((item, index) => ({ ...item, s_no: index + 1 })));
+      // setData9(sorted_recovery_of_arrears.map((item, index) => ({ ...item, s_no: index + 1 })));
+      // setData10(sorted_audit.map((item, index) => ({ ...item, s_no: index + 1 })));
+      // setData11(sorted_adjudication_legacy_cases.map((item, index) => ({ ...item, s_no: index + 1 })));
+      // setData12(sorted_appeals.map((item, index) => ({ ...item, s_no: index + 1 })) || []);
+      // setData13(sorted_refunds.map((item, index) => ({ ...item, s_no: index + 1 })) || []);
+
+      //open when needed
     }
-};
 
-  
+    catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+
+
+
 
   useEffect(() => {
-    const name = "recovery_of_arrears"; // For example, set name dynamically
-    fetchData(name);
-  }, []); // Call fetchData once component mounts
+    fetchData();
+  }, [newdate]); // Call fetchData once component mounts
 
   // const [open, setOpen] = React.useState(false);
   // const handleOpen = () => setOpen(true);
@@ -1054,15 +1294,15 @@ export const Dashboard = ({
     );
   });
 
-  const rearrangedData5 = data.map((zone) => {
+  console.log("data12", data12);
+  const rearrangedData12 = data.map((zone) => {
     return (
-      data5.find((item) => item.zone_code === zone.zone_code) || {
-        parameter_wise_weighted_average: 0,
+      data12.find((item) => item.zone_code === zone.zone_code) || {
+        sub_parameter_weighted_average: 0,
       }
     );
   });
-
-  console.log("rearrangedData5", rearrangedData5);
+  console.log("rearrangedData12", rearrangedData12);
 
   const rearrangedData6 = data.map((zone) => {
     return (
@@ -1072,7 +1312,61 @@ export const Dashboard = ({
     );
   });
 
-  const averageReturnFiling = 74.75;
+  console.log("data7", data7);
+  const rearrangedData7 = data.map((zone) => {
+    return (
+      data7.find((item) => item.zone_code === zone.zone_code) || {
+        sub_parameter_weighted_average: 0,
+      }
+    );
+  });
+
+  console.log("data8", data8);
+  const rearrangedData8 = data.map((zone) => {
+    return (
+      data8.find((item) => item.zone_code === zone.zone_code) || {
+        sub_parameter_weighted_average: 0,
+      }
+    );
+  });
+
+  console.log("data9", data9);
+  const rearrangedData9 = data.map((zone) => {
+    return (
+      data9.find((item) => item.zone_code === zone.zone_code) || {
+        sub_parameter_weighted_average: 0,
+      }
+    );
+  });
+
+  console.log("rearrangedData9", rearrangedData9);
+
+  console.log("data10", data10);
+  const rearrangedData10 = data.map((zone) => {
+    return (
+      data10.find((item) => item.zone_code === zone.zone_code) || {
+        sub_parameter_weighted_average: 0,
+      }
+    );
+  });
+  console.log("data11", data11);
+  const rearrangedData11 = data.map((zone) => {
+    return (
+      data11.find((item) => item.zone_code === zone.zone_code) || {
+        sub_parameter_weighted_average: 0,
+      }
+    );
+  });
+  console.log("data13", data13);
+  const rearrangedData13 = data.map((zone) => {
+    return (
+      data13.find((item) => item.zone_code === zone.zone_code) || {
+        sub_parameter_weighted_average: 0,
+      }
+    );
+  });
+
+  // const averageReturnFiling = 74.75;
 
   charts(FusionCharts);
   ZuneTheme(FusionCharts);
@@ -1081,6 +1375,7 @@ export const Dashboard = ({
 
   const dataSource = {
     chart: {
+      decimals: "2",
       tooltip: {
         toolTipBorderColor: "#ffffff",
         toolTipBorderThickness: "0",
@@ -1134,27 +1429,70 @@ export const Dashboard = ({
           color: "00FF00",
         })),
       },
+      // {
+      //   seriesname: "adjudication(legacy cases)",
+      //   data: rearrangedData3.slice(0, 5).map((item) => ({
+      //     value: item.sub_parameter_weighted_average,
+      //     color: "00FF00",
+      //   })),
+      // },
+      // {
+      //   seriesname: "Refunds",
+      //   data: rearrangedData4.slice(0, 5).map((item) => ({
+      //     value: item.sub_parameter_weighted_average,
+      //     color: "00FF00",
+      //   })),
+      // },
       {
-        seriesname: "adjudication(legacy cases)",
-        data: rearrangedData3.slice(0, 5).map((item) => ({
+        seriesname: "Appeals",
+        data: rearrangedData12.slice(0, 5).map((item) => ({
+          value: item.sub_parameter_weighted_average,
+          color: "00FF00",
+        })),
+      },
+      {
+        seriesname: "Arrest Prosecution",
+        data: rearrangedData7.slice(0, 5).map((item) => ({
+          value: item.sub_parameter_weighted_average,
+          color: "00FF00",
+        })),
+      },
+      {
+        seriesname: "scrutiny/assessment",
+        data: rearrangedData8.slice(0, 5).map((item) => ({
+          value: item.sub_parameter_weighted_average,
+          color: "00FF00",
+        })),
+      },
+      {
+        seriesname: "Recovery of Arrears",
+        data: rearrangedData9.slice(0, 5).map((item) => ({
+          value: item.sub_parameter_weighted_average,
+          color: "00FF00",
+        })),
+      },
+      {
+        seriesname: "Audit",
+        data: rearrangedData10.slice(0, 5).map((item) => ({
+          value: item.sub_parameter_weighted_average,
+          color: "00FF00",
+        })),
+      },
+      {
+        seriesname: "Adjudication(legacy cases)",
+        data: rearrangedData11.slice(0, 5).map((item) => ({
           value: item.sub_parameter_weighted_average,
           color: "00FF00",
         })),
       },
       {
         seriesname: "Refunds",
-        data: rearrangedData4.slice(0, 5).map((item) => ({
+        data: rearrangedData13.slice(0, 5).map((item) => ({
           value: item.sub_parameter_weighted_average,
           color: "00FF00",
         })),
       },
-      {
-        seriesname: "Appeals",
-        data: rearrangedData5.slice(0, 5).map((item) => ({
-          value: item.parameter_wise_weighted_average,
-          color: "00FF00",
-        })),
-      },
+
 
       // {
       //   seriesname: "National Avg Return Filing",
@@ -1254,9 +1592,72 @@ export const Dashboard = ({
             color: "FF0000",
           })),
       },
+      // {
+      //   seriesname: "adjudication(legacy cases)",
+      //   data: rearrangedData3
+      //     .slice(-5)
+      //     .map((item) => ({
+      //       value: item.sub_parameter_weighted_average,
+      //       color: "FF0000",
+      //     })),
+      // },
+      // {
+      //   seriesname: "Refunds",
+      //   data: rearrangedData4
+      //     .slice(-5)
+      //     .map((item) => ({
+      //       value: item.sub_parameter_weighted_average,
+      //       color: "FF0000",
+      //     })),
+      // },
+      {
+        seriesname: "Appeals",
+        data: rearrangedData12
+          .slice(-5)
+          .map((item) => ({
+            value: item.sub_parameter_weighted_average,
+            color: "FF0000",
+          })),
+      },
+      {
+        seriesname: "Arrest and prosecution",
+        data: rearrangedData7
+          .slice(-5)
+          .map((item) => ({
+            value: item.sub_parameter_weighted_average,
+            color: "FF0000",
+          })),
+      },
+      {
+        seriesname: "scrutiny/assessment",
+        data: rearrangedData8
+          .slice(-5)
+          .map((item) => ({
+            value: item.sub_parameter_weighted_average,
+            color: "FF0000",
+          })),
+      },
+      {
+        seriesname: "Recovery of Arrers",
+        data: rearrangedData9
+          .slice(-5)
+          .map((item) => ({
+            value: Number(item.sub_parameter_weighted_average).toFixed(2),
+            color: "FF0000",
+          })),
+      },
+      {
+        seriesname: "Audit",
+        data: rearrangedData10
+          .slice(-5)
+          .map((item) => ({
+            value: item.sub_parameter_weighted_average,
+            color: "FF0000",
+          })),
+      },
       {
         seriesname: "adjudication(legacy cases)",
-        data: rearrangedData3
+        data: rearrangedData11
           .slice(-5)
           .map((item) => ({
             value: item.sub_parameter_weighted_average,
@@ -1265,19 +1666,10 @@ export const Dashboard = ({
       },
       {
         seriesname: "Refunds",
-        data: rearrangedData4
+        data: rearrangedData13
           .slice(-5)
           .map((item) => ({
             value: item.sub_parameter_weighted_average,
-            color: "FF0000",
-          })),
-      },
-      {
-        seriesname: "Appeals",
-        data: rearrangedData5
-          .slice(-5)
-          .map((item) => ({
-            value: item.parameter_wise_weighted_average,
             color: "FF0000",
           })),
       },

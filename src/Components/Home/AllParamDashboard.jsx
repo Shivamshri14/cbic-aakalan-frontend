@@ -1988,12 +1988,12 @@ const AllParamDashboard = ({
                   <div className="card-body pb-0 d-flex justify-content-between align-items-start col6">
                     <div>
                       <div className="fs-4 fw-semibold text-dark">
-                        {/* <Link
+                        <Link
                           className="text-white sub-h"
                           to="/custompara?name=management_of_warehousing_bonds"
-                        > */}
+                        > 
                           Management Of Warehousing bonds
-                        {/* </Link> */}
+                        </Link>
                       </div>
                       <ol className="par-list b-4">
                         <li className="text-white">
@@ -2137,12 +2137,12 @@ const AllParamDashboard = ({
                   <div className="card-body pb-0 d-flex justify-content-between align-items-start col8">
                     <div class="g1-box">
                       <div className="fs-4 fw-semibold text-danger">
-                        {/* <Link
+                        <Link
                           className="text-white sub-h"
-                          to="/custompara?name=audit"
-                        > */}
+                          to="/custompara?name=cus_audit"
+                        >
                           Audit
-                        {/* </Link> */}
+                        </Link>
                       </div>
                       <ol className="par-list">
                         <li className="text-danger">
@@ -2151,13 +2151,13 @@ const AllParamDashboard = ({
                             placement="right"
                             arrow
                           >
-                            {/* <Link
+                            <Link
                               className="text-danger sub-h"
                               to="/customsubpara?name=cus13a"
-                            > */}
+                            >
                               {" "}
                               BEs audited/marked
-                            {/* </Link> */}
+                            </Link>
                           </Tooltip>
                         </li>
                         <li className="text-danger">

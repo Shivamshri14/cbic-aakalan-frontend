@@ -49,33 +49,33 @@ const MISReport = ({
   };
 
   const options = [
-    { id: 1, label: "Registration", value: "registration", color:"red" },
+    { id: 1, label: "Registration",/* value: "registration", */ color:"red" },
     { id: 2, label: "Return Filing", value: "returnFiling" },
-    { id: 3, label: "Scrutiny/Assessment", value: "scrutiny", color:"red" },
-    { id: 4, label: "Investigation", value: "investigation", color:"red" },
+    { id: 3, label: "Scrutiny/Assessment", /* value: "scrutiny", */ color:"red" },
+    { id: 4, label: "Investigation", /* value: "investigation",*/ color:"red" },
     { id: 5, label: "Adjudication", value: "adjudication" },
     { id: 6, label: "adjudication(legacy cases)", value: "adjudicationLegacy" },
     { id: 7, label: "Refunds", value: "refunds" },
-    { id: 8, label: "Recovery of Arrears", value: "recoveryOfArrears", color:"red" },
-    { id: 9, label: "Arrest and Prosecution", value: "arrestAndProsecution", color:"red" },
-    { id: 10, label: "Audit", value: "audit", color:"red" },
+    { id: 8, label: "Recovery of Arrears",/* value: "recoveryOfArrears", */color:"red" },
+    { id: 9, label: "Arrest and Prosecution", /* value: "arrestAndProsecution", */color:"red" },
+    { id: 10, label: "Audit", /*value: "audit", */color:"red" },
     { id: 11, label: "Appeals", value: "appeals" },
   ];
 
   const optionscustom = [
     { idc: 12, labelc: "Timely payment of Refunds", value:"TimelyPaymentOfRefunds" },
-    { idc: 13, labelc: "Management of Export Obligation(EPCG)", /* value:"epcg", */ color:"red" },
-    { idc: 14, labelc: "Management of Export Obligation(AA)",value:"aa", color:"red" },
-    { idc: 15, labelc: "Disposal/Pendency Of Provisional Assessments", color:"red" },
+    { idc: 13, labelc: "Management of Export Obligation(EPCG)", /*value:"epcg",*/color:"red" },
+    { idc: 14, labelc: "Management of Export Obligation(AA)", /*value:"aa",*/ color:"red" },
+    { idc: 15, labelc: "Disposal/Pendency Of Provisional Assessments", /*value:"disposalPendency",*/color:"red" },
     { idc: 16, labelc: "Adjudication", value:"Adjudication" },
-    { idc: 17, labelc: "Investigation", value:"Investigation", color:"red" },
-    { idc: 18, labelc: "Arrests and Prosecution", color:"red" },
-    { idc: 19, labelc: "Monitoring Of Un-cleared and Unclaimed cargo", color:"red" },
+    { idc: 17, labelc: "Investigation", /*value:"Investigation", */color:"red" },
+    { idc: 18, labelc: "Arrests and Prosecution",/*value:"arrestProsecution", */ color:"red" },
+    { idc: 19, labelc: "Monitoring Of Un-cleared and Unclaimed cargo",/*value:"muc", */ color:"red" },
     { idc: 20, labelc: "Disposal Of Confiscated Gold and NDPS", value:"DisposalOfConfiscatedGoldAndNDPS" },
-    { idc: 21, labelc: "Recovery of Arrears", value: "recovery_Of_Arrears", color:"red" },
-    { idc: 22, labelc: "Management Of Warehousing bonds", color:"red" },
+    { idc: 21, labelc: "Recovery of Arrears",/* value: "recovery_Of_Arrears",*/ color:"red" },
+    { idc: 22, labelc: "Management Of Warehousing bonds",/*value: "mowb",*/ color:"red" },
     { idc: 23, labelc: "Commissioner (Appeals)", value:"CommissionerAppeals" },
-    { idc: 24, labelc: "Audit", color:"red" },
+    { idc: 24, labelc: "Audit", /*value: "cus_audit",*/ color:"red" },
   ];
 
   const handleCheckboxChange = (id, label) => {

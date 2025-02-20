@@ -836,7 +836,58 @@ const AllParameters = ({
         } catch (error) {
           console.error("Error fetching adjudication data:", error);
         }
-      } else if (name === "gst_arrest_and_prosecution") {
+      }else if (name === "scrutiny/assessment") {
+        try {
+          const endpoints = ["gst3a", "gst3b"];
+      
+          const responses = await Promise.all(
+            endpoints.map((endpoint) =>
+              apiClient.get(`/cbic/${endpoint}`, {
+                params: { month_date: newdate, type: "all_commissary" },
+              }).then((response) => response.data)
+            )
+          );
+      
+          console.log("Responses", responses);
+          setloading(false); // Ensure loading is set to false after API calls complete
+      
+          // Flatten responses into a single array
+          const allData = responses.flat();
+          console.log("FINAL RESPONSE", allData);
+      
+          // Aggregate data by commissionerate_name
+          const summedByComm = allData.reduce((acc, item) => {
+            const commName = item.commissionerate_name;
+            acc[commName] = acc[commName] || { ...item, sub_parameter_weighted_average: 0 };
+      
+            acc[commName].sub_parameter_weighted_average += item.sub_parameter_weighted_average || 0;
+            return acc;
+          }, {});
+      
+          // Convert to array and format the values
+          const reducedAllData = Object.values(summedByComm).map((item) => ({
+            ...item,
+            sub_parameter_weighted_average: Number(item.sub_parameter_weighted_average.toFixed(2)),
+          }));
+      
+          console.log("Reduced All Data:", reducedAllData);
+      
+          // Sort data in descending order
+          const sorted = reducedAllData.sort(
+            (a, b) => b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+          );
+      
+          console.log("Sorted", sorted);
+      
+          // Add serial numbers
+          setData(sorted.map((item, index) => ({ ...item, s_no: index + 1 })));
+          setBarData([...sorted]);
+      
+        } catch (error) {
+          console.error("Error fetching adjudication data:", error);
+        }
+      }
+       else if (name === "gst_arrest_and_prosecution") {
         try {
           const endpoints = ["gst9a", "gst9b"];
       
@@ -1139,7 +1190,7 @@ const AllParameters = ({
         // :name === "adjudication" ? `${formatString(name)} (Score)`:
         selectedOption1 === "Zones" ? "All Zones" : "All Commissionerates",
       yaxisname:
-        name === "refunds" || name === "returnFiling" || name === "adjudication(legacy cases)"
+        name === "refunds" || name === "returnFiling" || name === "adjudication(legacy cases)"|| name === "scrutiny/assessment"
           ? "Percentage"
           : "Total Score",
       // decimals:'1',
@@ -1147,7 +1198,7 @@ const AllParameters = ({
       showvalues: "0",
       numDivLines: "10",
       plottooltext:
-        name === "refunds" || name === "returnFiling"|| name === "adjudication(legacy cases)"
+        name === "refunds" || name === "returnFiling"|| name === "adjudication(legacy cases)"|| name === "scrutiny/assessment"
           ? selectedOption1 === "Zones"
             ? "<b>Zone Name:$label</b>{br}Percentage:$value"
             : "<b>Commissionerate Name:$label</b>{br}Percentage:$value"
@@ -1160,7 +1211,7 @@ const AllParameters = ({
     categories: [
       {
         category: 
-        (name==="recovery_of_arrears"|| name==="arrest_and_prosecution" || name === "gst_arrest_and_prosecution" ||  name === "adjudication(legacy cases)" || name==="audit"|| name==="registration")?
+        (name==="recovery_of_arrears"|| name==="arrest_and_prosecution" || name === "gst_arrest_and_prosecution" ||  name === "adjudication(legacy cases)" || name === "scrutiny/assessment" || name==="audit"|| name==="registration")?
         selectedOption1 === "Zones"
             ? bardata.map((index) => ({ label: index.zone_name }))
             : bardata.map((index) => ({ label: index.commissionerate_name })):
@@ -1173,7 +1224,7 @@ const AllParameters = ({
       {
         data: bardata.map((item, index) => ({
           label:
-            (name === "recovery_of_arrears" || name === "arrest_and_prosecution" || name==="gst_arrest_and_prosecution" || name === "adjudication(legacy cases)" || name==="audit"|| name==="registration")
+            (name === "recovery_of_arrears" || name === "arrest_and_prosecution" || name==="gst_arrest_and_prosecution" || name === "adjudication(legacy cases)" ||name === "scrutiny/assessment"|| name==="audit"|| name==="registration")
               ? selectedOption1 === "Zones"
                 ? item.zone_name
                 : item.commissionerate_name

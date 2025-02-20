@@ -1014,7 +1014,7 @@ const CustomPara = ({
               accumulationMap.set(key, {
                 ...item,
                 sub_parameter_weighted_average: 0,
-                weighted_average_out_of_12: 0,
+                weighted_average_out_of_6: 0,
                 total_score: 0,
                 gst: response.gst,
               });
@@ -1033,7 +1033,7 @@ const CustomPara = ({
           item.sub_parameter_weighted_average = parseFloat(
             item.sub_parameter_weighted_average.toFixed(1)
           );
-          item.weighted_average_out_of_12 = ((item.sub_parameter_weighted_average * 12) / 10).toFixed(1);
+          item.weighted_average_out_of_6 = ((item.sub_parameter_weighted_average * 6) / 10).toFixed(1);
           item.total_score = parseFloat(item.total_score.toFixed(1));
           return item;
         });
@@ -1042,7 +1042,7 @@ const CustomPara = ({
           finalData
         );
 
-        relevantAspects = (name === "investigation" ? "INVESTIGATION" : finalData.map((item) => item.ra)[0]);
+        relevantAspects = (name === "management_of_warehousing_bonds" ? "Management Of Warehousing bonds" : finalData.map((item) => item.ra)[0]);
 
         const sorted = finalData.sort(
           (a, b) =>
@@ -1997,7 +1997,7 @@ const CustomPara = ({
           item.sub_parameter_weighted_average = parseFloat(
             item.sub_parameter_weighted_average.toFixed(1)
           );
-          item.weighted_average_out_of_12 = ((item.sub_parameter_weighted_average * 12) / 10).toFixed(1);
+          item.weighted_average_out_of_6 = ((item.sub_parameter_weighted_average * 6) / 10).toFixed(1);
           item.total_score = parseFloat(item.total_score.toFixed(1));
 
           item.total_score = parseFloat(item.total_score.toFixed(1));
@@ -2305,7 +2305,7 @@ const CustomPara = ({
       });
 
       break;
-    case "disposal/pendency":
+    case "management_of_warehousing_bonds":
       columns.splice(4, 0, {
         key: "sub_parameter_weighted_average",
         label: "Score (Out of 10)",
@@ -2757,6 +2757,17 @@ const CustomPara = ({
                 "Zonal Rank": user.zonal_rank,
               };
             }
+            case "management_of_warehousing_bonds": {
+              return {
+                SNo: user.s_no,
+                "Zone name ": user.zone_name,
+                "Commissionerate Name": user.commissionerate_name,
+                "Score Details": "Show",
+                "Score Out of 10": user.sub_parameter_weighted_average,
+                "Weighted Average (out of 6)": user.weighted_average_out_of_6,
+                "Zonal Rank": user.zonal_rank,
+              };
+            }
             case "unclaimed_cargo": {
               return {
                 SNo: user.s_no,
@@ -2879,6 +2890,20 @@ const CustomPara = ({
               };
             }
             case "recovery_of_arrears": {
+              return {
+                SNo: user.s_no,
+                "Commissionerate": user.commissionerate_name,
+                "Zone": user.zone_name,
+                // "Absolute Number": user.absval,
+                // "Percentage (For the Month)": user.totalScore,
+                // "Way to Grade (Score out of 10)": user.way_to_grade
+                "Score out of 10": user.sub_parameter_weighted_average,
+                "Weighted Average (out of 6)": user.weighted_average_out_of_6,
+                "Score Details": "Show",
+                "Commissionerate Rank": user.zonal_rank,
+              };
+            }
+            case "management_of_warehousing_bonds": {
               return {
                 SNo: user.s_no,
                 "Commissionerate": user.commissionerate_name,
@@ -3047,7 +3072,7 @@ const CustomPara = ({
 
     commName: (item) => <td>{item.commName}</td>,
     show_details: (item) => {
-      const comeName = ["investigation", "epcg", "registration", "export_obligation(AA)", "disposal/pendency", "arrest_and_prosecution", "unclaimed_cargo", "recovery_of_arrears", "DisposalOfConfiscatedGoldAndNDPS"].includes(name)
+      const comeName = ["investigation", "epcg", "registration", "export_obligation(AA)", "disposal/pendency", "arrest_and_prosecution", "unclaimed_cargo", "recovery_of_arrears", "DisposalOfConfiscatedGoldAndNDPS", "management_of_warehousing_bonds"].includes(name)
         ? encodeURIComponent(item?.commissionerate_name || "")
         : encodeURIComponent(item?.commName || "");
 

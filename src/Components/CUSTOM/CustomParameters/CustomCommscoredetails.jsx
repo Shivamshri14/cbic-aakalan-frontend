@@ -54,23 +54,23 @@ const CustomCommscoredetails = ({
       label: "S.No.",
     },
     {
-      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency"|| name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)" || name === "unclaimed_cargo" || name === "recovery_of_arrears" ? "zone_name" : "zoneName",
+      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency"|| name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)" || name === "unclaimed_cargo" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" ? "zone_name" : "zoneName",
       label: "Zone",
     },
     {
-      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)"  || name === "unclaimed_cargo" || name === "recovery_of_arrears"? "commissionerate_name" : "commName",
+      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)"  || name === "unclaimed_cargo" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" ? "commissionerate_name" : "commName",
       label: "Commissionerate",
     },
     {
-      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)"  || name === "unclaimed_cargo" || name === "recovery_of_arrears"? "gst" : "custom",
+      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)"  || name === "unclaimed_cargo" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" ? "gst" : "custom",
       label: "Sub Parameters",
     },
     {
-      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)" || name === "unclaimed_cargo"  || name === "recovery_of_arrears"? "absolutevale" : "absval",
+      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)" || name === "unclaimed_cargo"  || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" ? "absolutevale" : "absval",
       label: "Absolute Figures (N/D)",
     },
     {
-      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)" || name === "unclaimed_cargo" || name === "recovery_of_arrears" ? "total_score" : "totalScore",
+      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)" || name === "unclaimed_cargo" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" ? "total_score" : "totalScore",
       label: "Percentage for the month",
     },
     // {
@@ -96,7 +96,7 @@ const CustomCommscoredetails = ({
   const fetchDatacomm = async (name) => {
     try {
       // Handle the case where name is neither "export_obligation(AA)", "epcg", "disposal/pendency", or "arrest_and_prosecution"
-      if (name !== "export_obligation(AA)" && name !== "epcg" && name !== "disposal/pendency" && name !== "arrest_and_prosecution" && name !== "DisposalOfConfiscatedGoldAndNDPS" && name !== "adjudication(legacy cases)" && name !=="unclaimed_cargo" && name !=="recovery_of_arrears") {
+      if (name !== "export_obligation(AA)" && name !== "epcg" && name !== "disposal/pendency" && name !== "arrest_and_prosecution" && name !== "DisposalOfConfiscatedGoldAndNDPS" && name !== "adjudication(legacy cases)" && name !=="unclaimed_cargo" && name !=="recovery_of_arrears" && name !=="management_of_warehousing_bonds") {
         const response = await apiClient.get(`/cbic/custom/parameter/${name}`, {
           params: {
             month_date: newdate,
@@ -126,7 +126,6 @@ const CustomCommscoredetails = ({
           }))
         );
       }
-      // Handle "export_obligation(AA)" case
       else if (name === "export_obligation(AA)") {
         const cusendpoints = ["cus3a", "cus3b", "cus3c"];
   
@@ -222,7 +221,6 @@ const CustomCommscoredetails = ({
           }))
         );
       }
-      // Handle "epcg" case
       else if (name === "epcg") {
         const cusendpoints = ["cus2a", "cus2b", "cus2c"];
   
@@ -270,7 +268,6 @@ const CustomCommscoredetails = ({
           }))
         );
       }
-      // Handle "disposal/pendency" case
       else if (name === "disposal/pendency") {
         const cusendpoints = ["cus4a", "cus4b", "cus4c", "cus4d"];
   
@@ -318,7 +315,6 @@ const CustomCommscoredetails = ({
           }))
         );
       }
-      // Handle "arrest_and_prosecution" case
       else if (name === "arrest_and_prosecution") {
         const cusendpoints = ["cus7a", "cus7b"];
   
@@ -507,6 +503,53 @@ const CustomCommscoredetails = ({
           }))
         );
       }
+      else if (name === "management_of_warehousing_bonds") {
+        const cusendpoints = ["cus11a", "cus11b"];
+  
+        const responses = await Promise.all(
+          cusendpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/custom/${endpoint}`, {
+                params: { month_date: newdate, type: "all_commissary" },
+              })
+              .then((response) => ({
+                data: response.data,
+                gst: endpoint.toUpperCase(),
+              }))
+          )
+        );
+  
+        console.log("Response", responses);
+  
+        if (responses) {
+          setloading(false);
+        }
+  
+        const allData = responses.flatMap((response) =>
+          response.data.map((item) => ({
+            ...item,
+            gst: response.gst, // Adding the commissionerate name (gst) to each item
+          }))
+        );
+        console.log("FINAL RESPONSE", allData);
+  
+        const filteredData = allData.filter(
+          (item) => item.zone_code === zone_code && item.commissionerate_name === come_name
+        );
+        console.log("Filtered Data by Zone Code and Commissionerate:", filteredData);
+  
+        if (filteredData.length === 0) {
+          console.error("No data found for the specified zone_code and come_name");
+          setloading(false);
+        }
+  
+        setData(
+          filteredData.map((item, index) => ({
+            ...item,
+            s_no: index + 1,
+          }))
+        );
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
       setloading(false); // Stop loading state on error
@@ -595,6 +638,14 @@ const CustomCommscoredetails = ({
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
         label: "Weighted average (Out of 7)",
+      });
+
+      break;
+
+      case "management_of_warehousing_bonds":
+      columns.splice(6, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted average (Out of 6)",
       });
 
       break;
