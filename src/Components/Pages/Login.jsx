@@ -142,11 +142,12 @@ const Login = () => {
             setDialogText(response.data.message);
             //handleOpenDialog();
 
+
             setTimeout(() => {
               handleCloseDialog();
               navigate("/dashboard");
               setLoading(true);
-            }, );
+            }, 1000);
 
           } else {
             Cookies.set("hasLoggedInBefore", "true");
@@ -186,25 +187,25 @@ const Login = () => {
     const handleTabClose = () => {
       sessionStorage.clear(); // Clears all session data
     };
-  
+
     window.addEventListener("beforeunload", handleTabClose);
     return () => {
       window.removeEventListener("beforeunload", handleTabClose);
     };
   }, []);
-  
+
   useEffect(() => {
     const handleTabClose = () => {
       sessionStorage.removeItem("token"); // Clear session on tab close
       sessionStorage.removeItem("userSession");
     };
-  
+
     window.addEventListener("beforeunload", handleTabClose);
     return () => {
       window.removeEventListener("beforeunload", handleTabClose);
     };
   }, []);
-  
+
 
 
   const handleOpenDialog = () => {
@@ -320,9 +321,9 @@ const Login = () => {
                   onChange={CapchaChange}
                 /> */}
 
-                  {/* captcha code start */}
+                {/* captcha code start */}
 
-                  <Box
+                <Box
                   sx={{
                     display: "flex",
                     alignItems: "center",

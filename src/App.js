@@ -45,14 +45,18 @@ function App() {
     const currentTime = new Date().getTime();
 
     if (expirationTime && currentTime > parseInt(expirationTime, 10)) {
-      if (storedUserString) {
-        setSessionExpired(true);
-        localStorage.clear();
-        alert("Your session has expired. Please log in again.");
-        navigate("/");
-      }
+      setSessionExpired(true);
+      sessionStorage.clear();  // Clears session token properly
+      localStorage.clear();
+
+      alert("Your session has expired. Please log in again.");
+
+      navigate("/");
+      window.location.reload(); // Refreshes the page after navigation
     }
+
   };
+
 
   // ✅ Track user activity and reset session timeout
   useEffect(() => {
@@ -60,7 +64,7 @@ function App() {
       resetSessionTimeout();
     }
 
-    const intervalId = setInterval(checkSessionTimeout, 180000); // Check every 3 minutes
+    const intervalId = setInterval(checkSessionTimeout, 18000); // Check every 3 minutes 18000sec
 
     const activityHandler = () => resetSessionTimeout();
 
@@ -117,7 +121,7 @@ function App() {
 
   useEffect(() => {
     const allowedPaths = ["/", "/forgetpassword"];
-    const isLoggedIn = localStorage.getItem("user") && localStorage.getItem("token");
+    const isLoggedIn = sessionStorage.getItem("token") && localStorage.getItem("user");
 
     if (isLoggedIn) {
       if (pathname === "/" || pathname === "/forgetpassword") {
@@ -127,6 +131,7 @@ function App() {
       navigate("/", { replace: true });
     }
   }, [pathname, navigate]);
+
 
 
 
