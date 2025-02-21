@@ -146,7 +146,7 @@ const Login = () => {
               handleCloseDialog();
               navigate("/dashboard");
               setLoading(true);
-            }, 3000);
+            }, );
 
           } else {
             Cookies.set("hasLoggedInBefore", "true");
