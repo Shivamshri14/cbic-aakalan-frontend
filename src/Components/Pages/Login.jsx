@@ -140,7 +140,7 @@ const Login = () => {
 
           if (!isFirstLogin) {
             setDialogText(response.data.message);
-            handleOpenDialog();
+            //handleOpenDialog();
 
             setTimeout(() => {
               handleCloseDialog();
