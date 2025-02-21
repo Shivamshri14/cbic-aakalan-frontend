@@ -44,7 +44,7 @@ function App() {
     const expirationTime = localStorage.getItem("expirationTime");
     const currentTime = new Date().getTime();
 
-    if (expirationTime && currentTime > parseInt(expirationTime, 1000)) {
+    if (expirationTime && currentTime > parseInt(expirationTime, 10)) {
       if (storedUserString) {
         setSessionExpired(true);
         localStorage.clear();
@@ -54,21 +54,37 @@ function App() {
     }
   };
 
-  // ✅ Handle tab close (expire session only on tab close, NOT refresh)
-
+  // ✅ Track user activity and reset session timeout
   useEffect(() => {
-    const handleTabClose = (event) => {
+    if (storedUserString && token) {
+      resetSessionTimeout();
+    }
+
+    const intervalId = setInterval(checkSessionTimeout, 180000); // Check every 3 minutes
+
+    const activityHandler = () => resetSessionTimeout();
+
+    window.addEventListener("mousemove", activityHandler);
+    window.addEventListener("keydown", activityHandler);
+
+    return () => {
+      clearInterval(intervalId);
+      window.removeEventListener("mousemove", activityHandler);
+      window.removeEventListener("keydown", activityHandler);
+    };
+  }, [storedUserString, token]);
+
+  // ✅ Handle tab close (expire session only on tab close, NOT refresh)
+  useEffect(() => {
+    const handleTabClose = () => {
       if (!sessionStorage.getItem("pageReloaded")) {
-        // ✅ Only clear session when the tab is truly closed (NOT on refresh)
         console.log("Tab Closed: Clearing Session...");
         localStorage.removeItem("token");
         localStorage.removeItem("user");
-
       }
     };
 
     const handleRefresh = () => {
-      // ✅ Mark that the page was refreshed (so session stays intact)
       sessionStorage.setItem("pageReloaded", "true");
     };
 
@@ -78,24 +94,6 @@ function App() {
     return () => {
       window.removeEventListener("beforeunload", handleRefresh);
       window.removeEventListener("unload", handleTabClose);
-    };
-  }, []);
-
-
-
-
-  // ✅ Track user activity and reset session timeout
-  useEffect(() => {
-    checkSessionTimeout();
-
-    const intervalId = setInterval(checkSessionTimeout, 18000); // 3 minutes
-    window.addEventListener("mousemove", resetSessionTimeout);
-    window.addEventListener("keydown", resetSessionTimeout);
-
-    return () => {
-      clearInterval(intervalId);
-      window.removeEventListener("mousemove", resetSessionTimeout);
-      window.removeEventListener("keydown", resetSessionTimeout);
     };
   }, []);
 
@@ -120,7 +118,7 @@ function App() {
   useEffect(() => {
     const allowedPaths = ["/", "/forgetpassword"];
     const isLoggedIn = localStorage.getItem("user") && localStorage.getItem("token");
-  
+
     if (isLoggedIn) {
       if (pathname === "/" || pathname === "/forgetpassword") {
         navigate("/dashboard", { replace: true });
@@ -129,7 +127,7 @@ function App() {
       navigate("/", { replace: true });
     }
   }, [pathname, navigate]);
-  
+
 
 
 

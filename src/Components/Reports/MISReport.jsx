@@ -65,17 +65,17 @@ const MISReport = ({
   const optionscustom = [
     { idc: 12, labelc: "Timely payment of Refunds", value:"TimelyPaymentOfRefunds" },
     { idc: 13, labelc: "Management of Export Obligation(EPCG)", /*value:"epcg",*/color:"red" },
-    { idc: 14, labelc: "Management of Export Obligation(AA)", /*value:"aa",*/ color:"red" },
+    { idc: 14, labelc: "Management of Export Obligation(AA)",/*value:"aa",*/ color:"red" },
     { idc: 15, labelc: "Disposal/Pendency Of Provisional Assessments", /*value:"disposalPendency",*/color:"red" },
     { idc: 16, labelc: "Adjudication", value:"Adjudication" },
-    { idc: 17, labelc: "Investigation", /*value:"Investigation", */color:"red" },
-    { idc: 18, labelc: "Arrests and Prosecution",/*value:"arrestProsecution", */ color:"red" },
-    { idc: 19, labelc: "Monitoring Of Un-cleared and Unclaimed cargo",/*value:"muc", */ color:"red" },
+    { idc: 17, labelc: "Investigation", /*value:"cus_investigation",*/ color:"red" },
+    { idc: 18, labelc: "Arrests and Prosecution", /*value: "cus_arrestAndProsecution",*/ color:"red" },
+    { idc: 19, labelc: "Monitoring Of Un-cleared and Unclaimed cargo", /*value: "unclaimed_cargo",*/color:"red" },
     { idc: 20, labelc: "Disposal Of Confiscated Gold and NDPS", value:"DisposalOfConfiscatedGoldAndNDPS" },
-    { idc: 21, labelc: "Recovery of Arrears",/* value: "recovery_Of_Arrears",*/ color:"red" },
+    { idc: 21, labelc: "Recovery of Arrears", /*value: "recovery_Of_Arrears",*/ color:"red" },
     { idc: 22, labelc: "Management Of Warehousing bonds",/*value: "mowb",*/ color:"red" },
     { idc: 23, labelc: "Commissioner (Appeals)", value:"CommissionerAppeals" },
-    { idc: 24, labelc: "Audit", /*value: "cus_audit",*/ color:"red" },
+    { idc: 24, labelc: "Audit",/* value: "cus_audit", */color:"red" },
   ];
 
   const handleCheckboxChange = (id, label) => {
@@ -131,7 +131,7 @@ const MISReport = ({
               </LocalizationProvider>
             </div>
           </div>
-          <div className="rgt-sec">
+          {/* <div className="rgt-sec">
             <div className="switches-container2">
               <input
                 type="radio"
@@ -158,7 +158,7 @@ const MISReport = ({
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="bg-blue report-sec mb p-3">
           <div className="radio-box mt-4">

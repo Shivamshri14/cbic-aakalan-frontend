@@ -55,7 +55,7 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
       label: "S.No.",
     },
     {
-      key: name==="investigation"||name==="recovery_of_arrears"||name==="management_of_warehousing_bonds"||name==="export_obligation(AA)"||name ==="unclaimed_cargo"||name==="disposal/pendency"||name==="arrest_and_prosecution"||name==="epcg"?"zone_name":"zoneName",
+      key: name==="investigation"||name==="recovery_of_arrears"||name==="management_of_warehousing_bonds"||name==="export_obligation(AA)"||name ==="unclaimed_cargo"||name==="disposal/pendency"||name==="arrest_and_prosecution"||name==="epcg"  || name ==="cus_audit"  || name ==="DisposalOfConfiscatedGoldAndNDPS"?"zone_name":"zoneName",
       label: "Zone",
     },
     // {
@@ -63,15 +63,15 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
     //   label: "Commissionerate Name",
     // },
     {
-      key: name==="investigation"||name==="recovery_of_arrears"||name==="management_of_warehousing_bonds"||name==="export_obligation(AA)"||name ==="unclaimed_cargo"||name==="disposal/pendency"|| name==="arrest_and_prosecution"||name==="epcg"?"gst":"custom",
+      key: name==="investigation"||name==="recovery_of_arrears"||name==="management_of_warehousing_bonds"||name==="export_obligation(AA)"||name ==="unclaimed_cargo"||name==="disposal/pendency"|| name==="arrest_and_prosecution"||name==="epcg"  || name ==="cus_audit"  || name ==="DisposalOfConfiscatedGoldAndNDPS" ?"gst":"custom",
       label: "Sub Parameters",
     },
     {
-      key: name==="investigation"||name==="recovery_of_arrears"||name==="management_of_warehousing_bonds"||name==="export_obligation(AA)"||name ==="unclaimed_cargo"||name==="disposal/pendency"|| name==="arrest_and_prosecution"||name==="epcg"?"absolutevale":"absval",
+      key: name==="investigation"||name==="recovery_of_arrears"||name==="management_of_warehousing_bonds"||name==="export_obligation(AA)"||name ==="unclaimed_cargo"||name==="disposal/pendency"|| name==="arrest_and_prosecution"||name==="epcg"  || name ==="cus_audit"  || name ==="DisposalOfConfiscatedGoldAndNDPS" ?"absolutevale":"absval",
       label: "Absolute Number",
     },
     {
-      key: name==="investigation"||name==="recovery_of_arrears"||name==="management_of_warehousing_bonds"|| name==="export_obligation(AA)"||name ==="unclaimed_cargo"||name==="disposal/pendency"|| name==="arrest_and_prosecution"||name==="epcg"?"total_score":"totalScore",
+      key: name==="investigation"||name==="recovery_of_arrears"||name==="management_of_warehousing_bonds"|| name==="export_obligation(AA)"||name ==="unclaimed_cargo"||name==="disposal/pendency"|| name==="arrest_and_prosecution"||name==="epcg"  || name ==="cus_audit"  || name ==="DisposalOfConfiscatedGoldAndNDPS" ?"total_score":"totalScore",
       label: "Percentage for the month",
     },
     // {
@@ -268,6 +268,59 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
 
         setData(filteredData.map((item,index)=>({...item,s_no:index+1})));
       }
+      else if (name === "DisposalOfConfiscatedGoldAndNDPS") {
+        const cusendpoints = [
+          "cus9a",
+          "cus9b",
+        ];
+
+        const responses = await Promise.all(
+          cusendpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/custom/${endpoint}`, {
+                params: { month_date: newdate, type: "zone" },
+              })
+              .then((response) => ({ data: response.data, gst: endpoint.toUpperCase() }))
+          )
+        );
+        console.log("Response", responses);
+
+        const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
+        console.log("FINALRESPONSE",allData);
+        relevantAspects = (name==="investigation"?"INVESTIGATION":allData.map((item) => item.ra)[0]);
+        const filteredData = allData.filter(item => item.zone_code === zone_code);
+        console.log("Filtered Data by Zone Code", filteredData);
+
+        setData(filteredData.map((item,index)=>({...item,s_no:index+1})));
+      }
+      else if (name === "cus_audit") {
+        const cusendpoints = [
+          "cus13a",
+          "cus13b",
+          "cus13c",
+          "cus13d",
+          "cus13e",
+        ];
+
+        const responses = await Promise.all(
+          cusendpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/custom/${endpoint}`, {
+                params: { month_date: newdate, type: "zone" },
+              })
+              .then((response) => ({ data: response.data, gst: endpoint.toUpperCase() }))
+          )
+        );
+        console.log("Response", responses);
+
+        const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
+        console.log("FINALRESPONSE",allData);
+        relevantAspects = (name==="investigation"?"INVESTIGATION":allData.map((item) => item.ra)[0]);
+        const filteredData = allData.filter(item => item.zone_code === zone_code);
+        console.log("Filtered Data by Zone Code", filteredData);
+
+        setData(filteredData.map((item,index)=>({...item,s_no:index+1})));
+      }
       else if (name === "management_of_warehousing_bonds") {
         const cusendpoints = [
           "cus11a",
@@ -369,6 +422,13 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
         break;
 
         case "export_obligation(AA)":
+        columns.splice(6,0,{
+          key: "sub_parameter_weighted_average",
+          label: "Weighted average/Score (Out of 10)",
+        });
+  
+        break;
+        case "cus_audit":
         columns.splice(6,0,{
           key: "sub_parameter_weighted_average",
           label: "Weighted average/Score (Out of 10)",

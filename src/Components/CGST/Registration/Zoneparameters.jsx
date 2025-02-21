@@ -309,7 +309,7 @@ const Zoneparameters = ({
           setloading(false);
         }
 
-        relevantAspects = "adjudication(legacy cases)";
+        relevantAspects = name.toUpperCase();
 
         // Combine the responses from all endpoints into a single array
         const allData = responses.flatMap((response) =>
@@ -836,7 +836,7 @@ const Zoneparameters = ({
           setloading(false);
         }
 
-        relevantAspects = name.toUpperCase();
+        relevantAspects = "ARREST AND PROSECUTION";
 
         // Combine the responses from all endpoints into a single array
         const allData = responses.flatMap((response) =>
@@ -1049,6 +1049,8 @@ const Zoneparameters = ({
 
           const totalByParam0 = {};
 
+          relevantAspects = name.toUpperCase();
+
           // Process each response
           responses.forEach((response) => {
             response.data.forEach((item) => {
@@ -1183,6 +1185,8 @@ const Zoneparameters = ({
               currentIndex++;
             }
 
+            relevantAspects = name.toUpperCase();
+
             // Assign the index to each item based on its score
             sorted1[i].zonal_rank = scoreIndexMap.get(score);
           }
@@ -1246,6 +1250,8 @@ const Zoneparameters = ({
 
           const scoreIndexMap = new Map();
           let currentIndex = 1;
+
+          relevantAspects = name.toUpperCase();
 
           for (let i = 0; i < sorted3.length; i++) {
             const score = sorted3[i].sub_parameter_weighted_average;
@@ -1981,7 +1987,7 @@ const Zoneparameters = ({
           setloading(false);
         }
 
-        relevantAspects = "adjudication(legacy cases)";
+        relevantAspects = "ARREST AND PROSECUTION";
 
         // Combine the responses from all endpoints into a single array
         const allData = responses.flatMap((response) =>

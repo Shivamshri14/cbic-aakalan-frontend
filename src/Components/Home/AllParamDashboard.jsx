@@ -2145,14 +2145,14 @@ const AllParamDashboard = ({
                         </Link>
                       </div>
                       <ol className="par-list">
-                        <li className="text-danger">
+                        <li className="text-white">
                           <Tooltip
                             title="Number of BEs audited upto the month vis-à-vis total number of BEs marked for audit upto the month"
                             placement="right"
                             arrow
                           >
                             <Link
-                              className="text-danger sub-h"
+                              className="text-white sub-h"
                               to="/customsubpara?name=cus13a"
                             >
                               {" "}
@@ -2160,64 +2160,64 @@ const AllParamDashboard = ({
                             </Link>
                           </Tooltip>
                         </li>
-                        <li className="text-danger">
+                        <li className="text-white">
                           <Tooltip
                             title=" Number of SBs audited upto the month vis-à-vis total number of SBs marked for audit upto the month"
                             placement="right"
                             arrow
                           >
-                            {/* <Link
-                              className="text-danger sub-h"
+                            <Link
+                              className="text-white sub-h"
                               to="/customsubpara?name=cus13b"
-                            > */}
+                            >
                               {" "}
                               SBs audited/marked
-                            {/* </Link> */}
+                            </Link>
                           </Tooltip>
                         </li>
-                        <li className="text-danger">
+                        <li className="text-white">
                           <Tooltip
                             title="Amount  recovered in transactions audited upto the month vis-à-vis total amount detected in transactions marked for audit upto the month"
                             placement="right"
                             arrow
                           >
-                            {/* <Link
-                              className="text-danger sub-h"
+                            <Link
+                              className="text-white sub-h"
                               to="/customsubpara?name=cus13c"
-                            > */}
+                            > 
                               {" "}
                               Recovered/detected
-                            {/* </Link> */}
+                            </Link>
                           </Tooltip>
                         </li>
-                        <li className="text-danger">
+                        <li className="text-white">
                           <Tooltip
                             title="Number of BEs pending audit more than 6 months vis-à-vis total number of BEs pending audit"
                             placement="right"
                             arrow
                           >
-                            {/* <Link
-                              className="text-danger sub-h"
+                            <Link
+                              className="text-white sub-h"
                               to="/customsubpara?name=cus13d"
-                            > */}
+                            > 
                               {" "}
                               BEs pending &gt; 6 months
-                            {/* </Link> */}
+                             </Link>
                           </Tooltip>
                         </li>
-                        <li className="text-danger">
+                        <li className="text-white">
                           <Tooltip
                             title="Number of SBs pending audit more than 6 months vis-à-vis total number of SBs pending audit"
                             placement="right"
                             arrow
                           >
-                            {/* <Link
-                              className="text-danger sub-h"
+                            <Link
+                              className="text-white sub-h"
                               to="/customsubpara?name=cus13e"
-                            > */}
+                            > 
                               {" "}
                               SBs Pending &gt; 6 months{" "}
-                            {/* </Link> */}
+                            </Link>
                           </Tooltip>
                         </li>
                       </ol>

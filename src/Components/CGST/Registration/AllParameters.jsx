@@ -836,7 +836,65 @@ const AllParameters = ({
         } catch (error) {
           console.error("Error fetching adjudication data:", error);
         }
-      }else if (name === "scrutiny/assessment") {
+      } else if (name === "recovery_of_arrears") {
+
+        const endpoints = ["gst8a", "gst8b"]; 
+
+        const responses = await Promise.all(
+          endpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/${endpoint}`, {
+                params: { month_date: newdate, type: "all_commissary" },
+              })
+              .then((response) => ({
+                data: response.data,
+                gst: endpoint.toUpperCase(),
+              }))
+          )
+        );
+
+        console.log("Responses", responses);
+
+        if (responses) {
+          setloading(false);
+        }
+
+        // Combine the responses from all endpoints into a single array
+        const allData = responses.flatMap((response) =>
+          response.data.map((item) => ({ ...item, gst: response.gst }))
+        );
+        console.log("FINALRESPONSE", allData);
+
+        const summedByZone = allData.reduce((acc, item) => {
+          const zoneCode = item.commissionerate_name;
+          const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
+
+          // If zone_code is encountered for the first time, initialize it
+          if (!acc[zoneCode]) {
+            acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+          }
+
+          // Sum only the sub_parameter_weighted_average for each zone_code
+          acc[zoneCode].sub_parameter_weighted_average += value;
+
+          return acc;
+        }, {});
+
+        const reducedAllData = Object.values(summedByZone).map((item)=>({
+          ...item, sub_parameter_weighted_average: item.sub_parameter_weighted_average.toFixed(2)
+        }));
+
+        console.log("Reduced All Data:", reducedAllData);
+
+        const sorted = reducedAllData.sort(
+          (a, b) =>
+            b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+        );
+        console.log("Sorted", sorted);
+        setData(sorted.map((item,index)=>({...item, s_no:index+1})));
+        setBarData([...sorted]);
+      }
+      else if (name === "scrutiny/assessment") {
         try {
           const endpoints = ["gst3a", "gst3b"];
       

@@ -52,11 +52,11 @@ const CustomZonewisecomm = ({
       label: "S.No.",
     },
     {
-      key: name === "investigation" ||name ==="unclaimed_cargo"||name ==="recovery_of_arrears"||name ==="management_of_warehousing_bonds"||name==="export_obligation(AA)"||name==="disposal/pendency"||name==="arrest_and_prosecution"|| name==="epcg" ? "zone_name" : "zoneName",
+      key: name === "investigation" ||name ==="unclaimed_cargo"||name ==="recovery_of_arrears"||name ==="management_of_warehousing_bonds"||name==="export_obligation(AA)"||name==="disposal/pendency"||name==="arrest_and_prosecution"|| name==="epcg"  || name ==="cus_audit"  || name ==="DisposalOfConfiscatedGoldAndNDPS"? "zone_name" : "zoneName",
       label: `Zone`,
     },
     {
-      key: name === "investigation" ||name ==="unclaimed_cargo"||name ==="recovery_of_arrears"||name ==="management_of_warehousing_bonds"||name==="export_obligation(AA)"||name==="disposal/pendency"||name==="arrest_and_prosecution"|| name==="epcg" ? "commissionerate_name" : "commName",
+      key: name === "investigation" ||name ==="unclaimed_cargo"||name ==="recovery_of_arrears"||name ==="management_of_warehousing_bonds"||name==="export_obligation(AA)"||name==="disposal/pendency"||name==="arrest_and_prosecution"|| name==="epcg"  || name ==="cus_audit"  || name ==="DisposalOfConfiscatedGoldAndNDPS" ? "commissionerate_name" : "commName",
       label: "Commissionerate",
     },
     // {
@@ -575,6 +575,145 @@ const CustomZonewisecomm = ({
         setData(sorted.map((item, index) => ({ ...item, s_no: index + 1 })));
 
       }
+      else if (name === "DisposalOfConfiscatedGoldAndNDPS") {
+
+        const cusendpoints = [
+          "cus9a",
+          "cus9b",
+        ];
+
+        const responses = await Promise.all(
+          cusendpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/custom/${endpoint}`, {
+                params: { month_date: newdate, type: "all_commissary", zone_code: zone_code },
+              })
+              .then((response) => ({
+                data: response.data
+              }))
+          )
+        );
+        console.log("Response", responses);
+
+        if (responses) {
+          setloading(false);
+        }
+
+        const accumulationMap = new Map();
+
+        responses.flatMap((response) =>
+          response.data.forEach((item) => {
+            const key = item.commissionerate_name;
+            if (!accumulationMap.has(key)) {
+              accumulationMap.set(key, {
+                ...item,
+                sub_parameter_weighted_average: 0,
+                total_score: 0,
+                gst: response.gst,
+              });
+            }
+            const accumulatedItem = accumulationMap.get(key);
+            accumulatedItem.sub_parameter_weighted_average +=
+              item.sub_parameter_weighted_average;
+            accumulatedItem.total_score += item.total_score; // Update the map with the new summed values
+            accumulationMap.set(key, accumulatedItem);
+          })
+        );
+        const allData = Array.from(accumulationMap.values());
+        console.log("Consolidated and Summed Data", allData);
+
+        const finalData = allData.map((item) => {
+          item.sub_parameter_weighted_average = parseFloat(
+            item.sub_parameter_weighted_average.toFixed(1)
+          );
+          item.total_score = parseFloat(item.total_score.toFixed(1));
+          return item;
+        });
+        console.log(
+          "Final Summed Data with Total Score and Weighted Average",
+          finalData
+        );
+
+        const filteredData = allData.filter(
+          (item) => item.zone_code === zone_code
+        );
+        console.log("Filtered Data by Zone Code", filteredData);
+
+        const sorted = filteredData.sort((a, b) => b.sub_parameter_weighted_average - a.sub_parameter_weighted_average);
+        setData(sorted.map((item, index) => ({ ...item, s_no: index + 1 })));
+
+      }
+      else if (name === "cus_audit") {
+
+        const cusendpoints = [
+          "cus13a",
+          "cus13b",
+          "cus13c",
+          "cus13d",
+          "cus13e",
+        ];
+
+        const responses = await Promise.all(
+          cusendpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/custom/${endpoint}`, {
+                params: { month_date: newdate, type: "all_commissary", zone_code: zone_code },
+              })
+              .then((response) => ({
+                data: response.data
+              }))
+          )
+        );
+        console.log("Response", responses);
+
+        if (responses) {
+          setloading(false);
+        }
+
+        const accumulationMap = new Map();
+
+        responses.flatMap((response) =>
+          response.data.forEach((item) => {
+            const key = item.commissionerate_name;
+            if (!accumulationMap.has(key)) {
+              accumulationMap.set(key, {
+                ...item,
+                sub_parameter_weighted_average: 0,
+                total_score: 0,
+                gst: response.gst,
+              });
+            }
+            const accumulatedItem = accumulationMap.get(key);
+            accumulatedItem.sub_parameter_weighted_average +=
+              item.sub_parameter_weighted_average;
+            accumulatedItem.total_score += item.total_score; // Update the map with the new summed values
+            accumulationMap.set(key, accumulatedItem);
+          })
+        );
+        const allData = Array.from(accumulationMap.values());
+        console.log("Consolidated and Summed Data", allData);
+
+        const finalData = allData.map((item) => {
+          item.sub_parameter_weighted_average = parseFloat(
+            item.sub_parameter_weighted_average.toFixed(1)
+          );
+          item.total_score = parseFloat(item.total_score.toFixed(1));
+          return item;
+        });
+        console.log(
+          "Final Summed Data with Total Score and Weighted Average",
+          finalData
+        );
+
+        const filteredData = allData.filter(
+          (item) => item.zone_code === zone_code
+        );
+        console.log("Filtered Data by Zone Code", filteredData);
+
+        const sorted = filteredData.sort((a, b) => b.sub_parameter_weighted_average - a.sub_parameter_weighted_average);
+        setData(sorted.map((item, index) => ({ ...item, s_no: index + 1 })));
+
+      }
       else if (name === "management_of_warehousing_bonds") {
 
         const cusendpoints = [
@@ -715,6 +854,14 @@ const CustomZonewisecomm = ({
       break;
     
     case "DisposalOfConfiscatedGoldAndNDPS":
+      columns.splice(6, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted average/Score (Out of 10)",
+      });
+
+      break;
+
+      case "cus_audit":
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
         label: "Weighted average/Score (Out of 10)",

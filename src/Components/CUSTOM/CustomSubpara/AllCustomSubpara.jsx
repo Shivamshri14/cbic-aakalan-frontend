@@ -86,7 +86,7 @@ const AllCustomSubpara = ({
       );
 
       if(name==="cus9a" || name==="cus12a" ||name==="cus2a"||name==="cus3a"||name==="cus3c"||name==="cus4c"|| name==="cus9b" || name==="cus5a" || 
-      name==="cus6a"|| name==="cus6c" || name==="cus6d"|| name==="cus6e"|| name==="cus6f"|| name==="cus7b"|| name==="cus8a"|| name==="cus10a"|| name==="cus11b"){
+      name==="cus6a"|| name==="cus6c" || name==="cus6d"|| name==="cus6e"|| name==="cus6f"|| name==="cus7b"|| name==="cus8a"|| name==="cus10a"|| name==="cus11b" || name==="cus13a"|| name==="cus13b"|| name==="cus13c"|| name==="cus13d"|| name==="cus13e"){
       const sorted = response.data.sort(
         (a, b) => b.total_score - a.total_score
       );
@@ -131,7 +131,7 @@ const AllCustomSubpara = ({
       );
 
       if(name==="cus9a"|| name==="cus12a"||name==="cus2a"||name==="cus3a"||name==="cus3c"||name==="cus4c"|| name==="cus9b" || 
-        name==="cus5a" || name==="cus6a"|| name==="cus6c"|| name==="cus6d" || name==="cus6e"|| name==="cus6f"|| name==="cus7b"|| name==="cus8a"|| name==="cus10a"|| name==="cus11b" ) {
+        name==="cus5a" || name==="cus6a"|| name==="cus6c"|| name==="cus6d" || name==="cus6e"|| name==="cus6f"|| name==="cus7b"|| name==="cus8a"|| name==="cus10a"|| name==="cus11b" || name==="cus13a"|| name==="cus13b"|| name==="cus13c"|| name==="cus13d"|| name==="cus13e") {
         const sorted = response.data.sort(
           (a, b) => b.total_score - a.total_score
         );

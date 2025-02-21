@@ -120,7 +120,7 @@ const CustomSubpara = ({
       if (name === "cus1" || name === "cus2a"|| name === "cus2b"|| name === "cus2c"||name === "cus3a"||name === "cus3b"||name === "cus3c"||
          name === "cus4a" ||name === "cus4b" ||name === "cus4c" ||name === "cus4d" || name === "cus5a" || name === "cus5b" || name === "cus5c" || name === "cus6a" 
         || name === "cus6b" ||name === "cus6c" || name === "cus6d" || name === "cus6e" ||name === "cus6f" ||name === "cus7a" ||name === "cus7b" ||name === "cus8a" ||name === "cus8b" || name === "cus9a"
-        || name === "cus9b"||name === "cus10a"||name === "cus10b"||name === "cus11a"||name === "cus11b"|| name === "cus12a"|| name === "cus12b" || name === "cus13a"
+        || name === "cus9b"||name === "cus10a"||name === "cus10b"||name === "cus11a"||name === "cus11b"|| name === "cus12a"|| name === "cus12b" || name==="cus13a"|| name==="cus13b"|| name==="cus13c"|| name==="cus13d"|| name==="cus13e"
       ) {
         setData(enhancedData);
       }
@@ -808,27 +808,6 @@ const CustomSubpara = ({
         });
         break;
 
-        case "cus13a":
-        columns.splice(3, 0, {
-          key: "absolutevale",
-          label: "Cases Pending > 1 years/total pending",
-        });
-      
-        columns.splice(6, 0, {
-          key: "sub_parameter_weighted_average",
-          label: "Weighted Average (out of 5)",
-        });
-        columnscomm.splice(3, 0, {
-          key: "absolutevale",
-          label: "Pending > 1 years/total pending",
-        });
-       
-        columnscomm.splice(6, 0, {
-          key: "sub_parameter_weighted_average",
-          label: "Weighted Average (out of 5)",
-        });
-        break;
-
         case "cus6a":
       columns.splice(3, 0, {
         key: "absolutevale",
@@ -1149,6 +1128,161 @@ const CustomSubpara = ({
         });
 
         break;
+
+        case "cus13a":
+          columns.splice(3, 0, {
+            key: "absolutevale",
+            label: "BEs audited/marked",
+          });
+          columns.splice(6, 0, {
+            key: "insentavization",
+            label: "Incentivisation",
+          });
+    
+          columns.splice(7, 0, {
+            key: "sub_parameter_weighted_average",
+            label: "Weighted Average (out of 2)",
+          });
+    
+          columnscomm.splice(3, 0, {
+            key: "absolutevale",
+            label: "BEs audited/marked",
+          });
+          columnscomm.splice(6, 0, {
+            key: "insentavization",
+            label: "Incentivisation",
+          });
+    
+          columnscomm.splice(7, 0, {
+            key: "sub_parameter_weighted_average",
+            label: "Weighted Average (out of 2)",
+          });
+  
+          break;
+
+          case "cus13b":
+            columns.splice(3, 0, {
+              key: "absolutevale",
+              label: "SBs audited/marked",
+            });
+            columns.splice(6, 0, {
+              key: "insentavization",
+              label: "Incentivisation",
+            });
+      
+            columns.splice(7, 0, {
+              key: "sub_parameter_weighted_average",
+              label: "Weighted Average (out of 2)",
+            });
+
+            columnscomm.splice(3, 0, {
+              key: "absolutevale",
+              label: "SBs audited/marked",
+            });
+            columnscomm.splice(6, 0, {
+              key: "insentavization",
+              label: "Incentivisation",
+            });
+      
+            columnscomm.splice(7, 0, {
+              key: "sub_parameter_weighted_average",
+              label: "Weighted Average (out of 2)",
+            });
+    
+            break;
+
+            case "cus13c":
+            columns.splice(3, 0, {
+              key: "absolutevale",
+              label: "Recovered/detected",
+            });
+            columns.splice(6, 0, {
+              key: "insentavization",
+              label: "Incentivisation",
+            });
+      
+            columns.splice(7, 0, {
+              key: "sub_parameter_weighted_average",
+              label: "Weighted Average (out of 2)",
+            });
+
+            columnscomm.splice(3, 0, {
+              key: "absolutevale",
+              label: "Recovered/detected",
+            });
+            columnscomm.splice(6, 0, {
+              key: "insentavization",
+              label: "Incentivisation",
+            });
+      
+            columnscomm.splice(7, 0, {
+              key: "sub_parameter_weighted_average",
+              label: "Weighted Average (out of 2)",
+            });
+    
+            break;
+
+            case "cus13d":
+            columns.splice(3, 0, {
+              key: "absolutevale",
+              label: "BEs pending > 6 months",
+            });
+            // columns.splice(6, 0, {
+            //   key: "insentavization",
+            //   label: "Incentivisation",
+            // });
+      
+            columns.splice(7, 0, {
+              key: "sub_parameter_weighted_average",
+              label: "Weighted Average (out of 2)",
+            });
+
+            columnscomm.splice(3, 0, {
+              key: "absolutevale",
+              label: "BEs pending > 6 months",
+            });
+            // columnscomm.splice(6, 0, {
+            //   key: "insentavization",
+            //   label: "Incentivisation",
+            // });
+      
+            columnscomm.splice(7, 0, {
+              key: "sub_parameter_weighted_average",
+              label: "Weighted Average (out of 2)",
+            });
+    
+            break;
+
+            case "cus13e":
+            columns.splice(3, 0, {
+              key: "absolutevale",
+              label: "SBs Pending > 6 months",
+            });
+            // columns.splice(6, 0, {
+            //   key: "insentavization",
+            //   label: "Incentivisation",
+            // });
+      
+            columns.splice(7, 0, {
+              key: "sub_parameter_weighted_average",
+              label: "Weighted Average (out of 2)",
+            });
+      
+            columnscomm.splice(3, 0, {
+              key: "absolutevale",
+              label: "SBs Pending > 6 months",
+            });
+            // columnscomm.splice(6, 0, {
+            //   key: "insentavization",
+            //   label: "Incentivisation",
+            // });
+      
+            columnscomm.splice(7, 0, {
+              key: "sub_parameter_weighted_average",
+              label: "Weighted Average (out of 2)",
+            });
+    
+            break;
 
 
     default:
@@ -1612,18 +1746,6 @@ const CustomSubpara = ({
                     user.sub_parameter_weighted_average,
                 };
               }
-              case "cus13a": {
-                return {
-                  SNo: user.s_no,
-                  "Zone Name": user.zone_name,
-                  "Commissionerate Name": user.commissionerate_name,
-                  "Cases Pending > 1 years/total pending": user.absolutevale,
-                  "Percentage (For the Month)": user.total_score,
-                  "Way to Grade (Marks) Out of 10": user.way_to_grade,
-                  "Weighted Average(out of 5)":
-                    user.sub_parameter_weighted_average,
-                };
-              }
               // Customize object properties to match desired format
               default: {
                 return {
@@ -2037,18 +2159,6 @@ const CustomSubpara = ({
                     user.sub_parameter_weighted_average,
                 };
               }
-              case "cus13a": {
-                return {
-                  SNo: user.s_no,
-                  "Commissionerate Name": user.commissionerate_name,
-                  "Zone Name": user.zone_name,
-                  "Pending > 1 years/total pending": user.absolutevale,
-                  "Percentage (For the Month)": user.total_score,
-                  "Way to Grade (Marks) Out of 10": user.way_to_grade,
-                  "Weighted Average(out of 5)":
-                    user.sub_parameter_weighted_average,
-                };
-              }
               // Customize object properties to match desired format
               default: {
                 return {
@@ -2207,7 +2317,6 @@ const CustomSubpara = ({
       name === "cus5c" ? selectedOption1 === "Zones" ? "Top 5 Zones (Least % of ADJ Case pending > 1 year where duty involved > 1 crore)" : "Top 5 Commissionerates (Least % ADJ of Case pending > 1 year where duty involved > 1 crore)":
       name === "cus12a" ? selectedOption1 === "Zones" ? "Top 5 Zones (Highest % of Appeal Cases disposed/pending at start of month)" : "Top 5 Commissionerates (Highest % of Appeal Cases disposed/pending at start of month)":
       name === "cus12b" ? selectedOption1 === "Zones" ? "Top 5 Zones (Least % of Cases Pending > 1 years/total pending)" : "Top 5 Commissionerates (Least % of Cases Pending > 1 years/total pending)":
-      name === "cus13a" ? selectedOption1 === "Zones" ? "Top 5 Zones (Highest % of Appeal Cases disposed/pending at start of month)" : "Top 5 Commissionerates (Highest % of Appeal Cases disposed/pending at start of month)":
       name === "cus6a" ? selectedOption1 === "Zones" ? "Top 5 Zones (Highest % of Investigation Completed)" : "Top 5 Commissionerates ( Highest % of Investigation Completed)":
       name === "cus6b" ? selectedOption1 === "Zones" ? "Top 5 Zones (Least % of cases pending > 2 years)" : "Top 5 Commissionerates (Least % of cases Pending > 2 years)":
       name === "cus6c" ? selectedOption1 === "Zones" ? "Top 5 Zones (Highest % of Detection/Revenue collected)" : "Top 5 Commissionerates (Highest % of Detection/Revenue collected)":
@@ -2288,7 +2397,6 @@ const CustomSubpara = ({
       name === "cus6f" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Least % of Disposal of cases of Commercial fraud)" : "Bottom 5 Commissionerates ( Least % of Disposal of cases of Commercial fraud)":
       name === "cus12a" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Least % of Appeal Cases disposed/pending at start of month)" : "Bottom 5 Commissionerates (Least % of Appeal Cases disposed/pending at start of month)":
       name === "cus12b" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Highest % of Cases Pending > 1 years/total pending)" : "Bottom 5 Commissionerates (Highest % of Cases Pending > 1 years/total pending)":
-      name === "cus13a" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Least % of Appeal Cases disposed/pending at start of month)" : "Bottom 5 Commissionerates (Least % of Appeal Cases disposed/pending at start of month)":
       name === "cus2a" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Least % of Notices issued/EO fulfilment time is over)" : "Bottom 5 Commissionerates (Least % of Notices issued/EO fulfilment time is over)":
       name === "cus2b" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Highest % of No revenue protective measures/EO fulfillment time is over)" : "Bottom 5 Commissionerates (Highest % of No revenue protective measures/EO fulfillment time is over)":
       name === "cus2c" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Least % of Duty recovered/duty involved in expired licenses)" : "Bottom 5 Commissionerates (Least % of Duty recovered/duty involved in expired licenses)":
@@ -2435,7 +2543,7 @@ const CustomSubpara = ({
               {name === "cus9a" || name === "cus1" ||name === "cus2a" ||name === "cus2b" ||name === "cus2c" ||name === "cus3a" ||name === "cus3b" ||name === "cus3c" || name === "cus4d" ||
                name === "cus4a" ||name === "cus4b" ||name === "cus4c" ||name === "cus4d" ||name === "cus5a" || name === "cus5b" || name === "cus5c" ||
                name === "cus6a" ||name === "cus6b"||name === "cus6c"|| name === "cus6d"||name === "cus6e"||name === "cus6f"||name === "cus7a"||name === "cus7b"||name === "cus8a"||name === "cus8b"||
-                name === "cus9b"||name === "cus10a"||name === "cus10b"||name === "cus11a"|| name === "cus11b"|| name === "cus12a"|| name === "cus12b" || name === "cus13a" ? (
+                name === "cus9b"||name === "cus10a"||name === "cus10b"||name === "cus11a"|| name === "cus11b"|| name === "cus12a"|| name === "cus12b" || name==="cus13a"|| name==="cus13b"|| name==="cus13c"|| name==="cus13d"|| name==="cus13e"? (
                 <div className="row custom-tb mb col ">
                   <div className="row container">
                     <div className="col-md-6 mt-2 ">
@@ -2461,7 +2569,6 @@ const CustomSubpara = ({
                             name === "cus6f" ? (<strong>Top 5 Zones  (Highest % of Disposal of cases ofCommercial fraud)</strong>) :
                             name === "cus12a" ? (<strong>Top 5 Zones (Highest % of Appeal Cases disposed/pending at start of month)</strong>) :
                             name === "cus12b" ? (<strong>Top 5 Zones (Highest % of Cases pending &gt; 1 year/total pending)</strong>) :
-                            name === "cus13a" ? (<strong>Top 5 Zones (Highest % of Appeal Cases disposed/pending at start of month)</strong>) :
                             name === "cus2a" ? (<strong>Top 5 Zones (Highest % of Notices issued/EO fulfilment time is over)</strong>) :
                             name === "cus2b" ? (<strong>Top 5 Zones (Least % of No revenue protective measures/EO fulfillment time is over)</strong>) :
                             name === "cus2c" ? (<strong>Top 5 Zones (Highest % of Duty recovered/duty involved in expired licenses)</strong>) :
@@ -2505,8 +2612,7 @@ const CustomSubpara = ({
                             name === "cus9b" ? (<strong>Top 5 Commissionerates  (Highest % of Confiscated narcotics disposed/Pending for disposal)</strong>) :
                             name === "cus12a" ? (<strong>Top 5 Commissionerates (Highest % of Appeal Cases disposed/pending at start of month)</strong>) :
                             name === "cus12b" ? (<strong>Top 5 Commissionerates (Highest % of Cases pending &gt; 1 year/total pending)</strong>) :
-                            name === "cus13a" ? (<strong>Top 5 Commissionerates (Highest % of Appeal Cases disposed/pending at start of month)</strong>) :
-                            name === "cus2a" ? (<strong>Top 5 Commissionerates (Highest % of Notices issued/EO fulfilment time is over)</strong>) :
+                             name === "cus2a" ? (<strong>Top 5 Commissionerates (Highest % of Notices issued/EO fulfilment time is over)</strong>) :
                             name === "cus2b" ? (<strong>Top 5 Commissionerates (Least % of No revenue protective measures/EO fulfillment time is over)</strong>) :
                             name === "cus2c" ? (<strong>Top 5 Commissionerates (Highest % of Duty recovered/duty involved in expired licenses)</strong>) :
                             name === "cus3a" ? (<strong>Top 5 Commissionerates (Highest % of Notices issued/EO time is over)</strong>) :
@@ -2585,7 +2691,6 @@ const CustomSubpara = ({
                             name === "cus6f" ? (<strong>Bottom 5 Zones  (Least % of Disposal of cases of Commercial fraud)</strong>) :
                             name === "cus12a" ? (<strong>Bottom 5 Zones (Least % of Appeal cases disposed/cases pending )</strong>) :
                             name === "cus12b" ? (<strong>Bottom 5 Zones (Highest % of Cases pending &gt; 1 year )</strong>) :
-                            name === "cus13a" ? (<strong>Bottom 5 Zones (Least % of Appeal cases disposed/cases pending )</strong>) :
                             name === "cus2a" ? (<strong>Bottom 5 Zones (Least % of Notices issued/EO fulfilment time is over)</strong>) :
                             name === "cus2b" ? (<strong>Bottom 5 Zones (Highest % of No revenue protective measures/EO fulfillment time is over)</strong>) :
                             name === "cus2c" ? (<strong>Bottom 5 Zones (Least % of Duty recovered/duty involved in expired licenses)</strong>) :
@@ -2634,7 +2739,6 @@ const CustomSubpara = ({
                              name === "cus6f" ? (<strong>Bottom 5 Commissionerates (Least % of Disposal of cases of Commercial fraud)</strong>) : 
                              name === "cus12a" ?(<strong>Bottom 5 Commissionerates (Least % of Appeal Cases disposed/pending at start of month)</strong>) :
                              name === "cus12b" ?(<strong>Bottom 5 Commissionerates (Highest % of Cases pending &gt; 1 year/total pending)</strong>) :
-                             name === "cus13a" ?(<strong>Bottom 5 Commissionerates (Least % of Appeal Cases disposed/pending at start of month)</strong>) :
                              name === "cus2a" ? (<strong>Bottom 5 Commissionerates (Least % of Notices issued/EO fulfilment time is over)</strong>) : 
                              name === "cus2b" ? (<strong>Bottom 5 Commissionerates (Highest % of No revenue protective measures/EO fulfillment time is over)</strong>) :
                              name === "cus2c" ? (<strong>Bottom 5 Commissionerates (Least % of Duty recovered/duty involved in expired licenses)</strong>) :

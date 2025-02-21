@@ -9,7 +9,7 @@ import {
   DialogActions,
   DialogContentText,
 } from "@mui/material";
-import { Container } from "@mui/system";
+import { Container, margin } from "@mui/system";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiClient from "../../Service/ApiClient";
@@ -78,12 +78,14 @@ const ChangePassword = () => {
               navigate("/dashboard");
             }, 3000);
           } else {
-            setDialogText("Password change failed.Please try again!!");
+             setDialogText("Password change failed.Please try again!!");
+           // setDialogText(response.data.message);
             handleOpenDialog();
           }
         }
       } else {
-        setDialogText("Password change failed.Please try again!!");
+        //setDialogText("Password change failed.Please try again!!");
+        setDialogText(response.data.message);
         handleOpenDialog();
       }
     } catch (error) {
@@ -137,7 +139,7 @@ const ChangePassword = () => {
         <Spinner />
       ) : (
         <>
-          <header className="header header-sticky header-bg p-0">
+          {/* <header className="header header-sticky header-bg p-0">
             <div className="container-fluid border-bottom px-4">
               <div className="toggle-main">
                 <div className="toggle-rgt">
@@ -147,7 +149,7 @@ const ChangePassword = () => {
                 </div>
               </div>
             </div>
-          </header>
+          </header> */}
           <Container component="main" maxWidth="sm">
             <Box
               sx={{

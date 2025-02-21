@@ -16,7 +16,7 @@ import apiClient from "../../Service/ApiClient";
 import CryptoJS from "crypto-js";
 import Cookies from "js-cookie";
 import Spinner from "../Spinner";
-import ReCAPTCHA from "react-google-recaptcha";
+// import ReCAPTCHA from "react-google-recaptcha";
 import { useEffect } from "react";
 
 const Login = () => {
@@ -30,13 +30,39 @@ const Login = () => {
   const [isValidUsername, setIsValidUsername] = useState(true);
   const [isValidPassword, setIsValidPassword] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [capcha, setCapcha] = useState("");
+  //const [capcha, setCapcha] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogText, setDialogText] = useState("");
   const [onClose, setOnClose] = useState(null);
 
+  const [captcha, setCaptcha] = useState("");
+  const [captchaInput, setCaptchaInput] = useState("");
+
+  const generateCaptcha = () => {
+    let chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let captchaText = "";
+    for (let i = 0; i < 6; i++) {
+      captchaText += chars[Math.floor(Math.random() * chars.length)];
+    }
+    setCaptcha(captchaText);
+  };
+
+  useEffect(() => {
+    generateCaptcha(); // Generate captcha when component loads
+  }, []);
+
+
+
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (!captchaInput || captchaInput !== captcha) {
+      setDialogText("Captcha is incorrect. Please try again.");
+      handleOpenDialog();
+      generateCaptcha(); // Refresh captcha on incorrect input
+      return;
+    }
 
     if (!user.email) {
       setIsValidUsername(false);
@@ -52,10 +78,10 @@ const Login = () => {
       setIsValidPassword(true);
     }
 
-    if (!capcha) {
-      alert("Please Tick Checkbox in Capture");
-      return;
-    }
+    // if (!capcha) {
+    //   alert("Please Tick Checkbox in Capture");
+    //   return;
+    // }
 
     var key = CryptoJS.enc.Utf8.parse("8080808080808080");
     var iv = CryptoJS.enc.Utf8.parse("8080808080808080");
@@ -83,7 +109,7 @@ const Login = () => {
     const jsondata = {
       email: user.email,
       password: user.password,
-      capcha: capcha,
+      //capcha: capcha,
     };
 
     try {
@@ -160,12 +186,25 @@ const Login = () => {
     const handleTabClose = () => {
       sessionStorage.clear(); // Clears all session data
     };
-
+  
     window.addEventListener("beforeunload", handleTabClose);
     return () => {
       window.removeEventListener("beforeunload", handleTabClose);
     };
   }, []);
+  
+  useEffect(() => {
+    const handleTabClose = () => {
+      sessionStorage.removeItem("token"); // Clear session on tab close
+      sessionStorage.removeItem("userSession");
+    };
+  
+    window.addEventListener("beforeunload", handleTabClose);
+    return () => {
+      window.removeEventListener("beforeunload", handleTabClose);
+    };
+  }, []);
+  
 
 
   const handleOpenDialog = () => {
@@ -176,17 +215,17 @@ const Login = () => {
     setOpenDialog(false);
 
   };
-  useEffect(() => {
-    const handleTabClose = () => {
-      sessionStorage.removeItem("token"); // Clear session on tab close
-      sessionStorage.removeItem("userSession");
-    };
+  // useEffect(() => {
+  //   const handleTabClose = () => {
+  //     sessionStorage.removeItem("token"); // Clear session on tab close
+  //     sessionStorage.removeItem("userSession");
+  //   };
 
-    window.addEventListener("beforeunload", handleTabClose);
-    return () => {
-      window.removeEventListener("beforeunload", handleTabClose);
-    };
-  }, []);
+  //   window.addEventListener("beforeunload", handleTabClose);
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleTabClose);
+  //   };
+  // }, []);
 
 
   // Custom CSS styling for the dialog
@@ -210,9 +249,9 @@ const Login = () => {
     padding: "10px",
   };
 
-  const CapchaChange = (value) => {
-    setCapcha(value);
-  };
+  // const CapchaChange = (value) => {
+  //   setCapcha(value);
+  // };
 
   return (
     <>
@@ -248,6 +287,7 @@ const Login = () => {
                 LOGIN
               </Typography>
               <form onSubmit={handleSubmit}>
+
                 <TextField
                   margin="normal"
                   fullWidth
@@ -275,10 +315,48 @@ const Login = () => {
                   }
                 />
 
-                <ReCAPTCHA
+                {/* <ReCAPTCHA
                   sitekey="6LdGJv0UAAAAAIvZIBzc9LZ0kY1FovqsgO2Ewjb8"
                   onChange={CapchaChange}
+                /> */}
+
+                  {/* captcha code start */}
+
+                  <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    my: 2,
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      backgroundColor: "#f0f0f0",
+                      padding: "8px 16px",
+                      fontWeight: "bold",
+                      letterSpacing: "2px",
+                      borderRadius: "5px",
+                      textAlign: "center",
+                    }}
+                  >
+                    {captcha}
+                  </Typography>
+                  <Button variant="contained" onClick={generateCaptcha}>
+                    Refresh Captcha
+                  </Button>
+                </Box>
+
+                <TextField
+                  margin="normal"
+                  fullWidth
+                  label="Enter Captcha"
+                  name="captchaInput"
+                  onChange={(e) => setCaptchaInput(e.target.value)}
                 />
+
+                {/* captcha code ends */}
 
                 <Button
                   type="submit"

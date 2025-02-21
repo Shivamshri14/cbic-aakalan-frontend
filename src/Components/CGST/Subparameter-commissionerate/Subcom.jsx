@@ -216,7 +216,7 @@ const Subcom = ({ selectedDate, onChangeDate }) => {
   } else if (name === "gst1e") {
     columns.splice(3, 0, {
       key: "absolutevale",
-      label: "Reg pending for revocation/ received for revocation",
+      label: "Reg pending for cancellation/Initiated for cancellation",
     });
 
     columns.splice(5, 0, {

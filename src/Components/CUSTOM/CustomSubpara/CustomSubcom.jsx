@@ -169,7 +169,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
         label: "Weighted Average (out of 10)",
       });
       break;
-      case "cus2a":
+    case "cus2a":
       columns.splice(3, 0, {
         key: "absolutevale",
         label: "Notices issued/EO fulfilment time is over",
@@ -183,7 +183,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
         label: "Weighted Average (out of 3)",
       });
       break;
-      case "cus2b":
+    case "cus2b":
       columns.splice(3, 0, {
         key: "absolutevale",
         label: "No revenue protective measures/EO fulfillment time is over",
@@ -193,21 +193,21 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
         label: "Weighted Average (out of 4)",
       });
       break;
-      case "cus2c":
-        columns.splice(3, 0, {
-          key: "absolutevale",
-          label: "Duty recovered/duty involved in expired licenses",
-        });
-        columns.splice(6, 0, {
-          key: "insentavization",
-          label: "Incentivisation",
-        });
-        columns.splice(7, 0, {
-          key: "sub_parameter_weighted_average",
-          label: "Weighted Average (out of 3)",
-        });
-        break;
-      case "cus3a":
+    case "cus2c":
+      columns.splice(3, 0, {
+        key: "absolutevale",
+        label: "Duty recovered/duty involved in expired licenses",
+      });
+      columns.splice(6, 0, {
+        key: "insentavization",
+        label: "Incentivisation",
+      });
+      columns.splice(7, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average (out of 3)",
+      });
+      break;
+    case "cus3a":
       columns.splice(3, 0, {
         key: "absolutevale",
         label: "Notices issued/EO time is over",
@@ -221,7 +221,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
         label: "Weighted Average (out of 3)",
       });
       break;
-      case "cus3b":
+    case "cus3b":
       columns.splice(3, 0, {
         key: "absolutevale",
         label: "No revenue protective measures/EO fulfillment time is over",
@@ -236,7 +236,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
       });
       break;
 
-      case "cus3c":
+    case "cus3c":
       columns.splice(3, 0, {
         key: "absolutevale",
         label: "Duty recover/duty involved in expired licenses",
@@ -250,7 +250,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
         label: "Weighted Average (out of 3)",
       });
       break;
-      case "cus4a":
+    case "cus4a":
       columns.splice(3, 0, {
         key: "absolutevale",
         label: "(Non SVB)>6 months PD/total PA",
@@ -260,7 +260,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
         label: "Weighted Average (out of 3)",
       });
       break;
-      case "cus4b":
+    case "cus4b":
       columns.splice(3, 0, {
         key: "absolutevale",
         label: "(Non SVB)>6 months PD bonds/total PD bonds",
@@ -271,7 +271,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
       });
 
       break;
-      case "cus4c":
+    case "cus4c":
       columns.splice(3, 0, {
         key: "absolutevale",
         label: "Svb finalised/Pending beginning of month",
@@ -285,7 +285,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
         label: "Weighted Average (out of 3)",
       });
       break;
-      case "cus4d":
+    case "cus4d":
       columns.splice(3, 0, {
         key: "absolutevale",
         label: "Svb pending > 1 year/total pending",
@@ -296,7 +296,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
       });
 
       break;
-      case "cus5a":
+    case "cus5a":
       columns.splice(3, 0, {
         key: "absolutevale",
         label: "ADJ Cases disposed/Cases pending at start of month",
@@ -311,7 +311,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
       });
 
       break;
-      case "cus5b":
+    case "cus5b":
       columns.splice(3, 0, {
         key: "absolutevale",
         label: "ADJ Cases Pending > 1 yr/total pending cases)",
@@ -322,7 +322,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
       });
 
       break;
-      case "cus5c":
+    case "cus5c":
       columns.splice(3, 0, {
         key: "absolutevale",
         label: "ADJ cases where duty involved >1 cr Pending for > 1 yr/total pending cases ",
@@ -333,7 +333,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
       });
 
       break;
-      case "cus6a":
+    case "cus6a":
       columns.splice(3, 0, {
         key: "absolutevale",
         label: "Investigation completed/Investigation pending at start of month",
@@ -348,7 +348,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
       });
 
       break;
-      case "cus6b":
+    case "cus6b":
       columns.splice(3, 0, {
         key: "absolutevale",
         label: "Cases pending > 2 years/total pending",
@@ -359,7 +359,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
       });
 
       break;
-      case "cus6c":
+    case "cus6c":
       columns.splice(3, 0, {
         key: "absolutevale",
         label: "Detection/Revenue collected",
@@ -373,7 +373,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
         label: "Weighted Average (out of 2)",
       });
       break;
-      case "cus6d":
+    case "cus6d":
       columns.splice(3, 0, {
         key: "absolutevale",
         label: "Recovery/Detection(In lakh)",
@@ -388,7 +388,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
       });
 
       break;
-      case "cus6e":
+    case "cus6e":
       columns.splice(3, 0, {
         key: "absolutevale",
         label: "Outright smuggling cases of disposed/pending at start of month",
@@ -402,47 +402,47 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
         label: "Weighted Average (out of 1)",
       });
       break;
-      case "cus6f":
-        columns.splice(3, 0, {
-          key: "absolutevale",
-          label: "Commercial fraud cases of disposed/pending at start of month",
-        });
-        columns.splice(6, 0, {
-          key: "insentavization",
-          label: "Incentivisation",
-        });
-        columns.splice(7, 0, {
-          key: "sub_parameter_weighted_average",
-          label: "Weighted Average (out of 2)",
-        });
-  
-        break;
-        // case "cus9a":
-        //   columns.splice(3, 0, {
-        //     key: "absolutevale",
-        //     label: "Gold disposed/ripe for disposal at start of month",
-        //   });
-        //   columns.splice(6, 0, {
-        //     key: "insentavization",
-        //     label: "Incentivisation",
-        //   });
-        //   columns.splice(7, 0, {
-        //     key: "sub_parameter_weighted_average",
-        //     label: "Weighted Average (out of 5)",
-        //   });
-        //   break;
-          case "cus7a":
-            columns.splice(3, 0, {
-              key: "absolutevale",
-              label: "Not launched in 2 months of sanction/total sanction",
-            });
-            columns.splice(6, 0, {
-              key: "sub_parameter_weighted_average",
-              label: "Weighted Average (out of 6)",
-            });
-      
-            break;
-      case "cus7b":
+    case "cus6f":
+      columns.splice(3, 0, {
+        key: "absolutevale",
+        label: "Commercial fraud cases of disposed/pending at start of month",
+      });
+      columns.splice(6, 0, {
+        key: "insentavization",
+        label: "Incentivisation",
+      });
+      columns.splice(7, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average (out of 2)",
+      });
+
+      break;
+    // case "cus9a":
+    //   columns.splice(3, 0, {
+    //     key: "absolutevale",
+    //     label: "Gold disposed/ripe for disposal at start of month",
+    //   });
+    //   columns.splice(6, 0, {
+    //     key: "insentavization",
+    //     label: "Incentivisation",
+    //   });
+    //   columns.splice(7, 0, {
+    //     key: "sub_parameter_weighted_average",
+    //     label: "Weighted Average (out of 5)",
+    //   });
+    //   break;
+    case "cus7a":
+      columns.splice(3, 0, {
+        key: "absolutevale",
+        label: "Not launched in 2 months of sanction/total sanction",
+      });
+      columns.splice(6, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average (out of 6)",
+      });
+
+      break;
+    case "cus7b":
       columns.splice(3, 0, {
         key: "absolutevale",
         label: "Prosecution launched/arrests",
@@ -456,7 +456,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
         label: "Weighted Average (out of 4)",
       });
       break;
-      case "cus8a":
+    case "cus8a":
       columns.splice(3, 0, {
         key: "absolutevale",
         label: "Disposal of packages/pending start of month",
@@ -470,134 +470,219 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
         label: "Weighted Average (out of 5)",
       });
       break;
-      case "cus8b":
-        columns.splice(3, 0, {
-          key: "absolutevale",
-          label: "Pending > 6 month/total pending",
-        });
-        columns.splice(6, 0, {
-          key: "insentavization",
-          label: "Incentivisation",
-        });
-        columns.splice(7, 0, {
-          key: "sub_parameter_weighted_average",
-          label: "Weighted Average (out of 5)",
-        });
-        break;
-        case "cus9a":
-          columns.splice(3, 0, {
-            key: "absolutevale",
-            label: "Gold disposed/ripe for disposal at start of month",
-          });
-          columns.splice(6, 0, {
-            key: "insentavization",
-            label: "Incentivisation",
-          });
-          columns.splice(7, 0, {
-            key: "sub_parameter_weighted_average",
-            label: "Weighted Average (out of 5)",
-          });
-          break;
-          case "cus9b":
-          columns.splice(3, 0, {
-            key: "absolutevale",
-            label: "Confiscated narcotics disposed/confiscated narcotics at start of month",
-          });
-          columns.splice(6, 0, {
-            key: "insentavization",
-            label: "Incentivisation",
-          });
-          columns.splice(7, 0, {
-            key: "sub_parameter_weighted_average",
-            label: "Weighted Average (out of 5)",
-          });
-          break;
-          case "cus12a":
-            columns.splice(3, 0, {
-              key: "absolutevale",
-              label: "Appeal Cases disposed/pending at start of month",
-            });
-            columns.splice(6, 0, {
-              key: "insentavization",
-              label: "Incentivisation",
-            });
-            columns.splice(7, 0, {
-              key: "sub_parameter_weighted_average",
-              label: "Weighted Average (out of 5)",
-            });
-            break;
-            case "cus12b":
-          columns.splice(3, 0, {
-            key: "absolutevale",
-            label: "Pending > 1 years/total pending",
-          });
-          columns.splice(6, 0, {
-            key: "sub_parameter_weighted_average",
-            label: "Weighted Average (out of 5)",
-          });
-          break;
-          case "cus11a":
-          columns.splice(3, 0, {
-            key: "absolutevale",
-            label: "No action on expired bonds/total expired W/H bonds",
-          });
-          columns.splice(6, 0, {
-            key: "sub_parameter_weighted_average",
-            label: "Weighted Average (out of 5)",
-          });
-          break;
-          case "cus11b":
-            columns.splice(3, 0, {
-              key: "absolutevale",
-              label: "Duty recovered/duty involved in W/H bonds",
-            });
-            columns.splice(6, 0, {
-              key: "insentavization",
-              label: "Incentivisation",
-            });
-            columns.splice(7, 0, {
-              key: "sub_parameter_weighted_average",
-              label: "Weighted Average (out of 5)",
-            });
-            break;
-            case "cus10a":
-              columns.splice(3, 0, {
-                key: "absolutevale",
-                label: "Arrears recovered/target upto the month",
-              });
-              columns.splice(6, 0, {
-                key: "insentavization",
-                label: "Incentivisation",
-              });
-              columns.splice(7, 0, {
-                key: "sub_parameter_weighted_average",
-                label: "Weighted Average (out of 5)",
-              });
-              break;
-              case "cus10b":
-          columns.splice(3, 0, {
-            key: "absolutevale",
-            label: "Arrears pending > 1 yr /total pending",
-          });
-          columns.splice(6, 0, {
-            key: "sub_parameter_weighted_average",
-            label: "Weighted Average (out of 5)",
-          });
-          break;
-    
-          default:
-            columns.splice(6,0,{
-              key: "insentavization",
-              label: "Incentivisation",
-            });
-    
-            columns.splice(7,0,{
-              key: "sub_parameter_weighted_average",
-              label: "Weighted Average",
-            });
-            
-            break;
-    }
+    case "cus8b":
+      columns.splice(3, 0, {
+        key: "absolutevale",
+        label: "Pending > 6 month/total pending",
+      });
+      columns.splice(6, 0, {
+        key: "insentavization",
+        label: "Incentivisation",
+      });
+      columns.splice(7, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average (out of 5)",
+      });
+      break;
+    case "cus9a":
+      columns.splice(3, 0, {
+        key: "absolutevale",
+        label: "Gold disposed/ripe for disposal at start of month",
+      });
+      columns.splice(6, 0, {
+        key: "insentavization",
+        label: "Incentivisation",
+      });
+      columns.splice(7, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average (out of 5)",
+      });
+      break;
+    case "cus9b":
+      columns.splice(3, 0, {
+        key: "absolutevale",
+        label: "Confiscated narcotics disposed/confiscated narcotics at start of month",
+      });
+      columns.splice(6, 0, {
+        key: "insentavization",
+        label: "Incentivisation",
+      });
+      columns.splice(7, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average (out of 5)",
+      });
+      break;
+    case "cus12a":
+      columns.splice(3, 0, {
+        key: "absolutevale",
+        label: "Appeal Cases disposed/pending at start of month",
+      });
+      columns.splice(6, 0, {
+        key: "insentavization",
+        label: "Incentivisation",
+      });
+      columns.splice(7, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average (out of 5)",
+      });
+      break;
+    case "cus12b":
+      columns.splice(3, 0, {
+        key: "absolutevale",
+        label: "Pending > 1 years/total pending",
+      });
+      columns.splice(6, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average (out of 5)",
+      });
+      break;
+    case "cus11a":
+      columns.splice(3, 0, {
+        key: "absolutevale",
+        label: "No action on expired bonds/total expired W/H bonds",
+      });
+      columns.splice(6, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average (out of 5)",
+      });
+      break;
+    case "cus11b":
+      columns.splice(3, 0, {
+        key: "absolutevale",
+        label: "Duty recovered/duty involved in W/H bonds",
+      });
+      columns.splice(6, 0, {
+        key: "insentavization",
+        label: "Incentivisation",
+      });
+      columns.splice(7, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average (out of 5)",
+      });
+      break;
+    case "cus10a":
+      columns.splice(3, 0, {
+        key: "absolutevale",
+        label: "Arrears recovered/target upto the month",
+      });
+      columns.splice(6, 0, {
+        key: "insentavization",
+        label: "Incentivisation",
+      });
+      columns.splice(7, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average (out of 5)",
+      });
+      break;
+    case "cus10b":
+      columns.splice(3, 0, {
+        key: "absolutevale",
+        label: "Arrears pending > 1 yr /total pending",
+      });
+      columns.splice(6, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average (out of 5)",
+      });
+      break;
+
+      case "cus13a":
+      columns.splice(6,0,{
+        key: "insentavization",
+        label: "Incentivisation",
+      });
+      columns.splice(3, 0, {
+        key: "absolutevale",
+        label: "BEs audited/marked",
+      });
+
+      columns.splice(7, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average",
+      });
+
+      break;
+      case "cus13b":
+      columns.splice(6,0,{
+        key: "insentavization",
+        label: "Incentivisation",
+      });
+      columns.splice(3, 0, {
+        key: "absolutevale",
+        label: "SBs audited/marked",
+      });
+
+      columns.splice(7, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average",
+      });
+
+      break;
+
+      case "cus13c":
+      columns.splice(6,0,{
+        key: "insentavization",
+        label: "Incentivisation",
+      });
+      columns.splice(3, 0, {
+        key: "absolutevale",
+        label: "Recovered/detected",
+      });
+
+      columns.splice(7, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average",
+      });
+
+      break;
+
+    case "cus13d":
+      // columns.splice(6,0,{
+      //   key: "insentavization",
+      //   label: "Incentivisation",
+      // });
+      columns.splice(3, 0, {
+        key: "absolutevale",
+        label: "BEs pending > 6 months",
+      });
+
+      columns.splice(7, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average",
+      });
+
+      break;
+
+
+    case "cus13e":
+      // columns.splice(6,0,{
+      //   key: "insentavization",
+      //   label: "Incentivisation",
+      // });
+      columns.splice(3, 0, {
+        key: "absolutevale",
+        label: "SBs Pending > 6 months",
+      });
+
+      columns.splice(7, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average",
+      });
+
+      break;
+
+    default:
+      columns.splice(6, 0, {
+        key: "insentavization",
+        label: "Incentivisation",
+      });
+
+      columns.splice(7, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average",
+      });
+
+      break;
+  }
 
   const getBadge = (status) => {
     switch (status) {
@@ -640,7 +725,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
     chart: {
       caption: data.map((item) => item.zone_name)[0],
       yaxisname: "Percentage",
-      xaxisname:"Commissionerates",
+      xaxisname: "Commissionerates",
       // decimals:'1',
       theme: "zune",
       showvalues: "0",
@@ -660,16 +745,16 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
   const handleExport = () => {
     // Prepare data for export based on selectedOption and potentially other filters
     const exportData =
-    data.map((user) => ({
-            // Customize object properties to match desired format
-            SNo: user.s_no,
-            "Commissionerate": user.commissionerate_name,
-            "Zone": user.zone_name,
-            "Absolute Value": user.absolutevale,
-            "Total Score(For the Month) %": user.total_score,
-            "Way to Grade (Marks) Out of 10": user.way_to_grade,
-            "Weighted Average ": user.sub_parameter_weighted_average,
-          }))
+      data.map((user) => ({
+        // Customize object properties to match desired format
+        SNo: user.s_no,
+        "Commissionerate": user.commissionerate_name,
+        "Zone": user.zone_name,
+        "Absolute Value": user.absolutevale,
+        "Total Score(For the Month) %": user.total_score,
+        "Way to Grade (Marks) Out of 10": user.way_to_grade,
+        "Weighted Average ": user.sub_parameter_weighted_average,
+      }))
 
     return exportData;
   };
@@ -679,20 +764,20 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
 
-    const rowHeights=[70,200,200,150,150,150,150,150];
+    const rowHeights = [70, 200, 200, 150, 150, 150, 150, 150];
 
-    for(let i=0; i<rowHeights.length; i++){
-      ws['!cols']= ws['!cols'] || [];
-      ws['!cols'][i]={wpx: rowHeights[i]};
+    for (let i = 0; i < rowHeights.length; i++) {
+      ws['!cols'] = ws['!cols'] || [];
+      ws['!cols'][i] = { wpx: rowHeights[i] };
 
-      for(let j=0; j<rowHeights[i].length;j++){
-        const cell= ws[XLSX.utils.encode_cell({c:i, r:j})];
+      for (let j = 0; j < rowHeights[i].length; j++) {
+        const cell = ws[XLSX.utils.encode_cell({ c: i, r: j })];
 
-        if(cell){
-          cell.s={
-            alignment:{
-              horizontal:"center",
-              vertical:"center"
+        if (cell) {
+          cell.s = {
+            alignment: {
+              horizontal: "center",
+              vertical: "center"
             }
           };
         }
@@ -703,8 +788,8 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
     XLSX.writeFile(wb, "my_data.xlsx");
   };
 
-  const checkSpecialChar=(e)=>{
-    if(!/[0-9a-zA-Z]/.test(e.key)){
+  const checkSpecialChar = (e) => {
+    if (!/[0-9a-zA-Z]/.test(e.key)) {
       e.preventDefault();
     }
   }
@@ -754,8 +839,8 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
                         renderInput={(params) => <TextField {...params} />}
                         shouldDisableYear={shouldDisableYear} // Disable years less than 2022
                         slotProps={{
-                          field:{
-                            readOnly:true
+                          field: {
+                            readOnly: true
                           }
                         }}
                       />
@@ -765,33 +850,33 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
               </div>
             </div>
 
-            {name==="cus1"||name==="cus2a"||name==="cus2b"||name==="cus2c"||name==="cus3a"||name==="cus3b"||name==="cus3c"||name==="cus3c"||
-            name==="cus4a"||name==="cus4b"||name==="cus4c"||name==="cus4d"||
-            name==="cus5a"|| name==="cus5b"|| name==="cus5c" || name==="cus6a" || name==="cus6b" || name==="cus6c"
-             ||name==="cus6d" || name==="cus6e" ||name==="cus6f" ||name==="cus7a" ||name==="cus7b" ||name==="cus8a" ||name==="cus8b" || name==="cus9a"|| name==="cus9b"
-             || name==="cus11a" || name==="cus11b"|| name==="cus12a"|| name==="cus12b"?(
+            {name === "cus1" || name === "cus2a" || name === "cus2b" || name === "cus2c" || name === "cus3a" || name === "cus3b" || name === "cus3c" || name === "cus3c" ||
+              name === "cus4a" || name === "cus4b" || name === "cus4c" || name === "cus4d" ||
+              name === "cus5a" || name === "cus5b" || name === "cus5c" || name === "cus6a" || name === "cus6b" || name === "cus6c"
+              || name === "cus6d" || name === "cus6e" || name === "cus6f" || name === "cus7a" || name === "cus7b" || name === "cus8a" || name === "cus8b" || name === "cus9a" || name === "cus9b"
+              || name === "cus11a" || name === "cus11b" || name === "cus12a" || name === "cus12b" ? (
               <div className="row custom-tb mb col">
-              <div className="container mt-2">
-                <div className="card">
-                  <div className="card-header">
-                    <strong>{data.map((item) => item.zone_name)[0]}</strong>
-                  </div>
-                  <div className="card-body">
-                    <div id="chart">
-                      <div className="responsive-chart main-chart">
-                        <ReactFusioncharts
-                          type="column3d"
-                          width="100%"
-                          height="500"
-                          dataFormat="JSON"
-                          dataSource={top5}
-                        />
+                <div className="container mt-2">
+                  <div className="card">
+                    <div className="card-header">
+                      <strong>{data.map((item) => item.zone_name)[0]}</strong>
+                    </div>
+                    <div className="card-body">
+                      <div id="chart">
+                        <div className="responsive-chart main-chart">
+                          <ReactFusioncharts
+                            type="column3d"
+                            width="100%"
+                            height="500"
+                            dataFormat="JSON"
+                            dataSource={top5}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="export-btn">
+                <div className="export-btn">
                   <button
                     onClick={exportToXLS}
                     className="btn btn-primary m-3"
@@ -879,102 +964,102 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
                     align: "middle",
                     border: "primary",
                   }}
-                  onKeyDown={(e)=>checkSpecialChar(e)}
-                />
-            </div>
-            ):
-            (
-              <>
-              <div className="box-main bg-blue">
-              <div className="row  custom-tb mb">
-                <div className="export-btn">
-                  <button onClick={exportToXLS} className="btn btn-primary m-3">
-                    Export XLS
-                  </button>
-                </div>
-
-                <CSmartTable
-                  activePage={3}
-                  cleaner
-                  clickableRows={false}
-                  columns={columns}
-                  columnSorter
-                  items={data}
-                  itemsPerPage={10}
-                  pagination
-                  onRowClick={onRowClick}
-                  onFilteredItemsChange={(items) => {
-                    console.log(items);
-                  }}
-                  onSelectedItemsChange={(items) => {
-                    console.log(items);
-                  }}
-                  scopedColumns={{
-                    avatar: (item) => (
-                      <td>
-                        <CAvatar src={`/images/avatars/${item.avatar}`} />
-                      </td>
-                    ),
-                    status: (item) => (
-                      <td>
-                        <CBadge color={getBadge(item.status)}>
-                          {item.status}
-                        </CBadge>
-                      </td>
-                    ),
-                    show_details: (item) => {
-                      return (
-                        <td className="py-2">
-                          <CButton
-                            color="primary"
-                            variant="outline"
-                            shape="square"
-                            size="sm"
-                            onClick={() => {
-                              toggleDetails(item.id);
-                            }}
-                          >
-                            {details.includes(item.id) ? "Hide" : "Show"}
-                          </CButton>
-                        </td>
-                      );
-                    },
-                    details: (item) => {
-                      return (
-                        <CCollapse visible={details.includes(item.id)}>
-                          <CCardBody className="p-3">
-                            <h4>{item.username}</h4>
-                            <p className="text-muted">
-                              User since: {item.registered}
-                            </p>
-                            <CButton size="sm" color="info">
-                              User Settings
-                            </CButton>
-                            <CButton size="sm" color="danger" className="ml-1">
-                              Delete
-                            </CButton>
-                          </CCardBody>
-                        </CCollapse>
-                      );
-                    },
-                  }}
-                  sorterValue={{ column: "status", state: "asc" }}
-                  tableFilter
-                  tableProps={{
-                    className: "add-this-class",
-                    responsive: true,
-                    //striped: true,
-                    hover: true,
-                    align: "middle",
-                    border: "primary",
-                  }}
-                  onKeyDown={(e)=>checkSpecialChar(e)}
+                  onKeyDown={(e) => checkSpecialChar(e)}
                 />
               </div>
-            </div>
-            </>
-          )
-                }
+            ) :
+              (
+                <>
+                  <div className="box-main bg-blue">
+                    <div className="row  custom-tb mb">
+                      <div className="export-btn">
+                        <button onClick={exportToXLS} className="btn btn-primary m-3">
+                          Export XLS
+                        </button>
+                      </div>
+
+                      <CSmartTable
+                        activePage={3}
+                        cleaner
+                        clickableRows={false}
+                        columns={columns}
+                        columnSorter
+                        items={data}
+                        itemsPerPage={10}
+                        pagination
+                        onRowClick={onRowClick}
+                        onFilteredItemsChange={(items) => {
+                          console.log(items);
+                        }}
+                        onSelectedItemsChange={(items) => {
+                          console.log(items);
+                        }}
+                        scopedColumns={{
+                          avatar: (item) => (
+                            <td>
+                              <CAvatar src={`/images/avatars/${item.avatar}`} />
+                            </td>
+                          ),
+                          status: (item) => (
+                            <td>
+                              <CBadge color={getBadge(item.status)}>
+                                {item.status}
+                              </CBadge>
+                            </td>
+                          ),
+                          show_details: (item) => {
+                            return (
+                              <td className="py-2">
+                                <CButton
+                                  color="primary"
+                                  variant="outline"
+                                  shape="square"
+                                  size="sm"
+                                  onClick={() => {
+                                    toggleDetails(item.id);
+                                  }}
+                                >
+                                  {details.includes(item.id) ? "Hide" : "Show"}
+                                </CButton>
+                              </td>
+                            );
+                          },
+                          details: (item) => {
+                            return (
+                              <CCollapse visible={details.includes(item.id)}>
+                                <CCardBody className="p-3">
+                                  <h4>{item.username}</h4>
+                                  <p className="text-muted">
+                                    User since: {item.registered}
+                                  </p>
+                                  <CButton size="sm" color="info">
+                                    User Settings
+                                  </CButton>
+                                  <CButton size="sm" color="danger" className="ml-1">
+                                    Delete
+                                  </CButton>
+                                </CCardBody>
+                              </CCollapse>
+                            );
+                          },
+                        }}
+                        sorterValue={{ column: "status", state: "asc" }}
+                        tableFilter
+                        tableProps={{
+                          className: "add-this-class",
+                          responsive: true,
+                          //striped: true,
+                          hover: true,
+                          align: "middle",
+                          border: "primary",
+                        }}
+                        onKeyDown={(e) => checkSpecialChar(e)}
+                      />
+                    </div>
+                  </div>
+                </>
+              )
+            }
           </div>
         </div>
       )}

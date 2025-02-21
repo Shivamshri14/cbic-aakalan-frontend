@@ -30,3 +30,8 @@ svg g[transform*="translate"][fill="#b1b2b7"] {
   opacity: 0 !important; /* Hide it completely */
   display: none !important; /* Remove it */
 }
+
+.MuiBox-root.css-1u0f1ua {
+  margin-top: 80px;
+  margin-bottom: 80px;
+}
