@@ -60,7 +60,14 @@ const ChangePassword = () => {
       newPassword: user.newPassword,
     };
 
+
+
     try {
+      if (jsondata.newPassword === jsondata.oldPassword) {
+        setDialogText("New password cannot be the same as the old password.");
+        handleOpenDialog();
+        return;
+      }
       const response = await apiClient.post(`/api/update-password`, jsondata);
 
       if (response && response.data) {
@@ -78,7 +85,7 @@ const ChangePassword = () => {
               navigate("/dashboard");
             }, 3000);
           } else {
-             setDialogText("Password change failed.Please try again!!");
+             setDialogText("Invalid email, old password, or new password cannot be the same as old password.");
            // setDialogText(response.data.message);
             handleOpenDialog();
           }
@@ -90,7 +97,7 @@ const ChangePassword = () => {
       }
     } catch (error) {
       console.error("Error in posting data", error);
-      setDialogText("There was an error processing your request.");
+      setDialogText("Password must be at least 8 characters long, contain at least one uppercase letter(A-Z), one lowercase letter(a-z), one digit(0-9), and one special character from(@ # $ % ^ & * () - _). Example: Hello@1234, Secure#Pass1");
       handleOpenDialog();
     }
   };
@@ -109,7 +116,7 @@ const ChangePassword = () => {
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
-    setLoading(true);
+    //setLoading(true);
   };
 
   // Custom CSS styling for the dialog
