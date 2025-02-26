@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ReactApexChart from "react-apexcharts";
+//import ReactApexChart from "react-apexcharts";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -15,7 +15,7 @@ import { default as charts } from "fusioncharts/fusioncharts.charts";
 import ZuneTheme from "fusioncharts/themes/fusioncharts.theme.zune";
 import ReactFusioncharts from "react-fusioncharts";
 
-const Allzones = ({
+const AllZones = ({
   selectedDate,
   onChangeDate,
   selectedOption,
@@ -1042,4 +1042,4 @@ const Allzones = ({
   );
 };
 
-export default Allzones;
+export default AllZones;
