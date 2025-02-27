@@ -27,7 +27,6 @@
     "axios": "^1.6.8",
     "bootstrap": "^5.0.1",
     "chart.js": "^4.4.3",
-    "date-picker": "^0.5.0",
     "dayjs": "^1.11.11",
     "express": "^4.19.2",
     "fusioncharts": "^3.23.0",

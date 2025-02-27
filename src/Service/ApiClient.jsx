@@ -2,7 +2,7 @@ import axios from "axios";
 
 const instance = axios.create({
   //baseURL: "https://aaklan.c4k.in/cbicApi",  
- baseURL: "http://localhost:8080/cbicApi",
+ baseURL: "http://10.1.110.21:8080/cbicApi",
  headers:{
   'Content-Type':'application/json',
   'Accept':'application/json',
