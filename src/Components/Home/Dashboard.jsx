@@ -940,6 +940,8 @@ export const Dashboard = ({
   ZuneTheme(FusionCharts);
 
   const colorstop = ["#FF0000", "#FFFF00", "#00FF00", "#0000FF", "#00ffff"];
+  
+  const colorsbottom = ["#cc0077", "#ff8800", "#40916c", "#551a8b", "#3d0c02"];
 
   const dataSource = {
     chart: {
@@ -1052,8 +1054,6 @@ export const Dashboard = ({
     },
   };
 
-  const colorsbottom = ["#cc0077", "#ff8800", "#40916c", "#551a8b", "#3d0c02"];
-
   const dataSourcebottom = {
     chart: {
       tooltip: {
@@ -1067,6 +1067,239 @@ export const Dashboard = ({
       yAxisStep: "10",
       numDivLines: "10",
       xAxisname: "Bottom 5 Zones (CGST)",
+      yAxisName: "Total Score(Zone Wise)",
+      showvalues: "0",
+      showsum: "1",
+      legendbgalpha: "0",
+      interactiveLegend: "0",
+      plottooltext:
+        "<b>Zone Name-: $label</b>{br}Total Score: $value{br}Parameter: $seriesname",
+      theme: "zune",
+      useRoundEdges: "1",
+      drawAnchors: "0",
+    },
+    categories: [
+      {
+        category: data
+          .slice(-5)
+          .map((item) => ({
+            label: item.zoneName,
+            // link: `/kolkata?zone_code=${item.zone_code}`,
+          })),
+      },
+    ],
+    dataset: [
+      {
+        seriesname: "Return Filing",
+        data: rearrangedData1
+          .slice(-5)
+          .map((item) => ({
+            value: item.sub_parameter_weighted_average,
+            color: "FF0000",
+          })),
+      },
+      // {
+      //   seriesname: "Scrutiny/Assessment",
+      //   data: rearrangedData2
+      //     .slice(-5)
+      //     .map((item) => ({
+      //       value: item.sub_parameter_weighted_average,
+      //       color: "FF0000",
+      //     })),
+      // },
+      {
+        seriesname: "Adjudication",
+        data: rearrangedData2
+          .slice(-5)
+          .map((item) => ({
+            value: item.sub_parameter_weighted_average,
+            color: "FF0000",
+          })),
+      },
+      {
+        seriesname: "Adjudication(Legacy Cases)",
+        data: rearrangedData3
+          .slice(-5)
+          .map((item) => ({
+            value: item.sub_parameter_weighted_average,
+            color: "FF0000",
+          })),
+      },
+      {
+        seriesname: "Refunds",
+        data: rearrangedData4
+          .slice(-5)
+          .map((item) => ({
+            value: item.sub_parameter_weighted_average,
+            color: "FF0000",
+          })),
+      },
+      {
+        seriesname: "Appeals",
+        data: rearrangedData5
+          .slice(-5)
+          .map((item) => ({
+            value: item.parameter_wise_weighted_average,
+            color: "FF0000",
+          })),
+      },
+      //   {
+      //   data:alltop.map(item=>({value:item.value, color:item.color}))
+      // },
+      // {
+      //   seriesname: "National Avg Return Filing",
+      //   renderAs: "Line",
+      //   data:bardata.map(()=>({value:averageReturnFiling})),
+      //   lineThickness: "5",
+      //   color: "#ff0000",
+      //   alpha: "100",
+      //   drawAnchors:"0",
+      // }
+    ],
+    annotations: {
+      groups: [
+        {
+          items: [
+            {
+              id: "avg-text",
+              type: "text",
+              // text: `National Average: ${averageReturnFiling}`,
+              align: "right",
+              x: "$chartEndX - 50",
+              y: "$chartStartY + 70",
+              fontSize: "14",
+              color: "#000000",
+            },
+          ],
+        },
+      ],
+    },
+  };
+
+  const dataSourcecustom = {
+    chart: {
+      tooltip: {
+        toolTipBorderColor: "#ffffff",
+        toolTipBorderThickness: "0",
+      },
+      caption: "Customs",
+      subcaption: "Top 5 Zones",
+      yAxisMinValue: "0",
+      yAxisMaxValue: "100",
+      yAxisStep: "10",
+      numDivLines: "10",
+      xAxisname: "Top 5 Zones (Customs)",
+      yAxisName: "Total Score (Zone Wise)",
+      showvalues: "0",
+      showsum: "1",
+      legendbgalpha: "0",
+      interactiveLegend: "0",
+      plottooltext:
+        "<b>Zone Name-: $label</b>{br}Total Score: $value{br}Parameter:$seriesname",
+      theme: "zune",
+      useRoundEdges: "1",
+      drawAnchors: "0",
+      // clickURL: '/kolkata',
+    },
+    categories: [
+      {
+        category: data.slice(0, 5).map((index) => ({
+          label: index.zoneName,
+          // link: `/kolkata?zone_code=${index.zone_code}`,
+        })),
+      },
+    ],
+    dataset: [
+      {
+        seriesname: "Return Filing",
+        data: rearrangedData1.slice(0, 5).map((item) => ({
+          value: item.sub_parameter_weighted_average,
+          color: "00FF00",
+        })),
+      },
+      // {
+      //   seriesname: "Scrutiny/Assessment",
+      //   data: rearrangedData2.slice(0, 5).map((item) => ({
+      //     value: item.sub_parameter_weighted_average,
+      //     color: "00FF00",
+      //   })),
+      // },
+      {
+        seriesname: "Adjudication",
+        data: rearrangedData2.slice(0, 5).map((item) => ({
+          value: item.sub_parameter_weighted_average,
+          color: "00FF00",
+        })),
+      },
+      {
+        seriesname: "Adjudication(Legacy Cases)",
+        data: rearrangedData3.slice(0, 5).map((item) => ({
+          value: item.sub_parameter_weighted_average,
+          color: "00FF00",
+        })),
+      },
+      {
+        seriesname: "Refunds",
+        data: rearrangedData4.slice(0, 5).map((item) => ({
+          value: item.sub_parameter_weighted_average,
+          color: "00FF00",
+        })),
+      },
+      {
+        seriesname: "Appeals",
+        data: rearrangedData5.slice(0, 5).map((item) => ({
+          value: item.parameter_wise_weighted_average,
+          color: "00FF00",
+        })),
+      },
+
+      // {
+      //   seriesname: "National Avg Return Filing",
+      //   renderAs: "Line",
+      //   data: bardata.map(()=>({value:averageReturnFiling})),
+      //   lineThickness: "5",
+      //   color: "#ff0000",
+      //   alpha: "100",
+      //   drawAnchors:"0",
+      //   // dashed: "1",
+      //   // dashLen: "4",
+      //   // dashGap: "2",
+      //   // color : "#3572EF"
+      // }
+    ],
+    annotations: {
+      groups: [
+        {
+          items: [
+            {
+              id: "avg-text",
+              type: "text",
+              // text: `National Average: ${averageReturnFiling}`,
+              align: "right",
+              x: "$chartEndX - 50",
+              y: "$chartStartY + 70",
+              fontSize: "14",
+              color: "#000000",
+            },
+          ],
+        },
+      ],
+    },
+  };
+
+  const dataSourcebottomcustom = {
+    chart: {
+      tooltip: {
+        toolTipBorderColor: "#ffffff",
+        toolTipBorderThickness: "0",
+      },
+      caption: "Customs",
+      subcaption: "Bottom 5 Zones",
+      yAxisMinValue: "0",
+      yAxisMaxValue: "100",
+      yAxisStep: "10",
+      numDivLines: "10",
+      xAxisname: "Bottom 5 Zones (Customs)",
       yAxisName: "Total Score(Zone Wise)",
       showvalues: "0",
       showsum: "1",
@@ -1215,7 +1448,7 @@ export const Dashboard = ({
                     id="switchMonthly"
                     name="switchPlan"
                     value="CGST"
-                    //onChange={handleClick}
+                    onChange={handleClick}
                     checked={selectedOption === "CGST"}
                     defaultChecked
                   />
@@ -1223,7 +1456,7 @@ export const Dashboard = ({
                     type="radio"
                     id="switchYearly"
                     name="switchPlan"
-                    //onChange={handleClick}
+                    onChange={handleClick}
                     value="Customs"
                     checked={selectedOption === "Customs"}
                   />
@@ -1462,17 +1695,26 @@ export const Dashboard = ({
                     </div>
                     <div className="card-body">
                       <div className="responsive-chart main-chart">
-                        <Customtopfive />
+                        
+                      <ReactFusioncharts
+                          type="stackedcolumn3dline"
+                          width="100%"
+                          height="650"
+                          dataFormat="JSON"
+                          dataSource={dataSourcecustom}
+                        />
+
+                        {/* <Customtopfive /> */}
                         <Link to="/allzones">
                           <Button className="openbtn">
                             <KeyboardArrowRightIcon />
                           </Button>
                         </Link>
-                        <div className="btn-box">
+                        {/* <div className="btn-box">
                           <span className=" cust-btn">
                             <Link to="/">View Details</Link>
                           </span>
-                        </div>
+                        </div> */}
                         <div id="html-dist"></div>
                       </div>
                     </div>
@@ -1490,7 +1732,17 @@ export const Dashboard = ({
                     </div>
                     <div className="card-body">
                       <div className="responsive-chart main-chart">
-                        <Custombottomfive />
+
+                        {/* <Custombottomfive /> */}
+
+                        <ReactFusioncharts
+                          type="stackedcolumn3dline"
+                          width="100%"
+                          height="650"
+                          dataFormat="JSON"
+                          dataSource={dataSourcebottomcustom}
+                        />
+
                         <Link to="/allzones">
                           <Button className="openbtn">
                             <KeyboardArrowRightIcon />
@@ -1498,11 +1750,11 @@ export const Dashboard = ({
                         </Link>
                       </div>
 
-                      <div className="btn-box">
+                      {/* <div className="btn-box">
                         <span className=" cust-btn">
                           <Link to="/">View Details</Link>
                         </span>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>

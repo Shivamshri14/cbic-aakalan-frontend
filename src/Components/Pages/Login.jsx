@@ -51,9 +51,6 @@ const Login = () => {
     generateCaptcha(); // Generate captcha when component loads
   }, []);
 
-
-
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -131,7 +128,9 @@ const Login = () => {
           localStorage.setItem("user", JSON.stringify(user));  // Store user in localStorage
           localStorage.setItem("token", token);  // Store token in localStorage
 
-
+          // Set secure cookie attributes
+          Cookies.set("token", token, { secure: true, sameSite: 'Strict', httpOnly: true });
+          Cookies.set("userSession", JSON.stringify(user), { secure: true, sameSite: 'Strict', httpOnly: true });
 
           const storedUserString = localStorage.getItem("user");
           const u = JSON.parse(storedUserString);
@@ -150,7 +149,7 @@ const Login = () => {
             }, 1000);
 
           } else {
-            Cookies.set("hasLoggedInBefore", "true");
+            Cookies.set("hasLoggedInBefore", "true", { secure: true, sameSite: 'Strict', httpOnly: true });
             setDialogText(
               "For security reasons, we request you to please change your password"
             );
@@ -186,6 +185,8 @@ const Login = () => {
   useEffect(() => {
     const handleTabClose = () => {
       sessionStorage.clear(); // Clears all session data
+      Cookies.remove("token");
+      Cookies.remove("userSession");
     };
 
     window.addEventListener("beforeunload", handleTabClose);
@@ -198,6 +199,8 @@ const Login = () => {
     const handleTabClose = () => {
       sessionStorage.removeItem("token"); // Clear session on tab close
       sessionStorage.removeItem("userSession");
+      Cookies.remove("token");
+      Cookies.remove("userSession");
     };
 
     window.addEventListener("beforeunload", handleTabClose);
@@ -205,8 +208,6 @@ const Login = () => {
       window.removeEventListener("beforeunload", handleTabClose);
     };
   }, []);
-
-
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -216,18 +217,6 @@ const Login = () => {
     setOpenDialog(false);
 
   };
-  // useEffect(() => {
-  //   const handleTabClose = () => {
-  //     sessionStorage.removeItem("token"); // Clear session on tab close
-  //     sessionStorage.removeItem("userSession");
-  //   };
-
-  //   window.addEventListener("beforeunload", handleTabClose);
-  //   return () => {
-  //     window.removeEventListener("beforeunload", handleTabClose);
-  //   };
-  // }, []);
-
 
   // Custom CSS styling for the dialog
   const dialogStyles = {
@@ -249,10 +238,6 @@ const Login = () => {
     borderTop: "1px solid #e0e0e0",
     padding: "10px",
   };
-
-  // const CapchaChange = (value) => {
-  //   setCapcha(value);
-  // };
 
   return (
     <>
