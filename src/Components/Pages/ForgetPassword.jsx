@@ -55,8 +55,11 @@ const ForgetPassword = () => {
       setOtpSent(true);
     } catch (error) {
       console.error("Error sending OTP:", error);
-      setDialogText(error.response.data);
+      const errorMessage = error.response?.data?.message || "Failed to send OTP.";
+      setDialogText(errorMessage);
       handleOpenDialog();
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -90,8 +93,11 @@ const ForgetPassword = () => {
       }
     } catch (error) {
       console.error("Error in updating password", error);
-      setDialogText(error.response.data);
+      const errorMessage = error.response?.data?.message || "Something went wrong.";
+      setDialogText(errorMessage);
       handleOpenDialog();
+    }finally {
+      setLoading(false);
     }
   };
 

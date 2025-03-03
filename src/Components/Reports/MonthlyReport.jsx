@@ -65,6 +65,22 @@ const MonthlyReport = ({
 
   const fetchData = async () => {
     try {
+
+      const endpoints_audit = ["gst10a", "gst10b"];
+
+      const responses_audit  = await Promise.all(
+        endpoints_audit .map((endpoint) =>
+          apiClient
+            .get(`/cbic/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data,
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+
       const endpoints = [
         "returnFiling",
         // "scrutiny/assessment",
@@ -86,11 +102,16 @@ const MonthlyReport = ({
         )
       );
 
-      if (responses) {
+      const combinedResponses = [...responses, ...responses_audit];
+     
+ 
+
+
+      if (combinedResponses) {
         setloading(false);
       }
 
-      const allData = responses.flatMap((response) =>
+      const allData = combinedResponses.flatMap((response) =>
         response.data.map((item) => ({ ...item }))
       );
       console.log("FINALRESPONSE", allData);

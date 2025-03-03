@@ -15,7 +15,7 @@ const MISReport = ({
   onChangeDate,
   selectedOption1,
   onSelectedOption1,
-  selectedOption,onSelectedOption
+  selectedOption, onSelectedOption
 }) => {
   const [toggle, setToggle] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
@@ -49,33 +49,33 @@ const MISReport = ({
   };
 
   const options = [
-    { id: 1, label: "Registration",/* value: "registration", */ color:"red" },
+    { id: 1, label: "Registration",/* value: "registration", */ color: "red" },
     { id: 2, label: "Return Filing", value: "returnFiling" },
-    { id: 3, label: "Scrutiny/Assessment", /* value: "scrutiny", */ color:"red" },
-    { id: 4, label: "Investigation", /* value: "investigation",*/ color:"red" },
+    { id: 3, label: "Scrutiny/Assessment", /* value: "scrutiny", */ color: "red" },
+    { id: 4, label: "Investigation", /* value: "investigation",*/ color: "red" },
     { id: 5, label: "Adjudication", value: "adjudication" },
-    { id: 6, label: "adjudication(legacy cases)", value: "adjudicationLegacy" },
+    { id: 6, label: "Adjudication (Legacy cases)", value: "adjudicationLegacy" },
     { id: 7, label: "Refunds", value: "refunds" },
-    { id: 8, label: "Recovery of Arrears",/* value: "recoveryOfArrears", */color:"red" },
-    { id: 9, label: "Arrest and Prosecution", /* value: "arrestAndProsecution", */color:"red" },
-    { id: 10, label: "Audit", /*value: "audit", */color:"red" },
+    { id: 8, label: "Recovery of Arrears",/* value: "recoveryOfArrears", */color: "red" },
+    { id: 9, label: "Arrest and Prosecution", /* value: "arrestAndProsecution", */color: "red" },
+    { id: 10, label: "Audit", /*value: "audit", */color: "red" },
     { id: 11, label: "Appeals", value: "appeals" },
   ];
 
   const optionscustom = [
-    { idc: 12, labelc: "Timely payment of Refunds", value:"TimelyPaymentOfRefunds" },
-    { idc: 13, labelc: "Management of Export Obligation(EPCG)", /*value:"epcg",*/color:"red" },
-    { idc: 14, labelc: "Management of Export Obligation(AA)",/*value:"aa",*/ color:"red" },
-    { idc: 15, labelc: "Disposal/Pendency Of Provisional Assessments", /*value:"disposalPendency",*/color:"red" },
-    { idc: 16, labelc: "Adjudication", value:"Adjudication" },
-    { idc: 17, labelc: "Investigation", /*value:"cus_investigation",*/ color:"red" },
-    { idc: 18, labelc: "Arrests and Prosecution", /*value: "cus_arrestAndProsecution",*/ color:"red" },
-    { idc: 19, labelc: "Monitoring Of Un-cleared and Unclaimed cargo", /*value: "unclaimed_cargo",*/color:"red" },
-    { idc: 20, labelc: "Disposal Of Confiscated Gold and NDPS", value:"DisposalOfConfiscatedGoldAndNDPS" },
-    { idc: 21, labelc: "Recovery of Arrears", /*value: "recovery_Of_Arrears",*/ color:"red" },
-    { idc: 22, labelc: "Management Of Warehousing bonds",/*value: "mowb",*/ color:"red" },
-    { idc: 23, labelc: "Commissioner (Appeals)", value:"CommissionerAppeals" },
-    { idc: 24, labelc: "Audit",/* value: "cus_audit", */color:"red" },
+    { idc: 12, labelc: "Timely payment of Refunds", value: "TimelyPaymentOfRefunds" },
+    { idc: 13, labelc: "Management of Export Obligation(EPCG)", /*value:"epcg",*/color: "red" },
+    { idc: 14, labelc: "Management of Export Obligation(AA)",/*value:"aa",*/ color: "red" },
+    { idc: 15, labelc: "Disposal/Pendency Of Provisional Assessments", /*value:"disposalPendency",*/color: "red" },
+    { idc: 16, labelc: "Adjudication", value: "Adjudication" },
+    { idc: 17, labelc: "Investigation", /*value:"cus_investigation",*/ color: "red" },
+    { idc: 18, labelc: "Arrests and Prosecution", /*value: "cus_arrestAndProsecution",*/ color: "red" },
+    { idc: 19, labelc: "Monitoring Of Un-cleared and Unclaimed cargo", /*value: "unclaimed_cargo",*/color: "red" },
+    { idc: 20, labelc: "Disposal Of Confiscated Gold and NDPS", value: "DisposalOfConfiscatedGoldAndNDPS" },
+    { idc: 21, labelc: "Recovery of Arrears", /*value: "recovery_Of_Arrears",*/ color: "red" },
+    { idc: 22, labelc: "Management Of Warehousing bonds",/*value: "mowb",*/ color: "red" },
+    { idc: 23, labelc: "Commissioner (Appeals)", value: "CommissionerAppeals" },
+    { idc: 24, labelc: "Audit",/* value: "cus_audit", */color: "red" },
   ];
 
   const handleCheckboxChange = (id, label) => {
@@ -122,8 +122,8 @@ const MISReport = ({
                     renderInput={(params) => <TextField {...params} disabled />}
                     shouldDisableYear={shouldDisableYear}
                     slotProps={{
-                      field:{
-                        readOnly:true
+                      field: {
+                        readOnly: true
                       }
                     }}
                   />
@@ -190,7 +190,7 @@ const MISReport = ({
             </div>
           </div>
           <div className="row mt-5 ">
-            {selectedOption==="CGST" ? (
+            {selectedOption === "CGST" ? (
               <>
                 <h3>CGST</h3>
                 <div className="container">
@@ -206,6 +206,7 @@ const MISReport = ({
                             onChange={() =>
                               handleCheckboxChange(option.id, option.value)
                             }
+                            disabled={option.id === 1 || option.id === 3 || option.id === 4 || option.id === 8|| option.id === 9 || option.id === 10 }
                           />
                           <label
                             className="form-check-label"
@@ -236,6 +237,7 @@ const MISReport = ({
                             onChange={() =>
                               handleCheckboxChange(options.idc, options.value)
                             }
+                            disabled={options.idc === 13 || options.idc === 14 || options.idc === 15 || options.idc === 17|| options.idc === 18 || options.idc === 19 || options.idc === 21 || options.idc === 22 || options.idc === 24 }
                           />
                           <label
                             className="form-check-label"
@@ -247,6 +249,7 @@ const MISReport = ({
                         </div>
                       </div>
                     ))}
+
                   </div>
                 </div>
               </>

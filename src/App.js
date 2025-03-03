@@ -29,6 +29,7 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const { pathname } = location;
+  const publicPages = ["/", "/forgetpassword"];
 
   const storedUserString = localStorage.getItem("user");
   const token = sessionStorage.getItem("token");
@@ -39,8 +40,10 @@ function App() {
     localStorage.setItem("expirationTime", expirationTime);
   };
 
-  // ✅ Check for session expiration
+  // ✅ Check for session expiration (ignore public pages)
   const checkSessionTimeout = () => {
+    if (publicPages.includes(pathname)) return; // Skip timeout check on login & forget password
+
     const expirationTime = localStorage.getItem("expirationTime");
     const currentTime = new Date().getTime();
 
@@ -54,9 +57,7 @@ function App() {
       navigate("/");
       window.location.reload(); // Refreshes the page after navigation
     }
-
   };
-
 
   // ✅ Track user activity and reset session timeout
   useEffect(() => {
@@ -64,7 +65,7 @@ function App() {
       resetSessionTimeout();
     }
 
-    const intervalId = setInterval(checkSessionTimeout, 18000); // Check every 3 minutes 18000sec
+    const intervalId = setInterval(checkSessionTimeout, 18000); // Check every 3 minutes
 
     const activityHandler = () => resetSessionTimeout();
 
@@ -76,7 +77,7 @@ function App() {
       window.removeEventListener("mousemove", activityHandler);
       window.removeEventListener("keydown", activityHandler);
     };
-  }, [storedUserString, token]);
+  }, [storedUserString, token, pathname]);
 
   // ✅ Handle tab close (expire session only on tab close, NOT refresh)
   useEffect(() => {
@@ -102,23 +103,6 @@ function App() {
   }, []);
 
   // ✅ Redirect on app start (Show login page first)
-  // useEffect(() => {
-  //   const allowedPaths = ["/", "/forgetpassword"];
-  //   const isLoggedIn = localStorage.getItem("user") && sessionStorage.getItem("token");
-
-  //   const storedUserString = localStorage.getItem("user");  // Get user from localStorage
-  //   const token = localStorage.getItem("token");  // Get token from localStorage
-
-
-  //   if (isLoggedIn) {
-  //     if (pathname === "/" || pathname === "/forgetpassword") {
-  //       navigate("/dashboard", { replace: true }); // Prevents history stack issues
-  //     }
-  //   } else if (!allowedPaths.includes(pathname)) {
-  //     navigate("/", { replace: true }); // Redirect to login only if needed
-  //   }
-  // }, [pathname, navigate]);
-
   useEffect(() => {
     const allowedPaths = ["/", "/forgetpassword"];
     const isLoggedIn = sessionStorage.getItem("token") && localStorage.getItem("user");
@@ -132,10 +116,6 @@ function App() {
     }
   }, [pathname, navigate]);
 
-
-
-
-
   // ✅ Handle Sidebar Data Change
   const handleSidebarDataChange = (newData) => {
     setSidebarData(newData);
@@ -145,7 +125,6 @@ function App() {
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
-
 
   // Custom CSS styling for the dialog
   const dialogStyles = {
@@ -193,7 +172,6 @@ function App() {
             </Routes>
           )}
 
-
           <Dialog
             open={openDialog}
             onClose={handleCloseDialog}
@@ -226,3 +204,4 @@ function App() {
 }
 
 export default App;
+  
