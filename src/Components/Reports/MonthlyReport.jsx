@@ -319,14 +319,14 @@ const MonthlyReport = ({
                     checked={selectedOption === "CGST"}
                     onChange={handleChange}
                   />
-                  <input
+                  {/* <input
                     type="radio"
                     id="switchYearly"
                     name="switchPlan"
                     value="Customs"
                     checked={selectedOption === "Customs"}
                     onChange={handleChange}
-                  />
+                  /> */}
                   <label htmlFor="switchMonthly">CGST</label>
                   <label htmlFor="switchYearly">Customs</label>
                   <div className="switch-wrapper">
