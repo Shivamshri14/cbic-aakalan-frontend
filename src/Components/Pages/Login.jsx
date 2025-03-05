@@ -135,31 +135,26 @@ const Login = () => {
           const storedUserString = localStorage.getItem("user");
           const u = JSON.parse(storedUserString);
 
-          const isFirstLogin = !Cookies.get("hasLoggedInBefore");
+          //const isFirstLogin = !Cookies.get("hasLoggedInBefore");
 
-          if (!isFirstLogin) {
+          if (response.data.forcePasswordChange === "true") {
             setDialogText(response.data.message);
-            //handleOpenDialog();
-
-
-            setTimeout(() => {
-              handleCloseDialog();
-              navigate("/dashboard");
-              setLoading(true);
-            }, 1000);
-
-          } else {
-            Cookies.set("hasLoggedInBefore", "true", { secure: true, sameSite: 'Strict', httpOnly: true });
-            setDialogText(
-              "For security reasons, we request you to please change your password"
-            );
             handleOpenDialog();
-
+          
             setTimeout(() => {
               handleCloseDialog();
               navigate("/changepassword");
-            }, 3000);
-
+              setLoading(true);
+            }, 2000);
+          } else {
+            Cookies.set("hasLoggedInBefore", "true", { secure: true, sameSite: 'Strict', httpOnly: true });
+            setDialogText("Login successful");
+            handleOpenDialog();
+          
+            setTimeout(() => {
+              handleCloseDialog();
+              navigate("/dashboard");
+            }, 2000);
           }
         }
       } else {
