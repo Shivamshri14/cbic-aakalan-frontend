@@ -51,21 +51,21 @@ const MISReport = ({
   const options = [
     { id: 1, label: "Registration",/* value: "registration", */ color: "red" },
     { id: 2, label: "Return Filing", value: "returnFiling" },
-    { id: 3, label: "Scrutiny/Assessment", /* value: "scrutiny", */ color: "red" },
+    { id: 3, label: "Scrutiny/Assessment", value: "scrutiny", },
     { id: 4, label: "Investigation", /* value: "investigation",*/ color: "red" },
     { id: 5, label: "Adjudication", value: "adjudication" },
     { id: 6, label: "Adjudication (Legacy cases)", value: "adjudicationLegacy" },
     { id: 7, label: "Refunds", value: "refunds" },
-    { id: 8, label: "Recovery of Arrears",/* value: "recoveryOfArrears", */color: "red" },
-    { id: 9, label: "Arrest and Prosecution", /* value: "arrestAndProsecution", */color: "red" },
-    { id: 10, label: "Audit", /*value: "audit", */color: "red" },
+    { id: 8, label: "Recovery of Arrears",value: "recoveryOfArrears"},
+    { id: 9, label: "Arrest and Prosecution", value:"arrestAndProsecution"},
+    { id: 10, label: "Audit", value: "audit",},
     { id: 11, label: "Appeals", value: "appeals" },
   ];
 
   const optionscustom = [
     { idc: 12, labelc: "Timely payment of Refunds", value: "TimelyPaymentOfRefunds" },
-    { idc: 13, labelc: "Management of Export Obligation(EPCG)", /*value:"epcg",*/color: "red" },
-    { idc: 14, labelc: "Management of Export Obligation(AA)",/*value:"aa",*/ color: "red" },
+    { idc: 13, labelc: "Management of Export Obligation(EPCG)",value:"epcg", },
+    { idc: 14, labelc: "Management of Export Obligation(AA)",value:"aa", },
     { idc: 15, labelc: "Disposal/Pendency Of Provisional Assessments", /*value:"disposalPendency",*/color: "red" },
     { idc: 16, labelc: "Adjudication", value: "Adjudication" },
     { idc: 17, labelc: "Investigation", /*value:"cus_investigation",*/ color: "red" },
@@ -206,7 +206,7 @@ const MISReport = ({
                             onChange={() =>
                               handleCheckboxChange(option.id, option.value)
                             }
-                            disabled={option.id === 1 || option.id === 3 || option.id === 4 || option.id === 8|| option.id === 9 || option.id === 10 }
+                            disabled={option.id === 1 ||  option.id === 4}
                           />
                           <label
                             className="form-check-label"
@@ -237,7 +237,7 @@ const MISReport = ({
                             onChange={() =>
                               handleCheckboxChange(options.idc, options.value)
                             }
-                            disabled={options.idc === 13 || options.idc === 14 || options.idc === 15 || options.idc === 17|| options.idc === 18 || options.idc === 19 || options.idc === 21 || options.idc === 22 || options.idc === 24 }
+                            disabled={options.idc === 15 || options.idc === 17|| options.idc === 18 || options.idc === 19 || options.idc === 21 || options.idc === 22 || options.idc === 24 }
                           />
                           <label
                             className="form-check-label"

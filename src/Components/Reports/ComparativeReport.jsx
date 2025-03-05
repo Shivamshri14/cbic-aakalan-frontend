@@ -588,14 +588,14 @@ const previousmonth2 = dayjs(selectedDate)
                     checked={selectedOption1 === "Zones"}
                     onChange={handleChange1}
                   />
-                  <input
+                  {/* <input
                     type="radio"
                     id="switchCommissionerate"
                     name="switchPlan2"
                     value="Commissionerate"
                     checked={selectedOption1 === "Commissionerate"}
                     onChange={handleChange1}
-                  />
+                  /> */}
                   <label htmlFor="switchZones">Zones</label>
                   <label htmlFor="switchCommissionerate">Commissionerate</label>
                   <div className="switch-wrapper2">
