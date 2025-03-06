@@ -1452,14 +1452,14 @@ export const Dashboard = ({
                     checked={selectedOption === "CGST"}
                     defaultChecked
                   />
-                  <input
+                  {/* <input
                     type="radio"
                     id="switchYearly"
                     name="switchPlan"
                     onChange={handleClick}
                     value="Customs"
                     checked={selectedOption === "Customs"}
-                  />
+                  /> */}
                   <label htmlFor="switchMonthly">CGST</label>
                   <label htmlFor="switchYearly">Customs</label>
                   <div className="switch-wrapper">
