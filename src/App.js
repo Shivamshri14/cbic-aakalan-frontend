@@ -36,7 +36,7 @@ function App() {
 
   // ✅ Set session timeout for 3 minutes
   const resetSessionTimeout = () => {
-    const expirationTime = new Date().getTime() + 3 * 60 * 1000;
+    const expirationTime = new Date().getTime() + 10 * 60 * 1000;
     localStorage.setItem("expirationTime", expirationTime);
   };
 
@@ -65,7 +65,7 @@ function App() {
       resetSessionTimeout();
     }
 
-    const intervalId = setInterval(checkSessionTimeout, 18000); // Check every 3 minutes
+    const intervalId = setInterval(checkSessionTimeout, 600000); // Check every 10 minutes
 
     const activityHandler = () => resetSessionTimeout();
 
