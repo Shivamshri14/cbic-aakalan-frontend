@@ -20,6 +20,7 @@ import ChangePassword from "./Components/Pages/ChangePassword";
 import Registration from "./Components/Pages/Registration";
 import Spinner from "./Components/Spinner";
 import ForgetPassword from "./Components/Pages/ForgetPassword";
+import axios from "axios";
 
 function App() {
   const [sidebarData, setSidebarData] = useState("");
@@ -39,6 +40,33 @@ function App() {
     const expirationTime = new Date().getTime() + 10 * 60 * 1000;
     localStorage.setItem("expirationTime", expirationTime);
   };
+
+
+  const [allow, setAllow] = useState(false)
+  useEffect(() => {
+    async function anatarangCheck() {
+      try {
+        const referrer = document.referrer;
+        console.log("referrer value ...",referrer);
+
+        const x = await axios.get("https://DDVUAKAP01.cbic.gov.in:8080/cbicApi/api/check-anatarang-login", {
+          headers: {
+            "Content-Type": "application/json",
+            //"custom_url": "https://antarang.icegate.gov.in",
+            "custom_url": referrer,           
+          },
+         
+          timeout: 5000,  // Timeout in milliseconds
+        });
+        
+        setAllow(x.data);
+  
+      } catch (error) {
+        console.error('Request failed:', error);
+      }
+    }
+    anatarangCheck()
+  }, [])
 
   // ✅ Check for session expiration (ignore public pages)
   const checkSessionTimeout = () => {
@@ -148,60 +176,64 @@ function App() {
   };
 
   return (
+
     <>
-      {sessionExpired ? (
+      {allow ?
         <>
-          <Login />
-        </>
-      ) : (
-        <>
-          {storedUserString ? (
+          {sessionExpired ? (
             <>
-              {/* Show Sidebar & Header only if NOT on the Login Page */}
-              {pathname !== "/" && <Sidebar data={sidebarData} />}
-              <div className="wrapper d-flex flex-column min-vh-100">
-                {pathname !== "/" && <Header onDataChange={handleSidebarDataChange} />}
-                <RouteData />
-                {pathname !== "/" && <Footer />}
-              </div>
+              <Login />
             </>
           ) : (
-            <Routes>
-              <Route path="/" element={<Login />} />
-              <Route path="/forgetpassword" element={<ForgetPassword />} />
-            </Routes>
-          )}
+            <>
+              {storedUserString ? (
+                <>
+                  {/* Show Sidebar & Header only if NOT on the Login Page */}
+                  {pathname !== "/" && <Sidebar data={sidebarData} />}
+                  <div className="wrapper d-flex flex-column min-vh-100">
+                    {pathname !== "/" && <Header onDataChange={handleSidebarDataChange} />}
+                    <RouteData />
+                    {pathname !== "/" && <Footer />}
+                  </div>
+                </>
+              ) : (
+                <Routes>
+                  <Route path="/" element={<Login />} />
+                  <Route path="/forgetpassword" element={<ForgetPassword />} />
+                </Routes>
+              )}
 
-          <Dialog
-            open={openDialog}
-            onClose={handleCloseDialog}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-            PaperProps={{ style: dialogStyles }}
-            disableRestoreFocus
-          >
-            <DialogTitle id="alert-dialog-title" style={titleStyles}>
-              {"Message"}
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText
-                id="alert-dialog-description"
-                style={contentTextStyles}
+              <Dialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                PaperProps={{ style: dialogStyles }}
+                disableRestoreFocus
               >
-                {dialogText}
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions style={dialogActionsStyles}>
-              <Button onClick={handleCloseDialog} color="primary">
-                OK
-              </Button>
-            </DialogActions>
-          </Dialog>
+                <DialogTitle id="alert-dialog-title" style={titleStyles}>
+                  {"Message"}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText
+                    id="alert-dialog-description"
+                    style={contentTextStyles}
+                  >
+                    {dialogText}
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions style={dialogActionsStyles}>
+                  <Button onClick={handleCloseDialog} color="primary">
+                    OK
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </>
+          )}
         </>
-      )}
+        : <h1>Unauthorized access! Please login through Anatarang portal.</h1>}
     </>
   );
 }
 
 export default App;
-  
