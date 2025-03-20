@@ -41,7 +41,6 @@ function App() {
     localStorage.setItem("expirationTime", expirationTime);
   };
 
-
   const [allow, setAllow] = useState(false)
   useEffect(() => {
     async function anatarangCheck() {
@@ -49,17 +48,23 @@ function App() {
         const referrer = document.referrer;
         console.log("referrer value ...",referrer);
 
-        const x = await axios.get("https://DDVUAKAP01.cbic.gov.in:8080/cbicApi/api/check-anatarang-login", {
-          headers: {
-            "Content-Type": "application/json",
-            //"custom_url": "https://antarang.icegate.gov.in",
-            "custom_url": referrer,           
-          },
+        if(localStorage.getItem("hitCounter") && localStorage.getItem("hitCounter") > 0){
+          setAllow(true)
+          return
+        }
+        // const x = await axios.get("https://DDVUAKAP01.cbic.gov.in:8080/cbicApi/api/check-anatarang-login", {
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //     //"custom_url": "https://antarang.icegate.gov.in",
+        //     "custom_url": referrer,           
+        //   },
          
-          timeout: 5000,  // Timeout in milliseconds
-        });
-        
-        setAllow(x.data);
+        //   timeout: 5000,  // Timeout in milliseconds
+        // });
+        if( ["https://antarang.icegate.gov.in","https://antarang.icegate.gov.in/"].includes(referrer)  ){
+          localStorage.setItem("hitCounter",1)
+          setAllow(true);
+        }
   
       } catch (error) {
         console.error('Request failed:', error);
@@ -67,7 +72,7 @@ function App() {
     }
     anatarangCheck()
   }, [])
-
+useEffect(()=>{console.log(allow)})
   // ✅ Check for session expiration (ignore public pages)
   const checkSessionTimeout = () => {
     if (publicPages.includes(pathname)) return; // Skip timeout check on login & forget password
@@ -231,7 +236,7 @@ function App() {
             </>
           )}
         </>
-        : <h1>Unauthorized access! Please login through Anatarang portal.</h1>}
+        : <h1>Unauthorized access! Please login through Antarang portal.</h1>}
     </>
   );
 }

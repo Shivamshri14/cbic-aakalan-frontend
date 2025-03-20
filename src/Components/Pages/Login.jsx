@@ -148,13 +148,14 @@ const Login = () => {
             }, 2000);
           } else {
             Cookies.set("hasLoggedInBefore", "true", { secure: true, sameSite: 'Strict', httpOnly: true });
-            setDialogText("Login successful");
-            handleOpenDialog();
+            // setDialogText("Login successful");
+            // handleOpenDialog();
+               navigate("/dashboard");
           
-            setTimeout(() => {
-              handleCloseDialog();
-              navigate("/dashboard");
-            }, 2000);
+            // setTimeout(() => {
+            //   handleCloseDialog();
+            //   navigate("/dashboard");
+            // }, 2000);
           }
         }
       } else {

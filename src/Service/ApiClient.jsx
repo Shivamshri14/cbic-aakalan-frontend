@@ -34,7 +34,7 @@ instance.interceptors.response.use(
   },
   function (error) {
     if (error.response && error.response.status === 401) {
-      localStorage.clear();
+      // localStorage.clear();
       window.location.reload("/");
     }
     return Promise.reject(error);
