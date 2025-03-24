@@ -245,7 +245,7 @@ const Commscoredetails = ({
 
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(out of 10)",
+      label: "Weighted Average(out of 8)",
     });
   } else if (name === "arrest_and_prosecution") {
     columns.splice(3, 0, {
@@ -285,7 +285,7 @@ const Commscoredetails = ({
 
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(out of 10)",
+      label: "Weighted Average(out of 6)",
     });
   }
    else if (name === "registration") {
