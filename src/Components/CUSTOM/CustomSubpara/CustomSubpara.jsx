@@ -1361,7 +1361,7 @@ const CustomSubpara = ({
                   "Refund Pending > 90 days/total application refund": user.absolutevale,
                   "Percentage (For the Month)": user.total_score,
                   "Way to Grade (Marks) Out of 10": user.way_to_grade,
-                  "Weighted Average (out of 5)": user.sub_parameter_weighted_average,
+                  "Weighted Average (out of 10)": user.sub_parameter_weighted_average,
                 };
               }
               case "cus2a": {
@@ -1398,7 +1398,7 @@ const CustomSubpara = ({
                   "Percentage (For the Month)": user.total_score,
                   "Way to Grade (Marks) Out of 10": user.way_to_grade,
                   "Incentivisation": user.insentavization,
-                  "Weighted Average (out of 4)": user.sub_parameter_weighted_average,
+                  "Weighted Average (out of 3)": user.sub_parameter_weighted_average,
                   
                 };
               }

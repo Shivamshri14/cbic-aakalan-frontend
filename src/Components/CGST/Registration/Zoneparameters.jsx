@@ -187,7 +187,7 @@ const Zoneparameters = ({
         setBarData([...topfive, ...bottomfive]);
       } else if (name === "recovery_of_arrears") {
         const endpoints = ["gst8a", "gst8b"]; // You can modify this array as needed
-
+    
         // Make API calls for both endpoints
         const responses = await Promise.all(
           endpoints.map((endpoint) =>
@@ -201,87 +201,86 @@ const Zoneparameters = ({
               }))
           )
         );
-
+    
         console.log("Responses", responses);
-
+    
         if (responses) {
           setloading(false);
         }
-
+    
         relevantAspects = "RECOVERY OF ARREARS";
-
+    
         // Combine the responses from all endpoints into a single array
         const allData = responses.flatMap((response) =>
           response.data.map((item) => ({ ...item, gst: response.gst }))
         );
         console.log("FINALRESPONSE", allData);
-
+    
         const summedByZone = allData.reduce((acc, item) => {
           const zoneCode = item.zone_code;
           const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
-
+    
           // If zone_code is encountered for the first time, initialize it
           if (!acc[zoneCode]) {
             acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
           }
-
+    
           // Sum only the sub_parameter_weighted_average for each zone_code
           acc[zoneCode].sub_parameter_weighted_average += value;
-
+    
           return acc;
         }, {});
-
+    
         const reducedAllData = Object.values(summedByZone).map((item) => ({
           ...item,
-          sub_parameter_weighted_average:
-            item.sub_parameter_weighted_average.toFixed(2),
+          weighted_average_out_of_8: ((item.sub_parameter_weighted_average * 8) / 10).toFixed(1),
         }));
-
+    
         console.log("Reduced All Data:", reducedAllData);
-
+    
         const sorted = reducedAllData.sort(
           (a, b) =>
-            b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+            b.weighted_average_out_of_8 - a.weighted_average_out_of_8
         );
         console.log("Sorted", sorted);
-
+    
         const scoreIndexMap = new Map();
         let currentIndex = 1;
-
+    
         for (let i = 0; i < sorted.length; i++) {
-          const score = sorted[i].sub_parameter_weighted_average;
-
+          const score = sorted[i].weighted_average_out_of_8;
+    
           // If this score hasn't been assigned an index yet, assign it
           if (!scoreIndexMap.has(score)) {
             scoreIndexMap.set(score, currentIndex);
             currentIndex++;
           }
-
+    
           // Assign the index to each item based on its score
           sorted[i].zonal_rank = scoreIndexMap.get(score);
         }
-
+    
         const enhancedData = sorted.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
-
+          const total = parseFloat(item.weighted_average_out_of_8);
+    
           let props = {};
-          if (total <= 10 && total >= 7.5) {
+          if (total <= 8 && total >= 6) {
             props = { scope: "row", color: "success" }; // Top 5 entries
-          } else if (total < 7.5 && total >= 5) {
+          } else if (total < 6 && total >= 4) {
             props = { scope: "row", color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
+          } else if (total >= 0 && total <= 2) {
             props = { scope: "row", color: "danger" }; // Bottom 5 entries
           } else {
             props = { scope: "row", color: "primary" }; // Remaining entries
           }
-
+    
           return {
             ...item,
             _props: props, // Add _props field dynamically
             s_no: index + 1,
           };
         });
-
+    
         setData(enhancedData);
         const topfive = sorted.slice(0, 5);
         const bottomfive = sorted.slice(-5);
@@ -607,8 +606,8 @@ const Zoneparameters = ({
           "gst10b",
           "gst10c"
         ];
-
-        // Make API calls for both endpoints
+    
+        // Make API calls for all endpoints
         const responses = await Promise.all(
           endpoints.map((endpoint) =>
             apiClient
@@ -621,69 +620,68 @@ const Zoneparameters = ({
               }))
           )
         );
-
+    
         console.log("Responses", responses);
-
+    
         if (responses) {
           setloading(false);
         }
-
+    
         relevantAspects = name.toUpperCase();
-
+    
         // Combine the responses from all endpoints into a single array
         const allData = responses.flatMap((response) =>
           response.data.map((item) => ({ ...item, gst: response.gst }))
         );
         console.log("FINALRESPONSE", allData);
-
+    
         const summedByZone = allData.reduce((acc, item) => {
           const zoneCode = item.zone_code;
           const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
-
+    
           // If zone_code is encountered for the first time, initialize it
           if (!acc[zoneCode]) {
             acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
           }
-
+    
           // Sum only the sub_parameter_weighted_average for each zone_code
           acc[zoneCode].sub_parameter_weighted_average += value;
-
+    
           return acc;
         }, {});
-
+    
         const reducedAllData = Object.values(summedByZone).map((item) => ({
           ...item,
-          sub_parameter_weighted_average:
-            item.sub_parameter_weighted_average.toFixed(2),
+          weighted_average_out_of_12: ((item.sub_parameter_weighted_average * 12) / 10).toFixed(1),
         }));
-
+    
         console.log("Reduced All Data:", reducedAllData);
-
+    
         const sorted = reducedAllData.sort(
           (a, b) =>
-            b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+            b.weighted_average_out_of_12 - a.weighted_average_out_of_12
         );
         console.log("Sorted", sorted);
-
+    
         const scoreIndexMap = new Map();
         let currentIndex = 1;
-
+    
         for (let i = 0; i < sorted.length; i++) {
-          const score = sorted[i].sub_parameter_weighted_average;
-
+          const score = sorted[i].weighted_average_out_of_12;
+    
           // If this score hasn't been assigned an index yet, assign it
           if (!scoreIndexMap.has(score)) {
             scoreIndexMap.set(score, currentIndex);
             currentIndex++;
           }
-
+    
           // Assign the index to each item based on its score
           sorted[i].zonal_rank = scoreIndexMap.get(score);
         }
-
+    
         const enhancedData = sorted.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
-
+          const total = item.weighted_average_out_of_12;
+    
           let props = {};
           if (total <= 10 && total >= 7.5) {
             props = { scope: "row", color: "success" }; // Top 5 entries
@@ -694,14 +692,14 @@ const Zoneparameters = ({
           } else {
             props = { scope: "row", color: "primary" }; // Remaining entries
           }
-
+    
           return {
             ...item,
             _props: props, // Add _props field dynamically
             s_no: index + 1,
           };
         });
-
+    
         setData(enhancedData);
         const topfive = sorted.slice(0, 5);
         const bottomfive = sorted.slice(-5);
@@ -815,7 +813,7 @@ const Zoneparameters = ({
           "gst9a",
           "gst9b"
         ];
-
+    
         // Make API calls for both endpoints
         const responses = await Promise.all(
           endpoints.map((endpoint) =>
@@ -829,87 +827,86 @@ const Zoneparameters = ({
               }))
           )
         );
-
+    
         console.log("Responses", responses);
-
+    
         if (responses) {
           setloading(false);
         }
-
+    
         relevantAspects = "ARREST AND PROSECUTION";
-
+    
         // Combine the responses from all endpoints into a single array
         const allData = responses.flatMap((response) =>
           response.data.map((item) => ({ ...item, gst: response.gst }))
         );
         console.log("FINALRESPONSE", allData);
-
+    
         const summedByZone = allData.reduce((acc, item) => {
           const zoneCode = item.zone_code;
           const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
-
+    
           // If zone_code is encountered for the first time, initialize it
           if (!acc[zoneCode]) {
             acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
           }
-
+    
           // Sum only the sub_parameter_weighted_average for each zone_code
           acc[zoneCode].sub_parameter_weighted_average += value;
-
+    
           return acc;
         }, {});
-
+    
         const reducedAllData = Object.values(summedByZone).map((item) => ({
           ...item,
-          sub_parameter_weighted_average:
-            item.sub_parameter_weighted_average.toFixed(2),
+          weighted_average_out_of_6: ((item.sub_parameter_weighted_average * 6) / 10).toFixed(1),
         }));
-
+    
         console.log("Reduced All Data:", reducedAllData);
-
+    
         const sorted = reducedAllData.sort(
           (a, b) =>
-            b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+            b.weighted_average_out_of_6 - a.weighted_average_out_of_6
         );
         console.log("Sorted", sorted);
-
+    
         const scoreIndexMap = new Map();
         let currentIndex = 1;
-
+    
         for (let i = 0; i < sorted.length; i++) {
-          const score = sorted[i].sub_parameter_weighted_average;
-
+          const score = sorted[i].weighted_average_out_of_6;
+    
           // If this score hasn't been assigned an index yet, assign it
           if (!scoreIndexMap.has(score)) {
             scoreIndexMap.set(score, currentIndex);
             currentIndex++;
           }
-
+    
           // Assign the index to each item based on its score
           sorted[i].zonal_rank = scoreIndexMap.get(score);
         }
-
+    
         const enhancedData = sorted.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
-
+          const total = parseFloat(item.weighted_average_out_of_6);
+    
           let props = {};
-          if (total <= 10 && total >= 7.5) {
+          if (total <= 6 && total >= 4.5) {
             props = { scope: "row", color: "success" }; // Top 5 entries
-          } else if (total < 7.5 && total >= 5) {
+          } else if (total < 4.5 && total >= 3) {
             props = { scope: "row", color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
+          } else if (total >= 0 && total <= 1.5) {
             props = { scope: "row", color: "danger" }; // Bottom 5 entries
           } else {
             props = { scope: "row", color: "primary" }; // Remaining entries
           }
-
+    
           return {
             ...item,
             _props: props, // Add _props field dynamically
             s_no: index + 1,
           };
         });
-
+    
         setData(enhancedData);
         const topfive = sorted.slice(0, 5);
         const bottomfive = sorted.slice(-5);
@@ -1466,8 +1463,8 @@ const Zoneparameters = ({
         const bottomfive = sorted.slice(-5);
         setBarData([...topfive, ...bottomfive]);
       } else if (name === "recovery_of_arrears") {
-        const endpoints = ["gst8a", "gst8b"]; // You can modify this array as needed
-
+        const endpoints = ["gst8a", "gst8b"]; // Modify this array if needed
+    
         // Make API calls for both endpoints
         const responses = await Promise.all(
           endpoints.map((endpoint) =>
@@ -1481,67 +1478,72 @@ const Zoneparameters = ({
               }))
           )
         );
-
+    
         console.log("Responses", responses);
-
+    
         if (responses) {
           setloading(false);
         }
-
+    
         relevantAspects = "RECOVERY OF ARREARS";
-
+    
         // Combine the responses from all endpoints into a single array
         const allData = responses.flatMap((response) =>
           response.data.map((item) => ({ ...item, gst: response.gst }))
         );
-        console.log("FINALRESPONSE", allData);
-
-        const summedByZone = allData.reduce((acc, item) => {
-          const zoneCode = item.commissionerate_name;
+        console.log("FINAL RESPONSE", allData);
+    
+        const summedByCommissionerate = allData.reduce((acc, item) => {
+          const commissionerateName = item.commissionerate_name;
           const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
-
-          // If zone_code is encountered for the first time, initialize it
-          if (!acc[zoneCode]) {
-            acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+    
+          // If commissionerate_name is encountered for the first time, initialize it
+          if (!acc[commissionerateName]) {
+            acc[commissionerateName] = { ...item, sub_parameter_weighted_average: 0 };
           }
-
-          // Sum only the sub_parameter_weighted_average for each zone_code
-          acc[zoneCode].sub_parameter_weighted_average += value;
-
+    
+          // Sum only the sub_parameter_weighted_average for each commissionerate
+          acc[commissionerateName].sub_parameter_weighted_average += value;
+    
           return acc;
         }, {});
-
-        const reducedAllData = Object.values(summedByZone).map((item) => ({
+    
+        // Convert the summed data into an array and calculate weighted_average_out_of_8
+        const reducedAllData = Object.values(summedByCommissionerate).map((item) => ({
           ...item,
-          sub_parameter_weighted_average:
-            item.sub_parameter_weighted_average.toFixed(2), // Format to 2 decimal places
+          weighted_average_out_of_8: ((item.sub_parameter_weighted_average * 8) / 10).toFixed(1),
         }));
-
+    
         console.log("Reduced All Data:", reducedAllData);
-
+    
+        // Sort the commissionerates by weighted_average_out_of_8 in descending order
         const sorted = reducedAllData.sort(
           (a, b) =>
-            b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+            b.weighted_average_out_of_8 - a.weighted_average_out_of_8
         );
-        console.log("Sorted", sorted);
-
+        console.log("Sorted Data:", sorted);
+    
+        // Assign rankings based on weighted_average_out_of_8
         const scoreIndexMap = new Map();
         let currentIndex = 1;
-
+    
         for (let i = 0; i < sorted.length; i++) {
-          const score = sorted[i].sub_parameter_weighted_average;
-
+          const score = sorted[i].weighted_average_out_of_8;
+    
           // If this score hasn't been assigned an index yet, assign it
           if (!scoreIndexMap.has(score)) {
             scoreIndexMap.set(score, currentIndex);
             currentIndex++;
           }
-
+    
           // Assign the index to each item based on its score
           sorted[i].zonal_rank = scoreIndexMap.get(score);
         }
-
+    
+        // Assign serial numbers and set the data state
         setData(sorted.map((item, index) => ({ ...item, s_no: index + 1 })));
+        
+        // Get the top 5 and bottom 5 commissionerates for the bar chart
         const topfive = sorted.slice(0, 5);
         const bottomfive = sorted.slice(-5);
         setBarData([...topfive, ...bottomfive]);
@@ -1803,8 +1805,8 @@ const Zoneparameters = ({
           "gst10b",
           "gst10c"
         ];
-
-        // Make API calls for both endpoints
+    
+        // Make API calls for all endpoints
         const responses = await Promise.all(
           endpoints.map((endpoint) =>
             apiClient
@@ -1817,67 +1819,73 @@ const Zoneparameters = ({
               }))
           )
         );
-
+    
         console.log("Responses", responses);
-
+    
         if (responses) {
           setloading(false);
         }
-
+    
         relevantAspects = name.toUpperCase();
-
+    
         // Combine the responses from all endpoints into a single array
         const allData = responses.flatMap((response) =>
           response.data.map((item) => ({ ...item, gst: response.gst }))
         );
-        console.log("FINALRESPONSE", allData);
-
-        const summedByZone = allData.reduce((acc, item) => {
-          const zoneCode = item.commissionerate_name;
+        console.log("FINAL RESPONSE", allData);
+    
+        // Summing Data by Commissionerate Name
+        const summedByCommissionerate = allData.reduce((acc, item) => {
+          const commissionerateName = item.commissionerate_name;
           const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
-
-          // If zone_code is encountered for the first time, initialize it
-          if (!acc[zoneCode]) {
-            acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+    
+          // If commissionerate_name is encountered for the first time, initialize it
+          if (!acc[commissionerateName]) {
+            acc[commissionerateName] = { ...item, sub_parameter_weighted_average: 0 };
           }
-
-          // Sum only the sub_parameter_weighted_average for each zone_code
-          acc[zoneCode].sub_parameter_weighted_average += value;
-
+    
+          // Sum only the sub_parameter_weighted_average for each commissionerate
+          acc[commissionerateName].sub_parameter_weighted_average += value;
+    
           return acc;
         }, {});
-
-        const reducedAllData = Object.values(summedByZone).map((item) => ({
+    
+        // Convert the summed data into an array and calculate weighted_average_out_of_12
+        const reducedAllData = Object.values(summedByCommissionerate).map((item) => ({
           ...item,
-          sub_parameter_weighted_average:
-            item.sub_parameter_weighted_average.toFixed(2), // Format to 2 decimal places
+          weighted_average_out_of_12: ((item.sub_parameter_weighted_average * 12) / 10).toFixed(1),
         }));
-
+    
         console.log("Reduced All Data:", reducedAllData);
-
+    
+        // Sort the commissionerates by weighted_average_out_of_12 in descending order
         const sorted = reducedAllData.sort(
           (a, b) =>
-            b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+            b.weighted_average_out_of_12 - a.weighted_average_out_of_12
         );
-        console.log("Sorted", sorted);
-
+        console.log("Sorted Data:", sorted);
+    
+        // Assign rankings based on weighted_average_out_of_12
         const scoreIndexMap = new Map();
         let currentIndex = 1;
-
+    
         for (let i = 0; i < sorted.length; i++) {
-          const score = sorted[i].sub_parameter_weighted_average;
-
+          const score = sorted[i].weighted_average_out_of_12;
+    
           // If this score hasn't been assigned an index yet, assign it
           if (!scoreIndexMap.has(score)) {
             scoreIndexMap.set(score, currentIndex);
             currentIndex++;
           }
-
+    
           // Assign the index to each item based on its score
           sorted[i].zonal_rank = scoreIndexMap.get(score);
         }
-
+    
+        // Assign serial numbers and set the data state
         setData(sorted.map((item, index) => ({ ...item, s_no: index + 1 })));
+    
+        // Get the top 5 and bottom 5 commissionerates for the bar chart
         const topfive = sorted.slice(0, 5);
         const bottomfive = sorted.slice(-5);
         setBarData([...topfive, ...bottomfive]);
@@ -1965,8 +1973,8 @@ const Zoneparameters = ({
         const bottomfive = sorted.slice(-5);
         setBarData([...topfive, ...bottomfive]);
       } else if (name === "gst_arrest_and_prosecution") {
-        const endpoints = ["gst9a", "gst9b"]; // You can modify this array as needed
-
+        const endpoints = ["gst9a", "gst9b"]; // Modify this array if needed
+    
         // Make API calls for both endpoints
         const responses = await Promise.all(
           endpoints.map((endpoint) =>
@@ -1980,72 +1988,76 @@ const Zoneparameters = ({
               }))
           )
         );
-
+    
         console.log("Responses", responses);
-
+    
         if (responses) {
           setloading(false);
         }
-
+    
         relevantAspects = "ARREST AND PROSECUTION";
-
+    
         // Combine the responses from all endpoints into a single array
         const allData = responses.flatMap((response) =>
           response.data.map((item) => ({ ...item, gst: response.gst }))
         );
-        console.log("FINALRESPONSE", allData);
-
-        const summedByZone = allData.reduce((acc, item) => {
-          const zoneCode = item.commissionerate_name;
+        console.log("FINAL RESPONSE", allData);
+    
+        const summedByCommissionerate = allData.reduce((acc, item) => {
+          const commissionerateName = item.commissionerate_name;
           const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
-
-          // If zone_code is encountered for the first time, initialize it
-          if (!acc[zoneCode]) {
-            acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+    
+          // If commissionerate_name is encountered for the first time, initialize it
+          if (!acc[commissionerateName]) {
+            acc[commissionerateName] = { ...item, sub_parameter_weighted_average: 0 };
           }
-
-          // Sum only the sub_parameter_weighted_average for each zone_code
-          acc[zoneCode].sub_parameter_weighted_average += value;
-
+    
+          // Sum only the sub_parameter_weighted_average for each commissionerate
+          acc[commissionerateName].sub_parameter_weighted_average += value;
+    
           return acc;
         }, {});
-
-        const reducedAllData = Object.values(summedByZone).map((item) => ({
+    
+        // Convert the summed data into an array and calculate weighted_average_out_of_6
+        const reducedAllData = Object.values(summedByCommissionerate).map((item) => ({
           ...item,
-          sub_parameter_weighted_average:
-            item.sub_parameter_weighted_average.toFixed(2), // Format to 2 decimal places
+          weighted_average_out_of_6: ((item.sub_parameter_weighted_average * 6) / 10).toFixed(1),
         }));
-
+    
         console.log("Reduced All Data:", reducedAllData);
-
+    
+        // Sort the commissionerates by weighted_average_out_of_6 in descending order
         const sorted = reducedAllData.sort(
           (a, b) =>
-            b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+            b.weighted_average_out_of_6 - a.weighted_average_out_of_6
         );
-        console.log("Sorted", sorted);
-
+        console.log("Sorted Data:", sorted);
+    
+        // Assign rankings based on weighted_average_out_of_6
         const scoreIndexMap = new Map();
         let currentIndex = 1;
-
+    
         for (let i = 0; i < sorted.length; i++) {
-          const score = sorted[i].sub_parameter_weighted_average;
-
+          const score = sorted[i].weighted_average_out_of_6;
+    
           // If this score hasn't been assigned an index yet, assign it
           if (!scoreIndexMap.has(score)) {
             scoreIndexMap.set(score, currentIndex);
             currentIndex++;
           }
-
+    
           // Assign the index to each item based on its score
           sorted[i].zonal_rank = scoreIndexMap.get(score);
         }
-
+    
+        // Assign serial numbers and set the data state
         setData(sorted.map((item, index) => ({ ...item, s_no: index + 1 })));
+    
+        // Get the top 5 and bottom 5 commissionerates for the bar chart
         const topfive = sorted.slice(0, 5);
         const bottomfive = sorted.slice(-5);
         setBarData([...topfive, ...bottomfive]);
-      }
-      else {
+      } else {
         // Make a GET request to the specified endpoint
         // setloading(true);
         const response = await apiClient.get(`/cbic/t_score/${name}`, {
@@ -2579,8 +2591,8 @@ const Zoneparameters = ({
       label: " Score (out of 10)",
     });
     columns.splice(5, 0, {
-      key: "sub_parameter_weighted_average",
-      label: " Weighted Average (out of 10)",
+      key: "weighted_average_out_of_8",
+      label: " Weighted Average (out of 8)",
     });
 
     commcolumns.splice(4, 0, {
@@ -2588,8 +2600,8 @@ const Zoneparameters = ({
       label: " Score (out of 10)",
     });
     commcolumns.splice(5, 0, {
-      key: "sub_parameter_weighted_average",
-      label: " Weighted Average (out of 10)",
+      key: "weighted_average_out_of_8",
+      label: " Weighted Average (out of 8)",
     });
   } else if (name === "arrest_and_prosecution") {
     columns.splice(4, 0, {
@@ -2651,8 +2663,8 @@ const Zoneparameters = ({
       label: " Score (out of 10)",
     });
     columns.splice(5, 0, {
-      key: "sub_parameter_weighted_average",
-      label: " Weighted Average (out of 10)",
+      key: "weighted_average_out_of_12",
+      label: " Weighted Average (out of 12)",
     });
 
     commcolumns.splice(4, 0, {
@@ -2660,8 +2672,8 @@ const Zoneparameters = ({
       label: " Score (out of 10)",
     });
     commcolumns.splice(5, 0, {
-      key: "sub_parameter_weighted_average",
-      label: " Weighted Average (out of 10)",
+      key: "weighted_average_out_of_12",
+      label: " Weighted Average (out of 12)",
     });
   } else if (name === "scrutiny/assessment") {
     columns.splice(4, 0, {
@@ -2687,8 +2699,8 @@ const Zoneparameters = ({
       label: " Score (out of 10)",
     });
     columns.splice(5, 0, {
-      key: "sub_parameter_weighted_average",
-      label: " Weighted Average (out of 10)",
+      key: "weighted_average_out_of_6",
+      label: " Weighted Average (out of 6)",
     });
 
     commcolumns.splice(4, 0, {
@@ -2696,8 +2708,8 @@ const Zoneparameters = ({
       label: "Score (out of 10)",
     });
     commcolumns.splice(5, 0, {
-      key: "sub_parameter_weighted_average",
-      label: " Weighted Average (out of 10)",
+      key: "weighted_average_out_of_6",
+      label: " Weighted Average (out of 6)",
     });
   } else if (name === "adjudication(legacy cases)") {
     columns.splice(4, 0, {
@@ -3228,8 +3240,8 @@ const Zoneparameters = ({
                 Commissionerate: user.commissionerate_name,
                 "Score Details": "Show",
                 "Score(out of 10)": user.sub_parameter_weighted_average,
-                "Weighted Average (out of 10)":
-                  user.sub_parameter_weighted_average,
+                "Weighted Average (out of 8)":
+                  user.weighted_average_out_of_8,
                 "Zonal Rank": user.zonal_rank,
               };
             }
@@ -3267,8 +3279,8 @@ const Zoneparameters = ({
                 Commissionerate: user.commissionerate_name,
                 "Score Details": "Show",
                 "Score(out of 10)": user.sub_parameter_weighted_average,
-                "Weighted Average (out of 10)":
-                  user.sub_parameter_weighted_average,
+                "Weighted Average (out of 12)":
+                  user.weighted_average_out_of_12,
                 "Zonal Rank": user.zonal_rank,
               };
             }
@@ -3402,8 +3414,8 @@ const Zoneparameters = ({
                 Zone: user.zone_name,
                 "Score Details": "Show",
                 "Score(out of 10)": user.sub_parameter_weighted_average,
-                "Weighted Average (out of 10)":
-                  user.sub_parameter_weighted_average,
+                "Weighted Average (out of 8)":
+                  user.weighted_average_out_of_8,
                 "Commissionerate Rank": user.zonal_rank,
               };
             }
@@ -3986,5 +3998,4 @@ const Zoneparameters = ({
     </>
   );
 };
-
 export default Zoneparameters;
