@@ -672,6 +672,63 @@ const AllParameters = ({
         setBarData([...sorted]);
 
 
+      } else if (name === "investigation") {
+
+        const endpoints = ["gst4a", "gst4b","gst4c", "gst4d"];
+
+        const responses = await Promise.all(
+          endpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/${endpoint}`, {
+                params: { month_date: newdate, type: "all_commissary" },
+              })
+              .then((response) => ({
+                data: response.data,
+                gst: endpoint.toUpperCase(),
+              }))
+          )
+        );
+
+        console.log("Responses", responses);
+
+        if (responses) {
+          setloading(false);
+        }
+
+        // Combine the responses from all endpoints into a single array
+        const allData = responses.flatMap((response) =>
+          response.data.map((item) => ({ ...item, gst: response.gst }))
+        );
+        console.log("FINALRESPONSE", allData);
+
+        const summedByZone = allData.reduce((acc, item) => {
+          const zoneCode = item.commissionerate_name;
+          const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
+
+          // If zone_code is encountered for the first time, initialize it
+          if (!acc[zoneCode]) {
+            acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+          }
+
+          // Sum only the sub_parameter_weighted_average for each zone_code
+          acc[zoneCode].sub_parameter_weighted_average += value;
+
+          return acc;
+        }, {});
+
+        const reducedAllData = Object.values(summedByZone).map((item)=>({
+          ...item, sub_parameter_weighted_average: item.sub_parameter_weighted_average.toFixed(2)
+        }));
+
+        console.log("Reduced All Data:", reducedAllData);
+
+        const sorted = reducedAllData.sort(
+          (a, b) =>
+            b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+        );
+        console.log("Sorted", sorted);
+        setData(sorted.map((item,index)=>({...item, s_no:index+1})));
+        setBarData([...sorted]);
       } else if (name === "audit") {
 
         const endpoints = ["gst10a", "gst10b", "gst10c"]; 
@@ -893,8 +950,7 @@ const AllParameters = ({
         console.log("Sorted", sorted);
         setData(sorted.map((item,index)=>({...item, s_no:index+1})));
         setBarData([...sorted]);
-      }
-      else if (name === "scrutiny/assessment") {
+      } else if (name === "scrutiny/assessment") {
         try {
           const endpoints = ["gst3a", "gst3b"];
       
@@ -944,8 +1000,7 @@ const AllParameters = ({
         } catch (error) {
           console.error("Error fetching adjudication data:", error);
         }
-      }
-       else if (name === "gst_arrest_and_prosecution") {
+      } else if (name === "gst_arrest_and_prosecution") {
         try {
           const endpoints = ["gst9a", "gst9b"];
       
@@ -1179,39 +1234,49 @@ const AllParameters = ({
 
   const getBarColor = (index) => {
     const colors =
-      name === "adjudication"
-        ? data.map((item) => item.totalScore)
-        : bardata.map((item) => item.sub_parameter_weighted_average);
+      name === "adjudication" || name === "refunds" || name === "returnFiling"
+        ? bardata.map((item) => item.way_to_grade)  // For refunds/returnFiling, use way_to_grade
+        : name === "adjudication"
+          ? data.map((item) => item.totalScore)
+          : bardata.map((item) => item.sub_parameter_weighted_average);
+    
     const total = colors[index % colors.length];
-
+  
     console.log("TOTAL", total);
-
+  
     if (total <= 10 && total >= 7.5) {
-      return "#00FF00";
+      return "#00FF00";  // Green for scores between 7.5 and 10
     } else if (total >= 5 && total < 7.5) {
-      return "#FFFF00";
+      return "#FFFF00";  // Yellow for scores between 5 and 7.5
     } else if (total >= 0 && total <= 2.5) {
-      return "#FF0000";
+      return "#FF0000";  // Red for scores between 0 and 2.5
     } else {
-      return "#0000FF";
+      return "#0000FF";  // Blue for scores outside the above ranges
     }
   };
+  
 
   const getBarColorComm = (index) => {
-    const total = data.length;
-    console.log("total",total);
+    const colors =
+      name === "refunds" || name === "returnFiling"
+        ? bardata.map((item) => item.way_to_grade)  // For refunds/returnFiling, use way_to_grade
+        : data.map((item) => item.sub_parameter_weighted_average);  // Default for other cases
+    
+    const total = colors.length;
+    console.log("total", total);
     const firstQuarter = total * 0.25;
     const secondQuarter = total * 0.5;
     const thirdQuarter = total * 0.75;
-
+  
     return index < firstQuarter
-      ? "#00FF00"
+      ? "#b159d8"   // Green for the first quarter of the data
       : index < secondQuarter
-      ? "#FFFF00"
+      ? "#b159d8"   // Yellow for the second quarter of the data
       : index < thirdQuarter
-      ? "#0000FF"
-      : "#FF0000";
+      ? "#b159d8"   // Blue for the third quarter of the data
+      : "#b159d8";  // Red for the last quarter of the data
   };
+  
 
   // const colorsallzones=["#00FF00","#FFFF00","#0000FF","#FF0000"];
 
@@ -1249,7 +1314,7 @@ const AllParameters = ({
         selectedOption1 === "Zones" ? "All Zones" : "All Commissionerates",
       yaxisname:
         name === "refunds" || name === "returnFiling" || name === "adjudication(legacy cases)"|| name === "scrutiny/assessment"
-          ? "Percentage"
+          ? "Total Score"
           : "Total Score",
       // decimals:'1',
       theme: "zune",
@@ -1258,8 +1323,8 @@ const AllParameters = ({
       plottooltext:
         name === "refunds" || name === "returnFiling"|| name === "adjudication(legacy cases)"|| name === "scrutiny/assessment"
           ? selectedOption1 === "Zones"
-            ? "<b>Zone Name:$label</b>{br}Percentage:$value"
-            : "<b>Commissionerate Name:$label</b>{br}Percentage:$value"
+            ? "<b>Zone Name:$label</b>{br}Score:$value"
+            : "<b>Commissionerate Name:$label</b>{br}Score:$value"
           : selectedOption1 === "Zones"
           ? "<b>Zone Name:$label</b>{br}Total Score:$value"
           : "<b>Commissionerate Name:$label</b>{br}Total Score:$value",
@@ -1269,7 +1334,7 @@ const AllParameters = ({
     categories: [
       {
         category: 
-        (name==="recovery_of_arrears"|| name==="arrest_and_prosecution" || name === "gst_arrest_and_prosecution" ||  name === "adjudication(legacy cases)" || name === "scrutiny/assessment" || name==="audit"|| name==="registration")?
+        (name==="recovery_of_arrears"|| name==="arrest_and_prosecution" || name === "gst_arrest_and_prosecution" ||  name === "adjudication(legacy cases)" || name === "scrutiny/assessment" || name==="audit"|| name==="registration" || name === "investigation")?
         selectedOption1 === "Zones"
             ? bardata.map((index) => ({ label: index.zone_name }))
             : bardata.map((index) => ({ label: index.commissionerate_name })):
@@ -1282,7 +1347,7 @@ const AllParameters = ({
       {
         data: bardata.map((item, index) => ({
           label:
-            (name === "recovery_of_arrears" || name === "arrest_and_prosecution" || name==="gst_arrest_and_prosecution" || name === "adjudication(legacy cases)" ||name === "scrutiny/assessment"|| name==="audit"|| name==="registration")
+            (name === "recovery_of_arrears" || name === "arrest_and_prosecution" || name==="gst_arrest_and_prosecution" || name === "adjudication(legacy cases)" ||name === "scrutiny/assessment"|| name==="audit"|| name==="registration" || name === "investigation")
               ? selectedOption1 === "Zones"
                 ? item.zone_name
                 : item.commissionerate_name
@@ -1295,13 +1360,14 @@ const AllParameters = ({
                 ? item.totalScore
                 : item.sub_parameter_weighted_average
               : name === "adjudication(legacy cases)" ||
-                name === "refunds" ||
-                name === "audit" ||
-                name === "returnFiling"
+                name === "audit" || name === "investigation"
               ? item.sub_parameter_weighted_average
+              : name === "refunds" ||
+                name === "returnFiling"
+              ? item.way_to_grade
               : name === "appeals" ||
                 name === "recovery_of_arrears" ||
-                name === "audit" ||
+                name === "audit" || name === "investigation" ||
                 name === "arrest_and_prosecution"|| name==="registration" || name === "gst_arrest_and_prosecution" || name === "adjudication(legacy cases)" 
               ? item.sub_parameter_weighted_average
               : name === "scrutiny/assessment"
@@ -1454,11 +1520,10 @@ const AllParameters = ({
           <div class="row">
             <div class="text-center zone-heading">
               {name === "returnFiling" ? (
-                <h3>{formatString(name)}(Percentage Not Filed)</h3>
+                <h3>{formatString(name)}</h3>
               ) : name === "refunds" ? (
                 <h3>
-                  {formatString(name)} (Percentage Refund Pending Beyond 60
-                  Days/Total Refund Pending)
+                  {formatString(name)} 
                 </h3>
               ) : name === "scrutiny/assessment" ? (
                 <h3>{formatString(name)}(Score)</h3>

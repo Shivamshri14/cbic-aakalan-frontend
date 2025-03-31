@@ -177,6 +177,111 @@ const MISReporttable = ({
         setData5(enhancedData5);
         setData6(enhancedData6);
       }
+      if (name === "investigation") {
+        const endpoints = ["gst4a", "gst4b", "gst4c", "gst4d"];
+        const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
+
+        // Fetch data for all months and endpoints
+        const responses = await Promise.all(
+          months.map((month) =>
+            Promise.all(
+              endpoints.map((endpoint) =>
+                apiClient
+                  .get(`/cbic/${endpoint}`, { params: { month_date: month, type: "zone" } })
+                  .then((response) => ({
+                    data: response.data,
+                    gst: endpoint.toUpperCase(),
+                  }))
+                  .catch((error) => {
+                    console.error(`❌ API error for ${endpoint} (${month}):`, error);
+                    return { data: [], gst: endpoint.toUpperCase() }; // Return empty data on failure
+                  })
+              )
+            )
+          )
+        );
+
+        // Stop loading when all data is received
+        setLoading(false);
+
+        // Function to process data
+        const processData = (responseData) => {
+          const allData = responseData.flatMap((response) =>
+            response.data.map((item) => ({ ...item, gst: response.gst }))
+          );
+
+          console.log("✅ FINAL RESPONSE", allData);
+
+          // Summing sub_parameter_weighted_average by zone_code
+          const summedByZone = allData.reduce((acc, item) => {
+            const zoneCode = item.zone_code;
+            const value = parseFloat(item.sub_parameter_weighted_average) || 0; // Convert to number, default 0
+
+            if (!acc[zoneCode]) {
+              acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
+            }
+            acc[zoneCode].sub_parameter_weighted_average += value;
+
+            return acc;
+          }, {});
+
+          // Formatting and sorting data
+          const reducedAllData = Object.values(summedByZone).map((item) => ({
+            ...item,
+            weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+          }));
+
+          console.log("✅ Reduced All Data:", reducedAllData);
+
+          const sorted = reducedAllData.sort((a, b) => a.zone_code - b.zone_code);
+
+          // Apply coloring based on weighted_average
+          return sorted.map((item, index) => {
+            const total = item.sub_parameter_weighted_average;
+            let props = {};
+
+            if (total >= 7.5) {
+              props = { color: "success" }; // High performance
+            } else if (total >= 5) {
+              props = { color: "warning" };
+            } else if (total <= 2.5) {
+              props = { color: "danger" }; // Low performance
+            } else {
+              props = { color: "primary" }; // Normal
+            }
+
+            return {
+              ...item,
+              _cellProps: props,
+              s_no: index + 1,
+            };
+          });
+        };
+
+        // Process data for each month
+        const enhancedData1 = processData(responses[0]);
+        const enhancedData2 = processData(responses[1]);
+        const enhancedData3 = processData(responses[2]);
+        const enhancedData4 = processData(responses[3]);
+        const enhancedData5 = processData(responses[4]);
+        const enhancedData6 = processData(responses[5]);
+
+        // Debugging Logs
+        console.log("✅ Enhanced Data 1", enhancedData1);
+        console.log("✅ Enhanced Data 2", enhancedData2);
+        console.log("✅ Enhanced Data 3", enhancedData3);
+        console.log("✅ Enhanced Data 4", enhancedData4);
+        console.log("✅ Enhanced Data 5", enhancedData5);
+        console.log("✅ Enhanced Data 6", enhancedData6);
+
+        // Update state with the processed data
+        setData1(enhancedData1);
+        setData2(enhancedData2);
+        setData3(enhancedData3);
+        setData4(enhancedData4);
+        setData5(enhancedData5);
+        setData6(enhancedData6);
+      }
       else if (name === "adjudication") {
         //Zone parameters API
         const responsei = await apiClient.get(`/cbic/t_score/adjudication`, {
@@ -4508,7 +4613,7 @@ const MISReporttable = ({
                 name === "TimelyPaymentOfRefunds" ||
                   name === "Adjudication" || name === "epcg" || name === "aa" || name ==="cus_investigation"||
                   name === "DisposalOfConfiscatedGoldAndNDPS" || name ==="cus_arrestAndProsecution"|| name ==="unclaimed_cargo"||
-                  name === "CommissionerAppeals" || name ==="recovery_Of_Arrears" || name ==="mowb" || name ==="cus_audit"
+                  name === "CommissionerAppeals" || name ==="recovery_Of_Arrears" || name ==="mowb" || name ==="cus_audit"|| name ==="investigation"
                   ? datacustom
                   : data
               }

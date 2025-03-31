@@ -9,6 +9,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import queryString from "query-string";
+import { red } from "@mui/material/colors";
 
 const MISReport = ({
   selectedDate,
@@ -52,10 +53,10 @@ const MISReport = ({
     { id: 1, label: "Registration",/* value: "registration", */ color: "red" },
     { id: 2, label: "Return Filing", value: "returnFiling" },
     { id: 3, label: "Scrutiny/Assessment", value: "scrutiny", },
-    { id: 4, label: "Investigation", /* value: "investigation",*/ color: "red" },
-    { id: 5, label: "Adjudication", value: "adjudication" },
+    { id: 4, label: "Investigation", value: "investigation", },
+    { id: 5, label: "Adjudication", /*value: "adjudication" */ color: "red" },
     { id: 6, label: "Adjudication (Legacy cases)", value: "adjudicationLegacy" },
-    { id: 7, label: "Refunds", value: "refunds" },
+    { id: 7, label: "Refunds", /*value: "refunds"*/color: "red" },
     { id: 8, label: "Recovery of Arrears",value: "recoveryOfArrears"},
     { id: 9, label: "Arrest and Prosecution", value:"arrestAndProsecution"},
     { id: 10, label: "Audit", value: "audit",},
@@ -65,17 +66,17 @@ const MISReport = ({
   const optionscustom = [
     { idc: 12, labelc: "Timely payment of Refunds", value: "TimelyPaymentOfRefunds" },
     { idc: 13, labelc: "Management of Export Obligation(EPCG)",value:"epcg", },
-    { idc: 14, labelc: "Management of Export Obligation(AA)",value:"aa", },
-    { idc: 15, labelc: "Disposal/Pendency Of Provisional Assessments", /*value:"disposalPendency",*/color: "red" },
+    { idc: 14, labelc: "Management of Export Obligation(AA)",/*value:"aa",*/ color:"red"},
+    { idc: 15, labelc: "Disposal/Pendency Of Provisional Assessments",/*value:"disposalPendency"*/ color:"red"},
     { idc: 16, labelc: "Adjudication", value: "Adjudication" },
-    { idc: 17, labelc: "Investigation", /*value:"cus_investigation",*/ color: "red" },
-    { idc: 18, labelc: "Arrests and Prosecution", /*value: "cus_arrestAndProsecution",*/ color: "red" },
-    { idc: 19, labelc: "Monitoring Of Un-cleared and Unclaimed cargo", /*value: "unclaimed_cargo",*/color: "red" },
+    { idc: 17, labelc: "Investigation",/* value:"cus_investigation",*/ color:"red"}, 
+    { idc: 18, labelc: "Arrests and Prosecution", value: "cus_arrestAndProsecution", },
+    { idc: 19, labelc: "Monitoring Of Un-cleared and Unclaimed cargo", value: "unclaimed_cargo", },
     { idc: 20, labelc: "Disposal Of Confiscated Gold and NDPS", value: "DisposalOfConfiscatedGoldAndNDPS" },
-    { idc: 21, labelc: "Recovery of Arrears", /*value: "recovery_Of_Arrears",*/ color: "red" },
-    { idc: 22, labelc: "Management Of Warehousing bonds",/*value: "mowb",*/ color: "red" },
+    { idc: 21, labelc: "Recovery of Arrears", value: "recovery_Of_Arrears"},
+    { idc: 22, labelc: "Management Of Warehousing bonds",value: "mowb",},
     { idc: 23, labelc: "Commissioner (Appeals)", value: "CommissionerAppeals" },
-    { idc: 24, labelc: "Audit",/* value: "cus_audit", */color: "red" },
+    { idc: 24, labelc: "Audit",value: "cus_audit"},
   ];
 
   const handleCheckboxChange = (id, label) => {
@@ -206,7 +207,7 @@ const MISReport = ({
                             onChange={() =>
                               handleCheckboxChange(option.id, option.value)
                             }
-                            disabled={option.id === 1 ||  option.id === 4}
+                             disabled={option.id === 1  ||option.id === 5|| option.id === 7}
                           />
                           <label
                             className="form-check-label"
@@ -237,7 +238,8 @@ const MISReport = ({
                             onChange={() =>
                               handleCheckboxChange(options.idc, options.value)
                             }
-                            disabled={options.idc === 15 || options.idc === 17|| options.idc === 18 || options.idc === 19 || options.idc === 21 || options.idc === 22 || options.idc === 24 }
+                            disabled={options.idc === 14 || options.idc === 15||  options.idc === 17 }
+                            //  disabled={ options.idc === 17||options.idc === 18 ||options.idc === 23}
                           />
                           <label
                             className="form-check-label"

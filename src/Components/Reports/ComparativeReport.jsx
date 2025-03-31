@@ -80,9 +80,86 @@ const previousmonth2 = dayjs(selectedDate)
     onSelectedOption1(e.target.value);
     console.log(e.target.value);
   };
+      const fetchData = async () => {
+          try {
+            const endpoints_audit = ["gst10a", "gst10b", "gst10c"];
+            const responses_audit = await Promise.all(
+              endpoints_audit.map((endpoint) =>
+                apiClient
+                  .get(`/cbic/${endpoint}`, {
+                    params: { month_date: newdate, type: "zone" },
+                  })
+                  .then((response) => ({
+                    data: response.data.map(item => ({
+                      ...item,
+                      sub_parameter_weighted_average: (item.sub_parameter_weighted_average * 12) / 10
+                    })),
+                    gst: endpoint.toUpperCase(),
+                  }))
+              )
+            );
+      const endpoints_scrutiny_assessment = ["gst3a", "gst3b"];
+      const responses_scrutiny_assessment = await Promise.all(
+        endpoints_scrutiny_assessment.map((endpoint) =>
+          apiClient
+            .get(`/cbic/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data,
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
 
-  const fetchData = async () => {
-    try {
+      const endpoints_investigation = ["gst4a", "gst4b", "gst4c", "gst4d"];
+      const responses_investigation = await Promise.all(
+        endpoints_investigation.map((endpoint) =>
+          apiClient
+            .get(`/cbic/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data,
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+
+      const endpoints_recovery_of_arrears = ["gst8a", "gst8b"];
+      const responses_recovery_of_arrears = await Promise.all(
+        endpoints_recovery_of_arrears.map((endpoint) =>
+          apiClient
+            .get(`/cbic/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data.map(item => ({
+                ...item,
+                sub_parameter_weighted_average: (item.sub_parameter_weighted_average * 8) / 10
+              })),
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+
+      const endpoints_gst_arrest_and_prosecution = ["gst9a", "gst9b"];
+      const responses_gst_arrest_and_prosecution = await Promise.all(
+        endpoints_gst_arrest_and_prosecution.map((endpoint) =>
+          apiClient
+            .get(`/cbic/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data.map(item => ({
+                ...item,
+                sub_parameter_weighted_average: (item.sub_parameter_weighted_average * 6) / 10
+              })),
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+
       const endpoints = [
         "returnFiling",
         // "scrutiny/assessment",
@@ -95,7 +172,7 @@ const previousmonth2 = dayjs(selectedDate)
       const responses1 = await Promise.all(
         endpoints.map((endpoint) =>
           apiClient
-            .get(`/cbic/t_score/${endpoint}`, {
+            .get(`/cbic/t_score/${endpoint}`, { 
               params: { month_date: newdate, type: "parameter" },
             })
             .then((response) => ({
@@ -130,8 +207,18 @@ const previousmonth2 = dayjs(selectedDate)
             }))
         )
       );
+      const combinedResponses = [
+        ...responses1,
+        ...responses2,
+        ...responses3,
+        ...responses_audit,
+        ...responses_scrutiny_assessment,
+        ...responses_investigation,
+        ...responses_recovery_of_arrears,
+        ...responses_gst_arrest_and_prosecution,
+      ];
       
-      if (responses1 && responses2 && responses3) {
+      if (responses1 && responses2 && responses3 && responses_audit && responses_scrutiny_assessment && responses_investigation && responses_recovery_of_arrears && responses_gst_arrest_and_prosecution && combinedResponses ) {
         setloading(false);
       }
 
@@ -139,9 +226,25 @@ const previousmonth2 = dayjs(selectedDate)
       const allData1 = responses1.flatMap((response) =>
         response.data.map((item) => ({ ...item }))
       );
-      console.log("allData1",allData1);
+      const allDataAudit = responses_audit.flatMap((response) =>
+        response.data.map((item) => ({ ...item }))
+      );
+      const allDataScrutinyAssessment = responses_scrutiny_assessment.flatMap((response) =>
+        response.data.map((item) => ({ ...item }))
+      );
+      const allDataInvestigation = responses_investigation.flatMap((response) =>
+        response.data.map((item) => ({ ...item }))
+      );
+      const allDataRecoveryOfArrears = responses_recovery_of_arrears.flatMap((response) =>
+        response.data.map((item) => ({ ...item }))
+      );
+      const allDataGstArrestAndProsecution = responses_gst_arrest_and_prosecution.flatMap((response) =>
+        response.data.map((item) => ({ ...item }))
+      );
+      const allData1WithAudit = [...allData1, ...allDataAudit, ...allDataScrutinyAssessment, ...allDataInvestigation, ...allDataRecoveryOfArrears, ...allDataGstArrestAndProsecution];
+      console.log("allData1WithAudit", allData1WithAudit);
 
-      const summedByZone1 = allData1.reduce((acc, item) => {
+      const summedByZone1 = allData1WithAudit.reduce((acc, item) => {
         const zoneCode = item.zone_code;
         const value = (item.ra==="Adjudication")?item.totalScore:
         (item.ra==="Appeals")?item.parameter_wise_weighted_average:item.sub_parameter_weighted_average|| 0; // Default to 0 if missing
@@ -157,13 +260,15 @@ const previousmonth2 = dayjs(selectedDate)
         return acc;
       }, {});
 
-      const reducedAllData1 = Object.values(summedByZone1);
+      const reducedAllData1 = Object.values(summedByZone1).map(item => ({
+        ...item,
+        sub_parameter_weighted_average: parseFloat(item.sub_parameter_weighted_average.toFixed(2)) // Format to 2 decimal places
+      }));
 
       console.log("Reduced All Data:", reducedAllData1);
       const sorted1 = reducedAllData1.sort(
-        (a, b) =>
-          a.zone_code - b.zone_code
-      );
+        (a, b) => b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+      ).slice(0, 21); // Limit to 21 items
       console.log("Sorted1", sorted1);
 
 
@@ -187,13 +292,16 @@ const previousmonth2 = dayjs(selectedDate)
         return acc;
       }, {});
 
-      const reducedAllData2 = Object.values(summedByZone2);
+      const reducedAllData2 = Object.values(summedByZone2).map(item => ({
+        ...item,
+        sub_parameter_weighted_average: parseFloat(item.sub_parameter_weighted_average.toFixed(2)) // Format to 2 decimal places
+      }));
 
       console.log("Reduced All Data:", reducedAllData2);
       const sorted2 = reducedAllData2.sort(
-        (a, b) =>
-          a.zone_code - b.zone_code
-      );
+        (a, b) => b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+      ).slice(0, 21); // Limit to 21 items
+
       console.log("Sorted2", sorted2);
 
 
@@ -216,13 +324,16 @@ const previousmonth2 = dayjs(selectedDate)
         return acc;
       }, {});
 
-      const reducedAllData3 = Object.values(summedByZone3);
+      const reducedAllData3 = Object.values(summedByZone3).map(item => ({
+        ...item,
+        sub_parameter_weighted_average: parseFloat(item.sub_parameter_weighted_average.toFixed(2)) // Format to 2 decimal places
+      }));
 
       console.log("Reduced All Data:", reducedAllData3);
-      const sorted3 = reducedAllData2.sort(
-        (a, b) =>
-          a.zone_code - b.zone_code
-      );
+      const sorted3 = reducedAllData3.sort(
+        (a, b) => b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+      ).slice(0, 21); // Limit to 21 items
+
       console.log("Sorted3", sorted3);
 
       setData1(sorted1.map((item,index)=>({...item, s_no:index+1})));
@@ -585,8 +696,8 @@ const previousmonth2 = dayjs(selectedDate)
                     id="switchZones"
                     name="switchPlan2"
                     value="Zones"
-                    checked={selectedOption1 === "Zones"}
-                    onChange={handleChange1}
+                    // checked={selectedOption1 === "Zones"}
+                    // onChange={handleChange1}
                   />
                   {/* <input
                     type="radio"
@@ -596,14 +707,14 @@ const previousmonth2 = dayjs(selectedDate)
                     checked={selectedOption1 === "Commissionerate"}
                     onChange={handleChange1}
                   /> */}
-                  <label htmlFor="switchZones">Zones</label>
-                  <label htmlFor="switchCommissionerate">Commissionerate</label>
-                  <div className="switch-wrapper2">
-                    <div className="switch2">
+                  {/* <label htmlFor="switchZones">Zones</label> */}
+                  {/* <label htmlFor="switchCommissionerate">Commissionerate</label> */}
+                  {/* <div className="switch-wrapper2"> */}
+                    {/* <div className="switch2">
                       <div>Zones</div>
-                      <div>Commissionerate</div>
-                    </div>
-                  </div>
+                      <div>Commissionerate</div> */}
+                    {/* </div>
+                  </div> */}
                 </div>
               </div>
             </div>

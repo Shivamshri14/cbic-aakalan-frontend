@@ -281,7 +281,7 @@ const Subcom = ({ selectedDate, onChangeDate }) => {
   } else if (name === "gst3b") {
     columns.splice(3, 0, {
       key: "absolutevale",
-      label: "Recoveries/detections",
+      label: "Recoveries/detections (In lakhs)",
     });
 
     columns.splice(5, 0, {
@@ -498,7 +498,7 @@ const Subcom = ({ selectedDate, onChangeDate }) => {
   } else if (name === "gst8a") {
     columns.splice(3, 0, {
       key: "absolutevale",
-      label: "Arrears recoverable/Target upto the month",
+      label: "Arrears recoverable/Target upto the month (In lakhs)",
     });
 
     columns.splice(5, 0, {
@@ -518,7 +518,7 @@ const Subcom = ({ selectedDate, onChangeDate }) => {
   } else if (name === "gst8b") {
     columns.splice(3, 0, {
       key: "absolutevale",
-      label: "Arrears pending >1 year/ Total arrears pending ",
+      label: "Arrears pending >1 year/ Total arrears pending (In lakhs) ",
     });
 
     columns.splice(5, 0, {
@@ -603,7 +603,7 @@ const Subcom = ({ selectedDate, onChangeDate }) => {
   } else if (name === "gst10c") {
     columns.splice(3, 0, {
       key: "absolutevale",
-      label: "Recoveries/Detections ",
+      label: "Recoveries/Detections (In lakhs)",
     });
 
     columns.splice(5, 0, {

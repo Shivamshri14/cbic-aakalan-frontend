@@ -153,7 +153,7 @@ const Subpara = ({
         name === "gst4b" ||
         name === "gst4c" ||
         name === "gst4d" ||
-        name === "gst5a" ||
+        name === "gst5a" || 
         name === "gst5b" ||
         name === "gst1a" ||
         name === "gst1b" ||
@@ -222,8 +222,8 @@ const Subpara = ({
 
       const sorted1= response.data.sort((a,b)=>b.total_score-a.total_score);
 
-      if(name==="gst1c"||name==="gst1e"||name==="gst1f"||name==="gst2"||name==="gst4b"||name==="gst5b"||name==="gst6b"
-        ||name==="gst6d"||name==="gst7"||name==="gst8b"||name==="gst10b"|| name==="gst1d"|| name==="gst11d"|| name==="gst11b"|| name==="gst1b"){
+      if(name==="gst1e"||name==="gst1f"||name==="gst2"||name==="gst4b"||name==="gst5b"||name==="gst6b"
+        ||name==="gst6d"||name==="gst7"||name==="gst8b"||name==="gst10b"|| name==="gst1d"|| name==="gst11d"|| name==="gst11b"|| name==="gst1b" || name==="gst1c"){
         const sorted = response.data.sort((a, b) => a.total_score - b.total_score);
 
       console.log("Sorted:", sorted);
@@ -1138,7 +1138,7 @@ const Subpara = ({
   } else if (name === "gst8a") {
     columns.splice(3, 0, {
       key: "absolutevale",
-      label: "Arrears recoverable/Target upto the month",
+      label: "Arrears recoverable/Target upto the month (In lakhs)",
     });
 
     columns.splice(4, 0, {
@@ -1163,7 +1163,7 @@ const Subpara = ({
 
     columnscomm.splice(3, 0, {
       key: "absolutevale",
-      label: "Arrears recoverable/Target upto the month",
+      label: "Arrears recoverable/Target upto the month (In lakhs)",
     });
 
     // columnscomm.splice(4, 0, {
@@ -1188,7 +1188,7 @@ const Subpara = ({
   } else if (name === "gst8b") {
     columns.splice(3, 0, {
       key: "absolutevale",
-      label: "Arrears pending >1 year/ Total arrears pending ",
+      label: "Arrears pending >1 year/ Total arrears pending (In lakhs) ",
     });
 
     columns.splice(4, 0, {
@@ -1208,7 +1208,7 @@ const Subpara = ({
 
     columnscomm.splice(3, 0, {
       key: "absolutevale",
-      label: "Arrears pending >1 year/ Total arrears pending ",
+      label: "Arrears pending >1 year/ Total arrears pending (In lakhs)",
     });
 
     columnscomm.splice(5, 0, {
@@ -1239,7 +1239,7 @@ const Subpara = ({
 
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average (Out of 6)",
+      label: "Weighted Average (Out of 5)",
     });
 
     columnscomm.splice(3, 0, {
@@ -1255,7 +1255,7 @@ const Subpara = ({
 
     columnscomm.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average (Out of 6)",
+      label: "Weighted Average (Out of 5)",
     });
   } else if (name === "gst9b") {
     columns.splice(3, 0, {
@@ -2835,8 +2835,8 @@ const Subpara = ({
               : "Top 5 Commissionerates ( Least % of Pending > 1 year/Total cases pending)"
           : name === "gst4c"
           ? selectedOption1 === "Zones"
-            ? "Top 5 Zones (Highest % of Detection/Revenue collected)"
-            : "Top 5 Commissionerates (Highest % of Detection/Revenue collected)"
+            ? "Top 5 Zones (Highest % of Detection/Revenue collected Amount in Lakhs)"
+            : "Top 5 Commissionerates (Highest % of Detection/Revenue collected Amount in Lakhs)"
           : name === "gst4d"
           ? selectedOption1 === "Zones"
             ? "Top 5 Zones (Highest % of Recoveries/Detections(In lakhs))"
@@ -2871,12 +2871,12 @@ const Subpara = ({
               : "Top 5 Commissionerates (Least % of Refunds pending > 60 days/total refund pending)"
           : name === "gst8a"
           ? selectedOption1 === "Zones"
-            ? "Top 5 Zones (Highest % of Arrears recoverable/Target up to the month)"
-            : "Top 5 Commissionerates (Highest % of Arrears recoverable/Target up to the month)"
+            ? "Top 5 Zones (Highest % of Arrears recoverable/Target up to the month (In lakhs)"
+            : "Top 5 Commissionerates (Highest % of Arrears recoverable/Target up to the month(In lakhs)"
             : name === "gst8b"
             ? selectedOption1 === "Zones"
-              ? "Top 5 Zones (Least % of Arrears pending > 1 year)"
-              : "Top 5 Commissionerates (Least % of Arrears pending > 1 year)"
+              ? "Top 5 Zones (Least % of Arrears pending > 1 year (In lakhs)"
+              : "Top 5 Commissionerates (Least % of Arrears pending > 1 year)(In lakhs)"
           : name === "gst9a"
           ? selectedOption1 === "Zones"
             ? "Top 5 Zones (Least % of Prosecution not launched in 2 months/Prosecution sanctioned)"
@@ -2992,8 +2992,8 @@ const Subpara = ({
               : "Bottom 5 Commissionerates (Highest % of Pending > 1 year/Total cases pending)"
           : name === "gst4c"
           ? selectedOption1 === "Zones"
-            ? "Bottom 5 Zones ( Least % of Detection/Revenue collected)"
-            : "Bottom 5 5 Commissionerates (Least % of Detection/Revenue collected)"
+            ? "Bottom 5 Zones ( Least % of Detection/Revenue collected Amount in Lakhs )"
+            : "Bottom 5 5 Commissionerates (Least % of Detection/Revenue collected Amount in Lakhs)"
           : name === "gst4d"
           ? selectedOption1 === "Zones"
             ? "Bottom 5 Zones (Least % of Recoveries/Detection(In Lakhs))"
@@ -3020,12 +3020,12 @@ const Subpara = ({
               : "Bottom 5 Commissionerates (Highest % of Refunds pending > 60 days/total refund pending))"
             : name === "gst8a"
             ? selectedOption1 === "Zones"
-              ? "Bottom 5 Zones (Least % of Arrears recoverable/Target up to the month)"
-              : "Bottom 5 Commissionerates (Least % of Arrears recoverable/Target up to the month)"
+              ? "Bottom 5 Zones (Least % of Arrears recoverable/Target up to the month (In lakhs)"
+              : "Bottom 5 Commissionerates (Least % of Arrears recoverable/Target up to the month (In lakhs)"
           : name === "gst8b"
           ? selectedOption1 === "Zones"
-            ? "Bottom 5 Zones (Highest % of Arrears pending > 1 year)"
-            : "Bottom 5 Commissionerates (Highest % of Arrears pending > 1 year)"
+            ? "Bottom 5 Zones (Highest % of Arrears pending > 1 year (In lakhs)"
+            : "Bottom 5 Commissionerates (Highest % of Arrears pending > 1 year) (In lakhs)"
           : name === "gst6c"
           ? selectedOption1 === "Zones"
             ? "Bottom 5 Zones (Least % of Disposal of cases (C.Ex))"
@@ -3306,7 +3306,7 @@ const Subpara = ({
                             ) : name === "gst4c" ? (
                               <strong>
                                 Top 5 Zones (Highest % of Detection/Revenue
-                                collected)
+                                collected Amount in Lakhs)
                               </strong>
                             ) : name === "gst4d" ? (
                               <strong>
@@ -3338,12 +3338,12 @@ const Subpara = ({
                                   </strong>
                                ) : name === "gst8a" ? (
                                 <strong>
-                                  Top 5 Zones (Highest % of Arrears recoverable/Target up to the month)
+                                  Top 5 Zones (Highest % of Arrears recoverable/Target up to the month (In lakhs))
                                 </strong>
                             ) : name === "gst8b" ? (
                               <strong>
                                 Top 5 Zones (Least % of Arrears pending &gt; 1
-                                year)
+                                year (In lakhs))
                               </strong>
                             ) : name === "gst6c" ? (
                               <strong>
@@ -3459,7 +3459,7 @@ const Subpara = ({
                             ) : name === "gst4c" ? (
                               <strong>
                                 Top 5 Commissionerates (Highest % of
-                                Detection/Revenue collected)
+                                Detection/Revenue collected Amount in Lakhs)
                               </strong>
                             ) : name === "gst4d" ? (
                               <strong>
@@ -3501,13 +3501,13 @@ const Subpara = ({
                                 </strong>
                             ) : name === "gst8a" ? (
                               <strong>
-                                Top 5 Commissionerates (Highest % of Arrears recoverable/Target up to the month)
+                                Top 5 Commissionerates (Highest % of Arrears recoverable/Target up to the month (In lakhs))
                               </strong>
                           
                           ): name === "gst8b" ? (
                             <strong>
                               Top 5 Commissionerates (Least % of Arrears
-                              pending &gt; 1 year)
+                              pending &gt; 1 year (In lakhs))
                             </strong>
                           ) : 
                             name==="gst9a"?(
@@ -3633,7 +3633,7 @@ const Subpara = ({
                             name === "gst4c" ? (
                               <strong>
                                 Bottom 5 Zones (Least % of Detection/Revenue
-                                collected)
+                                collected Amount in Lakhs)
                               </strong>
                             ) : name === "gst4d" ? (
                               <strong>
@@ -3676,12 +3676,12 @@ const Subpara = ({
                                 </strong>
                             ) : name === "gst8a" ? (
                               <strong>
-                                Bottom 5 Zones (Least % of Arrears recoverable/Target up to the month)
+                                Bottom 5 Zones (Least % of Arrears recoverable/Target up to the month (In lakhs))
                               </strong>
                                 ) : name === "gst8b" ? (
                                   <strong>
                                     Bottom 5 Zones (Highest % of Arrears pending
-                                    &gt; 1 year)
+                                    &gt; 1 year (In lakhs))
                                   </strong>
                             ) : 
                             name==="gst9a"?(
@@ -3788,7 +3788,7 @@ const Subpara = ({
                             name === "gst4c" ? (
                               <strong>
                                 Bottom 5 Commissionerates (Least % of
-                                Detection/Revenue collected)
+                                Detection/Revenue collected Amount in Lakhs)
                               </strong>
                             ) : name === "gst4d" ? (
                               <strong>
@@ -3831,12 +3831,12 @@ const Subpara = ({
                                 </strong>
                             ) : name === "gst8a" ? (
                               <strong>
-                                Bottom 5 Commissionerates (Least % of Arrears recoverable/Target up to the month)
+                                Bottom 5 Commissionerates (Least % of Arrears recoverable/Target up to the month (In Lakhs))
                               </strong>
                                ) : name === "gst8b" ? (
                                 <strong>
                                   Bottom 5 Commissionerates (Highest % of Arrears
-                                  pending &gt; 1 year)
+                                  pending &gt; 1 year (In lakhs))
                                 </strong>
                             ) : 
                             name==="gst9a"?(

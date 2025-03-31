@@ -216,6 +216,7 @@ const CustomAllPara = ({
         const cusendpoints = [
           "cus3a",
           "cus3b",
+          "cus3c",
         ];
 
         const responses = await Promise.all(
@@ -1557,13 +1558,21 @@ const CustomAllPara = ({
   charts(FusionCharts);
   Zune(FusionCharts);
 
-  const getBarColor = (index) => {
+  const getBarColor = (index, name, parameter) => {
 
-    const colors = (name === "adjudication") ? data.map(item => item.totalScore) : data.map(item => item.sub_parameter_weighted_average);
-    const total = colors[index % colors.length];
-
+    let total;
+  
+    // Check if the parameter is "timelyrefunds"
+    if (parameter === "timelyrefunds") {
+      const colors = data.map(item => item.way_to_grade);
+      total = colors[index % colors.length];
+    } else {
+      const colors = (name === "adjudication") ? data.map(item => item.totalScore) : data.map(item => item.sub_parameter_weighted_average);
+      total = colors[index % colors.length];
+    }
+  
     console.log("TOTAL", total);
-
+  
     if (total <= 10 && total >= 7.5) {
       return "#00FF00";
     } else if (total >= 5 && total < 7.5) {
@@ -1574,6 +1583,7 @@ const CustomAllPara = ({
       return "#0000FF";
     }
   };
+  
 
   const getBarColorComm = (index) => {
     const total = data.length;
@@ -1582,17 +1592,17 @@ const CustomAllPara = ({
     const thirdQuarter = total * 0.75;
 
     return index < firstQuarter
-      ? "#00FF00"
+      ? "#b159d8 "
       : index < secondQuarter
-        ? "#FFFF00"
+        ? "#b159d8 "
         : index < thirdQuarter
-          ? "#0000FF"
-          : "#FF0000";
+          ? "#b159d8 "
+          : "#b159d8 ";
   };
 
   // const colorsallzones=["#00FF00","#FFFF00","#0000FF","#FF0000"];
 
-  function calculateAverage(data) {
+  function calculateAverage(data  ) {
     const totalScores = data.map((item) => item.total_score);
 
     if (totalScores.length === 0) {
@@ -1656,22 +1666,25 @@ const CustomAllPara = ({
     dataset: [
       {
         data: bardata.map((item, index) => ({
-          label:
-            name === "investigation" ||
-              name === "epcg" ||
-              name === "export_obligation(AA)" ||
-              name === "recovery_of_arrears" ||
-              name === "arrest_and_prosecution" ||
-              name === "disposal/pendency" ||
-              name === "unclaimed_cargo"
-               || name ==="cus_audit"  || name ==="DisposalOfConfiscatedGoldAndNDPS"
-              ? selectedOption1 === "Zones"
-                ? item.zone_name || "Unknown Zone"
-                : item.commissionerate_name || "Unknown Commissionerate"
-              : selectedOption1 === "Zones"
-                ? item.zoneName || "Unknown Zone"
-                : item.commName || "Unknown Commissionerate",
-          value: item.sub_parameter_weighted_average || 0,
+          label: 
+          name === "investigation" ||
+          name === "epcg" ||
+          name === "export_obligation(AA)" ||
+          name === "recovery_of_arrears" ||
+          name === "arrest_and_prosecution" ||
+          name === "disposal/pendency" ||
+          name === "unclaimed_cargo" ||
+          name === "cus_audit" ||
+          name === "DisposalOfConfiscatedGoldAndNDPS"
+            ? selectedOption1 === "Zones"
+              ? item.zone_name || "Unknown Zone"
+              : item.commissionerate_name || "Unknown Commissionerate"
+            : selectedOption1 === "Zones"
+              ? item.zoneName || "Unknown Zone"
+              : item.commName || "Unknown Commissionerate",
+          
+        value: name === "timelyrefunds" ? item.way_to_grade : item.sub_parameter_weighted_average || 0,
+        
           color:
             selectedOption1 === "Zones"
               ? getBarColor(index)

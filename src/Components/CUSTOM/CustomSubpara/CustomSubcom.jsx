@@ -196,7 +196,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
     case "cus2c":
       columns.splice(3, 0, {
         key: "absolutevale",
-        label: "Duty recovered/duty involved in expired licenses",
+        label: "Duty recovered/duty involved in expired licenses (In lakhs)",
       });
       columns.splice(6, 0, {
         key: "insentavization",
@@ -239,7 +239,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
     case "cus3c":
       columns.splice(3, 0, {
         key: "absolutevale",
-        label: "Duty recover/duty involved in expired licenses",
+        label: "Duty recover/duty involved in expired licenses (In lakhs)",
       });
       columns.splice(6, 0, {
         key: "insentavization",
@@ -362,7 +362,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
     case "cus6c":
       columns.splice(3, 0, {
         key: "absolutevale",
-        label: "Detection/Revenue collected",
+        label: "Detection/Revenue collected (In lakhs)",
       });
       columns.splice(6, 0, {
         key: "insentavization",
@@ -549,7 +549,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
     case "cus11b":
       columns.splice(3, 0, {
         key: "absolutevale",
-        label: "Duty recovered/duty involved in W/H bonds",
+        label: "Duty recovered/duty involved in W/H bonds (In lakhs)",
       });
       columns.splice(6, 0, {
         key: "insentavization",
@@ -563,7 +563,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
     case "cus10a":
       columns.splice(3, 0, {
         key: "absolutevale",
-        label: "Arrears recovered/target upto the month",
+        label: "Arrears recovered/target upto the month (In lakhs)",
       });
       columns.splice(6, 0, {
         key: "insentavization",
@@ -577,7 +577,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
     case "cus10b":
       columns.splice(3, 0, {
         key: "absolutevale",
-        label: "Arrears pending > 1 yr /total pending",
+        label: "Arrears pending > 1 yr /total pending (In lakhs)",
       });
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
@@ -625,7 +625,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
       });
       columns.splice(3, 0, {
         key: "absolutevale",
-        label: "Recovered/detected",
+        label: "Recovered/detected(In lakhs)",
       });
 
       columns.splice(7, 0, {
@@ -854,7 +854,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
               name === "cus4a" || name === "cus4b" || name === "cus4c" || name === "cus4d" ||
               name === "cus5a" || name === "cus5b" || name === "cus5c" || name === "cus6a" || name === "cus6b" || name === "cus6c"
               || name === "cus6d" || name === "cus6e" || name === "cus6f" || name === "cus7a" || name === "cus7b" || name === "cus8a" || name === "cus8b" || name === "cus9a" || name === "cus9b"
-              || name === "cus11a" || name === "cus11b" || name === "cus12a" || name === "cus12b" ? (
+              || name === "cus11a" || name === "cus11b" || name === "cus12a" || name === "cus10a" || name === "cus10b" || name === "cus12b"|| name === "cus13a"|| name === "cus13b"|| name === "cus13c"|| name === "cus13d" || name === "cus13e"? (
               <div className="row custom-tb mb col">
                 <div className="container mt-2">
                   <div className="card">

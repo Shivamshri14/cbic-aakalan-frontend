@@ -680,7 +680,7 @@ const Zoneparameters = ({
         }
     
         const enhancedData = sorted.map((item, index) => {
-          const total = item.weighted_average_out_of_12;
+          const total = item.sub_parameter_weighted_average;
     
           let props = {};
           if (total <= 10 && total >= 7.5) {
@@ -1017,8 +1017,7 @@ const Zoneparameters = ({
         const topfive = sorted.slice(0, 5);
         const bottomfive = sorted.slice(-5);
         setBarData([...topfive, ...bottomfive]);
-      }
-      else {
+      } else {
         const response = await apiClient.get(`/cbic/t_score/${name}`, {
           params: {
             month_date: newdate,
@@ -1354,9 +1353,9 @@ const Zoneparameters = ({
           setData(enhancedData);
         }
 
-        // if(name === "returnFiling" || name === "refunds"){
-        //   setData(enhancedData2);
-        // }
+        if(name === "returnFiling" || name === "refunds"){
+          setData(enhancedData2);
+        }
       }
     } catch (error) {
       // Log any errors that occur during fetching
@@ -2512,8 +2511,7 @@ const Zoneparameters = ({
       label: "Weighted Average (out of 5)",
       _props: { scope: "col" },
     });
-  }
-  else if (name === "adjudication") {
+  } else if (name === "adjudication") {
     columns.splice(4, 0, {
       key: "totalScore",
       label: "Score (out of 10)",
@@ -2760,28 +2758,34 @@ const Zoneparameters = ({
   charts(FusionCharts);
   Zune(FusionCharts);
 
+  
   const getBarColor = (index) => {
     const color =
-      name === "adjudication"
+      name === "refunds" || name === "returnFiling"
+        ? bardata.map((item) => item.way_to_grade)  // Use way_to_grade for refunds and returnFiling
+        : name === "adjudication"
         ? bardata.map((item) => item.totalScore)
         : bardata.map((item) => item.sub_parameter_weighted_average);
-    const colors = color.slice(0, 5);
+  
+    const colors = color.slice(0, 5);  // Only consider the first 5 items
     const total = colors[index % colors.length];
+  
     console.log("Total", total);
-
+  
     if (total >= 7.5 && total <= 10) {
-      return "#00FF00"; // First 5 bars
+      return "#00FF00";  // Green for values between 7.5 and 10
     } else if (total < 7.5 && total >= 5) {
-      return "#FFFF00"; // Next 5 bars
+      return "#FFFF00";  // Yellow for values between 5 and 7.5
     } else if (total >= 0 && total <= 2.5) {
-      return "#FF0000"; // Next 5 bars
+      return "#FF0000";  // Red for values between 0 and 2.5
     } else {
-      return "#0000FF"; // Last 5 bars
+      return "#0000FF";  // Blue for all other values
     }
   };
+  
 
   const getBarColorcomm = (index) => {
-    const colors = ["#00FF00", "#00FF00", "#00FF00", "#00FF00", "#00FF00"];
+    const colors = ["#b159d8", "#b159d8", "#b159d8", "#b159d8", "#b159d8"];
 
     const total = colors[index % colors.length];
 
@@ -2827,12 +2831,12 @@ const Zoneparameters = ({
       caption:
         name === "returnFiling"
           ? selectedOption1 === "Zones"
-            ? "Top 5 Zones (Least % pendency of return filing)"
-            : "Top 5 Commissionerates (Least % pendency of return filing)"
+            ? "Top 5 Performing Zone"
+            : "Top 5 Performing Commissionerate"
           : name === "refunds"
             ? selectedOption1 === "Zones"
-              ? "Top 5 Zones (Least % pendency of refunds beyond 60 days)"
-              : "Top 5 Commissionerates (Least % pendency of refunds beyond 60 days)"
+              ? "Top 5 Performing Zone"
+              : "Top 5 Performing Commissionerates "
             : name === "scrutiny/assessment" ||
               name === "adjudication" ||
               name === "adjudication(legacy cases)" ||
@@ -2867,10 +2871,10 @@ const Zoneparameters = ({
               ? selectedOption1 === "Zones"
                 ? item.totalScore
                 : item.sub_parameter_weighted_average
-              : name === "adjudication(legacy cases)" ||
-                name === "refunds" ||
-                name === "returnFiling"
+              : name === "adjudication(legacy cases)"
                 ? item.sub_parameter_weighted_average
+                : name === "refunds" || name === "returnFiling"
+                ? item.way_to_grade
                 : name === "appeals"
                   ? item.sub_parameter_weighted_average
                   : item.totalScore,
@@ -2889,6 +2893,8 @@ const Zoneparameters = ({
                   : item.sub_parameter_weighted_average
                 : name === "adjudication(legacy cases)"
                   ? item.sub_parameter_weighted_average
+                  : name === "refunds" || name === "returnFiling"
+                  ? item.way_to_grade
                   : name === "appeals"
                     ? item.sub_parameter_weighted_average
                     : item.totalScore,
@@ -2913,10 +2919,10 @@ const Zoneparameters = ({
                 ? selectedOption1 === "Zones"
                   ? item.totalScore
                   : item.sub_parameter_weighted_average
-                : name === "adjudication(legacy cases)" ||
-                  name === "refunds" ||
-                  name === "returnFiling"
+                : name === "adjudication(legacy cases)"
                   ? item.sub_parameter_weighted_average
+                  : name === "refunds" || name === "returnFiling"
+                  ? item.way_to_grade
                   : name === "appeals" ||
                     name === "arrest_and_prosecution" || name === "gst_arrest_and_prosecution" || name === "adjudication(legacy cases)" ||
                     name === "recovery_of_arrears" ||
@@ -2934,26 +2940,31 @@ const Zoneparameters = ({
 
   const getBarColorbottom = (index) => {
     const color =
-      name === "adjudication"
+      name === "refunds" || name === "returnFiling"
+        ? bardata.map((item) => item.way_to_grade)  // Use way_to_grade for refunds and returnFiling
+        : name === "adjudication"
         ? bardata.map((item) => item.totalScore)
         : bardata.map((item) => item.sub_parameter_weighted_average);
-    const colors = color.slice(-5);
+  
+    const colors = color.slice(-5);  // Only consider the last 5 items
     const total = colors[index % colors.length];
+  
     console.log("Total", total);
-
+  
     if (total >= 7.5 && total <= 10) {
-      return "#00FF00"; // First 5 bars
+      return "#00FF00"; // Green for values between 7.5 and 10
     } else if (total < 7.5 && total >= 5) {
-      return "#FFFF00"; // Next 5 bars
+      return "#FFFF00"; // Yellow for values between 5 and 7.5
     } else if (total >= 0 && total <= 2.5) {
-      return "#FF0000"; // Next 5 bars
+      return "#FF0000"; // Red for values between 0 and 2.5
     } else {
-      return "#0000FF"; // Last 5 bars
+      return "#0000FF"; // Blue for all other values
     }
   };
+  
 
   const getBarColorbottomcomm = (index) => {
-    const colors = ["#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000"];
+    const colors = ["#b159d8", "#b159d8", "#b159d8", "#b159d8", "#b159d8"];
 
     const total = colors[index % colors.length];
     console.log("Total", total);
@@ -3011,12 +3022,12 @@ const Zoneparameters = ({
       caption:
         name === "returnFiling"
           ? selectedOption1 === "Zones"
-            ? "Bottom 5 Zones (Highest % pendency of return filing)"
-            : "Bottom 5 Commissionerates (Highest % pendency of return filing)"
+            ? "Bottom 5 Performing Zone"
+            : "Bottom 5 Performing Commissionerate"
           : name === "refunds"
             ? selectedOption1 === "Zones"
-              ? "Bottom 5 Zones (Highest % pendency of refunds beyond 60 days)"
-              : "Bottom 5 Commissionerates (Highest % pendency of refunds beyond 60 days)"
+              ? "Bottom 5 Performing Zone"
+              : "Bottom 5 Performing Commissionerate"
             : name === "scrutiny/assessment" ||
               name === "adjudication" ||
               name === "adjudication(legacy cases)" ||
@@ -3052,10 +3063,10 @@ const Zoneparameters = ({
               ? selectedOption1 === "Zones"
                 ? item.totalScore
                 : item.sub_parameter_weighted_average
-              : name === "adjudication(legacy cases)" ||
-                name === "refunds" ||
-                name === "returnFiling"
+              : name === "adjudication(legacy cases)"
                 ? item.sub_parameter_weighted_average
+                : name === "refunds" || name === "returnFiling"
+                ? item.way_to_grade
                 : name === "appeals"
                   ? item.sub_parameter_weighted_average
                   : item.totalScore,
@@ -3776,12 +3787,11 @@ const Zoneparameters = ({
                       <div className="card-header">
                         {name === "returnFiling" ? (
                           <strong>
-                            Top 5 Zones (Least % pendency of return filing)
+                            Top 5 Performing Zone
                           </strong>
                         ) : name === "refunds" ? (
                           <strong>
-                            Top 5 Zones (Least % pendency of refunds beyond 60
-                            days)
+                           Top 5 Performing Zone
                           </strong>
                         ) : name === "scrutiny/assessment" ||
                           name === "adjudication" ||
@@ -3803,13 +3813,11 @@ const Zoneparameters = ({
                       <div className="card-header">
                         {name === "returnFiling" ? (
                           <strong>
-                            Top 5 Commissionerates (Least % pendency of return
-                            filing)
+                           Top 5 Performing Commissionerate
                           </strong>
                         ) : name === "refunds" ? (
                           <strong>
-                            Top 5 Commissionerates (Least % pendency of refunds
-                            beyond 60 days)
+                          Top 5 Performing Commissionerate
                           </strong>
                         ) : name === "scrutiny/assessment" ||
                           name === "adjudication" ||
@@ -3863,12 +3871,11 @@ const Zoneparameters = ({
                       <div className="card-header">
                         {name === "returnFiling" ? (
                           <strong>
-                            Bottom 5 Zones (Highest % pendency of return filing)
+                           Bottom 5 Performing Zone
                           </strong>
                         ) : name === "refunds" ? (
                           <strong>
-                            Bottom 5 Zones (Highest % pendency of refunds beyond
-                            60 days)
+                           Bottom 5 Performing Zone
                           </strong>
                         ) : name === "scrutiny/assessment" ||
                           name === "adjudication" ||
@@ -3890,13 +3897,11 @@ const Zoneparameters = ({
                       <div className="card-header">
                         {name === "returnFiling" ? (
                           <strong>
-                            Bottom 5 Commissionerates (Highest % pendency of
-                            return filing)
+                          Bottom 5 Performing Commissionerate
                           </strong>
                         ) : name === "refunds" ? (
                           <strong>
-                            Bottom 5 Commissionerates (Highest % pendency of
-                            refunds beyond 60 days)
+                          Bottom 5 Performing Commissionerate
                           </strong>
                         ) : name === "scrutiny/assessment" ||
                           name === "adjudication" ||
@@ -3998,4 +4003,5 @@ const Zoneparameters = ({
     </>
   );
 };
+
 export default Zoneparameters;

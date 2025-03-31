@@ -121,8 +121,8 @@ const Zonewisecomm = ({
     // });
 
     columns.splice(6, 0, {
-      key: "sub_parameter_weighted_average",
-      label: "Weighted Average(Out of 5)",
+      key: "way_to_grade",
+      label: "Score (Out of 10)",
     });
   }
   
@@ -143,7 +143,7 @@ const Zonewisecomm = ({
 
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(Out of 5)",
+      label: "Score (Out of 10)",
     });
   } 
   
@@ -164,7 +164,7 @@ const Zonewisecomm = ({
 
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(Out of 10)",
+      label: "Score (Out of 10)",
     });
   }
   else if (name === "gst_arrest_and_prosecution") {
@@ -184,7 +184,7 @@ const Zonewisecomm = ({
 
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(Out of 6)",
+      label: "Score (Out of 10)",
     });
   } 
 
@@ -205,7 +205,7 @@ const Zonewisecomm = ({
 
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(Out of 10)",
+      label: "Score (Out of 10)",
     });
   }
   else if (name === "scrutiny/assessment") {
@@ -225,7 +225,7 @@ const Zonewisecomm = ({
 
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(Out of 10)",
+      label: "Score (Out of 10)",
     });
   }
   else if (name === "investigation") {
@@ -245,7 +245,7 @@ const Zonewisecomm = ({
 
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(Out of 10)",
+      label: "Score (Out of 10)",
     });
   }
   else if (name === "refunds") {
@@ -265,26 +265,26 @@ const Zonewisecomm = ({
     // });
 
     columns.splice(6, 0, {
-      key: "sub_parameter_weighted_average",
-      label: "Weighted Average(Out of 5)",
+      key: "way_to_grade",
+      label: "Score (Out of 10)",
     });
   } 
   else if (name === "adjudication(legacy cases)") {
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(Out of 10)",
+      label: "Score (Out of 10)",
     });
   } 
   else if (name === "appeals") {
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(Out of 10)",
+      label: "Score (Out of 10)",
     });
   } 
   else if (name === "audit") {
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(Out of 12)",
+      label: "Score (Out of 10)",
     });
   } 
   else if (name === "adjudication") {
@@ -304,7 +304,7 @@ const Zonewisecomm = ({
 
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(Out of 10)",
+      label: "Score (Out of 10)",
     });
   }
   

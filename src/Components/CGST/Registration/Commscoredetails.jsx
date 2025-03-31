@@ -118,12 +118,12 @@ const Commscoredetails = ({
 
     columns.splice(6, 0, {
       key: "way_to_grade",
-      label: "Way to Grade (Marks) Score out of 10",
+      label: "Score out of 10",
     });
 
     columns.splice(7, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(out of 5)",
+      label: "Weighted Average (out of 5)",
     });
   } else if (name === "returnFiling") {
     columns.splice(3, 0, {
@@ -143,7 +143,7 @@ const Commscoredetails = ({
 
     columns.splice(6, 0, {
       key: "way_to_grade",
-      label: "Way to Grade (Marks) Score out of 10",
+      label: "Score out of 10",
     });
 
     columns.splice(7, 0, {
@@ -158,7 +158,7 @@ const Commscoredetails = ({
 
     columns.splice(5, 0, {
       key: "way_to_grade",
-      label: "Way to Grade (Marks) Score out of 10",
+      label: "Score out of 10",
     });
 
     columns.splice(4, 0, {
@@ -177,7 +177,7 @@ const Commscoredetails = ({
 
     columns.splice(5, 0, {
       key: "way_to_grade",
-      label: "Way to Grade (Marks) Score out of 10",
+      label: "Score out of 10",
     });
 
     columns.splice(4, 0, {
@@ -196,7 +196,7 @@ const Commscoredetails = ({
 
     columns.splice(5, 0, {
       key: "way_to_grade",
-      label: "Way to Grade (Marks) Score out of 10",
+      label: "Score out of 10",
     });
 
     columns.splice(4, 0, {
@@ -215,7 +215,7 @@ const Commscoredetails = ({
 
     columns.splice(5, 0, {
       key: "way_to_grade",
-      label: "Way to Grade (Marks) Score out of 10",
+      label: "Score out of 10",
     });
 
     columns.splice(4, 0, {
@@ -235,7 +235,7 @@ const Commscoredetails = ({
 
     columns.splice(5, 0, {
       key: "way_to_grade",
-      label: "Way to Grade (Marks) Score out of 10",
+      label: "Score out of 10",
     });
 
     columns.splice(4, 0, {
@@ -255,7 +255,7 @@ const Commscoredetails = ({
 
     columns.splice(5, 0, {
       key: "way_to_grade",
-      label: "Way to Grade (Marks) Score out of 10",
+      label: "Score out of 10",
     });
 
     columns.splice(4, 0, {
@@ -275,7 +275,7 @@ const Commscoredetails = ({
 
     columns.splice(5, 0, {
       key: "way_to_grade",
-      label: "Way to Grade (Marks) Score out of 10",
+      label: "Score out of 10",
     });
 
     columns.splice(4, 0, {

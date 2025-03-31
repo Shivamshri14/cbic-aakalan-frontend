@@ -120,7 +120,7 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
 
       columns.splice(5, 0, {
         key: "way_to_grade",
-        label: "Way to Grade (Marks) Score out of 10",
+        label: "Score out of 10",
       });
 
       columns.splice(6, 0, {
@@ -148,7 +148,7 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
 
       columns.splice(5, 0, {
         key: "way_to_grade",
-        label: "Way to Grade (Marks) out of 10",
+        label: "Score out of 10",
       });
 
       columns.splice(6, 0, {
@@ -175,7 +175,7 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
       });
       columns.splice(5, 0, {
         key: "way_to_grade",
-        label: "Way to Grade (Marks) out of 10",
+        label: "Score out of 10",
       });
 
       columns.splice(6, 0, {
@@ -202,7 +202,7 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
       });
       columns.splice(5, 0, {
         key: "way_to_grade",
-        label: "Way to Grade (Marks) out of 10",
+        label: "Score out of 10",
       });
 
       columns.splice(6, 0, {
@@ -230,7 +230,7 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
 
       columns.splice(5, 0, {
         key: "way_to_grade",
-        label: "Way to Grade (Marks) out of 10",
+        label: "Score out of 10",
       });
 
       columns.splice(6, 0, {
@@ -256,7 +256,7 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
 
       columns.splice(5, 0, {
         key: "way_to_grade",
-        label: "Way to Grade (Marks) out of 10",
+        label: "Score out of 10",
       });
 
       columns.splice(6, 0, {
@@ -273,7 +273,7 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
 
       columns.splice(4, 0, {
         key: "total_score",
-        label: " Percentage for the month",
+        label: "Percentage for the month",
       });
 
       columns.splice(3, 0, {
@@ -282,7 +282,7 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
       });
       columns.splice(5, 0, {
         key: "way_to_grade",
-        label: "Way to Grade (Marks) out of 10",
+        label: "Score out of 10",
       });
 
       columns.splice(6, 0, {
@@ -309,7 +309,7 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
 
       columns.splice(5, 0, {
         key: "way_to_grade",
-        label: "Way to Grade (Marks) out of 10",
+        label: "Score out of 10",
       });
 
       columns.splice(6, 0, {
@@ -335,7 +335,7 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
 
       columns.splice(5, 0, {
         key: "way_to_grade",
-        label: "Way to Grade (Marks) out of 10",
+        label: "Score out of 10",
       });
 
       columns.splice(6, 0, {
@@ -360,7 +360,7 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
       });
       columns.splice(5, 0, {
         key: "way_to_grade",
-        label: "Way to Grade (Marks) out of 10",
+        label: "Score out of 10",
       });
 
       columns.splice(6, 0, {
@@ -387,7 +387,7 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
       });
       columns.splice(5, 0, {
         key: "way_to_grade",
-        label: "Way to Grade (Marks) out of 10",
+        label: "Score out of 10",
       });
 
       columns.splice(6, 0, {
@@ -415,7 +415,7 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
 
       columns.splice(5, 0, {
         key: "way_to_grade",
-        label: "Way to Grade (Marks) out of 10",
+        label: "Score out of 10",
       });
 
       columns.splice(6, 0, {

@@ -354,7 +354,7 @@ const CustomSubpara = ({
         case "cus2c":
           columns.splice(3, 0, {
             key: "absolutevale",
-            label: "Duty recovered/duty involved in expired licenses",
+            label: "Duty recovered/duty involved in expired licenses (In lakhs)",
           });
     
           columns.splice(6, 0, {
@@ -369,7 +369,7 @@ const CustomSubpara = ({
     
           columnscomm.splice(3, 0, {
             key: "absolutevale",
-            label: "Duty recovered/duty involved in expired licenses",
+            label: "Duty recovered/duty involved in expired licenses (In lakhs)",
           });
     
           columnscomm.splice(6, 0, {
@@ -438,7 +438,7 @@ const CustomSubpara = ({
         case "cus3c":
           columns.splice(3, 0, {
             key: "absolutevale",
-            label: "Duty recover/duty involved in expired licenses",
+            label: "Duty recover/duty involved in expired licenses (In lakhs)",
           });
     
           columns.splice(6, 0, {
@@ -453,7 +453,7 @@ const CustomSubpara = ({
     
           columnscomm.splice(3, 0, {
             key: "absolutevale",
-            label: "Duty recover/duty involved in expired licenses",
+            label: "Duty recover/duty involved in expired licenses (In lakhs)",
           });
     
           columnscomm.splice(6, 0, {
@@ -861,7 +861,7 @@ const CustomSubpara = ({
       case "cus6c":
         columns.splice(3, 0, {
           key: "absolutevale",
-          label: "Detection/Revenue collected",
+          label: "Detection/Revenue collected (In lakhs)",
         });
         columns.splice(6, 0, {
           key: "insentavization",
@@ -875,7 +875,7 @@ const CustomSubpara = ({
   
         columnscomm.splice(3, 0, {
           key: "absolutevale",
-          label: "Detection/Revenue collected",
+          label: "Detection/Revenue collected (In lakhs)",
         });
         columnscomm.splice(6, 0, {
           key: "insentavization",
@@ -1031,7 +1031,7 @@ const CustomSubpara = ({
         case "cus10a":
           columns.splice(3, 0, {
             key: "absolutevale",
-            label: "Recovered/target upto the month",
+            label: "Recovered/target upto the month (In lakhs)",
           });
           columns.splice(6, 0, {
             key: "insentavization",
@@ -1045,7 +1045,7 @@ const CustomSubpara = ({
     
           columnscomm.splice(3, 0, {
             key: "absolutevale",
-            label: "Recovered/target upto the month",
+            label: "Recovered/target upto the month (In lakhs)",
           });
           columnscomm.splice(6, 0, {
             key: "insentavization",
@@ -1060,7 +1060,7 @@ const CustomSubpara = ({
         case "cus10b":
           columns.splice(3, 0, {
             key: "absolutevale",
-            label: "Pending > 1 yr /total pending",
+            label: "Pending > 1 yr /total pending (In lakhs)",
           });
          
           columns.splice(6, 0, {
@@ -1069,7 +1069,7 @@ const CustomSubpara = ({
           });
           columnscomm.splice(3, 0, {
             key: "absolutevale",
-            label: "Pending > 1 yr /total pending",
+            label: "Pending > 1 yr /total pending (In lakhs)",
           });
          
           columnscomm.splice(6, 0, {
@@ -1101,7 +1101,7 @@ const CustomSubpara = ({
       case "cus11b":
         columns.splice(3, 0, {
           key: "absolutevale",
-          label: "Duty recovered/duty involved",
+          label: "Duty recovered/duty involved (In lakhs)",
         });
         columns.splice(6, 0, {
           key: "insentavization",
@@ -1115,7 +1115,7 @@ const CustomSubpara = ({
   
         columnscomm.splice(3, 0, {
           key: "absolutevale",
-          label: "Duty recovered/duty involved",
+          label: "Duty recovered/duty involved (In lakhs)",
         });
         columnscomm.splice(6, 0, {
           key: "insentavization",
@@ -1194,7 +1194,7 @@ const CustomSubpara = ({
             case "cus13c":
             columns.splice(3, 0, {
               key: "absolutevale",
-              label: "Recovered/detected",
+              label: "Recovered/detected (In lakhs)",
             });
             columns.splice(6, 0, {
               key: "insentavization",
@@ -1208,7 +1208,7 @@ const CustomSubpara = ({
 
             columnscomm.splice(3, 0, {
               key: "absolutevale",
-              label: "Recovered/detected",
+              label: "Recovered/detected (In lakhs)",
             });
             columnscomm.splice(6, 0, {
               key: "insentavization",
@@ -1216,7 +1216,7 @@ const CustomSubpara = ({
             });
       
             columnscomm.splice(7, 0, {
-              key: "sub_parameter_weighted_average",
+              key: "sub_parameter_weighted_average (In lakhs)",
               label: "Weighted Average (out of 2)",
             });
     
@@ -2319,16 +2319,16 @@ const CustomSubpara = ({
       name === "cus12b" ? selectedOption1 === "Zones" ? "Top 5 Zones (Least % of Cases Pending > 1 years/total pending)" : "Top 5 Commissionerates (Least % of Cases Pending > 1 years/total pending)":
       name === "cus6a" ? selectedOption1 === "Zones" ? "Top 5 Zones (Highest % of Investigation Completed)" : "Top 5 Commissionerates ( Highest % of Investigation Completed)":
       name === "cus6b" ? selectedOption1 === "Zones" ? "Top 5 Zones (Least % of cases pending > 2 years)" : "Top 5 Commissionerates (Least % of cases Pending > 2 years)":
-      name === "cus6c" ? selectedOption1 === "Zones" ? "Top 5 Zones (Highest % of Detection/Revenue collected)" : "Top 5 Commissionerates (Highest % of Detection/Revenue collected)":
+      name === "cus6c" ? selectedOption1 === "Zones" ? "Top 5 Zones (Highest % of Detection/Revenue collected (In lakhs))" : "Top 5 Commissionerates (Highest % of Detection/Revenue collected (In lakhs))":
       name === "cus6d" ? selectedOption1 === "Zones" ? "Top 5 Zones (Highest % of Recovery/Detection (In Lakh))" : "Top 5 Commissionerates (Highest % of Recovery/Detection (In Lakh))":
       name === "cus6e" ? selectedOption1 === "Zones" ? "Top 5 Zones (Highest % of Disposal of cases of outright smuggling)" : "Top 5 Commissionerates (Highest % of Disposal of cases of outright smuggling)":
       name === "cus6f" ? selectedOption1 === "Zones" ? "Top 5 Zones (Highest % of Disposal of cases of Commercial fraud)" : "Top 5 Commissionerates (Highest % of Disposal of cases of Commercial fraud)":
       name === "cus2a" ? selectedOption1 === "Zones" ? "Top 5 Zones (Highest % of Notices issued/EO fulfilment time is over)" : "Top 5 Commissionerates (Highest % of Notices issued/EO fulfilment time is over)":
       name === "cus2b" ? selectedOption1 === "Zones" ? "Top 5 Zones (Least % of No revenue protective measures/EO fulfillment time is over)" : "Top 5 Commissionerates (Least % of No revenue protective measures/EO fulfillment time is over)":
-      name === "cus2c" ? selectedOption1 === "Zones" ? "Top 5 Zones (Highest % of Duty recovered/duty involved in expired licenses)" : "Top 5 Commissionerates (Highest % of Duty recovered/duty involved in expired licenses)":
+      name === "cus2c" ? selectedOption1 === "Zones" ? "Top 5 Zones (Highest % of Duty recovered/duty involved in expired licenses (In lakhs))" : "Top 5 Commissionerates (Highest % of Duty recovered/duty involved in expired licenses (In lakhs))":
       name === "cus3a" ? selectedOption1 === "Zones" ? "Top 5 Zones (Highest % of Notices issued/EO time is over)" : "Top 5 Commissionerates (Highest % of Notices issued/EO time is over)":
       name === "cus3b" ? selectedOption1 === "Zones" ? "Top 5 Zones (Least % of No revenue protective measures/EO fulfillment time is over)" : "Top 5 Commissionerates (Least % of No revenue protective measures/EO fulfillment time is over)":
-      name === "cus3c" ? selectedOption1 === "Zones" ? "Top 5 Zones (Highest % of Duty recover/duty involved in expired licenses)" : "Top 5 Commissionerates (Highest % of Duty recover/duty involved in expired licenses)":
+      name === "cus3c" ? selectedOption1 === "Zones" ? "Top 5 Zones (Highest % of Duty recover/duty involved in expired licenses (In lakhs))" : "Top 5 Commissionerates (Highest % of Duty recover/duty involved in expired licenses (In lakhs))":
       name === "cus4a" ? selectedOption1 === "Zones" ? "Top 5 Zones (Least % of (Non SVB)>6 months PA/total PA)" : "Top 5 Commissionerates (Least % of (Non SVB)>6 months PA/total PA)":
       name === "cus4b" ? selectedOption1 === "Zones" ? "Top 5 Zones (Least % of (Non SVB)>6 months PD bonds/total PD bonds)" : "Top 5 Commissionerates (Least % of (Non SVB)>6 months PD bonds/total PD bonds)":
       name === "cus4c" ? selectedOption1 === "Zones" ? "Top 5 Zones (Highest % of SVB finalised/Pending beginning of month)" : "Top 5 Commissionerates (Highest % of SVB finalised/Pending beginning of month)":
@@ -2338,9 +2338,14 @@ const CustomSubpara = ({
       name === "cus8a" ? selectedOption1 === "Zones" ? "Top 5 Zones (Highest % of Disposal of packages/pending beg of month)" : "Top 5 Commissionerates (Highest % of Disposal of packages/pending beg of month)":
       name === "cus8b" ? selectedOption1 === "Zones" ? "Top 5 Zones (Least % of Pending > 6 month/total pending)" : "Top 5 Commissionerates (Least % of Pending > 6 month/total pending)":
       name === "cus11a" ? selectedOption1 === "Zones" ? "Top 5 Zones (Least % of No action on expired bonds/total expired W/H bonds)" : "Top 5 Commissionerates (Least % of No action on expired bonds/total expired W/H bonds":
-      name === "cus11b" ? selectedOption1 === "Zones" ? "Top 5 Zones (Highest % of Duty recovered/duty involved in W/H bonds)" : "Top 5 Commissionerates (Highest % of Duty recovered/duty involved in W/H bonds)":
-      name === "cus10a" ? selectedOption1 === "Zones" ? "Top 5 Zones (Highest % of Arrears recovered/target upto the month)" : "Top 5 Commissionerates (Highest % of Arrears recovered/target upto the month)":
-      name === "cus10b" ? selectedOption1 === "Zones" ? "Top 5 Zones (Least % of Arrears pending > 1 yr /total pending)" : "Top 5 Commissionerates (Least % of Arrears pending > 1 yr /total pending":
+      name === "cus11b" ? selectedOption1 === "Zones" ? "Top 5 Zones (Highest % of Duty recovered/duty involved in W/H bonds (In lakhs))" : "Top 5 Commissionerates (Highest % of Duty recovered/duty involved in W/H bonds (In lakhs))":
+      name === "cus10a" ? selectedOption1 === "Zones" ? "Top 5 Zones (Highest % of Arrears recovered/target upto the month (In lakhs))" : "Top 5 Commissionerates (Highest % of Arrears recovered/target upto the month (In lakhs))":
+      name === "cus10b" ? selectedOption1 === "Zones" ? "Top 5 Zones (Least % of Arrears pending > 1 yr /total pending (In lakhs))" : "Top 5 Commissionerates (Least % of Arrears pending > 1 yr /total pending (In lakhs)":
+      name === "cus13a" ? selectedOption1 === "Zones" ? "Top 3 Zones (Highest % of BEs audited/marked )" : "Top 3 Commissionerates (Highest % of BEs audited/marked)":
+      name === "cus13b" ? selectedOption1 === "Zones" ? "Top 3 Zones (Highest % of SBs audited/marked )" : "Top 3 Commissionerates (Highest % of SBs audited/marked)":
+      name === "cus13c" ? selectedOption1 === "Zones" ? "Top 3 Zones (Highest % of Recovered/detected (In lakhs))" : "Top 3 Commissionerates (Highest % of BEs Recovered/detected (In lakhs))":
+      name === "cus13d" ? selectedOption1 === "Zones" ? "Top 3 Zones (Least % of BEs pending > 6 months )" : "Top 3 Commissionerates (Least % of BEs pending > 6 months )":
+      name === "cus13e" ? selectedOption1 === "Zones" ? "Top 3 Zones (Least % of SBs Pending > 6 months )" : "Top 3 Commissionerates (Least % of SBs Pending > 6 months)":
      
               
 
@@ -2391,7 +2396,7 @@ const CustomSubpara = ({
       // name === "cus5c" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Case pending > 1 year(duty involved > 1 crore))" : "Bottom 5 Commissionerates (Case pending > 1 year(duty involved > 1 crore))":
       name === "cus6a" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Least % of Investigation Completed)" : "Bottom 5 Zones (Least % of Investigation Completed)":
       name === "cus6b" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Highest % of cases pending > 2 years)" : "Bottom 5 Commissionerates (Highest % of cases pending > 2 years))":
-      name === "cus6c" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Least % of Detection/Revenue collected)" : "Bottom 5 Commissionerates (Least % of Detection/Revenue collected)":
+      name === "cus6c" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Least % of Detection/Revenue collected (In lakhs))" : "Bottom 5 Commissionerates (Least % of Detection/Revenue collected (In lakhs))":
       name === "cus6d" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Least % of Recovery/Detection(In Lakh))" : "Bottom 5 Commissionerates (Least % of Recovery/Detection(In Lakh))":
       name === "cus6e" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Least % of Disposal of cases of outright smuggling)" : "Bottom 5 Commissionerates (Least % of Disposal of cases of outright smuggling)":
       name === "cus6f" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Least % of Disposal of cases of Commercial fraud)" : "Bottom 5 Commissionerates ( Least % of Disposal of cases of Commercial fraud)":
@@ -2399,10 +2404,10 @@ const CustomSubpara = ({
       name === "cus12b" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Highest % of Cases Pending > 1 years/total pending)" : "Bottom 5 Commissionerates (Highest % of Cases Pending > 1 years/total pending)":
       name === "cus2a" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Least % of Notices issued/EO fulfilment time is over)" : "Bottom 5 Commissionerates (Least % of Notices issued/EO fulfilment time is over)":
       name === "cus2b" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Highest % of No revenue protective measures/EO fulfillment time is over)" : "Bottom 5 Commissionerates (Highest % of No revenue protective measures/EO fulfillment time is over)":
-      name === "cus2c" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Least % of Duty recovered/duty involved in expired licenses)" : "Bottom 5 Commissionerates (Least % of Duty recovered/duty involved in expired licenses)":
+      name === "cus2c" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Least % of Duty recovered/duty involved in expired licenses (In lakhs))" : "Bottom 5 Commissionerates (Least % of Duty recovered/duty involved in expired licenses (In lakhs))":
       name === "cus3a" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Least % of Notices issued/EO time is over)" : "Bottom 5 Commissionerates (Least % of Notices issued/EO time is over)":
       name === "cus3b" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Highest % of No revenue protective measures/EO fulfillment time is over)" : "Bottom 5 Commissionerates (Highest % of No revenue protective measures/EO fulfillment time is over)":
-      name === "cus3c" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Least % of Duty recover/duty involved in expired licenses)" : "Bottom 5 Commissionerates (Least % of Duty recover/duty involved in expired licenses)":
+      name === "cus3c" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Least % of Duty recover/duty involved in expired licenses (In lakhs))" : "Bottom 5 Commissionerates (Least % of Duty recover/duty involved in expired licenses (In lakhs))":
       name === "cus4a" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Highest % of (Non SVB)>6 months PA/total PA)" : "Bottom 5 Commissionerates (Highest % of (Non SVB)>6 months PA/total PA)":
       name === "cus4b" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Highest % of (Non SVB)>6 months PD bonds/total PD bonds)" : "Bottom 5 Commissionerates (Highest % of (Non SVB)>6 months PD bonds/total PD bonds)":
       name === "cus4c" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Least % of SVB finalised/Pending beginning of month)" : "Bottom 5 Commissionerates (Least % of SVB finalised/Pending beginning of month)":
@@ -2412,9 +2417,14 @@ const CustomSubpara = ({
       name === "cus8a" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Least % of Disposal of packages/pending beg of month)" : "Bottom 5 Commissionerates (Least % of Disposal of packages/pending beg of month)":
       name === "cus8b" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Highest % of Pending > 6 month/total pending)" : "Bottom 5 Commissionerates (Highest % of Pending > 6 month/total pending)":
       name === "cus11a" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Highest % of No action on expired bonds/total expired W/H bonds)" : "Bottom 5 Commissionerates (Highest % of No action on expired bonds/total expired W/H bonds)":
-      name === "cus11b" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Least % of Duty recovered/duty involved in W/H bonds)" : "Bottom 5 Commissionerates (Least % of Duty recovered/duty involved in W/H bonds)":
-      name === "cus10a" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Least % of Arrears recovered/target upto the month)" : "Bottom 5 Commissionerates (Least % of Arrears recovered/target upto the month)":
-      name === "cus10b" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Highest % of Arrears pending > 1 yr /total pending)" : "Bottom 5 Commissionerates (Highest % of Arrears pending > 1 yr /total pending)":
+      name === "cus11b" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Least % of Duty recovered/duty involved in W/H bonds (In lakhs))" : "Bottom 5 Commissionerates (Least % of Duty recovered/duty involved in W/H bonds (In lakhs))":
+      name === "cus10a" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Least % of Arrears recovered/target upto the month (In lakhs))" : "Bottom 5 Commissionerates (Least % of Arrears recovered/target upto the month (In lakhs))":
+      name === "cus10b" ? selectedOption1 === "Zones" ? "Bottom 5 Zones (Highest % of Arrears pending > 1 yr /total pending (In lakhs))" : "Bottom 5 Commissionerates (Highest % of Arrears pending > 1 yr /total pending (In lakhs))":
+      name === "cus13a" ? selectedOption1 === "Zones" ? "Bottom 3 Zones (Least % of  BEs audited/marked )" : "Bottom 3 Commissionerates (Least % of BEs audited/marked)":
+      name === "cus13b" ? selectedOption1 === "Zones" ? "Bottom 3 Zones (Least % of  SBs audited/marked )" : "Bottom 3 Commissionerates (Least % of SBs audited/marked)":
+      name === "cus13c" ? selectedOption1 === "Zones" ? "Bottom 3 Zones (Least % of  Recovered/detected (In lakhs))" : "Bottom 3 Commissionerates (Least % of BEs Recovered/detected (In lakhs))":
+      name === "cus13d" ? selectedOption1 === "Zones" ? "Bottom 3 Zones (Highest % of BEs pending > 6 months )" : "Bottom 3 Commissionerates (Highest % of BEs pending > 6 months )":
+      name === "cus13e" ? selectedOption1 === "Zones" ? "Bottom 3 Zones (Highest % of SBs Pending > 6 months )" : "Bottom 3 Commissionerates (Highest % of SBs Pending > 6 months)":
         selectedOption1 === "Zones"
           ? "Bottom 5 Zones"
           : "Bottom 5 Commissionerates",
@@ -2563,7 +2573,7 @@ const CustomSubpara = ({
                             name === "cus5c" ? (<strong>Top 5 Zones (Least % of ADJ Cases pending &gt; 1 year where duty involved &gt; 1 crore )</strong>) :
                             name === "cus6a" ? (<strong>Top 5 Zones (Highest % of Investigation Completed )</strong>) :
                             name === "cus6b" ? (<strong>Top 5 Zones  (Least % of Cases pending &gt; 2 years )</strong>) :
-                            name === "cus6c" ? (<strong>Top 5 Zones  (Highest % of Detection/Revenue collected)</strong>) :
+                            name === "cus6c" ? (<strong>Top 5 Zones  (Highest % of Detection/Revenue collected (In lakhs))</strong>) :
                             name === "cus6d" ? (<strong>Top 5 Zones  (Highest % of Recovery/Detection (In Lakh))</strong>) :
                             name === "cus6e" ? (<strong>Top 5 Zones  (Highest % of Disposal of cases of outright smuggling)</strong>) :
                             name === "cus6f" ? (<strong>Top 5 Zones  (Highest % of Disposal of cases ofCommercial fraud)</strong>) :
@@ -2571,10 +2581,10 @@ const CustomSubpara = ({
                             name === "cus12b" ? (<strong>Top 5 Zones (Highest % of Cases pending &gt; 1 year/total pending)</strong>) :
                             name === "cus2a" ? (<strong>Top 5 Zones (Highest % of Notices issued/EO fulfilment time is over)</strong>) :
                             name === "cus2b" ? (<strong>Top 5 Zones (Least % of No revenue protective measures/EO fulfillment time is over)</strong>) :
-                            name === "cus2c" ? (<strong>Top 5 Zones (Highest % of Duty recovered/duty involved in expired licenses)</strong>) :
+                            name === "cus2c" ? (<strong>Top 5 Zones (Highest % of Duty recovered/duty involved in expired licenses (In lakhs))</strong>) :
                             name === "cus3a" ? (<strong>Top 5 Zones (Highest % of Notices issued/EO time is over)</strong>) :
                             name === "cus3b" ? (<strong>Top 5 Zones (Least % of No revenue protective measures/EO fulfillment time is over)</strong>) :
-                            name === "cus3c" ? (<strong>Top 5 Zones (Highest % of Duty recover/duty involved in expired licenses)</strong>) : 
+                            name === "cus3c" ? (<strong>Top 5 Zones (Highest % of Duty recover/duty involved in expired licenses (In lakhs))</strong>) : 
                             name === "cus4a" ? (<strong>Top 5 Zones (Least % of (Non SVB) &gt; 6 months PA/total PA)</strong>) : 
                             name === "cus4b" ? (<strong>Top 5 Zones (Least % of (Non SVB) &gt; 6 months PD bonds/total PD bonds)</strong>) :
                             name === "cus4c" ? (<strong>Top 5 Zones (Highest % of SVB finalised/Pending beginning of month)</strong>) : 
@@ -2584,9 +2594,14 @@ const CustomSubpara = ({
                             name === "cus8a" ? (<strong>Top 5 Zones (Highest % of Disposal of packages/pending beg of month)</strong>) : 
                             name === "cus8b" ? (<strong>Top 5 Zones (Least % of Pending &gt; 6 month/total pending)</strong>) :
                             name === "cus11a" ? (<strong>Top 5 Zones (Least % of No action on expired bonds/total expired W/H bonds)</strong>) : 
-                            name === "cus11b" ? (<strong>Top 5 Zones (Highest % of Duty recovered/duty involved in W/H bonds)</strong>) : 
-                            name === "cus10a" ? (<strong>Top 5 Zones (Highest % of Arrears recovered/target upto the month)</strong>) :   
-                            name === "cus10b" ? (<strong>Top 5 Zones (Least % of Arrears pending &gt; 1 yr /total pending)</strong>) :  
+                            name === "cus11b" ? (<strong>Top 5 Zones (Highest % of Duty recovered/duty involved in W/H bonds (In lakhs))</strong>) : 
+                            name === "cus10a" ? (<strong>Top 5 Zones (Highest % of Arrears recovered/target upto the month (In lakhs))</strong>) :   
+                            name === "cus10b" ? (<strong>Top 5 Zones (Highest % of  Arrears pending &gt; 1 yr /total pending (In lakhs))</strong>) :  
+                            name === "cus13a" ? (<strong>Top 3 Zones (Highest % of BEs audited/marked)</strong>) :
+                            name === "cus13b" ? (<strong>Top 3 Zones (Highest % of SBs audited/marked) </strong>) :
+                            name === "cus13c" ? (<strong>Top 3 Zones (Highest % of Recovered/detected (In lakhs) )</strong>) :
+                            name === "cus13d" ? (<strong>Top 3 Zones (Least % of BEs pending &gt; 6 months)</strong>) :
+                            name === "cus13e" ? (<strong>Top 3 Zones (Least % of SBs Pending &gt; 6 months)</strong>) :
                             (
                               <strong>Top 5 Zones</strong>
                             )}
@@ -2605,7 +2620,7 @@ const CustomSubpara = ({
                             name === "cus5c" ? ( <strong>Top 5 Commissionerates (Least % of Cases pending &gt; 1 year where duty involved &gt; 1 crore)</strong> ) :
                             name === "cus6a" ? (<strong>Top 5 Commissionerates  (Highest % of Investigation Completed )</strong>) :
                             name === "cus6b" ? (<strong>Top 5 Commissionerates  (Least % of Cases pending &gt; 2 years )</strong>) : 
-                            name === "cus6c" ? (<strong>Top 5 Commissionerates  (Highest % of Detection/Revenue collected)</strong>) :
+                            name === "cus6c" ? (<strong>Top 5 Commissionerates  (Highest % of Detection/Revenue collected (In lakhs))</strong>) :
                             name === "cus6d" ? (<strong>Top 5 Commissionerates  (Highest % of Recovery/Detection (In Lakh))</strong>) :
                             name === "cus6e" ? (<strong>Top 5 Commissionerates  (Highest % of Disposal of cases of outright smuggling)</strong>) :
                             name === "cus6f" ? (<strong>Top 5 Commissionerates  (Highest % of Disposal of cases of Commercial fraud)</strong>) :
@@ -2614,10 +2629,10 @@ const CustomSubpara = ({
                             name === "cus12b" ? (<strong>Top 5 Commissionerates (Highest % of Cases pending &gt; 1 year/total pending)</strong>) :
                              name === "cus2a" ? (<strong>Top 5 Commissionerates (Highest % of Notices issued/EO fulfilment time is over)</strong>) :
                             name === "cus2b" ? (<strong>Top 5 Commissionerates (Least % of No revenue protective measures/EO fulfillment time is over)</strong>) :
-                            name === "cus2c" ? (<strong>Top 5 Commissionerates (Highest % of Duty recovered/duty involved in expired licenses)</strong>) :
+                            name === "cus2c" ? (<strong>Top 5 Commissionerates (Highest % of Duty recovered/duty involved in expired licenses (In lakhs))</strong>) :
                             name === "cus3a" ? (<strong>Top 5 Commissionerates (Highest % of Notices issued/EO time is over)</strong>) :
                             name === "cus3b" ? (<strong>Top 5 Commissionerates (Least % of No revenue protective measures/EO fulfillment time is over)</strong>) :
-                            name === "cus3c" ? (<strong>Top 5 Commissionerates (Highest % of Duty recover/duty involved in expired licenses)</strong>) : 
+                            name === "cus3c" ? (<strong>Top 5 Commissionerates (Highest % of Duty recover/duty involved in expired licenses (In lakhs))</strong>) : 
                             name === "cus4a" ? (<strong>Top 5 Commissionerates (Least % of (Non SVB) &gt; 6 months PA/total PA)</strong>) : 
                             name === "cus4b" ? (<strong>Top 5 Commissionerates (Least % of (Non SVB) &gt; 6 months PD bonds/total PD bonds)</strong>) :
                             name === "cus4c" ? (<strong>Top 5 Commissionerates (Highest % of SVB finalised/Pending beginning of month)</strong>) : 
@@ -2627,9 +2642,14 @@ const CustomSubpara = ({
                             name === "cus8a" ? (<strong>Top 5 Commissionerates (Highest % of Disposal of packages/pending beg of month)</strong>) : 
                             name === "cus8b" ? (<strong>Top 5 Commissionerates (Least % of Pending &gt; 6 month/total pending)</strong>) : 
                             name === "cus11a" ? (<strong>Top 5 Commissionerates (Least % of No action on expired bonds/total expired W/H bonds)</strong>) :  
-                            name === "cus11b" ? (<strong>Top 5 Commissionerates (Highest % of Duty recovered/duty involved in W/H bonds)</strong>) :
-                            name === "cus10a" ? (<strong>Top 5 Commissionerates (Highest % of Arrears Recovered/target upto the month)</strong>) :   
-                            name === "cus10b" ? (<strong>Top 5 Commissionerates (Least % of Arrears pending &gt; 1 yr /total pending)</strong>) :      
+                            name === "cus11b" ? (<strong>Top 5 Commissionerates (Highest % of Duty recovered/duty involved in W/H bonds (In lakhs))</strong>) :
+                            name === "cus10a" ? (<strong>Top 5 Commissionerates (Highest % of Arrears Recovered/target upto the month (In lakhs))</strong>) :   
+                            name === "cus10b" ? (<strong>Top 5 Commissionerates (Least % of Arrears pending &gt; 1 yr /total pending (In lakhs))</strong>) :
+                            name === "cus13a" ? (<strong>Top 3 Commissionerates (Highest % of BEs audited/marked)</strong>) :
+                            name === "cus13b" ? (<strong>Top 3 Commissionerates  (Highest % of SBs audited/marked) </strong>) :
+                            name === "cus13c" ? (<strong>Top 3 Commissionerates (Highest % of Recovered/detected (In lakhs) )</strong>) :
+                            name === "cus13d" ? (<strong>Top 3 Commissionerates  (Least % of BEs pending &gt; 6 months)</strong>) :
+                            name === "cus13e" ? (<strong>Top 3 Commissionerates (Least % of SBs Pending &gt; 6 months)</strong>) :      
                             (
                               <strong>Top 5 Commissionerates</strong>
                             )}
@@ -2685,7 +2705,7 @@ const CustomSubpara = ({
                             name === "cus5c" ? (<strong>Bottom 5 Zones (Highest % of ADJ Cases pending &gt; 1 year(duty involved &gt; 1 crore) )</strong>) :
                             name === "cus6a" ? (<strong>Bottom 5 Zones (Least % of Investigation Completed)</strong>) :
                             name === "cus6b" ? (<strong>Bottom 5 Zones  (Highest % of Pending &gt; 2 years)</strong>) :
-                            name === "cus6c" ? (<strong>Bottom 5 Zones  (Least % of Detection/Revenue collected)</strong>) :
+                            name === "cus6c" ? (<strong>Bottom 5 Zones  (Least % of Detection/Revenue collected (In lakhs))</strong>) :
                             name === "cus6d" ? (<strong>Bottom 5 Zones  (Least % of Recovery/Detection(In Lakh))</strong>) :
                             name === "cus6e" ? (<strong>Bottom 5 Zones  (Least % of Disposal of cases of outright smuggling)</strong>) :
                             name === "cus6f" ? (<strong>Bottom 5 Zones  (Least % of Disposal of cases of Commercial fraud)</strong>) :
@@ -2693,10 +2713,10 @@ const CustomSubpara = ({
                             name === "cus12b" ? (<strong>Bottom 5 Zones (Highest % of Cases pending &gt; 1 year )</strong>) :
                             name === "cus2a" ? (<strong>Bottom 5 Zones (Least % of Notices issued/EO fulfilment time is over)</strong>) :
                             name === "cus2b" ? (<strong>Bottom 5 Zones (Highest % of No revenue protective measures/EO fulfillment time is over)</strong>) :
-                            name === "cus2c" ? (<strong>Bottom 5 Zones (Least % of Duty recovered/duty involved in expired licenses)</strong>) :
+                            name === "cus2c" ? (<strong>Bottom 5 Zones (Least % of Duty recovered/duty involved in expired licenses (In lakhs))</strong>) :
                             name === "cus3a" ? (<strong>Bottom 5 Zones (Least % of Notices issued/EO time is over)</strong>) :
                             name === "cus3b" ? (<strong>Bottom 5 Zones (Highest % of No revenue protective measures/EO fulfillment time is over)</strong>) :
-                            name === "cus3c" ? (<strong>Bottom 5 Zones (Least % of Duty recover/duty involved in expired licenses)</strong>) :
+                            name === "cus3c" ? (<strong>Bottom 5 Zones (Least % of Duty recover/duty involved in expired licenses (In lakhs))</strong>) :
                             name === "cus4a" ? (<strong>Bottom 5 Zones (Highest % of (Non SVB) &gt; 6 months PA/total PA)</strong>) : 
                             name === "cus4b" ? (<strong>Bottom 5 Zones (Highest % of (Non SVB) &gt; 6 months PD bonds/total PD bonds)</strong>) :
                             name === "cus4c" ? (<strong>Bottom 5 Zones (Least % of SVB finalised/Pending beginning of month)</strong>) : 
@@ -2706,9 +2726,14 @@ const CustomSubpara = ({
                             name === "cus8a" ? (<strong>Bottom 5 Zones (Least % of Disposal of packages/pending beg of month)</strong>) :
                             name === "cus8b" ? (<strong>Bottom 5 Zones (Highest % of Pending  6 month/total pending)</strong>) : 
                             name === "cus11a" ?(<strong>Bottom 5 Zones (Highest % of No action on expired bonds/total expired wh bonds)</strong>) :
-                            name === "cus11b" ?(<strong>Bottom 5 Zones (Least % of Duty recovered/duty involved)</strong>) :  
-                            name === "cus10a" ?(<strong>Bottom 5 Zones (Least % of Duty Recovered/target upto the month)</strong>) : 
-                            name === "cus10b" ?(<strong>Bottom 5 Zones (Highest % of Pending &gt; 1 yr /total pending)</strong>) :      
+                            name === "cus11b" ?(<strong>Bottom 5 Zones (Least % of Duty recovered/duty involved (In lakhs))</strong>) :  
+                            name === "cus10a" ?(<strong>Bottom 5 Zones (Least % of Duty Recovered/target upto the month (In lakhs))</strong>) : 
+                            name === "cus10b" ?(<strong>Bottom 5 Zones (Highest % of Pending &gt; 1 yr /total pending (In lakhs))</strong>) : 
+                            name === "cus13a" ? (<strong>Bottom 3 Zones (Least % of BEs audited/marked)</strong>) :
+                            name === "cus13b" ? (<strong>Bottom 3 Zones (Least % of SBs audited/marked) </strong>) :
+                            name === "cus13c" ? (<strong>Bottom 3 Zones (Least % of Recovered/detected (In lakhs) )</strong>) :
+                            name === "cus13d" ? (<strong>Bottom 3 Zones (Highest % of BEs pending &gt; 6 months)</strong>) :
+                            name === "cus13e" ? (<strong>Bottom 3 Zones (Highest % of SBs Pending &gt; 6 months)</strong>) :      
                             (
                               <strong>Bottom 5 Zones</strong>
                             )}
@@ -2733,7 +2758,7 @@ const CustomSubpara = ({
                              name === "cus5c" ? (<strong>Bottom 5 Commissionerates (Highest % of ADJ Cases pending &gt; 1 year(duty involved &gt; 1 crore) )</strong>) :
                              name === "cus6a" ? (<strong>Bottom 5 Commissionerates (Least % of Investigation Completed)</strong>) :
                              name === "cus6b" ? (<strong>Bottom 5 Commissionerates (Highest % of Cases pending &gt; 2 years)</strong>) :
-                             name === "cus6c" ? (<strong>Bottom 5 Commissionerates (Least % of Detection/Revenue collected)</strong>) : 
+                             name === "cus6c" ? (<strong>Bottom 5 Commissionerates (Least % of Detection/Revenue collected (In lakhs))</strong>) : 
                              name === "cus6d" ? (<strong>Bottom 5 Commissionerates (Least % of Recovery/Detection(In Lakh))</strong>) :
                              name === "cus6e" ? (<strong>Bottom 5 Commissionerates (Least % of Disposal of cases of outright smuggling)</strong>) :
                              name === "cus6f" ? (<strong>Bottom 5 Commissionerates (Least % of Disposal of cases of Commercial fraud)</strong>) : 
@@ -2741,10 +2766,10 @@ const CustomSubpara = ({
                              name === "cus12b" ?(<strong>Bottom 5 Commissionerates (Highest % of Cases pending &gt; 1 year/total pending)</strong>) :
                              name === "cus2a" ? (<strong>Bottom 5 Commissionerates (Least % of Notices issued/EO fulfilment time is over)</strong>) : 
                              name === "cus2b" ? (<strong>Bottom 5 Commissionerates (Highest % of No revenue protective measures/EO fulfillment time is over)</strong>) :
-                             name === "cus2c" ? (<strong>Bottom 5 Commissionerates (Least % of Duty recovered/duty involved in expired licenses)</strong>) :
+                             name === "cus2c" ? (<strong>Bottom 5 Commissionerates (Least % of Duty recovered/duty involved in expired licenses (In lakhs))</strong>) :
                              name === "cus3a" ? (<strong>Bottom 5 Commissionerates (Least % of Notices issued/EO time is over)</strong>) :
                              name === "cus3b" ? (<strong>Bottom 5 Commissionerates (Highest % of No revenue protective measures/EO fulfillment time is over)</strong>) :
-                             name === "cus3c" ? (<strong>Bottom 5 Commissionerates (Least % of Duty recover/duty involved in expired licenses)</strong>) :
+                             name === "cus3c" ? (<strong>Bottom 5 Commissionerates (Least % of Duty recover/duty involved in expired licenses (In lakhs))</strong>) :
                              name === "cus4a" ? (<strong>Bottom 5 Commissionerates (Highest % of (Non SVB) &gt; 6 months PA/total PA)</strong>) : 
                              name === "cus4b" ? (<strong>Bottom 5 Commissionerates (Highest % of (Non SVB) &gt; 6 months PD bonds/total PD bonds)</strong>) : 
                              name === "cus4c" ? (<strong>Bottom 5 Commissionerates (Least % of SVB finalised/Pending beginning of month)</strong>) : 
@@ -2754,9 +2779,14 @@ const CustomSubpara = ({
                              name === "cus8a" ? (<strong>Bottom 5 Commissionerates (Least % of Disposal of packages/pending beg of month)</strong>) :
                              name === "cus8b" ? (<strong>Bottom 5 Commissionerates (Highest % of Pending &gt; 6 month/total pending)</strong>) :
                              name === "cus11a" ? (<strong>Bottom 5 Commissionerates (Highest % of No action on expired bonds/total expired W/H bonds)</strong>) : 
-                             name === "cus11b" ? (<strong>Bottom 5 Commissionerates (Least % of Duty recovered/duty involved in W/H bonds)</strong>) :
-                             name === "cus10a" ?(<strong>Bottom 5 Commissionerates (Least % of Arrears recovered/target upto the month)</strong>) : 
-                             name === "cus10b" ?(<strong>Bottom 5 Commissionerates (Highest % of Arrears pending &gt; 1 yr /total pending)</strong>) :      
+                             name === "cus11b" ? (<strong>Bottom 5 Commissionerates (Least % of Duty recovered/duty involved in W/H bonds (In lakhs))</strong>) :
+                             name === "cus10a" ?(<strong>Bottom 5 Commissionerates (Least % of Arrears recovered/target upto the month (In lakhs))</strong>) : 
+                             name === "cus10b" ?(<strong>Bottom 5 Commissionerates (Highest % of Arrears pending &gt; 1 yr /total pending (In lakhs))</strong>) : 
+                             name === "cus13a" ? (<strong>Bottom 3 Commissionerates (Least % of BEs audited/marked)</strong>) :
+                             name === "cus13b" ? (<strong>Bottom 3 Commissionerates(Least % of SBs audited/marked) </strong>) :
+                             name === "cus13c" ? (<strong>Bottom 3 Commissionerates (Least % of Recovered/detected(In lakhs) )</strong>) :
+                             name === "cus13d" ? (<strong>Bottom 3 Commissionerates (Highest % of BEs pending &gt; 6 months)</strong>) :
+                             name === "cus13e" ? (<strong>Bottom 3 Commissionerates (Highest % of SBs Pending &gt; 6 months)</strong>) :      
                              (
                               <strong>Bottom 5 Commissionerates</strong>
                             )}

@@ -3,9 +3,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import React, { useEffect, useState } from "react";
-// import "./Zonescoredetails.scss";
 import { CAvatar, CBadge, CButton, CCardBody, CCollapse } from "@coreui/react";
-
 import { CSmartTable } from "@coreui/react-pro";
 import "@coreui/coreui/dist/css/coreui.min.css";
 import Button from "@mui/material/Button";
@@ -15,11 +13,8 @@ import queryString from "query-string";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import apiClient from "./../../Service/ApiClient";
-// import "./Subpara.scss";
 import Spinner from "../Spinner";
 
-// const urlParmeter= new URLSearchParams(window.location.search);
-// var urlname= urlParmeter.get('name');
 const MonthlyReport = ({
   selectedDate,
   onChangeDate,
@@ -33,20 +28,18 @@ const MonthlyReport = ({
   };
 
   const [data, setData] = useState([]);
- 
   const newdate = dayjs(selectedDate).format("YYYY-MM-DD");
   console.log("test", selectedDate);
 
-  // Function to disable years less than 2022
   const shouldDisableYear = (year) => {
     return year.year() < 2023;
   };
+
   const location = useLocation();
   const queryParams = queryString.parse(location.search);
   const { name } = queryParams;
   const { type } = queryParams;
   const [loading, setloading] = useState(true);
-
   const navigate = useNavigate();
 
   const handleBack = () => {
@@ -65,11 +58,28 @@ const MonthlyReport = ({
 
   const fetchData = async () => {
     try {
+      const endpoints_audit = ["gst10a", "gst10b", "gst10c"];
+      const responses_audit = await Promise.all(
+        endpoints_audit.map((endpoint) =>
+          apiClient
+            .get(`/cbic/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data.map(item => ({
+                ...item,
+                sub_parameter_weighted_average: parseFloat(
+                  ((item.sub_parameter_weighted_average * 12) / 10).toFixed(2)
+                ),
+              })),
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
 
-      const endpoints_audit = ["gst10a", "gst10b"];
-
-      const responses_audit  = await Promise.all(
-        endpoints_audit .map((endpoint) =>
+      const endpoints_scrutiny_assessment = ["gst3a", "gst3b"];
+      const responses_scrutiny_assessment = await Promise.all(
+        endpoints_scrutiny_assessment.map((endpoint) =>
           apiClient
             .get(`/cbic/${endpoint}`, {
               params: { month_date: newdate, type: "zone" },
@@ -81,9 +91,60 @@ const MonthlyReport = ({
         )
       );
 
+      const endpoints_investigation = ["gst4a", "gst4b", "gst4c", "gst4d"];
+      const responses_investigation = await Promise.all(
+        endpoints_investigation.map((endpoint) =>
+          apiClient
+            .get(`/cbic/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data,
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+
+      const endpoints_recovery_of_arrears = ["gst8a", "gst8b"];
+      const responses_recovery_of_arrears = await Promise.all(
+        endpoints_recovery_of_arrears.map((endpoint) =>
+          apiClient
+            .get(`/cbic/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data.map(item => ({
+                ...item,
+                sub_parameter_weighted_average: parseFloat(
+                  ((item.sub_parameter_weighted_average * 8) / 10).toFixed(2)
+                ),
+              })),
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+
+      const endpoints_gst_arrest_and_prosecution = ["gst9a", "gst9b"];
+      const responses_gst_arrest_and_prosecution = await Promise.all(
+        endpoints_gst_arrest_and_prosecution.map((endpoint) =>
+          apiClient
+            .get(`/cbic/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data.map(item => ({
+                ...item,
+                sub_parameter_weighted_average: parseFloat(
+                  ((item.sub_parameter_weighted_average * 6) / 10).toFixed(2)
+                ),
+              })),
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+
       const endpoints = [
         "returnFiling",
-        // "scrutiny/assessment",
         "adjudication",
         "adjudication(legacy cases)",
         "refunds",
@@ -102,65 +163,65 @@ const MonthlyReport = ({
         )
       );
 
-      const combinedResponses = [...responses, ...responses_audit];
-     
- 
-
+      const combinedResponses = [
+        ...responses,
+        ...responses_audit,
+        ...responses_scrutiny_assessment,
+        ...responses_investigation,
+        ...responses_recovery_of_arrears,
+        ...responses_gst_arrest_and_prosecution,
+      ];
 
       if (combinedResponses) {
         setloading(false);
       }
 
       const allData = combinedResponses.flatMap((response) =>
-        response.data.map((item) => ({ ...item }))
+        response.data.map((item) => ({
+          ...item,
+          sub_parameter_weighted_average: parseFloat(
+            item.sub_parameter_weighted_average.toFixed(2)
+          ),
+        }))
       );
-      console.log("FINALRESPONSE", allData);
-
       const summedByZone = allData.reduce((acc, item) => {
         const zoneCode = item.zone_code;
-        const value = (item.ra==="Adjudication")?item.totalScore:
-        (item.ra==="Appeals")?item.parameter_wise_weighted_average:item.sub_parameter_weighted_average || 0; // Default to 0 if missing
-
-        // If zone_code is encountered for the first time, initialize it
+        const value = (item.ra === "Adjudication") ? item.totalScore :
+          (item.ra === "Appeals") ? item.parameter_wise_weighted_average : item.sub_parameter_weighted_average || 0;
         if (!acc[zoneCode]) {
-          acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+          acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
         }
-
-        // Sum only the sub_parameter_weighted_average for each zone_code
-        acc[zoneCode].sub_parameter_weighted_average += value;
-
+        acc[zoneCode].sub_parameter_weighted_average = parseFloat(
+          (acc[zoneCode].sub_parameter_weighted_average + value).toFixed(2)
+        );
         return acc;
       }, {});
 
       const reducedAllData = Object.values(summedByZone);
 
-      console.log("Reduced All Data:", reducedAllData);
-
       const sorted = reducedAllData.sort(
         (a, b) =>
           b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
       );
-      console.log("Sorted", sorted);
 
       const scoreIndexMap = new Map();
-        let currentIndex = 1;
+      let currentIndex = 1;
 
-        for (let i = 0; i < sorted.length; i++) {
-          const score = sorted[i].sub_parameter_weighted_average;
+      for (let i = 0; i < sorted.length; i++) {
+        const score = sorted[i].sub_parameter_weighted_average;
 
-          // If this score hasn't been assigned an index yet, assign it
-          if (!scoreIndexMap.has(score)) {
-            scoreIndexMap.set(score, currentIndex);
-            currentIndex++;
-          }
-
-          // Assign the index to each item based on its score
-          sorted[i].zonal_rank = scoreIndexMap.get(score);
+        if (!scoreIndexMap.has(score)) {
+          scoreIndexMap.set(score, currentIndex);
+          currentIndex++;
         }
 
-      setData(sorted);
+        sorted[i].zonal_rank = scoreIndexMap.get(score);
+      }
+
+      const filteredData = sorted.filter(item => item.zonal_rank <= 21);
+
+      setData(filteredData);
     } catch (error) {
-      // Log any errors that occur during fetching
       console.error("Error fetching data:", error);
       setloading(false);
     }
@@ -168,7 +229,7 @@ const MonthlyReport = ({
 
   useEffect(() => {
     fetchData();
-  }, [newdate]); // Empty dependency array indicates that this effect runs only once
+  }, [newdate]);
 
   const [details, setDetails] = useState([]);
   const [selectedRow, setSelectedRow] = useState();
@@ -184,9 +245,18 @@ const MonthlyReport = ({
     {
       key: "sub_parameter_weighted_average",
       label: "Current Month Score",
+      _style: { minWidth: "150px" },
+      filter: false,
+      sorter: false,
+      _props: { className: "current-month-score" },
+      formatter: (item) => {
+        if (!item || item.sub_parameter_weighted_average == null) return "0";
+        
+        // Ensure the value is rounded down and converted to a string
+        return Math.trunc(Number(item.sub_parameter_weighted_average)).toString();
+      },
     },
   ];
-
   const headerStyles = {
     backgroundColor: "#4CAF50",
     color: "white",
@@ -230,9 +300,7 @@ const MonthlyReport = ({
   };
 
   const handleExport = () => {
-    // Prepare data for export based on selectedOption and potentially other filters
     const exportData = data.map((user) => ({
-      // Customize object properties to match desired format
       Ranking: user.rank,
       Zone: user.zone_name,
       "Figures(N/D)": user.absolutevale,
@@ -264,7 +332,6 @@ const MonthlyReport = ({
         <div>
           <div className="body flex-grow-1 custom-sec">
             <div className="msg-box">
-              {/* <h2>GST 1A (Zone) {name.toUpperCase()}</h2> */}
               <div className="lft-box col-md-11">
                 <h3>Monthly Report</h3>
               </div>
@@ -283,10 +350,6 @@ const MonthlyReport = ({
             <div className="date-sec">
               <div className="lft-sec">
                 <div className="date-main">
-                  {/* const mont = today. getMonth() + 1; 
-              const year = today. getFullYear(); 
-              const date = today. */}
-
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer
                       components={["DatePicker", "DatePicker", "DatePicker"]}
@@ -295,10 +358,10 @@ const MonthlyReport = ({
                         label={"Month and Year"}
                         views={["month", "year"]}
                         maxDate={dayjs().subtract(1, "month").startOf("month")}
-                        value={selectedDate} // Set value to `value2` state
+                        value={selectedDate}
                         onChange={handleChangeDate}
                         renderInput={(params) => <TextField {...params} />}
-                        shouldDisableYear={shouldDisableYear} // Disable years less than 2022
+                        shouldDisableYear={shouldDisableYear}
                         slotProps={{
                           field: {
                             readOnly: true,
@@ -319,14 +382,14 @@ const MonthlyReport = ({
                     checked={selectedOption === "CGST"}
                     onChange={handleChange}
                   />
-                  {/* <input
+                  <input
                     type="radio"
                     id="switchYearly"
                     name="switchPlan"
                     value="Customs"
                     checked={selectedOption === "Customs"}
                     onChange={handleChange}
-                  /> */}
+                  />
                   <label htmlFor="switchMonthly">CGST</label>
                   <label htmlFor="switchYearly">Customs</label>
                   <div className="switch-wrapper">
@@ -344,25 +407,7 @@ const MonthlyReport = ({
                     id="switchZones"
                     name="switchPlan2"
                     value="Zones"
-                    checked={selectedOption1 === "Zones"}
-                    onChange={handleChange1}
                   />
-                  {/* <input
-                    type="radio"
-                    id="switchCommissionerate"
-                    name="switchPlan2"
-                    value="Commissionerate"
-                    checked={selectedOption1 === "Commissionerate"}
-                    onChange={handleChange1}
-                  /> */}
-                  <label htmlFor="switchZones">Zones</label>
-                  <label htmlFor="switchCommissionerate">Commissionerate</label>
-                  <div className="switch-wrapper2">
-                    <div className="switch2">
-                      <div>Zones</div>
-                      <div>Commissionerate</div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -373,7 +418,6 @@ const MonthlyReport = ({
                     Export XLS
                   </button>
                 </div>
-
                 <CSmartTable
                   activePage={1}
                   cleaner
@@ -396,21 +440,11 @@ const MonthlyReport = ({
                   tableProps={{
                     className: "add-this-class",
                     responsive: true,
-                    // striped: true,
                     hover: true,
-                    // bordered:true,
                     align: "middle",
-                    // borderColor:'info',
                     border: "primary",
                   }}
                   onKeyDown={(e) => checkSpecialChar(e)}
-                  // tableBodyProps={{
-                  //   className: "align-middle border-info",
-                  //   color:'primary',
-                  // }}
-                  // tableHeadProps={{
-                  //   className:"border-info alert-dark",
-                  // }}
                 />
               </div>
             </div>
@@ -421,5 +455,4 @@ const MonthlyReport = ({
     </>
   );
 };
-
 export default MonthlyReport;

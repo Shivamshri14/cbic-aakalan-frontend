@@ -452,14 +452,14 @@ const AllParamDashboard = ({
                 <div className="card text-white bg-danger">
                   <div className="card-body pb-0 d-flex justify-content-between align-items-start">
                     <div>
-                      <div className="fs-4 fw-semibold text-dark">
+                      <div className="fs-4 fw-semibold text-white">
                         {" "}
-                     {/* <Link
+                     <Link
                       to="/zoneparameters?name=investigation"
                       className="text-white sub-h"
-                    >  */}
+                    > 
                         Investigation
-                     {/* </Link>{" "} */}
+                     </Link>{" "}
                       </div>
                       <ol className="par-list b-4">
                         <li className="text-white">
@@ -555,7 +555,7 @@ const AllParamDashboard = ({
                 <div className="card text-white bg-violet">
                   <div className="card-body pb-0 d-flex justify-content-between align-items-start ">
                     <div>
-                      <div className="fs-4 fw-semibold">
+                      <div className="fs-4 fw-semibold text-white">
                         {""}{" "}
                         <Link
                           to="/zoneparameters?name=adjudication"
@@ -580,18 +580,20 @@ const AllParamDashboard = ({
                             </Link>
                           </Tooltip>
                         </li>
-                        <li>
+                        <li className="text-white">
                           <Tooltip
                             title="Number of cases where time left for adjudication is less than 6 months vis-à-vis total adjudication cases pending at the end of the month"
                             placement="right"
                             arrow
-                          >
+                          ><>
+                          </>
                             <Link
                               to="/Subpara?name=gst5b"
                               className="text-white sub-h"
                             >
                               Time left for adjudication &lt; 6 months
                             </Link>
+                            
                           </Tooltip>
                         </li>
                       </ol>
@@ -634,7 +636,7 @@ const AllParamDashboard = ({
                           to="/zoneparameters?name=adjudication(legacy cases)"
                           className="text-white sub-h"
                         > 
-                          adjudication(legacy cases)
+                          Adjudication(legacy cases)
                         </Link>
                       </div>
                       <ol className="par-list b-4">
@@ -1128,13 +1130,13 @@ const AllParamDashboard = ({
                 <div className="card text-white bg-navy-blue">
                   <div className="card-body pb-0 d-flex justify-content-between align-items-start">
                     <div className="g1-box">
-                      <div className="fs-4 fw-semibold">
-                        <Link
+                    <div className="fs-4 fw-semibold text-danger">
+                    {/* <Link
                           className="text-white sub-h"
                           to="/custompara?name=timelyrefunds"
-                        >
+                        > */}
                           Timely payment of Refunds
-                        </Link>
+                        {/* </Link> */}
                       </div>
                       <ol className="par-list">
                         <li>
@@ -1557,13 +1559,13 @@ const AllParamDashboard = ({
                 <div className="card text-white bg-successdarkpurple">
                   <div className="card-body pb-0 d-flex justify-content-between align-items-start col4">
                     <div class="g1-box">
-                      <div className="fs-4 fw-semibold">
-                        <Link
+                      <div className="fs-4 fw-semibold text-dark">
+                        {/* <Link
                           className="text-white sub-h"
                           to="/custompara?name=investigation"
-                        >
+                        > */}
                           Investigation
-                        </Link>
+                        {/* </Link> */}
                       </div>
                       <ol className="par-list">
                         <li>
@@ -1596,19 +1598,20 @@ const AllParamDashboard = ({
                             </Link>
                           </Tooltip>
                         </li>
-                        <li>
+                        <li className="text-dark">
                           <Tooltip
                             title=") Amount involved in detections made up to the month vis-à-vis total revenue collected upto the month in the Commissionerate(Zone)"
+                           
                             placement="right"
                             arrow
                           >
-                            <Link
+                            {/* <Link
                               className="text-white sub-h"
                               to="/customsubpara?name=cus6c"
-                            >
+                            > */}
                               {" "}
                               Detections/Revenue collected
-                            </Link>
+                            {/* </Link> */}
                           </Tooltip>
                         </li>
                         <li>
@@ -1691,7 +1694,7 @@ const AllParamDashboard = ({
                 <div className="card text-white bg-red">
                   <div className="card-body pb-0 d-flex justify-content-between align-items-start">
                     <div class="g1-box">
-                      <div className="fs-4 fw-semibold text-dark">
+                      <div className="fs-4 fw-semibold text-white">
                         <Link
                           className="text-white sub-h"
                           to="/custompara?name=arrest_and_prosecution"
@@ -2059,7 +2062,7 @@ const AllParamDashboard = ({
                 <div className="card text-white bg-dark-green">
                   <div className="card-body pb-0 d-flex justify-content-between align-items-start">
                     <div>
-                      <div className="fs-4 fw-semibold">
+                      <div className="fs-4 fw-semibold text-white">
                         <Link
                           className="text-white sub-h"
                           to="/custompara?name=CommissionerAppeals"

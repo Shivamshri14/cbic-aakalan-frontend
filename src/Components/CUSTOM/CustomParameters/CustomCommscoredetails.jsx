@@ -686,8 +686,8 @@ const CustomCommscoredetails = ({
 
     case "timelyrefunds":
       columns.splice(6, 0, {
-        key: "sub_parameter_weighted_average",
-        label: "Weighted average (Out of 5)",
+        key: "way_to_grade",
+        label: "Score (Out of 10)",
       });
 
       break;
@@ -695,16 +695,23 @@ const CustomCommscoredetails = ({
     case "investigation":
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
-        label: "Weighted average (Out of 12)",
+        label: "Score (Out of 10)",
       });
 
       break;
+      case "disposal/pendency":
+        columns.splice(6, 0, {
+          key: "sub_parameter_weighted_average",
+          label: "Score (Out of 10)",
+        });
+  
+        break;
 
 
     case "DisposalOfConfiscatedGoldAndNDPS":
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
-        label: "Weighted average (Out of 4)",
+        label: "Score (Out of 10)",
       });
 
       break;
@@ -712,14 +719,14 @@ const CustomCommscoredetails = ({
       case "export_obligation(AA)":
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
-        label: "Weighted average (Out of 10)",
+        label: "Score (Out of 10)",
       });
 
       break;
       case "recovery_of_arrears":
         columns.splice(6, 0, {
           key: "sub_parameter_weighted_average",
-          label: "Weighted average (Out of 3)",
+          label: "Score (Out of 10)",
         });
   
         break;
@@ -729,7 +736,7 @@ const CustomCommscoredetails = ({
     case "CommissionerAppeals":
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
-        label: "Weighted average (Out of 8)",
+        label: "Score (Out of 10)",
       });
 
       break;
@@ -737,7 +744,7 @@ const CustomCommscoredetails = ({
       case "epcg":
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
-        label: "Weighted average (Out of 7)",
+        label: "Score (Out of 10)",
       });
 
       break;
@@ -745,7 +752,7 @@ const CustomCommscoredetails = ({
       case "management_of_warehousing_bonds":
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
-        label: "Weighted average (Out of 6)",
+        label: "Score (Out of 10)",
       });
 
       break;
@@ -753,7 +760,14 @@ const CustomCommscoredetails = ({
       case "cus_audit":
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
-        label: "Weighted average (Out of 12)",
+        label: "Score (Out of 10)",
+      });
+      break;
+
+      case "unclaimed_cargo":
+      columns.splice(6, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Score (Out of 10)",
       });
 
       break;
@@ -762,7 +776,7 @@ const CustomCommscoredetails = ({
     default:
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
-        label: "Weighted average",
+        label: "Score (Out of 10)",
       });
 
       break;
