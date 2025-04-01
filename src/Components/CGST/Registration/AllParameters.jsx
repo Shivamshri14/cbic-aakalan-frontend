@@ -1234,7 +1234,7 @@ const AllParameters = ({
 
   const getBarColor = (index) => {
     const colors =
-      name === "adjudication" || name === "refunds" || name === "returnFiling"
+name === "refunds" || name === "returnFiling"
         ? bardata.map((item) => item.way_to_grade)  // For refunds/returnFiling, use way_to_grade
         : name === "adjudication"
           ? data.map((item) => item.totalScore)
