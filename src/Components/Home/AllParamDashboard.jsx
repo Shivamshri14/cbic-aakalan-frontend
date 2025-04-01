@@ -1131,12 +1131,12 @@ const AllParamDashboard = ({
                   <div className="card-body pb-0 d-flex justify-content-between align-items-start">
                     <div className="g1-box">
                     <div className="fs-4 fw-semibold text-danger">
-                    {/* <Link
+                    <Link
                           className="text-white sub-h"
                           to="/custompara?name=timelyrefunds"
-                        > */}
+                        >
                           Timely payment of Refunds
-                        {/* </Link> */}
+                        </Link>
                       </div>
                       <ol className="par-list">
                         <li>
