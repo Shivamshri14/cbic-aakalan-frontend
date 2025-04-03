@@ -1135,6 +1135,7 @@ const CustomAllPara = ({
                 total_score: 0,
                 gst: response.gst,
               });
+              // 0000
             }
             const accumulatedItem = accumulationMap.get(key);
             accumulatedItem.sub_parameter_weighted_average +=
