@@ -123,24 +123,13 @@ const Login = () => {
           sessionStorage.setItem("token", token);
           sessionStorage.setItem("userSession", JSON.stringify(user));
 
-          // localStorage.setItem("token", token);
-          // localStorage.setItem("userSession", JSON.stringify(user));
-          localStorage.setItem("user", JSON.stringify(user));  // Store user in localStorage
-          localStorage.setItem("token", token);  // Store token in localStorage
-
-          // Set secure cookie attributes
           Cookies.set("token", token, { secure: true, sameSite: 'Strict', httpOnly: true });
           Cookies.set("userSession", JSON.stringify(user), { secure: true, sameSite: 'Strict', httpOnly: true });
-
-          const storedUserString = localStorage.getItem("user");
-          const u = JSON.parse(storedUserString);
-
-          //const isFirstLogin = !Cookies.get("hasLoggedInBefore");
 
           if (response.data.forcePasswordChange === "true") {
             setDialogText(response.data.message);
             handleOpenDialog();
-          
+
             setTimeout(() => {
               handleCloseDialog();
               navigate("/changepassword");
@@ -148,14 +137,7 @@ const Login = () => {
             }, 2000);
           } else {
             Cookies.set("hasLoggedInBefore", "true", { secure: true, sameSite: 'Strict', httpOnly: true });
-            // setDialogText("Login successful");
-            // handleOpenDialog();
-               navigate("/dashboard");
-          
-            // setTimeout(() => {
-            //   handleCloseDialog();
-            //   navigate("/dashboard");
-            // }, 2000);
+            navigate("/dashboard");
           }
         }
       } else {
@@ -165,7 +147,13 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Error in posting data", error);
-      setDialogText("Username or Password is incorrect!");
+
+      // Check if the error response contains a specific message
+      if (error.response && error.response.status === 401) {
+        setDialogText("Username or Password is incorrect!");
+      } else {
+        setDialogText("500 Internal Server Error !");
+      }
       handleOpenDialog();
     }
   };
