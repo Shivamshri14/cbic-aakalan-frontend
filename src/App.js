@@ -41,7 +41,7 @@ function App() {
     localStorage.setItem("expirationTime", expirationTime);
   };
 
-  const [allow, setAllow] = useState(false)
+  const [allow, setAllow] = useState(true)
   useEffect(() => {
     async function anatarangCheck() {
       try {

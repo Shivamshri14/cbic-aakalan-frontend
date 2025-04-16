@@ -92,7 +92,7 @@ const Commscoredetails = ({
     // },
     // {
     //   key: "totalScore",
-    //   label: "Score of Sub Parameters (%)",
+    //   label: "Percentage for the month",
     // },
     // {
     //     key:"zonal_rank",
@@ -116,14 +116,14 @@ const Commscoredetails = ({
       label: "Refunds > 60 days/Total Refund Pending",
     });
 
-    columns.splice(6, 0, {
-      key: "way_to_grade",
-      label: "Score out of 10",
-    });
+    // columns.splice(6, 0, {
+    //   key: "way_to_grade",
+    //   label: "Score out of 10",
+    // });
 
     columns.splice(7, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average (out of 5)",
+      label: "Weighted Average",
     });
   } else if (name === "returnFiling") {
     columns.splice(3, 0, {
@@ -141,14 +141,14 @@ const Commscoredetails = ({
       label: "Return Not Filed/Total Return Pending",
     });
 
-    columns.splice(6, 0, {
-      key: "way_to_grade",
-      label: "Score out of 10",
-    });
+    // columns.splice(6, 0, {
+    //   key: "way_to_grade",
+    //   label: "Score out of 10",
+    // });
 
     columns.splice(7, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(out of 5)",
+      label: "Weighted Average",
     });
   } else if (name === "scrutiny/assessment") {
     columns.splice(3, 0, {
@@ -157,8 +157,8 @@ const Commscoredetails = ({
     });
 
     columns.splice(5, 0, {
-      key: "way_to_grade",
-      label: "Score out of 10",
+      key: "total_score",
+      label: "Percentage for the month",
     });
 
     columns.splice(4, 0, {
@@ -167,7 +167,7 @@ const Commscoredetails = ({
     });
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(out of 10)",
+      label: "Weighted Average",
     });
   } else if (name === "adjudication") {
     columns.splice(3, 0, {
@@ -175,9 +175,10 @@ const Commscoredetails = ({
       label: "Sub Parameters",
     });
 
+  
     columns.splice(5, 0, {
-      key: "way_to_grade",
-      label: "Score out of 10",
+      key: "totalScore",
+      label: "Percentage Not Filed",
     });
 
     columns.splice(4, 0, {
@@ -186,7 +187,7 @@ const Commscoredetails = ({
     });
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(out of 10)",
+      label: "Weighted Average",
     });
   } else if (name === "appeals") {
     columns.splice(3, 0, {
@@ -195,9 +196,9 @@ const Commscoredetails = ({
     });
 
     columns.splice(5, 0, {
-      key: "way_to_grade",
-      label: "Score out of 10",
-    });
+      key: "total_score",
+      label: "Percentage for the month",
+    });;
 
     columns.splice(4, 0, {
       key: "absolutevale",
@@ -205,7 +206,7 @@ const Commscoredetails = ({
     });
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(out of 12)",
+      label: "Weighted Average",
     });
   } else if (name === "adjudication(legacy cases)") {
     columns.splice(3, 0, {
@@ -213,9 +214,10 @@ const Commscoredetails = ({
       label: "Sub Parameters",
     });
 
+  
     columns.splice(5, 0, {
-      key: "way_to_grade",
-      label: "Score out of 10",
+      key: "total_score",
+      label: "Percentage for the month",
     });
 
     columns.splice(4, 0, {
@@ -225,7 +227,7 @@ const Commscoredetails = ({
 
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(out of 10)",
+      label: "Weighted Average",
     });
   } else if (name === "recovery_of_arrears") {
     columns.splice(3, 0, {
@@ -233,9 +235,10 @@ const Commscoredetails = ({
       label: "Sub Parameters",
     });
 
+   
     columns.splice(5, 0, {
-      key: "way_to_grade",
-      label: "Score out of 10",
+      key: "total_score",
+      label: "Percentage for the month",
     });
 
     columns.splice(4, 0, {
@@ -245,7 +248,7 @@ const Commscoredetails = ({
 
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(out of 8)",
+      label: "Weighted Average",
     });
   } else if (name === "arrest_and_prosecution") {
     columns.splice(3, 0, {
@@ -253,9 +256,10 @@ const Commscoredetails = ({
       label: "Sub Parameters",
     });
 
+  
     columns.splice(5, 0, {
-      key: "way_to_grade",
-      label: "Score out of 10",
+      key: "total_score",
+      label: "Percentage for the month",
     });
 
     columns.splice(4, 0, {
@@ -265,7 +269,7 @@ const Commscoredetails = ({
 
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(out of 10)",
+      label: "Weighted Average",
     });
   }  else if (name === "gst_arrest_and_prosecution") {
     columns.splice(3, 0, {
@@ -274,8 +278,8 @@ const Commscoredetails = ({
     });
 
     columns.splice(5, 0, {
-      key: "way_to_grade",
-      label: "Score out of 10",
+      key: "total_score",
+      label: "Percentage for the month",
     });
 
     columns.splice(4, 0, {
@@ -285,7 +289,7 @@ const Commscoredetails = ({
 
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(out of 6)",
+      label: "Weighted Average",
     });
   }
    else if (name === "registration") {
@@ -296,7 +300,7 @@ const Commscoredetails = ({
 
     columns.splice(5, 0, {
       key: "total_score",
-      label: "Score of Sub Parameters (%)",
+      label: "Percentage for the month",
     });
 
     columns.splice(4, 0, {
@@ -306,7 +310,7 @@ const Commscoredetails = ({
 
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(out of 10)",
+      label: "Weighted Average",
     });
   }
   else if (name === "investigation") {
@@ -315,9 +319,10 @@ const Commscoredetails = ({
       label: "Sub Parameters",
     });
 
+  
     columns.splice(5, 0, {
       key: "total_score",
-      label: "Score of Sub Parameters (%)",
+      label: "Percentage for the month",
     });
 
     columns.splice(4, 0, {
@@ -327,7 +332,7 @@ const Commscoredetails = ({
 
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(out of 10)",
+      label: "Weighted Average",
     });
   }
 
@@ -339,7 +344,7 @@ const Commscoredetails = ({
 
     columns.splice(5, 0, {
       key: "total_score",
-      label: "Score of Sub Parameters (%)",
+      label: "Percentage for the month",
     });
 
     columns.splice(4, 0, {
@@ -349,7 +354,7 @@ const Commscoredetails = ({
 
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(out of 12)",
+      label: "Weighted Average",
     });
   }
   
@@ -360,8 +365,8 @@ const Commscoredetails = ({
     });
 
     columns.splice(5, 0, {
-      key: "totalScore",
-      label: "Score of Sub Parameters (%)",
+      key: "total_score",
+      label: "Percentage for the month",
     });
 
     columns.splice(4, 0, {

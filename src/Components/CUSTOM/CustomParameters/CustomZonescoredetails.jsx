@@ -400,7 +400,7 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
     case "timelyrefunds":
       columns.splice(6,0,{
         key: "way_to_grade",
-        label: "Score (Out of 10)",
+        label: "Weighted Average",
       });
 
       break;
@@ -408,7 +408,7 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
     case "investigation":
       columns.splice(6,0,{
         key: "sub_parameter_weighted_average",
-        label: "Score (Out of 10)",
+        label: "Weighted Average",
       });
 
       break;
@@ -416,7 +416,7 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
       case "DisposalOfConfiscatedGoldAndNDPS":
         columns.splice(6,0,{
           key: "sub_parameter_weighted_average",
-          label: "Score (Out of 10)",
+          label: "Weighted Average",
         });
   
         break;
@@ -424,14 +424,14 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
         case "export_obligation(AA)":
         columns.splice(6,0,{
           key: "sub_parameter_weighted_average",
-          label: "Score (Out of 10)",
+          label: "Weighted Average",
         });
   
         break;
         case "cus_audit":
         columns.splice(6,0,{
           key: "sub_parameter_weighted_average",
-          label: "Score (Out of 10)",
+          label: "Weighted Average",
         });
   
         break;
@@ -439,7 +439,7 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
         case "CommissionerAppeals":
         columns.splice(6,0,{
           key: "sub_parameter_weighted_average",
-          label: "Score (Out of 10)",
+          label: "Weighted Average",
         });
   
         break;
@@ -447,7 +447,7 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
       default:
         columns.splice(6,0,{
           key: "sub_parameter_weighted_average",
-          label: "Score (Out of 10)",
+          label: "Weighted Average",
         });
 
         break;

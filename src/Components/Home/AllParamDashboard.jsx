@@ -966,7 +966,7 @@ const AllParamDashboard = ({
                         </li>
                         <li className="text-white">
                           <Tooltip
-                            title="Number of Taxpayers (TPs) audited during the month vis-à-vis total number of Taxpayers (TPs)  allotted for audit upto the month (Pro- Rata)"
+                            title="Number of Audit Paras pending for more than 6 month vis-à-vis number of Audit Paras pending"
                             placement="right"
                             arrow
                           >
@@ -1071,7 +1071,7 @@ const AllParamDashboard = ({
                               to="/Subpara?name=gst11c"
                               className="text-white sub-h"
                             >
-                              Disposal of ADJ/JC appeals
+                              Disposal of ADC/JC appeals
                             </Link>
                           </Tooltip>
                         </li>
@@ -1086,7 +1086,7 @@ const AllParamDashboard = ({
                               className="text-white sub-h"
                             >
                               {" "}
-                              ADJ/JC appeals
+                              ADC/JC appeals
                             </Link>
                           </Tooltip>
                         </li>
@@ -1131,12 +1131,12 @@ const AllParamDashboard = ({
                   <div className="card-body pb-0 d-flex justify-content-between align-items-start">
                     <div className="g1-box">
                     <div className="fs-4 fw-semibold text-danger">
-                    {/* <Link
+                    <Link
                           className="text-white sub-h"
                           to="/custompara?name=timelyrefunds"
-                        > */}
+                        >
                           Timely payment of Refunds
-                        {/* </Link> */}
+                        </Link>
                       </div>
                       <ol className="par-list">
                         <li>
@@ -1559,13 +1559,13 @@ const AllParamDashboard = ({
                 <div className="card text-white bg-successdarkpurple">
                   <div className="card-body pb-0 d-flex justify-content-between align-items-start col4">
                     <div class="g1-box">
-                      <div className="fs-4 fw-semibold text-dark">
-                        {/* <Link
+                      <div className="fs-4 fw-semibold text-white">
+                        <Link
                           className="text-white sub-h"
                           to="/custompara?name=investigation"
-                        > */}
+                        >
                           Investigation
-                        {/* </Link> */}
+                        </Link>
                       </div>
                       <ol className="par-list">
                         <li>
@@ -1598,20 +1598,20 @@ const AllParamDashboard = ({
                             </Link>
                           </Tooltip>
                         </li>
-                        <li className="text-dark">
+                        <li className="text-white">
                           <Tooltip
                             title=") Amount involved in detections made up to the month vis-à-vis total revenue collected upto the month in the Commissionerate(Zone)"
                            
                             placement="right"
                             arrow
                           >
-                            {/* <Link
+                            <Link
                               className="text-white sub-h"
                               to="/customsubpara?name=cus6c"
-                            > */}
+                            >
                               {" "}
                               Detections/Revenue collected
-                            {/* </Link> */}
+                            </Link>
                           </Tooltip>
                         </li>
                         <li>

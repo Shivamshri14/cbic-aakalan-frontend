@@ -2,8 +2,8 @@ import axios from "axios";
 
 const instance = axios.create({
   //baseURL: "https://aaklan.c4k.in/cbicApi",  
- baseURL: "https://DDVUAKAP01.cbic.gov.in:8080/cbicApi",
-//  baseURL: "https://localhost:8080/cbicApi",
+//  baseURL: "https://DDVUAKAP01.cbic.gov.in:8080/cbicApi",
+ baseURL: "http://localhost:8080/cbicApi",
  headers:{
   'Content-Type':'application/json',
   'Accept':'application/json',

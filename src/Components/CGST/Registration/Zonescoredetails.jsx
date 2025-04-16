@@ -118,14 +118,14 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
         label: "Return Not Filed/Total Return Due",
       });
 
-      columns.splice(5, 0, {
-        key: "way_to_grade",
-        label: "Score out of 10",
-      });
+      // columns.splice(5, 0, {
+      //   key: "way_to_grade",
+      //   label: "Score out of 10",
+      // });
 
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
-        label: "Weighted Average (out of 5)",
+        label: "Weighted Average ",
       });
 
       break;
@@ -146,14 +146,14 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
         label: "Refund > 60 days/Total Refunds Pending",
       });
 
-      columns.splice(5, 0, {
-        key: "way_to_grade",
-        label: "Score out of 10",
-      });
+      // columns.splice(5, 0, {
+      //   key: "way_to_grade",
+      //   label: "Score out of 10",
+      // });
 
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
-        label: "Weighted Average (out of 5)",
+        label: "Weighted Average",
       });
 
       break;
@@ -173,14 +173,14 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
         key: "total_score",
         label: "Percentage for the month",
       });
-      columns.splice(5, 0, {
-        key: "way_to_grade",
-        label: "Score out of 10",
-      });
+      // columns.splice(5, 0, {
+      //   key: "way_to_grade",
+      //   label: "Score out of 10",
+      // });
 
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
-        label: "Weighted Average (out of 10)",
+        label: "Weighted Average",
       });
 
       break;
@@ -200,14 +200,14 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
         key: "absval",
         label: "Absolute Number",
       });
-      columns.splice(5, 0, {
-        key: "way_to_grade",
-        label: "Score out of 10",
-      });
+      // columns.splice(5, 0, {
+      //   key: "way_to_grade",
+      //   label: "Score out of 10",
+      // });
 
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
-        label: "Weighted Average (out of 10)",
+        label: "Weighted Average",
       });
 
       break;
@@ -228,14 +228,14 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
         label: "Absolute Number",
       });
 
-      columns.splice(5, 0, {
-        key: "way_to_grade",
-        label: "Score out of 10",
-      });
+      // columns.splice(5, 0, {
+      //   key: "way_to_grade",
+      //   label: "Score out of 10",
+      // });
 
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
-        label: "Weighted Average (out of 10)",
+        label: "Weighted Average",
       });
       break;
     case "appeals":
@@ -254,14 +254,14 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
         label: "Absolute Number",
       });
 
-      columns.splice(5, 0, {
-        key: "way_to_grade",
-        label: "Score out of 10",
-      });
+      // columns.splice(5, 0, {
+      //   key: "way_to_grade",
+      //   label: "Score out of 10",
+      // });
 
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
-        label: "Weighted Average (out of 10)",
+        label: "Weighted Average",
       });
       break;
 
@@ -280,14 +280,14 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
         key: "absolutevale",
         label: "Absolute Number",
       });
-      columns.splice(5, 0, {
-        key: "way_to_grade",
-        label: "Score out of 10",
-      });
+      // columns.splice(5, 0, {
+      //   key: "way_to_grade",
+      //   label: "Score out of 10",
+      // });
 
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
-        label: "Weighted Average (out of 10)",
+        label: "Weighted Average",
       });
       break;
 
@@ -307,14 +307,14 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
         label: "Absolute Number",
       });
 
-      columns.splice(5, 0, {
-        key: "way_to_grade",
-        label: "Score out of 10",
-      });
+      // columns.splice(5, 0, {
+      //   key: "way_to_grade",
+      //   label: "Score out of 10",
+      // });
 
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
-        label: "Weighted Average (out of 10)",
+        label: "Weighted Average",
       });
       break;
     case "gst_arrest_and_prosecution":
@@ -333,14 +333,14 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
         label: "Absolute Number",
       });
 
-      columns.splice(5, 0, {
-        key: "way_to_grade",
-        label: "Score out of 10",
-      });
+      // columns.splice(5, 0, {
+      //   key: "way_to_grade",
+      //   label: "Score out of 10",
+      // });
 
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
-        label: "Weighted Average (out of 10)",
+        label: "Weighted Average",
       });
       break;
     case "registration":
@@ -358,14 +358,14 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
         key: "absolutevale",
         label: "Absolute Number",
       });
-      columns.splice(5, 0, {
-        key: "way_to_grade",
-        label: "Score out of 10",
-      });
+      // // columns.splice(5, 0, {
+      // //   key: "way_to_grade",
+      // //   label: "Score out of 10",
+      // });
 
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
-        label: "Weighted Average (out of 10)",
+        label: "Weighted Average",
       });
 
       break;
@@ -385,14 +385,14 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
         key: "absolutevale",
         label: "Absolute Number",
       });
-      columns.splice(5, 0, {
-        key: "way_to_grade",
-        label: "Score out of 10",
-      });
+      // columns.splice(5, 0, {
+      //   key: "way_to_grade",
+      //   label: "Score out of 10",
+      // });
 
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
-        label: "Weighted Average (out of 10)",
+        label: "Weighted Average",
       });
 
       break;
@@ -413,14 +413,14 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
         label: "Absolute Number",
       });
 
-      columns.splice(5, 0, {
-        key: "way_to_grade",
-        label: "Score out of 10",
-      });
+      // columns.splice(5, 0, {
+      //   key: "way_to_grade",
+      //   label: "Score out of 10",
+      // });
 
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
-        label: "Weighted Average (out of 10)",
+        label: "Weighted Average",
       });
 
       break;

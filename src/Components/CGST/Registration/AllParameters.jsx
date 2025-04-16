@@ -1234,7 +1234,7 @@ const AllParameters = ({
 
   const getBarColor = (index) => {
     const colors =
-      name === "adjudication" || name === "refunds" || name === "returnFiling"
+      name === "refunds" || name === "returnFiling"
         ? bardata.map((item) => item.way_to_grade)  // For refunds/returnFiling, use way_to_grade
         : name === "adjudication"
           ? data.map((item) => item.totalScore)
@@ -1260,22 +1260,25 @@ const AllParameters = ({
     const colors =
       name === "refunds" || name === "returnFiling"
         ? bardata.map((item) => item.way_to_grade)  // For refunds/returnFiling, use way_to_grade
-        : data.map((item) => item.sub_parameter_weighted_average);  // Default for other cases
+        : name === "adjudication"
+          ? data.map((item) => item.totalScore)
+          : bardata.map((item) => item.sub_parameter_weighted_average);
     
-    const total = colors.length;
-    console.log("total", total);
-    const firstQuarter = total * 0.25;
-    const secondQuarter = total * 0.5;
-    const thirdQuarter = total * 0.75;
+    const total = colors[index % colors.length];
   
-    return index < firstQuarter
-      ? "#b159d8"   // Green for the first quarter of the data
-      : index < secondQuarter
-      ? "#b159d8"   // Yellow for the second quarter of the data
-      : index < thirdQuarter
-      ? "#b159d8"   // Blue for the third quarter of the data
-      : "#b159d8";  // Red for the last quarter of the data
+    console.log("TOTAL", total);
+  
+    if (total <= 10 && total >= 7.5) {
+      return "#00FF00";  // Green for scores between 7.5 and 10
+    } else if (total >= 5 && total < 7.5) {
+      return "#FFFF00";  // Yellow for scores between 5 and 7.5
+    } else if (total >= 0 && total <= 2.5) {
+      return "#FF0000";  // Red for scores between 0 and 2.5
+    } else {
+      return "#0000FF";  // Blue for scores outside the above ranges
+    }
   };
+  
   
 
   // const colorsallzones=["#00FF00","#FFFF00","#0000FF","#FF0000"];

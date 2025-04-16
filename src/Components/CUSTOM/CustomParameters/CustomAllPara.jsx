@@ -1558,18 +1558,15 @@ const CustomAllPara = ({
   charts(FusionCharts);
   Zune(FusionCharts);
 
-  const getBarColor = (index, name, parameter) => {
-
-    let total;
-  
-    // Check if the parameter is "timelyrefunds"
-    if (parameter === "timelyrefunds") {
-      const colors = data.map(item => item.way_to_grade);
-      total = colors[index % colors.length];
-    } else {
-      const colors = (name === "adjudication") ? data.map(item => item.totalScore) : data.map(item => item.sub_parameter_weighted_average);
-      total = colors[index % colors.length];
-    }
+  const getBarColor = (index) => {
+    const colors =
+      name === "timelyrefunds" 
+        ? bardata.map((item) => item.way_to_grade)  // For refunds/returnFiling, use way_to_grade
+        : name === "adjudication"
+          ? data.map((item) => item.totalScore)
+          : bardata.map((item) => item.sub_parameter_weighted_average);
+    
+    const total = colors[index % colors.length];
   
     console.log("TOTAL", total);
   
