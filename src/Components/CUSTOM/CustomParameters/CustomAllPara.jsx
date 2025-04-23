@@ -1583,18 +1583,26 @@ const CustomAllPara = ({
   
 
   const getBarColorComm = (index) => {
-    const total = data.length;
-    const firstQuarter = total * 0.25;
-    const secondQuarter = total * 0.5;
-    const thirdQuarter = total * 0.75;
-
-    return index < firstQuarter
-      ? "#b159d8 "
-      : index < secondQuarter
-        ? "#b159d8 "
-        : index < thirdQuarter
-          ? "#b159d8 "
-          : "#b159d8 ";
+    const colors =
+      name === "timelyrefunds" 
+        ? bardata.map((item) => item.way_to_grade)  // For refunds/returnFiling, use way_to_grade
+        // : name === "adjudication"
+        //   ? data.map((item) => item.totalScore)
+          : bardata.map((item) => item.sub_parameter_weighted_average);
+    
+    const total = colors[index % colors.length];
+  
+    console.log("TOTAL", total);
+  
+    if (total <= 10 && total >= 7.5) {
+      return "#00FF00";
+    } else if (total >= 5 && total < 7.5) {
+      return "#FFFF00";
+    } else if (total >= 0 && total <= 2.5) {
+      return "#FF0000";
+    } else {
+      return "#0000FF";
+    }
   };
 
   // const colorsallzones=["#00FF00","#FFFF00","#0000FF","#FF0000"];

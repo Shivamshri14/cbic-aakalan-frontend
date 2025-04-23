@@ -80,11 +80,21 @@ export const Dashboard = ({
   const [data_audit, setData_audit] = useState([]);
   const [data_appeals, setData_appeals] = useState([]);
 
+  //customs
   const [datascustom, setDatascustom] = useState([]);
   const [dataepcg, setDataepcg] = useState([]);
   const [dataaa, setDataaa] = useState([]);
   const [dataDisposal_Pendency, setDataDisposal_Pendency] = useState([]);
   const [Data_AdjudicationData, setDataAdjudicationData] = useState([]);
+  const [data_cus_investigation, setDatacusinvestigation] = useState([]);
+  const [data_cus_arrest_and_prosecution, setDatacusarrest_and_prosecution] = useState([]);
+  const [data_cus_timelyrefunds, setDatacustimelyrefunds] = useState([]);
+  const [data_cus_unclaimed_cargo, setDatacusunclaimed_cargo] = useState([]);
+  const [data_cus_DisposalOfConfiscatedGoldAndNDPS, setDatacus_DisposalOfConfiscatedGoldAndNDPS] = useState([]);
+  const [data_cus_recovery_of_arrears, setDatacus_recovery_of_arrears] = useState([]);
+  const [data_cus_management_of_warehousing_bonds, setDatacus_management_of_warehousing_bonds] = useState([]);
+  const [data_cus_CommissionerAppeals, setDatacus_CommissionerAppeals] = useState([]);
+  const [data_cus_audit, setDatacus_audit] = useState([]);
 
   const newdate = dayjs(selectedDate).format("YYYY-MM-DD");
 
@@ -318,7 +328,16 @@ export const Dashboard = ({
       const endpoints_epcg = ["cus2a", "cus2b", "cus2c"];
       const endpoints_aa = ["cus3a", "cus3b", "cus3c"];
       const endpoints_Adjudication = ["cus5a", "cus5b", "cus5c"];
-      
+      const endpoints_cus_investigation = ["cus6a", "cus6b", "cus6c", "cus6d", "cus6e", "cus6f"];
+      const endpoints_cus_arrest_and_prosecution = ["cus7a", "cus7b"];
+      const endpoints_cus_timelyrefunds = ["cus1"];
+      const endpoints_cus_unclaimed_cargo = ["cus8a", "cus8b"];
+      const endpoints_cus_DisposalOfConfiscatedGoldAndNDPS = ["cus9a", "cus9b"];
+      const endpoints_cus_recovery_of_arrears = ["cus10a", "cus10b"];
+      const endpoints_cus_management_of_warehousing_bonds = ["cus11a", "cus11b"];
+      const endpoints_cus_CommissionerAppeals = ["cus12a", "cus12b"];
+      const endpoints_cus_audit = ["cus13a", "cus13b", "cus13c", "cus13d","cus13e"]; 
+
 
       // Fetch the data from the endpoints
       const responses_Disposal_Pendency = await Promise.all(
@@ -373,10 +392,127 @@ export const Dashboard = ({
         )
       );
 
-      console.log("Responses from all endpoints:", responses_Disposal_Pendency, responses_epcg, responses_aa, responses_Adjudication);
+      const responses_cus_investigation = await Promise.all(
+        endpoints_cus_investigation.map((endpoint) =>
+          apiClient
+            .get(`/cbic/custom/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data,
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+
+      const responses_cus_arrest_and_prosecution = await Promise.all(
+        endpoints_cus_arrest_and_prosecution.map((endpoint) =>
+          apiClient
+            .get(`/cbic/custom/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data,
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+
+      const responses_cus_timelyrefunds = await Promise.all(
+        endpoints_cus_timelyrefunds.map((endpoint) =>
+          apiClient
+            .get(`/cbic/custom/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data,
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+
+      const responses_cus_unclaimed_cargo = await Promise.all(
+        endpoints_cus_unclaimed_cargo.map((endpoint) =>
+          apiClient
+            .get(`/cbic/custom/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data,
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+
+      const responses_cus_DisposalOfConfiscatedGoldAndNDPS = await Promise.all(
+        endpoints_cus_DisposalOfConfiscatedGoldAndNDPS.map((endpoint) =>
+          apiClient
+            .get(`/cbic/custom/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data,
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+
+      const responses_cus_recovery_of_arrears = await Promise.all(
+        endpoints_cus_recovery_of_arrears.map((endpoint) =>
+          apiClient
+            .get(`/cbic/custom/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data,
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+
+      const responses_cus_management_of_warehousing_bonds = await Promise.all(
+        endpoints_cus_management_of_warehousing_bonds.map((endpoint) =>
+          apiClient
+            .get(`/cbic/custom/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data,
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+
+      const responses_cus_CommissionerAppeals = await Promise.all(
+        endpoints_cus_CommissionerAppeals.map((endpoint) =>
+          apiClient
+            .get(`/cbic/custom/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data,
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+
+      const responses_cus_audit = await Promise.all(
+        endpoints_cus_audit.map((endpoint) =>
+          apiClient
+            .get(`/cbic/custom/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data,
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+
+      console.log("Responses from all endpoints:", responses_Disposal_Pendency, responses_epcg, responses_aa, responses_Adjudication, responses_cus_investigation, responses_cus_arrest_and_prosecution, responses_cus_timelyrefunds, responses_cus_unclaimed_cargo, responses_cus_DisposalOfConfiscatedGoldAndNDPS, responses_cus_recovery_of_arrears, responses_cus_management_of_warehousing_bonds, responses_cus_audit);
 
       // Helper function to merge data by zone, ensuring no duplicates and summing the weighted averages
-      const mergeDataByZone = (disposalData, epcgData, aaData, AdjudicationData) => {
+      const mergeDataByZone = (disposalData, epcgData, aaData, AdjudicationData, Investiation_cus_Data, arrest_and_prosecution_cus_Data, timelyrefunds_cus_Data, unclaimed_cargo_cus_Data, DisposalOfConfiscatedGoldAndNDPS_cus_Data, recovery_of_arrears_cus_Data, management_of_warehousing_bonds_cus_Data, audit_cus_Data, CommissionerAppeals_cus_Data) => {
         const combinedMap = new Map();
 
         // Merge Disposal/Pendency data
@@ -389,10 +525,18 @@ export const Dashboard = ({
               weighted_average_out_of_11: 0,
               weighted_average_out_of_7_epcg: 0,
               weighted_average_out_of_7_aa: 0,
-              sub_parameter_weighted_average_AdjudicationData: 0, // New field for investigation
+              sub_parameter_weighted_average_AdjudicationData: 0,
+              weighted_average_out_of_12_investigation: 0,
+              weighted_average_out_of_6_cus_arrest_prosecution: 0,
+              weighted_average_out_of_5_cus_timelyrefunds: 0,
+              weighted_average_out_of_6_cus_unclaimed_cargo: 0,
+              weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
+              weighted_average_out_of_6_cus_recovery_of_arrears: 0,
+              weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
+              weighted_average_out_of_12_cus_audit : 0,
             });
           }
-          // Add the weighted average of Disposal/Pendency to the combined map
           combinedMap.get(zoneCode).weighted_average_out_of_11 += parseFloat(item.sub_parameter_weighted_average || 0);
         });
 
@@ -407,9 +551,17 @@ export const Dashboard = ({
               weighted_average_out_of_7_epcg: 0,
               weighted_average_out_of_7_aa: 0,
               sub_parameter_weighted_average_AdjudicationData: 0,
+              weighted_average_out_of_12_investigation: 0,
+              weighted_average_out_of_6_cus_arrest_prosecution: 0,
+              weighted_average_out_of_5_cus_timelyrefunds: 0,
+              weighted_average_out_of_6_cus_unclaimed_cargo: 0,
+              weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
+              weighted_average_out_of_6_cus_recovery_of_arrears: 0,
+              weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
+              weighted_average_out_of_12_cus_audit : 0,
             });
           }
-          // Ensure zone_name is not overwritten; it should retain the first encountered name
           const current = combinedMap.get(zoneCode);
           current.zone_name = current.zone_name || item.zone_name;
 
@@ -428,6 +580,15 @@ export const Dashboard = ({
               weighted_average_out_of_7_epcg: 0,
               weighted_average_out_of_7_aa: 0,
               sub_parameter_weighted_average_AdjudicationData: 0,
+              weighted_average_out_of_12_investigation: 0,
+              weighted_average_out_of_6_cus_arrest_prosecution: 0,
+              weighted_average_out_of_5_cus_timelyrefunds: 0,
+              weighted_average_out_of_6_cus_unclaimed_cargo: 0,
+              weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
+              weighted_average_out_of_6_cus_recovery_of_arrears: 0,
+              weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
+              weighted_average_out_of_12_cus_audit : 0,
             });
           }
           // Ensure zone_name is not overwritten; it should retain the first encountered name
@@ -448,7 +609,16 @@ export const Dashboard = ({
               weighted_average_out_of_11: 0,
               weighted_average_out_of_7_epcg: 0,
               weighted_average_out_of_7_aa: 0,
-              sub_parameter_weighted_average_AdjudicationData: 0, // New field for AdjudicationData
+              sub_parameter_weighted_average_AdjudicationData: 0,
+              weighted_average_out_of_12_investigation: 0,
+              weighted_average_out_of_6_cus_arrest_prosecution: 0,
+              weighted_average_out_of_5_cus_timelyrefunds: 0,
+              weighted_average_out_of_6_cus_unclaimed_cargo: 0,
+              weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
+              weighted_average_out_of_6_cus_recovery_of_arrears: 0,
+              weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
+              weighted_average_out_of_12_cus_audit : 0,
             });
           }
           // Ensure zone_name is not overwritten; it should retain the first encountered name
@@ -459,6 +629,270 @@ export const Dashboard = ({
           current.sub_parameter_weighted_average_AdjudicationData += parseFloat(item.sub_parameter_weighted_average || 0);
         });
 
+
+        Investiation_cus_Data.forEach((item) => {
+          const zoneCode = item.zone_code;
+          if (!combinedMap.has(zoneCode)) {
+            combinedMap.set(zoneCode, {
+              zone_code: zoneCode,
+              zone_name: item.zone_name,  // Store zone_name from AdjudicationData if not already set
+              weighted_average_out_of_11: 0,
+              weighted_average_out_of_7_epcg: 0,
+              weighted_average_out_of_7_aa: 0,
+              sub_parameter_weighted_average_AdjudicationData: 0,
+              weighted_average_out_of_12_investigation: 0,
+              weighted_average_out_of_6_cus_arrest_prosecution: 0,
+              weighted_average_out_of_5_cus_timelyrefunds: 0,
+              weighted_average_out_of_6_cus_unclaimed_cargo: 0,
+              weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
+              weighted_average_out_of_6_cus_recovery_of_arrears: 0,
+              weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
+              weighted_average_out_of_12_cus_audit : 0,
+            });
+          }
+          // Ensure zone_name is not overwritten; it should retain the first encountered name
+          const current = combinedMap.get(zoneCode);
+          current.zone_name = current.zone_name || item.zone_name;
+
+          // Add the investigation data directly without summing or modifying
+          current.weighted_average_out_of_12_investigation += parseFloat(item.sub_parameter_weighted_average || 0);
+        });
+
+        arrest_and_prosecution_cus_Data.forEach((item) => {
+          const zoneCode = item.zone_code;
+          if (!combinedMap.has(zoneCode)) {
+            combinedMap.set(zoneCode, {
+              zone_code: zoneCode,
+              zone_name: item.zone_name,  // Store zone_name from AdjudicationData if not already set
+              weighted_average_out_of_11: 0,
+              weighted_average_out_of_7_epcg: 0,
+              weighted_average_out_of_7_aa: 0,
+              sub_parameter_weighted_average_AdjudicationData: 0,
+              weighted_average_out_of_12_investigation: 0,
+              weighted_average_out_of_6_cus_arrest_prosecution: 0,
+              weighted_average_out_of_5_cus_timelyrefunds: 0,
+              weighted_average_out_of_6_cus_unclaimed_cargo: 0,
+              weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
+              weighted_average_out_of_6_cus_recovery_of_arrears: 0,
+              weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
+              weighted_average_out_of_12_cus_audit : 0,
+            });
+          }
+          // Ensure zone_name is not overwritten; it should retain the first encountered name
+          const current = combinedMap.get(zoneCode);
+          current.zone_name = current.zone_name || item.zone_name;
+
+          // Add the investigation data directly without summing or modifying
+          current.weighted_average_out_of_6_cus_arrest_prosecution += parseFloat(item.sub_parameter_weighted_average || 0);
+        });
+
+
+        timelyrefunds_cus_Data.forEach((item) => {
+          const zoneCode = item.zone_code;
+          if (!combinedMap.has(zoneCode)) {
+            combinedMap.set(zoneCode, {
+              zone_code: zoneCode,
+              zone_name: item.zone_name,  // Store zone_name from AdjudicationData if not already set
+              weighted_average_out_of_11: 0,
+              weighted_average_out_of_7_epcg: 0,
+              weighted_average_out_of_7_aa: 0,
+              sub_parameter_weighted_average_AdjudicationData: 0,
+              weighted_average_out_of_12_investigation: 0,
+              weighted_average_out_of_6_cus_arrest_prosecution: 0,
+              weighted_average_out_of_5_cus_timelyrefunds: 0,
+              weighted_average_out_of_6_cus_unclaimed_cargo: 0,
+              weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
+              weighted_average_out_of_6_cus_recovery_of_arrears: 0,
+              weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
+              weighted_average_out_of_12_cus_audit : 0,
+            });
+          }
+          // Ensure zone_name is not overwritten; it should retain the first encountered name
+          const current = combinedMap.get(zoneCode);
+          current.zone_name = current.zone_name || item.zone_name;
+
+          // Add the investigation data directly without summing or modifying
+          current.weighted_average_out_of_5_cus_timelyrefunds += parseFloat(item.sub_parameter_weighted_average || 0);
+        });
+
+        unclaimed_cargo_cus_Data.forEach((item) => {
+          const zoneCode = item.zone_code;
+          if (!combinedMap.has(zoneCode)) {
+            combinedMap.set(zoneCode, {
+              zone_code: zoneCode,
+              zone_name: item.zone_name,  // Store zone_name from AdjudicationData if not already set
+              weighted_average_out_of_11: 0,
+              weighted_average_out_of_7_epcg: 0,
+              weighted_average_out_of_7_aa: 0,
+              sub_parameter_weighted_average_AdjudicationData: 0,
+              weighted_average_out_of_12_investigation: 0,
+              weighted_average_out_of_6_cus_arrest_prosecution: 0,
+              weighted_average_out_of_5_cus_timelyrefunds: 0,
+              weighted_average_out_of_6_cus_unclaimed_cargo: 0,
+              weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
+              weighted_average_out_of_6_cus_recovery_of_arrears: 0,
+              weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
+              weighted_average_out_of_12_cus_audit : 0,
+            });
+          }
+          // Ensure zone_name is not overwritten; it should retain the first encountered name
+          const current = combinedMap.get(zoneCode);
+          current.zone_name = current.zone_name || item.zone_name;
+
+          // Add the investigation data directly without summing or modifying
+          current.weighted_average_out_of_6_cus_unclaimed_cargo += parseFloat(item.sub_parameter_weighted_average || 0);
+        });
+
+        DisposalOfConfiscatedGoldAndNDPS_cus_Data.forEach((item) => {
+          const zoneCode = item.zone_code;
+          if (!combinedMap.has(zoneCode)) {
+            combinedMap.set(zoneCode, {
+              zone_code: zoneCode,
+              zone_name: item.zone_name,  // Store zone_name from AdjudicationData if not already set
+              weighted_average_out_of_11: 0,
+              weighted_average_out_of_7_epcg: 0,
+              weighted_average_out_of_7_aa: 0,
+              sub_parameter_weighted_average_AdjudicationData: 0,
+              weighted_average_out_of_12_investigation: 0,
+              weighted_average_out_of_6_cus_arrest_prosecution: 0,
+              weighted_average_out_of_5_cus_timelyrefunds: 0,
+              weighted_average_out_of_6_cus_unclaimed_cargo: 0,
+              weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
+              weighted_average_out_of_6_cus_recovery_of_arrears: 0,
+              weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
+              weighted_average_out_of_12_cus_audit : 0,
+            });
+          }
+          // Ensure zone_name is not overwritten; it should retain the first encountered name
+          const current = combinedMap.get(zoneCode);
+          current.zone_name = current.zone_name || item.zone_name;
+
+          // Add the investigation data directly without summing or modifying
+          current.weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS += parseFloat(item.sub_parameter_weighted_average || 0);
+        });
+        
+        recovery_of_arrears_cus_Data.forEach((item) => {
+          const zoneCode = item.zone_code;
+          if (!combinedMap.has(zoneCode)) {
+            combinedMap.set(zoneCode, {
+              zone_code: zoneCode,
+              zone_name: item.zone_name,  // Store zone_name from AdjudicationData if not already set
+              weighted_average_out_of_11: 0,
+              weighted_average_out_of_7_epcg: 0,
+              weighted_average_out_of_7_aa: 0,
+              sub_parameter_weighted_average_AdjudicationData: 0,
+              weighted_average_out_of_12_investigation: 0,
+              weighted_average_out_of_6_cus_arrest_prosecution: 0,
+              weighted_average_out_of_5_cus_timelyrefunds: 0,
+              weighted_average_out_of_6_cus_unclaimed_cargo: 0,
+              weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
+              weighted_average_out_of_6_cus_recovery_of_arrears: 0,
+              weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
+              weighted_average_out_of_12_cus_audit : 0,
+            });
+          }
+          // Ensure zone_name is not overwritten; it should retain the first encountered name
+          const current = combinedMap.get(zoneCode);
+          current.zone_name = current.zone_name || item.zone_name;
+
+          // Add the investigation data directly without summing or modifying
+          current.weighted_average_out_of_6_cus_recovery_of_arrears += parseFloat(item.sub_parameter_weighted_average || 0);
+        });
+
+        management_of_warehousing_bonds_cus_Data.forEach((item) => {
+          const zoneCode = item.zone_code;
+          if (!combinedMap.has(zoneCode)) {
+            combinedMap.set(zoneCode, {
+              zone_code: zoneCode,
+              zone_name: item.zone_name,  // Store zone_name from AdjudicationData if not already set
+              weighted_average_out_of_11: 0,
+              weighted_average_out_of_7_epcg: 0,
+              weighted_average_out_of_7_aa: 0,
+              sub_parameter_weighted_average_AdjudicationData: 0,
+              weighted_average_out_of_12_investigation: 0,
+              weighted_average_out_of_6_cus_arrest_prosecution: 0,
+              weighted_average_out_of_5_cus_timelyrefunds: 0,
+              weighted_average_out_of_6_cus_unclaimed_cargo: 0,
+              weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
+              weighted_average_out_of_6_cus_recovery_of_arrears: 0,
+              weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
+              weighted_average_out_of_12_cus_audit : 0,
+              
+            });
+          }
+          // Ensure zone_name is not overwritten; it should retain the first encountered name
+          const current = combinedMap.get(zoneCode);
+          current.zone_name = current.zone_name || item.zone_name;
+
+          // Add the investigation data directly without summing or modifying
+          current.weighted_average_out_of_6_cus_management_of_warehousing_bonds += parseFloat(item.sub_parameter_weighted_average || 0);
+        });
+
+        CommissionerAppeals_cus_Data.forEach((item) => {
+          const zoneCode = item.zone_code;
+          if (!combinedMap.has(zoneCode)) {
+            combinedMap.set(zoneCode, {
+              zone_code: zoneCode,
+              zone_name: item.zone_name,  // Store zone_name from AdjudicationData if not already set
+              weighted_average_out_of_11: 0,
+              weighted_average_out_of_7_epcg: 0,
+              weighted_average_out_of_7_aa: 0,
+              sub_parameter_weighted_average_AdjudicationData: 0,
+              weighted_average_out_of_12_investigation: 0,
+              weighted_average_out_of_6_cus_arrest_prosecution: 0,
+              weighted_average_out_of_5_cus_timelyrefunds: 0,
+              weighted_average_out_of_6_cus_unclaimed_cargo: 0,
+              weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
+              weighted_average_out_of_6_cus_recovery_of_arrears: 0,
+              weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
+              weighted_average_out_of_12_cus_audit : 0,
+            });
+          }
+          // Ensure zone_name is not overwritten; it should retain the first encountered name
+          const current = combinedMap.get(zoneCode);
+          current.zone_name = current.zone_name || item.zone_name;
+
+          // Add the investigation data directly without summing or modifying
+          current.weighted_average_out_of_8_cus_CommissionerAppeals += parseFloat(item.sub_parameter_weighted_average || 0);
+        });
+        
+        audit_cus_Data.forEach((item) => {
+          const zoneCode = item.zone_code;
+          if (!combinedMap.has(zoneCode)) {
+            combinedMap.set(zoneCode, {
+              zone_code: zoneCode,
+              zone_name: item.zone_name,  // Store zone_name from AdjudicationData if not already set
+              weighted_average_out_of_11: 0,
+              weighted_average_out_of_7_epcg: 0,
+              weighted_average_out_of_7_aa: 0,
+              sub_parameter_weighted_average_AdjudicationData: 0,
+              weighted_average_out_of_12_investigation: 0,
+              weighted_average_out_of_6_cus_arrest_prosecution: 0,
+              weighted_average_out_of_5_cus_timelyrefunds: 0,
+              weighted_average_out_of_6_cus_unclaimed_cargo: 0,
+              weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
+              weighted_average_out_of_6_cus_recovery_of_arrears: 0,
+              weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
+              weighted_average_out_of_12_cus_audit : 0,
+            });
+          }
+          // Ensure zone_name is not overwritten; it should retain the first encountered name
+          const current = combinedMap.get(zoneCode);
+          current.zone_name = current.zone_name || item.zone_name;
+
+          // Add the investigation data directly without summing or modifying
+          current.weighted_average_out_of_12_cus_audit += parseFloat(item.sub_parameter_weighted_average || 0);
+        });
+
         // Convert the Map to an array for sorting
         return Array.from(combinedMap.values());
       };
@@ -466,10 +900,19 @@ export const Dashboard = ({
       const Data_Disposal_Pendency = responses_Disposal_Pendency.flatMap((response) => response.data.map((item) => ({ ...item })));
       const Data_epcg = responses_epcg.flatMap((response) => response.data.map((item) => ({ ...item })));
       const Data_aa = responses_aa.flatMap((response) => response.data.map((item) => ({ ...item })));
-      const Data_investigation = responses_Adjudication.flatMap((response) => response.data.map((item) => ({ ...item })));
+      const Data_Adjudication = responses_Adjudication.flatMap((response) => response.data.map((item) => ({ ...item })));
+      const Investiation_cus_Data = responses_cus_investigation.flatMap((response) => response.data.map((item) => ({ ...item })));
+      const arrest_and_prosecution_cus_Data = responses_cus_arrest_and_prosecution.flatMap((response) => response.data.map((item) => ({ ...item })));
+      const timelyrefunds_cus_Data = responses_cus_timelyrefunds.flatMap((response) => response.data.map((item) => ({ ...item })));
+      const unclaimed_cargo_cus_Data = responses_cus_unclaimed_cargo.flatMap((response) => response.data.map((item) => ({ ...item })));
+      const DisposalOfConfiscatedGoldAndNDPS_cus_Data = responses_cus_DisposalOfConfiscatedGoldAndNDPS.flatMap((response) => response.data.map((item) => ({ ...item })));
+      const recovery_of_arrears_cus_Data = responses_cus_recovery_of_arrears.flatMap((response) => response.data.map((item) => ({ ...item })));
+      const management_of_warehousing_bonds_cus_Data = responses_cus_management_of_warehousing_bonds.flatMap((response) => response.data.map((item) => ({ ...item })));
+      const CommissionerAppeals_cus_Data = responses_cus_CommissionerAppeals.flatMap((response) => response.data.map((item) => ({ ...item })));
+      const audit_cus_Data = responses_cus_audit.flatMap((response) => response.data.map((item) => ({ ...item })));
 
       // Combine and merge data
-      const mergedData = mergeDataByZone(Data_Disposal_Pendency, Data_epcg, Data_aa, Data_investigation);
+      const mergedData = mergeDataByZone(Data_Disposal_Pendency, Data_epcg, Data_aa, Data_Adjudication, Investiation_cus_Data, arrest_and_prosecution_cus_Data, timelyrefunds_cus_Data, unclaimed_cargo_cus_Data, DisposalOfConfiscatedGoldAndNDPS_cus_Data, recovery_of_arrears_cus_Data, management_of_warehousing_bonds_cus_Data, audit_cus_Data, CommissionerAppeals_cus_Data);
 
       // Final data mapping and adding totals
       const finalData = mergedData.map((item) => {
@@ -478,13 +921,31 @@ export const Dashboard = ({
         item.weighted_average_out_of_7_epcg = ((item.weighted_average_out_of_7_epcg * 7) / 10).toFixed(1);
         item.weighted_average_out_of_7_aa = ((item.weighted_average_out_of_7_aa * 7) / 10).toFixed(1);
         item.sub_parameter_weighted_average_AdjudicationData = parseFloat(item.sub_parameter_weighted_average_AdjudicationData).toFixed(1);
+        item.weighted_average_out_of_12_investigation = ((item.weighted_average_out_of_12_investigation * 12) / 10).toFixed(1);
+        item.weighted_average_out_of_6_cus_arrest_prosecution = ((item.weighted_average_out_of_6_cus_arrest_prosecution * 6) / 10).toFixed(1);
+        item.weighted_average_out_of_5_cus_timelyrefunds = ((item.weighted_average_out_of_5_cus_timelyrefunds)).toFixed(1);
+        item.weighted_average_out_of_6_cus_unclaimed_cargo = ((item.weighted_average_out_of_6_cus_unclaimed_cargo * 6 )/10).toFixed(1);
+        item.weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS = ((item.weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS * 6 )/10).toFixed(1);
+        item.weighted_average_out_of_6_cus_recovery_of_arrears = ((item.weighted_average_out_of_6_cus_recovery_of_arrears * 6 )/10).toFixed(1);
+        item.weighted_average_out_of_6_cus_management_of_warehousing_bonds = ((item.weighted_average_out_of_6_cus_management_of_warehousing_bonds * 6 )/10).toFixed(1);
+        item.weighted_average_out_of_8_cus_CommissionerAppeals = ((item.weighted_average_out_of_8_cus_CommissionerAppeals * 8 )/10).toFixed(1);
+        item.weighted_average_out_of_12_cus_audit = ((item.weighted_average_out_of_12_cus_audit * 12 )/10).toFixed(1);
 
         // Calculate the total weighted average by adding all weighted averages
         const total_weighted_average =
           parseFloat(item.weighted_average_out_of_11) +
           parseFloat(item.weighted_average_out_of_7_epcg) +
           parseFloat(item.weighted_average_out_of_7_aa) +
-          parseFloat(item.sub_parameter_weighted_average_AdjudicationData);
+          parseFloat(item.sub_parameter_weighted_average_AdjudicationData) +
+          parseFloat(item.weighted_average_out_of_12_investigation) +
+          parseFloat(item.weighted_average_out_of_6_cus_arrest_prosecution) +
+          parseFloat(item.weighted_average_out_of_5_cus_timelyrefunds) +
+          parseFloat(item.weighted_average_out_of_6_cus_unclaimed_cargo) +
+          parseFloat(item.weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS) +
+          parseFloat(item.weighted_average_out_of_6_cus_recovery_of_arrears) +
+          parseFloat(item.weighted_average_out_of_6_cus_management_of_warehousing_bonds)+
+          parseFloat(item.weighted_average_out_of_8_cus_CommissionerAppeals) +
+          parseFloat(item.weighted_average_out_of_12_cus_audit);
 
         // Add the total weighted average to the item
         item.total_weighted_average = total_weighted_average;
@@ -515,6 +976,33 @@ export const Dashboard = ({
       setDataAdjudicationData(
         sortedFinalData.filter((item) => item.sub_parameter_weighted_average_AdjudicationData > 0) // Filter only zones from Investigation
       );
+      setDatacusinvestigation(
+        sortedFinalData.filter((item) => item.weighted_average_out_of_12_investigation > 0) // Filter only zones from AA
+      );
+      setDatacusarrest_and_prosecution(
+        sortedFinalData.filter((item) => item.weighted_average_out_of_6_cus_arrest_prosecution > 0) // Filter only zones from AA
+      );
+      setDatacustimelyrefunds(
+        sortedFinalData.filter((item) => item.weighted_average_out_of_5_cus_timelyrefunds > 0) // Filter only zones from AA
+      );
+      setDatacusunclaimed_cargo(
+        sortedFinalData.filter((item) => item.weighted_average_out_of_6_cus_unclaimed_cargo > 0) // Filter only zones from AA
+      );
+      // setDatacus_DisposalOfConfiscatedGoldAndNDPS(
+      //   sortedFinalData.filter((item) => item.weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS > 0) // Filter only zones from AA
+      // );
+      // setDatacus_recovery_of_arrears(
+      //   sortedFinalData.filter((item) => item.weighted_average_out_of_6_cus_recovery_of_arrears > 0) // Filter only zones from AA
+      // );
+      // setDatacus_management_of_warehousing_bonds(
+      //   sortedFinalData.filter((item) => item.weighted_average_out_of_6_cus_management_of_warehousing_bonds > 0) // Filter only zones from AA
+      // );
+      // setDatacus_CommissionerAppeals(
+      //   sortedFinalData.filter((item) => item.weighted_average_out_of_8_cus_CommissionerAppeals > 0) // Filter only zones from AA
+      // );
+      // setDatacus_audit(
+      //   sortedFinalData.filter((item) => item.weighted_average_out_of_12_cus_audit > 0) // Filter only zones from AA
+      // );
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -1292,6 +1780,78 @@ export const Dashboard = ({
     );
   });
 
+  const rearrangedDatacusinvestigation = datascustom.map((zone) => {
+    return (
+      data_cus_investigation.find((item) => item.zone_code === zone.zone_code) || {
+        weighted_average_out_of_12_investigation: 0,
+      }
+    );
+  });
+
+  const rearrangedDatacusarrest_prosecution = datascustom.map((zone) => {
+    return (
+      data_cus_arrest_and_prosecution.find((item) => item.zone_code === zone.zone_code) || {
+        weighted_average_out_of_6_cus_arrest_prosecution: 0,
+      }
+    );
+  });
+
+  const rearrangedDatacustimelyrefunds = datascustom.map((zone) => {
+    return (
+      data_cus_timelyrefunds.find((item) => item.zone_code === zone.zone_code) || {
+        weighted_average_out_of_5_cus_timelyrefunds: 0,
+      }
+    );
+  });
+
+  const rearrangedDatacusunclaimed_cargo = datascustom.map((zone) => {
+    return (
+      data_cus_unclaimed_cargo.find((item) => item.zone_code === zone.zone_code) || {
+        weighted_average_out_of_6_cus_unclaimed_cargo: 0,
+      }
+    );
+  });
+
+  const rearrangedDatacus_DisposalOfConfiscatedGoldAndNDPS = datascustom.map((zone) => {
+    return (
+      data_cus_DisposalOfConfiscatedGoldAndNDPS.find((item) => item.zone_code === zone.zone_code) || {
+        weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
+      }
+    );
+  });
+
+  const rearrangedDatacus_recovery_of_arrears = datascustom.map((zone) => {
+    return (
+      data_cus_recovery_of_arrears.find((item) => item.zone_code === zone.zone_code) || {
+        weighted_average_out_of_6_cus_recovery_of_arrears: 0,
+      }
+    );
+  });
+
+  const rearrangedDatacus_management_of_warehousing_bonds = datascustom.map((zone) => {
+    return (
+      data_cus_management_of_warehousing_bonds.find((item) => item.zone_code === zone.zone_code) || {
+        weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
+      }
+    );
+  });
+
+  const rearrangedDatacus_CommissionerAppeals = datascustom.map((zone) => {
+    return (
+      data_cus_CommissionerAppeals.find((item) => item.zone_code === zone.zone_code) || {
+        weighted_average_out_of_8_cus_CommissionerAppeals: 0,
+      }
+    );
+  });
+
+  const rearrangedDatacus_cus_audit = datascustom.map((zone) => {
+    return (
+      data_cus_audit.find((item) => item.zone_code === zone.zone_code) || {
+        weighted_average_out_of_12_cus_audit: 0,
+      }
+    );
+  });
+
   const averageReturnFiling = 74.75;
 
   charts(FusionCharts);
@@ -1320,7 +1880,7 @@ export const Dashboard = ({
       legendbgalpha: "0",
       interactiveLegend: "0",
       plottooltext:
-        "<b>Zone Name-: $label</b>{br}Total Score: $value{br}Parameter:$seriesname",
+        "<b>Zone Name-: $label</b>{br}Weighted Average: $value{br}Parameter:$seriesname",
       theme: "zune",
       useRoundEdges: "1",
       drawAnchors: "0",
@@ -1479,7 +2039,7 @@ export const Dashboard = ({
       legendbgalpha: "0",
       interactiveLegend: "0",
       plottooltext:
-        "<b>Zone Name-: $label</b>{br}Total Score: $value{br}Parameter: $seriesname",
+        "<b>Zone Name-: $label</b>{br}Weighted Average: $value{br}Parameter: $seriesname",
       theme: "zune",
       useRoundEdges: "1",
       drawAnchors: "0",
@@ -1636,7 +2196,7 @@ export const Dashboard = ({
       legendbgalpha: "0",
       interactiveLegend: "0",
       plottooltext:
-        "<b>Zone Name-: $label</b>{br}Total Score: $value{br}Parameter:$seriesname",
+        "<b>Zone Name-: $label</b>{br}Weighted Average: $value{br}Parameter:$seriesname",
       theme: "zune",
       useRoundEdges: "1",
       drawAnchors: "0",
@@ -1645,9 +2205,10 @@ export const Dashboard = ({
       {
         category: datascustom
           .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
-          .slice(0, 5) // Get the top 5 zones based on weighted average
+          .slice(0, 5)
           .map((zone) => ({
             label: zone.zone_name,
+            //link: `/kolkata?zone_code=${zone.zone_code}`, // Add link if needed
           })),
       },
     ],
@@ -1656,39 +2217,181 @@ export const Dashboard = ({
         seriesname: "EPCG",
         data: rearrangedDataepcg
           .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
-          .slice(0, 5) // Get the top 5 EPCG zones
-          .map((item) => {
-            return { value: item.weighted_average_out_of_7_epcg, color: "00FF00" }; // Map EPCG data for chart
-          }),
+          .slice(0, 5)
+          .map((item, index) => ({
+            value: item.weighted_average_out_of_7_epcg,
+            color: "00FF00"
+          })),
       },
       {
         seriesname: "AA",
         data: rearrangedDataaa
           .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
-          .slice(0, 5) // Get the top 5 AA zones
-          .map((item) => {
-            return { value: item.weighted_average_out_of_7_aa, color: "00FF00" }; // Map EPCG data for chart
-          }),
+          .slice(0, 5)
+          .map((item, index) => ({
+            value: item.weighted_average_out_of_7_aa,
+            color: "00FF00"
+          })),
       },
       {
         seriesname: "Disposal/Pendency",
         data: rearrangedDataDisposal_Pendency
           .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
-          .slice(0, 5) // Get the top 5 Disposal/Pendency zones
-          .map((item) => {
-            return { value: item.weighted_average_out_of_11, color: "00FF00" }; // Map Disposal/Pendency data for chart
-          }),
+          .slice(0, 5)
+          .map((item, index) => ({
+            value: item.weighted_average_out_of_11,
+            color: "00FF00"
+          })),
       },
       {
         seriesname: "Adjudication",
         data: rearrangedDataAdjudication
           .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
-          .slice(0, 5) // Get the top 5 adjudication zones
-          .map((item) => {
-            return { value: item.sub_parameter_weighted_average_AdjudicationData, color: "00FF00" }; // Map Disposal/Pendency data for chart
-          }),
+          .slice(0, 5)
+          .map((item, index) => ({
+            value: item.sub_parameter_weighted_average_AdjudicationData,
+            color: "00FF00"
+          })),
+      },
+      {
+        seriesname: "Investisation",
+        data: rearrangedDatacusinvestigation
+          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+          .slice(0, 5)
+          .map((item, index) => ({
+            value: item.weighted_average_out_of_12_investigation,
+            color: "00FF00"
+          })),
+      }, 
+      {
+        seriesname: "Arrest & Prosecution",
+        data: rearrangedDatacusarrest_prosecution
+          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+          .slice(0, 5)
+          .map((item, index) => ({
+            value: item.weighted_average_out_of_6_cus_arrest_prosecution,
+            color: "00FF00"
+          })),
+      },
+      {
+        seriesname: "Timelyrefunds",
+        data: rearrangedDatacustimelyrefunds
+          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+          .slice(0, 5)
+          .map((item, index) => ({
+            value: item.weighted_average_out_of_5_cus_timelyrefunds,
+            color: "00FF00"
+          })),
+      },
+      {
+        seriesname: "Unclaimed cargo",
+        data: rearrangedDatacusunclaimed_cargo
+          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+          .slice(0, 5)
+          .map((item, index) => ({
+            value: item.weighted_average_out_of_6_cus_unclaimed_cargo,
+            color: "00FF00"
+          })),
+      },
+      {
+        seriesname: "Disposal Of Confiscated Gold & NDPS",
+        data: rearrangedDatacus_DisposalOfConfiscatedGoldAndNDPS
+          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+          .slice(0, 5)
+          .map((item, index) => ({
+            value: item.weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS,
+            color: "00FF00"
+          })),
+      },
+      {
+        seriesname: "Recovery of Arrears",
+        data: rearrangedDatacus_recovery_of_arrears
+          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+          .slice(0, 5)
+          .map((item, index) => ({
+            value: item.weighted_average_out_of_6_cus_recovery_of_arrears,
+            color: "00FF00"
+          })),
+      },
+      {
+        seriesname: "Management of Warehousing Bonds",
+        data: rearrangedDatacus_management_of_warehousing_bonds
+          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+          .slice(0, 5)
+          .map((item, index) => ({
+            value: item.weighted_average_out_of_6_cus_management_of_warehousing_bonds,
+            color: "00FF00"
+          })),
+      },
+      {
+        seriesname: "Commissioner Appeals",
+        data: rearrangedDatacus_CommissionerAppeals
+          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+          .slice(0, 5)
+          .map((item, index) => ({
+            value: item.weighted_average_out_of_8_cus_CommissionerAppeals,
+            color: "00FF00",
+          })),
+      },
+      {
+        seriesname: "Audit",
+        data: rearrangedDatacus_cus_audit
+          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+          .slice(0, 5)
+          .map((item, index) => ({
+            value: item.weighted_average_out_of_12_cus_audit,
+            color: "00FF00",
+          })),
       },
     ],
+    // categories: [
+    //   {
+    //     category: datascustom
+    //       .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+    //       .slice(0, 5) // Get the top 5 zones based on weighted average
+    //       .map((zone) => ({
+    //         label: zone.zone_name,
+    //       })),
+    //   },
+    // ],
+    // dataset: [
+    //   {
+    //     seriesname: "EPCG",
+    //     data: rearrangedDataepcg
+    //       .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+    //       .slice(0, 5) // Get the top 5 EPCG zones
+    //       .map((item) => {
+    //         return { value: item.weighted_average_out_of_7_epcg, color: "00FF00" }; // Map EPCG data for chart
+    //       }),
+    //   },
+    //   {
+    //     seriesname: "AA",
+    //     data: rearrangedDataaa
+    //       .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+    //       .slice(0, 5) // Get the top 5 AA zones
+    //       .map((item) => {
+    //         return { value: item.weighted_average_out_of_7_aa, color: "00FF00" }; // Map EPCG data for chart
+    //       }),
+    //   },
+    //   {
+    //     seriesname: "Disposal/Pendency",
+    //     data: rearrangedDataDisposal_Pendency
+    //       .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+    //       .slice(0, 5) // Get the top 5 Disposal/Pendency zones
+    //       .map((item) => {
+    //         return { value: item.weighted_average_out_of_11, color: "00FF00" }; // Map Disposal/Pendency data for chart
+    //       }),
+    //   },
+    //   {
+    //     seriesname: "Adjudication",
+    //     data: rearrangedDataAdjudication
+    //       .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+    //       .slice(0, 5) // Get the top 5 adjudication zones
+    //       .map((item) => {
+    //         return { value: item.sub_parameter_weighted_average_AdjudicationData, color: "00FF00" }; // Map Disposal/Pendency data for chart
+    //       }),
+    //   },
+    // ],
   };
 
   const dataSourcebottomcustom = {
@@ -1710,7 +2413,7 @@ export const Dashboard = ({
       legendbgalpha: "0",
       interactiveLegend: "0",
       plottooltext:
-        "<b>Zone Name-: $label</b>{br}Total Score: $value{br}Parameter: $seriesname",
+        "<b>Zone Name-: $label</b>{br}Weighted Average: $value{br}Parameter: $seriesname",
       theme: "zune",
       useRoundEdges: "1",
       drawAnchors: "0",
@@ -1754,7 +2457,7 @@ export const Dashboard = ({
           }),
       },
       {
-        seriesname: "AdjudicationData",
+        seriesname: "Adjudication",
         data: rearrangedDataAdjudication
           .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
           .slice(-5) // Bottom 5
@@ -1762,7 +2465,89 @@ export const Dashboard = ({
             return { value: item.sub_parameter_weighted_average_AdjudicationData, color: "FF0000" };
           }),
       },
+      {
+        seriesname: "Investisation",
+        data: rearrangedDatacusinvestigation
+          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+          .slice(-5) // Bottom 5
+          .map((item) => {
+            return { value: item.weighted_average_out_of_12_investigation, color: "FF0000" };
+          }),
+      },
+      {
+        seriesname: "Arrest & Prosecution",
+        data: rearrangedDatacusarrest_prosecution
+          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+          .slice(-5) // Bottom 5
+          .map((item) => {
+            return { value: item.weighted_average_out_of_6_cus_arrest_prosecution, color: "FF0000" };
+          }),
+      },
+      {
+        seriesname: "Timelyrefunds",
+        data: rearrangedDatacustimelyrefunds
+          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+          .slice(-5) // Bottom 5
+          .map((item) => {
+            return { value: item.weighted_average_out_of_5_cus_timelyrefunds, color: "FF0000" };
+          }),
+      },
+      {
+        seriesname: "Unclaimed cargo",
+        data: rearrangedDatacusunclaimed_cargo
+          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+          .slice(-5) // Bottom 5
+          .map((item) => {
+            return { value: item.weighted_average_out_of_6_cus_unclaimed_cargo, color: "FF0000" };
+          }),
+      },
+      {
+        seriesname: "Disposal Of Confiscated Gold & NDPS",
+        data: rearrangedDatacus_DisposalOfConfiscatedGoldAndNDPS
+          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+          .slice(-5) // Bottom 5
+          .map((item) => {
+            return { value: item.weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS, color: "FF0000" };
+          }),
+      },
+      {
+        seriesname: "Recovery of Arrears",
+        data: rearrangedDatacus_recovery_of_arrears
+          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+          .slice(-5) // Bottom 5
+          .map((item) => {
+            return { value: item.weighted_average_out_of_6_cus_recovery_of_arrears, color: "FF0000" };
+          }),
+      },
+      {
+        seriesname: "Management of Warehousing Bonds",
+        data: rearrangedDatacus_management_of_warehousing_bonds
+          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+          .slice(-5) // Bottom 5
+          .map((item) => {
+            return { value: item.weighted_average_out_of_6_cus_management_of_warehousing_bonds, color: "FF0000" };
+          }),
+      },
+      {
+        seriesname: "Commissioner Appeals",
+        data: rearrangedDatacus_CommissionerAppeals
+          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+          .slice(-5) // Bottom 5
+          .map((item) => {
+            return { value: item.weighted_average_out_of_8_cus_CommissionerAppeals, color: "FF0000" };
+          }),
+      },
+      {
+        seriesname: "Audit",
+        data: rearrangedDatacus_cus_audit
+          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+          .slice(-5) // Bottom 5
+          .map((item) => {
+            return { value: item.weighted_average_out_of_12_cus_audit, color: "FF0000" };
+          }),
+      },
     ],
+    
   };
 
   return (

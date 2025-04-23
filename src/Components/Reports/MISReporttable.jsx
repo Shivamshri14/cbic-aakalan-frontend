@@ -176,8 +176,7 @@ const MISReporttable = ({
         setData4(enhancedData4);
         setData5(enhancedData5);
         setData6(enhancedData6);
-      }
-      if (name === "investigation") {
+      } else if (name === "investigation") {
         const endpoints = ["gst4a", "gst4b", "gst4c", "gst4d"];
         const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
 
@@ -281,8 +280,7 @@ const MISReporttable = ({
         setData4(enhancedData4);
         setData5(enhancedData5);
         setData6(enhancedData6);
-      }
-      else if (name === "adjudication") {
+      } else if (name === "adjudication") {
         //Zone parameters API
         const responsei = await apiClient.get(`/cbic/t_score/adjudication`, {
           params: {
@@ -679,11 +677,7 @@ const MISReporttable = ({
         setData4(matchingdata4);
         setData5(matchingdata5);
         setData6(matchingdata6);
-      }
-
-
-
-      else if (name === "epcg") {
+      } else if (name === "epcg") {
         const endpoints = ["cus2a", "cus2b", "cus2c"];
         const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
 
@@ -891,447 +885,111 @@ const MISReporttable = ({
         setData4(enhancedData4);
         setData5(enhancedData5);
         setData6(enhancedData6);
-      }
+      } else if (name === "aa") {
+        const endpoints = ["cus3a", "cus3b", "cus3c"];
+        const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
 
-      else if (name === "aa") {
-        const endpoints = [
-          "cus3a",
-          "cus3b",
-          "cus3c"
-        ];
-
-
-        // Make API calls for both endpoints
-        const responses1 = await Promise.all(
-          endpoints.map((endpoint) =>
-            apiClient
-              .get(`/cbic/custom/${endpoint}`, {
-                params: { month_date: newdate, type: "zone" },
-              })
-              .then((response) => ({
-                data: response.data
-              }))
+        // Fetch data for all months and endpoints
+        const responses = await Promise.all(
+          months.map((month) =>
+            Promise.all(
+              endpoints.map((endpoint) =>
+                apiClient
+                  .get(`/cbic/custom/${endpoint}`, { params: { month_date: month, type: "zone" } })
+                  .then((response) => ({
+                    data: response.data,
+                    gst: endpoint.toUpperCase(),
+                  }))
+                  .catch((error) => {
+                    console.error(`❌ API error for ${endpoint} (${month}):`, error);
+                    return { data: [], gst: endpoint.toUpperCase() }; // Return empty data on failure
+                  })
+              )
+            )
           )
         );
 
-        const responses2 = await Promise.all(
-          endpoints.map((endpoint) =>
-            apiClient
-              .get(`/cbic/custom/${endpoint}`, {
-                params: { month_date: previousmonth1, type: "zone" },
-              })
-              .then((response) => ({
-                data: response.data
-              }))
-          )
-        );
+        // Stop loading when all data is received
+        setLoading(false);
 
-        const responses3 = await Promise.all(
-          endpoints.map((endpoint) =>
-            apiClient
-              .get(`/cbic/custom/${endpoint}`, {
-                params: { month_date: previousmonth2, type: "zone" },
-              })
-              .then((response) => ({
-                data: response.data
-              }))
-          )
-        );
+        // Function to process data
+        const processData = (responseData) => {
+          const allData = responseData.flatMap((response) =>
+            response.data.map((item) => ({ ...item, gst: response.gst }))
+          );
 
-        const responses4 = await Promise.all(
-          endpoints.map((endpoint) =>
-            apiClient
-              .get(`/cbic/custom/${endpoint}`, {
-                params: { month_date: previousmonth3, type: "zone" },
-              })
-              .then((response) => ({
-                data: response.data
-              }))
-          )
-        );
+          console.log("✅ FINAL RESPONSE", allData);
 
-        const responses5 = await Promise.all(
-          endpoints.map((endpoint) =>
-            apiClient
-              .get(`/cbic/custom/${endpoint}`, {
-                params: { month_date: previousmonth4, type: "zone" },
-              })
-              .then((response) => ({
-                data: response.data
-              }))
-          )
-        );
+          // Summing sub_parameter_weighted_average by zone_code
+          const summedByZone = allData.reduce((acc, item) => {
+            const zoneCode = item.zone_code;
+            const value = parseFloat(item.sub_parameter_weighted_average) || 0; // Convert to number, default 0
 
-        const responses6 = await Promise.all(
-          endpoints.map((endpoint) =>
-            apiClient
-              .get(`/cbic/custom/${endpoint}`, {
-                params: { month_date: previousmonth5, type: "zone" },
-              })
-              .then((response) => ({
-                data: response.data
-              }))
-          )
-        );
+            if (!acc[zoneCode]) {
+              acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
+            }
+            acc[zoneCode].sub_parameter_weighted_average += value;
 
-        console.log("response1", responses1);
-        console.log("response2", responses2);
-        console.log("response3", responses3);
-        console.log("response4", responses4);
-        console.log("response5", responses5);
-        console.log("response6", responses6);
+            return acc;
+          }, {});
 
-        if (responses1 && responses2 && responses3 && responses4 && responses5 && responses6) {
-          setLoading(false);
-        }
-
-        // Combine the responses from all endpoints into a single array
-        const allData1 = responses1.flatMap((response) =>
-          response.data.map((item) => ({ ...item, gst: response.gst }))
-        );
-        console.log("FINALRESPONSE1", allData1);
-
-        const summedByZone1 = allData1.reduce((acc, item) => {
-          const zoneCode = item.zone_code;
-          const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
-
-          // If zone_code is encountered for the first time, initialize it
-          if (!acc[zoneCode]) {
-            acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
-          }
-
-          // Sum only the sub_parameter_weighted_average for each zone_code
-          acc[zoneCode].sub_parameter_weighted_average += value;
-
-          return acc;
-        }, {});
-
-        const reducedAllData1 = Object.values(summedByZone1).map((item) => ({
-          ...item,
-          weighted_average:
-            item.sub_parameter_weighted_average.toFixed(2),
-        }));
-
-        console.log("Reduced All Data:", reducedAllData1);
-
-        const sorted1 = reducedAllData1.sort(
-          (a, b) =>
-            a.zone_code - b.zone_code
-        );
-        console.log("Sorted", sorted1);
-
-        const enhancedData1 = sorted1.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" }; // Top 5 entries
-          } else if (total < 7.5 && total >= 5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" }; // Bottom 5 entries
-          } else {
-            props = { color: "primary" }; // Remaining entries
-          }
-
-          return {
+          // Formatting and sorting data
+          const reducedAllData = Object.values(summedByZone).map((item) => ({
             ...item,
-            _cellProps: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
+            weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+          }));
 
-        const allData2 = responses2.flatMap((response) =>
-          response.data.map((item) => ({ ...item, gst: response.gst }))
-        );
-        console.log("FINALRESPONSE2", allData2);
+          console.log("✅ Reduced All Data:", reducedAllData);
 
-        const summedByZone2 = allData2.reduce((acc, item) => {
-          const zoneCode = item.zone_code;
-          const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
+          const sorted = reducedAllData.sort((a, b) => a.zone_code - b.zone_code);
 
-          // If zone_code is encountered for the first time, initialize it
-          if (!acc[zoneCode]) {
-            acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
-          }
+          // Apply coloring based on weighted_average
+          return sorted.map((item, index) => {
+            const total = item.sub_parameter_weighted_average;
+            let props = {};
 
-          // Sum only the sub_parameter_weighted_average for each zone_code
-          acc[zoneCode].sub_parameter_weighted_average += value;
+            if (total >= 7.5) {
+              props = { color: "success" }; // High performance
+            } else if (total >= 5) {
+              props = { color: "warning" };
+            } else if (total <= 2.5) {
+              props = { color: "danger" }; // Low performance
+            } else {
+              props = { color: "primary" }; // Normal
+            }
 
-          return acc;
-        }, {});
+            return {
+              ...item,
+              _cellProps: props,
+              s_no: index + 1,
+            };
+          });
+        };
 
-        const reducedAllData2 = Object.values(summedByZone2).map((item) => ({
-          ...item,
-          weighted_average:
-            item.sub_parameter_weighted_average.toFixed(2),
-        }));
+        // Process data for each month
+        const enhancedData1 = processData(responses[0]);
+        const enhancedData2 = processData(responses[1]);
+        const enhancedData3 = processData(responses[2]);
+        const enhancedData4 = processData(responses[3]);
+        const enhancedData5 = processData(responses[4]);
+        const enhancedData6 = processData(responses[5]);
 
-        console.log("Reduced All Data:", reducedAllData1);
+        // Debugging Logs
+        console.log("✅ Enhanced Data 1", enhancedData1);
+        console.log("✅ Enhanced Data 2", enhancedData2);
+        console.log("✅ Enhanced Data 3", enhancedData3);
+        console.log("✅ Enhanced Data 4", enhancedData4);
+        console.log("✅ Enhanced Data 5", enhancedData5);
+        console.log("✅ Enhanced Data 6", enhancedData6);
 
-        const sorted2 = reducedAllData2.sort(
-          (a, b) =>
-            a.zone_code - b.zone_code
-        );
-        console.log("Sorted", sorted1);
-
-        const enhancedData2 = sorted2.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" }; // Top 5 entries
-          } else if (total < 7.5 && total >= 5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" }; // Bottom 5 entries
-          } else {
-            props = { color: "primary" }; // Remaining entries
-          }
-
-          return {
-            ...item,
-            _cellProps: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const allData3 = responses3.flatMap((response) =>
-          response.data.map((item) => ({ ...item, gst: response.gst }))
-        );
-        console.log("FINALRESPONSE3", allData3);
-
-        const summedByZone3 = allData3.reduce((acc, item) => {
-          const zoneCode = item.zone_code;
-          const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
-
-          // If zone_code is encountered for the first time, initialize it
-          if (!acc[zoneCode]) {
-            acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
-          }
-
-          // Sum only the sub_parameter_weighted_average for each zone_code
-          acc[zoneCode].sub_parameter_weighted_average += value;
-
-          return acc;
-        }, {});
-
-        const reducedAllData3 = Object.values(summedByZone3).map((item) => ({
-          ...item,
-          weighted_average:
-            item.sub_parameter_weighted_average.toFixed(2),
-        }));
-
-        console.log("Reduced All Data:", reducedAllData3);
-
-        const sorted3 = reducedAllData3.sort(
-          (a, b) =>
-            a.zone_code - b.zone_code
-        );
-        console.log("Sorted", sorted3);
-
-        const enhancedData3 = sorted3.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" }; // Top 5 entries
-          } else if (total < 7.5 && total >= 5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" }; // Bottom 5 entries
-          } else {
-            props = { color: "primary" }; // Remaining entries
-          }
-
-          return {
-            ...item,
-            _cellProps: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const allData4 = responses4.flatMap((response) =>
-          response.data.map((item) => ({ ...item, gst: response.gst }))
-        );
-        console.log("FINALRESPONSE4", allData4);
-
-        const summedByZone4 = allData4.reduce((acc, item) => {
-          const zoneCode = item.zone_code;
-          const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
-
-          // If zone_code is encountered for the first time, initialize it
-          if (!acc[zoneCode]) {
-            acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
-          }
-
-          // Sum only the sub_parameter_weighted_average for each zone_code
-          acc[zoneCode].sub_parameter_weighted_average += value;
-
-          return acc;
-        }, {});
-
-        const reducedAllData4 = Object.values(summedByZone4).map((item) => ({
-          ...item,
-          weighted_average:
-            item.sub_parameter_weighted_average.toFixed(2),
-        }));
-
-        console.log("Reduced All Data:", reducedAllData1);
-
-        const sorted4 = reducedAllData4.sort(
-          (a, b) =>
-            a.zone_code - b.zone_code
-        );
-        console.log("Sorted", sorted4);
-
-        const enhancedData4 = sorted4.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" }; // Top 5 entries
-          } else if (total < 7.5 && total >= 5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" }; // Bottom 5 entries
-          } else {
-            props = { color: "primary" }; // Remaining entries
-          }
-
-          return {
-            ...item,
-            _cellProps: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const allData5 = responses5.flatMap((response) =>
-          response.data.map((item) => ({ ...item, gst: response.gst }))
-        );
-        console.log("FINALRESPONSE5", allData5);
-
-        const summedByZone5 = allData5.reduce((acc, item) => {
-          const zoneCode = item.zone_code;
-          const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
-
-          // If zone_code is encountered for the first time, initialize it
-          if (!acc[zoneCode]) {
-            acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
-          }
-
-          // Sum only the sub_parameter_weighted_average for each zone_code
-          acc[zoneCode].sub_parameter_weighted_average += value;
-
-          return acc;
-        }, {});
-
-        const reducedAllData5 = Object.values(summedByZone5).map((item) => ({
-          ...item,
-          weighted_average:
-            item.sub_parameter_weighted_average.toFixed(2),
-        }));
-
-        console.log("Reduced All Data:", reducedAllData5);
-
-        const sorted5 = reducedAllData5.sort(
-          (a, b) =>
-            a.zone_code - b.zone_code
-        );
-        console.log("Sorted", sorted1);
-
-        const enhancedData5 = sorted5.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" }; // Top 5 entries
-          } else if (total < 7.5 && total >= 5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" }; // Bottom 5 entries
-          } else {
-            props = { color: "primary" }; // Remaining entries
-          }
-
-          return {
-            ...item,
-            _cellProps: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const allData6 = responses6.flatMap((response) =>
-          response.data.map((item) => ({ ...item, gst: response.gst }))
-        );
-        console.log("FINALRESPONSE6", allData6);
-
-        const summedByZone6 = allData6.reduce((acc, item) => {
-          const zoneCode = item.zone_code;
-          const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
-
-          // If zone_code is encountered for the first time, initialize it
-          if (!acc[zoneCode]) {
-            acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
-          }
-
-          // Sum only the sub_parameter_weighted_average for each zone_code
-          acc[zoneCode].sub_parameter_weighted_average += value;
-
-          return acc;
-        }, {});
-
-        const reducedAllData6 = Object.values(summedByZone6).map((item) => ({
-          ...item,
-          weighted_average:
-            item.sub_parameter_weighted_average.toFixed(2),
-        }));
-
-        console.log("Reduced All Data:", reducedAllData6);
-
-        const sorted6 = reducedAllData6.sort(
-          (a, b) =>
-            a.zone_code - b.zone_code
-        );
-        console.log("Sorted", sorted6);
-
-        const enhancedData6 = sorted6.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" }; // Top 5 entries
-          } else if (total < 7.5 && total >= 5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" }; // Bottom 5 entries
-          } else {
-            props = { color: "primary" }; // Remaining entries
-          }
-
-          return {
-            ...item,
-            _cellProps: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        console.log("ed1", enhancedData1);
-        console.log("ed2", enhancedData2);
-        console.log("ed3", enhancedData3);
-        console.log("ed4", enhancedData4);
-        console.log("ed5", enhancedData5);
-        console.log("ed6", enhancedData6);
-
-        setData1(enhancedData6);
-        setData2(enhancedData5);
-        setData3(enhancedData4);
-        setData4(enhancedData3);
-        setData5(enhancedData2);
-        setData6(enhancedData1);
-
-      }
-      else if (name === "scrutiny") {
+        // Update state with the processed data
+        setData1(enhancedData1);
+        setData2(enhancedData2);
+        setData3(enhancedData3);
+        setData4(enhancedData4);
+        setData5(enhancedData5);
+        setData6(enhancedData6);
+      } else if (name === "scrutiny") {
         const endpoints = ["gst3a", "gst3b"];
         const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
 
@@ -1435,8 +1093,111 @@ const MISReporttable = ({
         setData4(enhancedData4);
         setData5(enhancedData5);
         setData6(enhancedData6);
-      }
-      else if (name === "recoveryOfArrears") {
+      } else if (name === "refunds") {
+        const endpoints = ["gst7"];
+        const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
+
+        // Fetch data for all months and endpoints
+        const responses = await Promise.all(
+          months.map((month) =>
+            Promise.all(
+              endpoints.map((endpoint) =>
+                apiClient
+                  .get(`/cbic/${endpoint}`, { params: { month_date: month, type: "zone" } })
+                  .then((response) => ({
+                    data: response.data,
+                    gst: endpoint.toUpperCase(),
+                  }))
+                  .catch((error) => {
+                    console.error(`❌ API error for ${endpoint} (${month}):`, error);
+                    return { data: [], gst: endpoint.toUpperCase() }; // Return empty data on failure
+                  })
+              )
+            )
+          )
+        );
+
+        // Stop loading when all data is received
+        setLoading(false);
+
+        // Function to process data
+        const processData = (responseData) => {
+          const allData = responseData.flatMap((response) =>
+            response.data.map((item) => ({ ...item, gst: response.gst }))
+          );
+
+          console.log("✅ FINAL RESPONSE", allData);
+
+          // Summing sub_parameter_weighted_average by zone_code
+          const summedByZone = allData.reduce((acc, item) => {
+            const zoneCode = item.zone_code;
+            const value = parseFloat(item.sub_parameter_weighted_average) || 0; // Convert to number, default 0
+
+            if (!acc[zoneCode]) {
+              acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
+            }
+            acc[zoneCode].sub_parameter_weighted_average += value;
+
+            return acc;
+          }, {});
+
+          // Formatting and sorting data
+          const reducedAllData = Object.values(summedByZone).map((item) => ({
+            ...item,
+            weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+          }));
+
+          console.log("✅ Reduced All Data:", reducedAllData);
+
+          const sorted = reducedAllData.sort((a, b) => a.zone_code - b.zone_code);
+
+          // Apply coloring based on weighted_average
+          return sorted.map((item, index) => {
+            const total = item.sub_parameter_weighted_average;
+            let props = {};
+
+            if (total >= 7.5) {
+              props = { color: "success" }; // High performance
+            } else if (total >= 5) {
+              props = { color: "warning" };
+            } else if (total <= 2.5) {
+              props = { color: "danger" }; // Low performance
+            } else {
+              props = { color: "primary" }; // Normal
+            }
+
+            return {
+              ...item,
+              _cellProps: props,
+              s_no: index + 1,
+            };
+          });
+        };
+
+        // Process data for each month
+        const enhancedData1 = processData(responses[0]);
+        const enhancedData2 = processData(responses[1]);
+        const enhancedData3 = processData(responses[2]);
+        const enhancedData4 = processData(responses[3]);
+        const enhancedData5 = processData(responses[4]);
+        const enhancedData6 = processData(responses[5]);
+
+        // Debugging Logs
+        console.log("✅ Enhanced Data 1", enhancedData1);
+        console.log("✅ Enhanced Data 2", enhancedData2);
+        console.log("✅ Enhanced Data 3", enhancedData3);
+        console.log("✅ Enhanced Data 4", enhancedData4);
+        console.log("✅ Enhanced Data 5", enhancedData5);
+        console.log("✅ Enhanced Data 6", enhancedData6);
+
+        // Update state with the processed data
+        setData1(enhancedData1);
+        setData2(enhancedData2);
+        setData3(enhancedData3);
+        setData4(enhancedData4);
+        setData5(enhancedData5);
+        setData6(enhancedData6);
+      } else if (name === "recoveryOfArrears") {
         const endpoints = ["gst8a", "gst8b"];
         const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
 
@@ -1540,8 +1301,7 @@ const MISReporttable = ({
         setData4(enhancedData4);
         setData5(enhancedData5);
         setData6(enhancedData6);
-      }
-      else if (name === "arrestAndProsecution") {
+      } else if (name === "arrestAndProsecution") {
         const endpoints = ["gst9a", "gst9b"];
         const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
 
@@ -1645,8 +1405,7 @@ const MISReporttable = ({
         setData4(enhancedData4);
         setData5(enhancedData5);
         setData6(enhancedData6);
-      }
-      else if (name === "audit") {
+      } else if (name === "audit") {
         const endpoints = ["gst10a", "gst10b", "gst10c"];
         const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
 
@@ -1750,9 +1509,7 @@ const MISReporttable = ({
         setData4(enhancedData4);
         setData5(enhancedData5);
         setData6(enhancedData6);
-      }
-
-      else if (name === "TimelyPaymentOfRefunds") {
+      } else if (name === "TimelyPaymentOfRefunds") {
         const responsei = await apiClient.get(
           `/cbic/custom/parameter/timelyrefunds`,
           {
@@ -1915,7 +1672,7 @@ const MISReporttable = ({
         );
 
         const enhancedData1 = sorted1.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
+          const total = item.way_to_grade;
 
 
 
@@ -1962,7 +1719,7 @@ const MISReporttable = ({
         // });
 
         const enhancedData2 = sorted2.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
+          const total = item.way_to_grade;
 
 
 
@@ -1985,7 +1742,7 @@ const MISReporttable = ({
         });
 
         const enhancedData3 = sorted3.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
+          const total = item.way_to_grade;
 
 
 
@@ -2008,7 +1765,7 @@ const MISReporttable = ({
         });
 
         const enhancedData4 = sorted4.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
+          const total = item.way_to_grade;
 
 
 
@@ -2031,7 +1788,7 @@ const MISReporttable = ({
         });
 
         const enhancedData5 = sorted5.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
+          const total = item.way_to_grade;
 
 
 
@@ -2054,7 +1811,7 @@ const MISReporttable = ({
         });
 
         const enhancedData6 = sorted6.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
+          const total = item.way_to_grade;
 
 
 
@@ -2345,18 +2102,19 @@ const MISReporttable = ({
         );
 
         const enhancedData1 = sorted1.map((item, index) => {
-          const total = item.totalScore;
+          const total = item.sub_parameter_weighted_average;
 
           let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" };
-          } else if (total >= 5 && total < 7.5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" };
+          if (total >= 7.5) {
+            props = { color: "success" }; // High performance
+          } else if (total >= 5) {
+            props = { color: "warning" }; // Normal performance
+          } else if (total <= 2.5) {
+            props = { color: "danger" }; // Low performance
           } else {
-            props = { color: "primary" };
+            props = { color: "primary" }; // Default (between 2.5 and 5)
           }
+
 
           return {
             ...item,
@@ -3133,7 +2891,7 @@ const MISReporttable = ({
         setData5(enhancedData5);
         setData6(enhancedData6);
       } else if (name === "cus_audit") {
-        const endpoints = ["cus13a", "cus13b","cus13c", "cus13d","cus13e"];
+        const endpoints = ["cus13a", "cus13b", "cus13c", "cus13d", "cus13e"];
         const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
 
         // Fetch data for all months and endpoints
@@ -3237,7 +2995,7 @@ const MISReporttable = ({
         setData5(enhancedData5);
         setData6(enhancedData6);
       }
-       else if (
+      else if (
         name === "CommissionerAppeals" ||
         name === "DisposalOfConfiscatedGoldAndNDPS"
       ) {
@@ -4475,7 +4233,7 @@ const MISReporttable = ({
     })
     .filter((item) => item !== null); // Remove null values
 
-  console.log(datacustom);
+  console.log("✅ Final Fixed datacustom:" , datacustom);
 
 
 
@@ -4610,10 +4368,10 @@ const MISReporttable = ({
               clickableRows={false}
               columns={columns}
               items={
-                name === "TimelyPaymentOfRefunds" ||
-                  name === "Adjudication" || name === "epcg" || name === "aa" || name ==="cus_investigation"||
-                  name === "DisposalOfConfiscatedGoldAndNDPS" || name ==="cus_arrestAndProsecution"|| name ==="unclaimed_cargo"||
-                  name === "CommissionerAppeals" || name ==="recovery_Of_Arrears" || name ==="mowb" || name ==="cus_audit"|| name ==="investigation"
+                name === "TimelyPaymentOfRefunds" || name === "disposalPendency" || name === "investigation" ||
+                  name === "Adjudication" || name === "epcg" || name === "aa" || name === "cus_investigation" ||
+                  name === "DisposalOfConfiscatedGoldAndNDPS" || name === "cus_arrestAndProsecution" || name === "unclaimed_cargo" ||
+                  name === "CommissionerAppeals" || name === "recovery_Of_Arrears" || name === "mowb" || name === "cus_audit"
                   ? datacustom
                   : data
               }

@@ -56,7 +56,7 @@ const MISReport = ({
     { id: 4, label: "Investigation", value: "investigation", },
     { id: 5, label: "Adjudication", value: "adjudication",},
     { id: 6, label: "Adjudication (Legacy cases)", value: "adjudicationLegacy" },
-    { id: 7, label: "Refunds", /*value: "refunds"*/color: "red" },
+    { id: 7, label: "Refunds", value: "refunds"  },
     { id: 8, label: "Recovery of Arrears",value: "recoveryOfArrears"},
     { id: 9, label: "Arrest and Prosecution", value:"arrestAndProsecution"},
     { id: 10, label: "Audit", value: "audit",},
@@ -66,9 +66,9 @@ const MISReport = ({
   const optionscustom = [
     { idc: 12, labelc: "Timely payment of Refunds", value: "TimelyPaymentOfRefunds" },
     { idc: 13, labelc: "Management of Export Obligation(EPCG)",value:"epcg", },
-    { idc: 14, labelc: "Management of Export Obligation(AA)",value:"aa", color:"red"},
-    { idc: 15, labelc: "Disposal/Pendency Of Provisional Assessments",/*value:"disposalPendency"*/ color:"red"},
-    { idc: 16, labelc: "Adjudication", value: "Adjudication" ,color:"red" },
+    { idc: 14, labelc: "Management of Export Obligation(AA)",value:"aa"},
+    { idc: 15, labelc: "Disposal/Pendency Of Provisional Assessments", value:"disposalPendency" },
+    { idc: 16, labelc: "Adjudication", value: "Adjudication" },
     { idc: 17, labelc: "Investigation", value:"cus_investigation",}, 
     { idc: 18, labelc: "Arrests and Prosecution", value: "cus_arrestAndProsecution", },
     { idc: 19, labelc: "Monitoring Of Un-cleared and Unclaimed cargo", value: "unclaimed_cargo", },
@@ -207,7 +207,7 @@ const MISReport = ({
                             onChange={() =>
                               handleCheckboxChange(option.id, option.value)
                             }
-                             disabled={option.id === 1 || option.id === 7}
+                             disabled={option.id === 1 /*|| option.id === 7*/}
                           />
                           <label
                             className="form-check-label"
