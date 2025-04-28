@@ -141,10 +141,10 @@ const CustomPara = ({
 
         const finalData = allData.map((item) => {
           item.sub_parameter_weighted_average = parseFloat(
-            item.sub_parameter_weighted_average.toFixed(1)
+            item.sub_parameter_weighted_average.toFixed(2)
           );
-          item.weighted_average_out_of_12 = ((item.sub_parameter_weighted_average * 12) / 10).toFixed(1);
-          item.total_score = parseFloat(item.total_score.toFixed(1));
+          item.weighted_average_out_of_12 = ((item.sub_parameter_weighted_average * 12) / 10).toFixed(2);
+          item.total_score = parseFloat(item.total_score.toFixed(2));
           return item;
         });
         console.log(
@@ -255,10 +255,10 @@ const CustomPara = ({
 
         const finalData = allData.map((item) => {
           item.sub_parameter_weighted_average = parseFloat(
-            item.sub_parameter_weighted_average.toFixed(1)
+            item.sub_parameter_weighted_average.toFixed(2)
           );
-          item.weighted_average_out_of_7 = ((item.sub_parameter_weighted_average * 7) / 10).toFixed(1);
-          item.total_score = parseFloat(item.total_score.toFixed(1));
+          item.weighted_average_out_of_7 = ((item.sub_parameter_weighted_average * 7) / 10).toFixed(2);
+          item.total_score = parseFloat(item.total_score.toFixed(2));
           return item;
         });
         console.log(
@@ -369,10 +369,10 @@ const CustomPara = ({
 
         const finalData = allData.map((item) => {
           item.sub_parameter_weighted_average = parseFloat(
-            item.sub_parameter_weighted_average.toFixed(1)
+            item.sub_parameter_weighted_average.toFixed(2)
           );
-          item.weighted_average_out_of_7 = ((item.sub_parameter_weighted_average * 7) / 10).toFixed(1);
-          item.total_score = parseFloat(item.total_score.toFixed(1));
+          item.weighted_average_out_of_7 = ((item.sub_parameter_weighted_average * 7) / 10).toFixed(2);
+          item.total_score = parseFloat(item.total_score.toFixed(2));
           return item;
         });
         console.log(
@@ -479,10 +479,10 @@ const CustomPara = ({
 
         const finalData = allData.map((item) => {
           item.sub_parameter_weighted_average = parseFloat(
-            item.sub_parameter_weighted_average.toFixed(1)
+            item.sub_parameter_weighted_average.toFixed(2)
           );
-          item.weighted_average_out_of_8 = ((item.sub_parameter_weighted_average * 8) / 10).toFixed(1);
-          item.total_score = parseFloat(item.total_score.toFixed(1));
+          item.weighted_average_out_of_8 = ((item.sub_parameter_weighted_average * 8) / 10).toFixed(2);
+          item.total_score = parseFloat(item.total_score.toFixed(2));
           return item;
         });
         console.log(
@@ -591,10 +591,10 @@ const CustomPara = ({
 
         const finalData = allData.map((item) => {
           item.sub_parameter_weighted_average = parseFloat(
-            item.sub_parameter_weighted_average.toFixed(1)
+            item.sub_parameter_weighted_average.toFixed(2)
           );
-          item.weighted_average_out_of_11 = ((item.sub_parameter_weighted_average * 11) / 10).toFixed(1);
-          item.total_score = parseFloat(item.total_score.toFixed(1));
+          item.weighted_average_out_of_11 = ((item.sub_parameter_weighted_average * 11) / 10).toFixed(2);
+          item.total_score = parseFloat(item.total_score.toFixed(2));
           return item;
         });
         console.log(
@@ -701,10 +701,10 @@ const CustomPara = ({
 
         const finalData = allData.map((item) => {
           item.sub_parameter_weighted_average = parseFloat(
-            item.sub_parameter_weighted_average.toFixed(1)
+            item.sub_parameter_weighted_average.toFixed(2)
           );
-          item.weighted_average_out_of_6 = ((item.sub_parameter_weighted_average * 6) / 10).toFixed(1);
-          item.total_score = parseFloat(item.total_score.toFixed(1));
+          item.weighted_average_out_of_6 = ((item.sub_parameter_weighted_average * 6) / 10).toFixed(2);
+          item.total_score = parseFloat(item.total_score.toFixed(2));
           return item;
         });
         console.log(
@@ -811,10 +811,10 @@ const CustomPara = ({
 
         const finalData = allData.map((item) => {
           item.sub_parameter_weighted_average = parseFloat(
-            item.sub_parameter_weighted_average.toFixed(1)
+            item.sub_parameter_weighted_average.toFixed(2)
           );
-          item.weighted_average_out_of_4 = ((item.sub_parameter_weighted_average * 4) / 10).toFixed(1);
-          item.total_score = parseFloat(item.total_score.toFixed(1));
+          item.weighted_average_out_of_4 = ((item.sub_parameter_weighted_average * 4) / 10).toFixed(2);
+          item.total_score = parseFloat(item.total_score.toFixed(2));
           return item;
         });
         console.log(
@@ -921,10 +921,10 @@ const CustomPara = ({
 
         const finalData = allData.map((item) => {
           item.sub_parameter_weighted_average = parseFloat(
-            item.sub_parameter_weighted_average.toFixed(1)
+            item.sub_parameter_weighted_average.toFixed(2)
           );
-          item.weighted_average_out_of_6 = ((item.sub_parameter_weighted_average * 6) / 10).toFixed(1);
-          item.total_score = parseFloat(item.total_score.toFixed(1));
+          item.weighted_average_out_of_6 = ((item.sub_parameter_weighted_average * 6) / 10).toFixed(2);
+          item.total_score = parseFloat(item.total_score.toFixed(2));
           return item;
         });
         console.log(
@@ -1031,10 +1031,10 @@ const CustomPara = ({
 
         const finalData = allData.map((item) => {
           item.sub_parameter_weighted_average = parseFloat(
-            item.sub_parameter_weighted_average.toFixed(1)
+            item.sub_parameter_weighted_average.toFixed(2)
           );
-          item.weighted_average_out_of_6 = ((item.sub_parameter_weighted_average * 6) / 10).toFixed(1);
-          item.total_score = parseFloat(item.total_score.toFixed(1));
+          item.weighted_average_out_of_6 = ((item.sub_parameter_weighted_average * 6) / 10).toFixed(2);
+          item.total_score = parseFloat(item.total_score.toFixed(2));
           return item;
         });
         console.log(
@@ -1144,10 +1144,10 @@ const CustomPara = ({
 
         const finalData = allData.map((item) => {
           item.sub_parameter_weighted_average = parseFloat(
-            item.sub_parameter_weighted_average.toFixed(1)
+            item.sub_parameter_weighted_average.toFixed(2)
           );
-          item.weighted_average_out_of_12 = ((item.sub_parameter_weighted_average * 12) / 10).toFixed(1);
-          item.total_score = parseFloat(item.total_score.toFixed(1));
+          item.weighted_average_out_of_12 = ((item.sub_parameter_weighted_average * 12) / 10).toFixed(2);
+          item.total_score = parseFloat(item.total_score.toFixed(2));
           return item;
         });
         console.log(
@@ -1254,10 +1254,10 @@ const CustomPara = ({
 
         const finalData = allData.map((item) => {
           item.sub_parameter_weighted_average = parseFloat(
-            item.sub_parameter_weighted_average.toFixed(1)
+            item.sub_parameter_weighted_average.toFixed(2)
           );
-          item.weighted_average_out_of_6 = ((item.sub_parameter_weighted_average * 6) / 10).toFixed(1);
-          item.total_score = parseFloat(item.total_score.toFixed(1));
+          item.weighted_average_out_of_6 = ((item.sub_parameter_weighted_average * 6) / 10).toFixed(2);
+          item.total_score = parseFloat(item.total_score.toFixed(2));
           return item;
         });
         console.log(

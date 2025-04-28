@@ -133,8 +133,12 @@ const Zoneparameters = ({
           return acc;
         }, {});
 
-        // Step 2: Convert the accumulated object to an array
-        const reducedAllData = Object.values(summedByZone);
+
+        const reducedAllData = Object.values(summedByZone).map((item) => ({
+          ...item,
+          sub_parameter_weighted_average:
+            item.sub_parameter_weighted_average.toFixed(2), // Format to 2 decimal places
+        }));
 
         console.log("Reduced All Data:", reducedAllData);
 
@@ -233,7 +237,7 @@ const Zoneparameters = ({
 
         const reducedAllData = Object.values(summedByZone).map((item) => ({
           ...item,
-          weighted_average_out_of_8: ((item.sub_parameter_weighted_average * 8) / 10).toFixed(1),
+          weighted_average_out_of_8: ((item.sub_parameter_weighted_average * 8) / 10).toFixed(2),
         }));
 
         console.log("Reduced All Data:", reducedAllData);
@@ -652,7 +656,7 @@ const Zoneparameters = ({
 
         const reducedAllData = Object.values(summedByZone).map((item) => ({
           ...item,
-          weighted_average_out_of_12: ((item.sub_parameter_weighted_average * 12) / 10).toFixed(1),
+          weighted_average_out_of_12: ((item.sub_parameter_weighted_average * 12) / 10).toFixed(2),
         }));
 
         console.log("Reduced All Data:", reducedAllData);
@@ -859,7 +863,7 @@ const Zoneparameters = ({
 
         const reducedAllData = Object.values(summedByZone).map((item) => ({
           ...item,
-          weighted_average_out_of_6: ((item.sub_parameter_weighted_average * 6) / 10).toFixed(1),
+          weighted_average_out_of_6: ((item.sub_parameter_weighted_average * 6) / 10).toFixed(2),
         }));
 
         console.log("Reduced All Data:", reducedAllData);
@@ -1207,29 +1211,29 @@ const Zoneparameters = ({
           }
         }
 
-        if (name === "adjudication") {
-          const sorted2 = response.data.sort(
-            (a, b) => b.totalScore - a.totalScore
-          );
+        // if (name === "adjudication") {
+        //   const sorted2 = response.data.sort(
+        //     (a, b) => b.totalScore - a.totalScore
+        //   );
 
-          if (sorted2.length <= 5) {
-            const topfive1 = sorted2;
-            const bottomfive1 = 0;
-            setBarData([...topfive1, ...bottomfive1]);
-          } else if (sorted2.length > 5 && sorted2.length < 10) {
-            const topfive1 = sorted2.slice(0, 5);
-            const bottomfive1 = sorted2.slice(5);
-            setBarData([...topfive1, ...bottomfive1]);
-          } else {
-            const topfive1 = sorted2.slice(0, 5);
-            const bottomfive1 = sorted2.slice(-5);
-            setBarData([...topfive1, ...bottomfive1]);
-          }
+        //   if (sorted2.length <= 5) {
+        //     const topfive1 = sorted2;
+        //     const bottomfive1 = 0;
+        //     setBarData([...topfive1, ...bottomfive1]);
+        //   } else if (sorted2.length > 5 && sorted2.length < 10) {
+        //     const topfive1 = sorted2.slice(0, 5);
+        //     const bottomfive1 = sorted2.slice(5);
+        //     setBarData([...topfive1, ...bottomfive1]);
+        //   } else {
+        //     const topfive1 = sorted2.slice(0, 5);
+        //     const bottomfive1 = sorted2.slice(-5);
+        //     setBarData([...topfive1, ...bottomfive1]);
+        //   }
 
-          const topfive2 = sorted2.slice(0, 5);
-          const bottomfive2 = sorted2.slice(-5);
-          setBarData([...topfive2, ...bottomfive2]);
-        }
+        //   const topfive2 = sorted2.slice(0, 5);
+        //   const bottomfive2 = sorted2.slice(-5);
+        //   setBarData([...topfive2, ...bottomfive2]);
+        // }
 
         if (name === "adjudication(legacy cases)" || name === "appeals") {
           const sorted3 = response.data.sort(
@@ -2808,7 +2812,7 @@ const Zoneparameters = ({
       name === "refunds" || name === "returnFiling"
         ? bardata.map((item) => item.way_to_grade)
         : name === "adjudication" 
-          ? bardata.map((item) => item.sub_parameter_weighted_average)
+          ? bardata.map((item) => item.totalScore)
           : bardata.map((item) => item.sub_parameter_weighted_average);
   
     const colors = color.slice(0, 5);
@@ -2856,7 +2860,7 @@ const Zoneparameters = ({
       name === "refunds" || name === "returnFiling"
         ? bardata.map((item) => item.way_to_grade)
         : name === "adjudication" 
-          ? bardata.map((item) => item.sub_parameter_weighted_average)
+          ? bardata.map((item) => item.totalScore)
           : bardata.map((item) => item.sub_parameter_weighted_average);
   
     const colors = color.slice(-5);

@@ -168,7 +168,9 @@ const Subcom = ({ selectedDate, onChangeDate }) => {
       key:'sub_parameter_weighted_average',
      label:'Weighted Average(out of 1)',
     });
-  } else if (name === "gst1b") {
+  } 
+  
+  else if (name === "gst1b") {
     columns.splice(3, 0, {
       key: "absolutevale",
       label: "PV not completed ( in 30 days ) /Applications marked for PV",
@@ -1573,6 +1575,228 @@ const Subcom = ({ selectedDate, onChangeDate }) => {
                 </div>
               )}
             </div>
+            {/* <div className="box-main bg-blue">
+  {name === "gst3a" || name === "gst3b" || name === "gst6a" || name === "gst6b" || name === "gst6c" || name === "gst6d"
+    || name === "gst1a" || name === "gst1b" || name === "gst1c" || name === "gst1d" || name === "gst1e" || name === "gst1f"
+    || name === "gst2" || name === "gst4a" || name === "gst4b" || name === "gst4c" || name === "gst4d" || name === "gst5a"
+    || name === "gst5b" || name === "gst7" || name === "gst8a" || name === "gst8b" || name === "gst9a" || name === "gst9b" || name === "gst11a"
+    || name === "gst11b" || name === "gst11c" || name === "gst11d" || name === "gst10a" || name === "gst10b" || name === "gst10c"
+    ? (
+      <div className="row custom-tb mb col">
+        <div className="container mt-2">
+          <div className="card">
+            <div className="card-header">
+              {name === "gst3a" ? <strong>Scrutiny Completed/Pending</strong> : name === "gst3b" ?
+                <strong>% Recovery/Detection</strong> : <strong>{data.map(item => item.zone_name)[0]}</strong>}
+            </div>
+            <div className="card-body">
+              <div id="chart">
+                <div className="responsive-chart main-chart">
+                  <ReactFusioncharts
+                    type="column3d"
+                    width="100%"
+                    height="500"
+                    dataFormat="JSON"
+                    dataSource={top5}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="export-btn">
+          <button
+            onClick={exportToXLS}
+            className="btn btn-primary m-3"
+          >
+            Export XLS
+          </button>
+        </div>
+
+        <CSmartTable
+          activePage={3}
+          cleaner
+          clickableRows={false}
+          columns={columns}
+          columnSorter
+          items={data}
+          itemsPerPage={10}
+          pagination
+          onRowClick={onRowClick}
+          onFilteredItemsChange={(items) => {
+            console.log(items);
+          }}
+          onSelectedItemsChange={(items) => {
+            console.log(items);
+          }}
+          scopedColumns={{
+            avatar: (item) => (
+              <td>
+                <CAvatar src={`/images/avatars/${item.avatar}`} />
+              </td>
+            ),
+            status: (item) => (
+              <td>
+                <CBadge color={getBadge(item.status)}>
+                  {item.status}
+                </CBadge>
+              </td>
+            ),
+            absolutevale: (item) => (
+              <td style={{
+                backgroundColor: item.absolutevale === "0/0" ? "#f8d7da" : "transparent", // Light red background
+                color: item.absolutevale === "0/0" ? "black" : "black" // Text color remains black
+              }}>
+                {item.absolutevale}
+              </td>
+            ),
+            show_details: (item) => {
+              return (
+                <td className="py-2">
+                  <CButton
+                    color="primary"
+                    variant="outline"
+                    shape="square"
+                    size="sm"
+                    onClick={() => {
+                      toggleDetails(item.id);
+                    }}
+                  >
+                    {details.includes(item.id) ? "Hide" : "Show"}
+                  </CButton>
+                </td>
+              );
+            },
+            details: (item) => {
+              return (
+                <CCollapse visible={details.includes(item.id)}>
+                  <CCardBody className="p-3">
+                    <h4>{item.username}</h4>
+                    <p className="text-muted">
+                      User since: {item.registered}
+                    </p>
+                    <CButton size="sm" color="info">
+                      User Settings
+                    </CButton>
+                    <CButton
+                      size="sm"
+                      color="danger"
+                      className="ml-1"
+                    >
+                      Delete
+                    </CButton>
+                  </CCardBody>
+                </CCollapse>
+              );
+            },
+          }}
+          sorterValue={{ column: "status", state: "asc" }}
+          tableFilter
+          tableProps={{
+            className: "add-this-class",
+            responsive: true,
+            hover: true,
+            align: "middle",
+            border: "primary",
+          }}
+          onKeyDown={(e) => checkSpecialChar(e)}
+        />
+      </div>
+    ) : (
+      <div className="row custom-tb mb">
+        <div className="export-btn">
+          <button
+            onClick={exportToXLS}
+            className="btn btn-primary m-3"
+          >
+            Export XLS
+          </button>
+        </div>
+
+        <CSmartTable
+          activePage={3}
+          cleaner
+          clickableRows={false}
+          columns={columns}
+          columnSorter
+          items={data}
+          itemsPerPage={10}
+          pagination
+          onRowClick={onRowClick}
+          onFilteredItemsChange={(items) => {
+            console.log(items);
+          }}
+          onSelectedItemsChange={(items) => {
+            console.log(items);
+          }}
+          scopedColumns={{
+            avatar: (item) => (
+              <td>
+                <CAvatar src={`/images/avatars/${item.avatar}`} />
+              </td>
+            ),
+            status: (item) => (
+              <td>
+                <CBadge color={getBadge(item.status)}>
+                  {item.status}
+                </CBadge>
+              </td>
+            ),
+            show_details: (item) => {
+              return (
+                <td className="py-2">
+                  <CButton
+                    color="primary"
+                    variant="outline"
+                    shape="square"
+                    size="sm"
+                    onClick={() => {
+                      toggleDetails(item.id);
+                    }}
+                  >
+                    {details.includes(item.id) ? "Hide" : "Show"}
+                  </CButton>
+                </td>
+              );
+            },
+            details: (item) => {
+              return (
+                <CCollapse visible={details.includes(item.id)}>
+                  <CCardBody className="p-3">
+                    <h4>{item.username}</h4>
+                    <p className="text-muted">
+                      User since: {item.registered}
+                    </p>
+                    <CButton size="sm" color="info">
+                      User Settings
+                    </CButton>
+                    <CButton
+                      size="sm"
+                      color="danger"
+                      className="ml-1"
+                    >
+                      Delete
+                    </CButton>
+                  </CCardBody>
+                </CCollapse>
+              );
+            },
+          }}
+          sorterValue={{ column: "status", state: "asc" }}
+          tableFilter
+          tableProps={{
+            className: "add-this-class",
+            responsive: true,
+            hover: true,
+            align: "middle",
+            border: "primary",
+          }}
+          onKeyDown={(e) => checkSpecialChar(e)}
+        />
+      </div>
+    )}
+            </div> */}
+
             {/* <div className="row">
             <div className="view-btn">
               <Button variant="contained" className="ml-4" onClick={handleBack}>

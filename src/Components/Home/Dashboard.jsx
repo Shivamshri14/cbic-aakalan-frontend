@@ -914,8 +914,12 @@ export const Dashboard = ({
       // Combine and merge data
       const mergedData = mergeDataByZone(Data_Disposal_Pendency, Data_epcg, Data_aa, Data_Adjudication, Investiation_cus_Data, arrest_and_prosecution_cus_Data, timelyrefunds_cus_Data, unclaimed_cargo_cus_Data, DisposalOfConfiscatedGoldAndNDPS_cus_Data, recovery_of_arrears_cus_Data, management_of_warehousing_bonds_cus_Data, audit_cus_Data, CommissionerAppeals_cus_Data);
 
+      const filteredData = mergedData.filter((item) =>
+        !["DG NORTH", "DG WEST", "DG EAST", "DG SOUTH", "DG (HQ)", "DRI DG"].includes(item.zone_name)
+      );
+
       // Final data mapping and adding totals
-      const finalData = mergedData.map((item) => {
+      const finalData = filteredData.map((item) => {
         // Format the fields
         item.weighted_average_out_of_11 = ((item.weighted_average_out_of_11 * 11) / 10).toFixed(1);
         item.weighted_average_out_of_7_epcg = ((item.weighted_average_out_of_7_epcg * 7) / 10).toFixed(1);
@@ -988,21 +992,21 @@ export const Dashboard = ({
       setDatacusunclaimed_cargo(
         sortedFinalData.filter((item) => item.weighted_average_out_of_6_cus_unclaimed_cargo > 0) // Filter only zones from AA
       );
-      // setDatacus_DisposalOfConfiscatedGoldAndNDPS(
-      //   sortedFinalData.filter((item) => item.weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS > 0) // Filter only zones from AA
-      // );
-      // setDatacus_recovery_of_arrears(
-      //   sortedFinalData.filter((item) => item.weighted_average_out_of_6_cus_recovery_of_arrears > 0) // Filter only zones from AA
-      // );
-      // setDatacus_management_of_warehousing_bonds(
-      //   sortedFinalData.filter((item) => item.weighted_average_out_of_6_cus_management_of_warehousing_bonds > 0) // Filter only zones from AA
-      // );
-      // setDatacus_CommissionerAppeals(
-      //   sortedFinalData.filter((item) => item.weighted_average_out_of_8_cus_CommissionerAppeals > 0) // Filter only zones from AA
-      // );
-      // setDatacus_audit(
-      //   sortedFinalData.filter((item) => item.weighted_average_out_of_12_cus_audit > 0) // Filter only zones from AA
-      // );
+      setDatacus_DisposalOfConfiscatedGoldAndNDPS(
+        sortedFinalData.filter((item) => item.weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS > 0) // Filter only zones from AA
+      );
+      setDatacus_recovery_of_arrears(
+        sortedFinalData.filter((item) => item.weighted_average_out_of_6_cus_recovery_of_arrears > 0) // Filter only zones from AA
+      );
+      setDatacus_management_of_warehousing_bonds(
+        sortedFinalData.filter((item) => item.weighted_average_out_of_6_cus_management_of_warehousing_bonds > 0) // Filter only zones from AA
+      );
+      setDatacus_CommissionerAppeals(
+        sortedFinalData.filter((item) => item.weighted_average_out_of_8_cus_CommissionerAppeals > 0) // Filter only zones from AA
+      );
+      setDatacus_audit(
+        sortedFinalData.filter((item) => item.weighted_average_out_of_12_cus_audit > 0) // Filter only zones from AA
+      );
     } catch (error) {
       console.error("Error fetching data:", error);
     }

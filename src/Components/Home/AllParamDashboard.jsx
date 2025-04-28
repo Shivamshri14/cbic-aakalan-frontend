@@ -5,7 +5,7 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./allparamdashboard.scss";
-// import './Registration/Zoneregistration.scss'
+//import './Registration/Zoneregistration.scss'
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -118,8 +118,8 @@ const AllParamDashboard = ({
                     renderInput={(params) => <TextField {...params} />}
                     shouldDisableYear={shouldDisableYear}
                     slotProps={{
-                      field:{
-                        readOnly:true
+                      field: {
+                        readOnly: true
                       }
                     }}
                   />
@@ -194,12 +194,12 @@ const AllParamDashboard = ({
                   <div className="card-body pb-0 d-flex justify-content-between align-items-start g1">
                     <div className="g1-box">
                       <div className="fs-4 fw-semibold text-danger">
-                     {/* <Link
-                      to="/zoneparameters?name=registration"
-                      className="text-white sub-h"
-                    >  */}
-                        Registration
-                      {/* </Link>{" "} */}
+                        {/* <Link
+                          to="/zoneparameters?name=registration"
+                          className="text-white sub-h"
+                        > */}
+                          Registration
+                          {/* </Link>{" "} */}
                       </div>
                       <ol className="par-list">
                         <li className="text-white">
@@ -208,9 +208,9 @@ const AllParamDashboard = ({
                             placement="right"
                             arrow
                           >
-                             <Link to="/Subpara?name=gst1a" className="text-white sub-h">  Application
-                            cleared within 7 days
-                            </Link> 
+                            <Link to="/Subpara?name=gst1a" className="text-white sub-h">  Application
+                              cleared within 7 days
+                            </Link>
                           </Tooltip>
                         </li>
                         <li className="text-white">
@@ -219,10 +219,10 @@ const AllParamDashboard = ({
                             placement="right"
                             arrow
                           >
-                             <Link to="/Subpara?name=gst1b" className="text-white sub-h">
-                            Pendency of
-                            PV
-                            </Link> 
+                            <Link to="/Subpara?name=gst1b" className="text-white sub-h">
+                              Pendency of
+                              PV
+                            </Link>
                           </Tooltip>
                         </li>
                         <li className="text-white">
@@ -231,10 +231,10 @@ const AllParamDashboard = ({
                             placement="right"
                             arrow
                           >
-                        <Link
+                            <Link
                               to="/Subpara?name=gst1c"
                               className="text-white sub-h"
-                            > 
+                            >
                               Deemed Registration{" "}
                             </Link>
                           </Tooltip>
@@ -248,10 +248,10 @@ const AllParamDashboard = ({
                             <Link
                               to="/Subpara?name=gst1d"
                               className="text-white sub-h"
-                            > 
+                            >
                               {" "}
                               Registration application pending
-                             </Link> 
+                            </Link>
                           </Tooltip>
                         </li>
                         <li>
@@ -336,7 +336,7 @@ const AllParamDashboard = ({
                             arrow
                           >
                             <Link to="/Subpara?name=gst2" className="text-white sub-h">
-                            {/* <Link
+                              {/* <Link
                               to="/zoneparameters?name=returnFiling"
                               className="text-white sub-h"
                             > */}
@@ -381,12 +381,12 @@ const AllParamDashboard = ({
                     <div>
                       <div className="fs-4 fw-semibold text-white">
                         {" "}
-                      <Link
+                        <Link
                           to="/zoneparameters?name=scrutiny/assessment"
                           className="text-white sub-h"
-                        > 
+                        >
                           Scrutiny & Assessment
-                       </Link>{" "} 
+                        </Link>{" "}
                       </div>
                       <ol className="par-list">
                         <li className="text-white">
@@ -395,12 +395,12 @@ const AllParamDashboard = ({
                             placement="right"
                             arrow
                           >
-                             <Link
+                            <Link
                               to="/Subpara?name=gst3a"
                               className="text-white sub-h"
-                            > 
+                            >
                               Scrutiny Completed/Return pending
-                             </Link> 
+                            </Link>
                           </Tooltip>
                         </li>
                         <li className="text-white">
@@ -412,9 +412,9 @@ const AllParamDashboard = ({
                             <Link
                               to="/Subpara?name=gst3b"
                               className="text-white sub-h"
-                            > 
+                            >
                               Recoveries/Detection
-                            </Link> 
+                            </Link>
                           </Tooltip>
                         </li>
                       </ol>
@@ -454,12 +454,12 @@ const AllParamDashboard = ({
                     <div>
                       <div className="fs-4 fw-semibold text-white">
                         {" "}
-                     <Link
-                      to="/zoneparameters?name=investigation"
-                      className="text-white sub-h"
-                    > 
-                        Investigation
-                     </Link>{" "}
+                        <Link
+                          to="/zoneparameters?name=investigation"
+                          className="text-white sub-h"
+                        >
+                          Investigation
+                        </Link>{" "}
                       </div>
                       <ol className="par-list b-4">
                         <li className="text-white">
@@ -468,12 +468,12 @@ const AllParamDashboard = ({
                             placement="right"
                             arrow
                           >
-                             <Link
+                            <Link
                               to="/Subpara?name=gst4a"
                               className="text-white sub-h"
-                            > 
+                            >
                               Investigation completed
-                            </Link> 
+                            </Link>
                           </Tooltip>
                         </li>
                         <li className="text-white">
@@ -482,10 +482,10 @@ const AllParamDashboard = ({
                             placement="right"
                             arrow
                           >
-                          <Link to="/Subpara?name=gst4b" className="text-white sub-h">  
-                            Pending &gt;
-                            1year
-                            </Link> 
+                            <Link to="/Subpara?name=gst4b" className="text-white sub-h">
+                              Pending &gt;
+                              1year
+                            </Link>
                           </Tooltip>
                         </li>
                         <li>
@@ -586,14 +586,14 @@ const AllParamDashboard = ({
                             placement="right"
                             arrow
                           ><>
-                          </>
+                            </>
                             <Link
                               to="/Subpara?name=gst5b"
                               className="text-white sub-h"
                             >
                               Time left for adjudication &lt; 6 months
                             </Link>
-                            
+
                           </Tooltip>
                         </li>
                       </ol>
@@ -635,7 +635,7 @@ const AllParamDashboard = ({
                         <Link
                           to="/zoneparameters?name=adjudication(legacy cases)"
                           className="text-white sub-h"
-                        > 
+                        >
                           Adjudication(legacy cases)
                         </Link>
                       </div>
@@ -796,11 +796,11 @@ const AllParamDashboard = ({
                       <div className="fs-4 fw-semibold text-danger">
                         {""}{" "}
                         <Link
-                      to="/zoneparameters?name=recovery_of_arrears"
-                      className="text-white sub-h"
-                    > 
-                        Recovery of Arrears
-                        </Link> 
+                          to="/zoneparameters?name=recovery_of_arrears"
+                          className="text-white sub-h"
+                        >
+                          Recovery of Arrears
+                        </Link>
                         {""}
                       </div>
                       <ol className="par-list">
@@ -811,9 +811,9 @@ const AllParamDashboard = ({
                             arrow
                           >
                             <Link to="/Subpara?name=gst8a" className="text-white sub-h">
-                            Recovery of
-                            recoverable arrears
-                             </Link>  
+                              Recovery of
+                              recoverable arrears
+                            </Link>
                           </Tooltip>
                         </li>
                         <li className="text-white">
@@ -822,12 +822,12 @@ const AllParamDashboard = ({
                             placement="right"
                             arrow
                           >
-                             <Link
+                            <Link
                               to="/Subpara?name=gst8b"
                               className="text-white sub-h"
-                            > 
+                            >
                               Arrears pending &gt; 1 year
-                            </Link> 
+                            </Link>
                           </Tooltip>
                         </li>
                       </ol>
@@ -870,12 +870,12 @@ const AllParamDashboard = ({
                     <div>
                       <div className="fs-4 fw-semibold text-danger">
                         {""}{" "}
-                          <Link
-                      to="/zoneparameters?name=gst_arrest_and_prosecution"
-                      className="text-white sub-h"
-                    >   
-                        Arrest and Prosecution
-                         </Link>
+                        <Link
+                          to="/zoneparameters?name=gst_arrest_and_prosecution"
+                          className="text-white sub-h"
+                        >
+                          Arrest and Prosecution
+                        </Link>
                         {""}
                       </div>
                       <ol className="par-list b-4">
@@ -885,12 +885,12 @@ const AllParamDashboard = ({
                             placement="right"
                             arrow
                           >
-                              <Link 
-                             to="/Subpara?name=gst9a"
-                             className="text-white sub-h">
-                             Prosecution
-                            not launched within 2 months
-                             </Link>  
+                            <Link
+                              to="/Subpara?name=gst9a"
+                              className="text-white sub-h">
+                              Prosecution
+                              not launched within 2 months
+                            </Link>
                           </Tooltip>
                         </li>
                         <li>
@@ -945,11 +945,11 @@ const AllParamDashboard = ({
                       <div className="fs-4 fw-semibold text-danger">
                         {""}{" "}
                         <Link
-                      to="/zoneparameters?name=audit"
-                      className="text-white sub-h"
-                    > 
-                        Audit
-                        </Link> 
+                          to="/zoneparameters?name=audit"
+                          className="text-white sub-h"
+                        >
+                          Audit
+                        </Link>
                         {""}
                       </div>
                       <ol className="par-list b-4">
@@ -959,8 +959,8 @@ const AllParamDashboard = ({
                             placement="right"
                             arrow
                           >
-                             <Link to="/Subpara?name=gst10a" className="text-white sub-h"> 
-                            Taxpayers audited/Allotted
+                            <Link to="/Subpara?name=gst10a" className="text-white sub-h">
+                              Taxpayers audited/Allotted
                             </Link>
                           </Tooltip>
                         </li>
@@ -970,10 +970,10 @@ const AllParamDashboard = ({
                             placement="right"
                             arrow
                           >
-                             <Link to="/Subpara?name=gst10b" className="text-white sub-h">  
-                            Paras
-                            pending &gt; 6 months
-                             </Link> 
+                            <Link to="/Subpara?name=gst10b" className="text-white sub-h">
+                              Paras
+                              pending &gt; 6 months
+                            </Link>
                           </Tooltip>
                         </li>
                         <li className="text-white">
@@ -983,8 +983,8 @@ const AllParamDashboard = ({
                             arrow
                           >
                             <Link to="/Subpara?name=gst10c" className="text-white sub-h">
-                            Recoveries/Detections
-                             </Link> 
+                              Recoveries/Detections
+                            </Link>
                           </Tooltip>
                         </li>
                       </ol>
@@ -1130,8 +1130,8 @@ const AllParamDashboard = ({
                 <div className="card text-white bg-navy-blue">
                   <div className="card-body pb-0 d-flex justify-content-between align-items-start">
                     <div className="g1-box">
-                    <div className="fs-4 fw-semibold text-danger">
-                    <Link
+                      <div className="fs-4 fw-semibold text-danger">
+                        <Link
                           className="text-white sub-h"
                           to="/custompara?name=timelyrefunds"
                         >
@@ -1145,8 +1145,8 @@ const AllParamDashboard = ({
                             placement="right"
                             arrow
                           >
-                            <Link className="text-white sub-h" to="/customsubpara?name=cus1"> 
-                            {/* <Link
+                            <Link className="text-white sub-h" to="/customsubpara?name=cus1">
+                              {/* <Link
                               className="text-white sub-h"
                               to="/custompara?name=timelyrefunds"
                             > */}
@@ -1205,13 +1205,13 @@ const AllParamDashboard = ({
                             placement="right"
                             arrow
                           >
-                             <Link
+                            <Link
                               className="text-white sub-h"
                               to="/customsubpara?name=cus2a"
-                            > 
+                            >
                               {" "}
                               Action initiated on expired licenses
-                            </Link> 
+                            </Link>
                           </Tooltip>
                         </li>
                         <li className="text-white">
@@ -1220,13 +1220,13 @@ const AllParamDashboard = ({
                             placement="right"
                             arrow
                           >
-                             <Link
+                            <Link
                               className="text-white sub-h"
                               to="/customsubpara?name=cus2b"
-                            > 
+                            >
                               {" "}
                               Revenue protective measure not initiated
-                           </Link> 
+                            </Link>
                           </Tooltip>
                         </li>
                         <li className="text-white">
@@ -1235,13 +1235,13 @@ const AllParamDashboard = ({
                             placement="right"
                             arrow
                           >
-                             <Link
+                            <Link
                               className="text-white sub-h"
                               to="/customsubpara?name=cus2c"
                             >
                               {" "}
                               Duty recovered
-                             </Link> 
+                            </Link>
                           </Tooltip>
                         </li>
                       </ol>
@@ -1297,10 +1297,10 @@ const AllParamDashboard = ({
                             <Link
                               className="text-white sub-h"
                               to="/customsubpara?name=cus3a"
-                            > 
+                            >
                               {" "}
                               Action initiated on expired licenses
-                             </Link> 
+                            </Link>
                           </Tooltip>
                         </li>
                         <li className="text-white">
@@ -1309,13 +1309,13 @@ const AllParamDashboard = ({
                             placement="right"
                             arrow
                           >
-                             <Link
+                            <Link
                               className="text-white sub-h"
                               to="/customsubpara?name=cus3b"
-                            > 
+                            >
                               {" "}
                               Revenue Protective measure not initiated
-                             </Link> 
+                            </Link>
                           </Tooltip>
                         </li>
                         <li className="text-white">
@@ -1323,13 +1323,13 @@ const AllParamDashboard = ({
                             title="Duty  recovered during the month by way of duty deposit or enforcement of Bank Guarantee  vis-a-vis total duty involved on expired licenses of AA up to the month"
                             arrow
                           >
-                             <Link
+                            <Link
                               className="text-white sub-h"
                               to="/customsubpara?name=cus3c"
-                            > 
+                            >
                               {" "}
                               Duty recovered
-                            </Link> 
+                            </Link>
                           </Tooltip>
                         </li>
                       </ol>
@@ -1384,11 +1384,11 @@ const AllParamDashboard = ({
                           >
                             <Link className="text-white sub-h"
                               to="/customsubpara?name=cus4a"
-                            > 
+                            >
                               {" "}
                               Prov. Assessment not finalized within 6 months
                               (Non SVB){" "}
-                             </Link> 
+                            </Link>
                           </Tooltip>
                         </li>
                         <li className="text-white">
@@ -1410,12 +1410,12 @@ const AllParamDashboard = ({
                             placement="right"
                             arrow
                           >
-                             <Link li className="text-white"
+                            <Link li className="text-white"
                               to="/customsubpara?name=cus4c"
-                            > 
+                            >
                               {" "}
                               Prov. Assessments Finalized (SVB)
-                             </Link> 
+                            </Link>
                           </Tooltip>
                         </li>
                         <li className="text-white">
@@ -1424,12 +1424,12 @@ const AllParamDashboard = ({
                             placement="right"
                             arrow
                           >
-                             <Link li className="text-white"
+                            <Link li className="text-white"
                               to="/customsubpara?name=cus4d"
-                            > 
+                            >
                               {" "}
                               PD Bonds pending &gt; 1 year (SVB)
-                             </Link> 
+                            </Link>
                           </Tooltip>
                         </li>
                       </ol>
@@ -1601,7 +1601,7 @@ const AllParamDashboard = ({
                         <li className="text-white">
                           <Tooltip
                             title=") Amount involved in detections made up to the month vis-à-vis total revenue collected upto the month in the Commissionerate(Zone)"
-                           
+
                             placement="right"
                             arrow
                           >
@@ -1709,12 +1709,12 @@ const AllParamDashboard = ({
                             placement="right"
                             arrow
                           >
-                              <Link li className="text-white"
+                            <Link li className="text-white"
                               to="/customsubpara?name=cus7a"
-                            > 
+                            >
                               {" "}
                               Prosecution not launched within 2 months
-                         </Link> 
+                            </Link>
                           </Tooltip>
                         </li>
                         <li className="text-white">
@@ -1723,9 +1723,9 @@ const AllParamDashboard = ({
                             placement="right"
                             arrow
                           >
-                             <Link li className="text-white"
+                            <Link li className="text-white"
                               to="/customsubpara?name=cus7b"
-                            > 
+                            >
                               {" "}
                               Prosecution launched/Arrests made
                             </Link>
@@ -1767,12 +1767,12 @@ const AllParamDashboard = ({
                   <div className="card-body pb-0 d-flex justify-content-between align-items-start col7">
                     <div>
                       <div className="fs-4 fw-semibold text-danger">
-                         <Link
+                        <Link
                           className="text-white sub-h"
                           to="/custompara?name=unclaimed_cargo"
-                        > 
+                        >
                           Monitoring Of Un-cleared and Unclaimed cargo
-                         </Link> 
+                        </Link>
                       </div>
                       <ol className="par-list b-4">
                         <li className="text-white">
@@ -1781,13 +1781,13 @@ const AllParamDashboard = ({
                             placement="right"
                             arrow
                           >
-                           <Link
+                            <Link
                               className="text-white sub-h"
                               to="/customsubpara?name=cus8a"
-                            > 
+                            >
                               {" "}
                               Disposal of packages
-                         </Link> 
+                            </Link>
                           </Tooltip>
                         </li>
                         <li className="text-white">
@@ -1799,10 +1799,10 @@ const AllParamDashboard = ({
                             <Link
                               className="text-white sub-h"
                               to="/customsubpara?name=cus8b"
-                            > 
+                            >
                               {" "}
                               Packages pending &gt; 6 months
-                              </Link> 
+                            </Link>
                           </Tooltip>
                         </li>
                       </ol>
@@ -1923,7 +1923,7 @@ const AllParamDashboard = ({
                           to="/custompara?name=recovery_of_arrears"
                         >
                           Recovery of Arrears
-                        </Link> 
+                        </Link>
                       </div>
                       <ol className="par-list">
                         <li className="text-white">
@@ -1931,13 +1931,13 @@ const AllParamDashboard = ({
                             title=" Recoverable arrears recovered vis-à-vis pro rata TAR target  upto the month "
                             placement="right"
                             arrow
-                          > 
-                           <Link className="text-white sub-h"
+                          >
+                            <Link className="text-white sub-h"
                               to="/customsubpara?name=cus10a"
-                            > 
+                            >
                               {" "}
                               Recovery of recoverable arrears
-                          </Link>
+                            </Link>
                           </Tooltip>
                         </li>
                         <li className="text-white">
@@ -1947,12 +1947,12 @@ const AllParamDashboard = ({
                             arrow
                           >
                             <Link
-                            className="text-white sub-h"
+                              className="text-white sub-h"
                               to="/customsubpara?name=cus10b"
-                            > 
+                            >
                               {" "}
                               Recoverable arrears pending &gt; 1 year
-                             </Link> 
+                            </Link>
                           </Tooltip>
                         </li>
                       </ol>
@@ -1994,7 +1994,7 @@ const AllParamDashboard = ({
                         <Link
                           className="text-white sub-h"
                           to="/custompara?name=management_of_warehousing_bonds"
-                        > 
+                        >
                           Management Of Warehousing bonds
                         </Link>
                       </div>
@@ -2005,12 +2005,12 @@ const AllParamDashboard = ({
                             placement="right"
                             arrow
                           >
-                         <Link
+                            <Link
                               className="text-white sub-h"
                               to="/customsubpara?name=cus11a"
-                            > 
+                            >
                               No action initiated on expired WH bonds
-                        </Link> 
+                            </Link>
                           </Tooltip>
                         </li>
                         <li className="text-white">
@@ -2019,12 +2019,12 @@ const AllParamDashboard = ({
                             placement="right"
                             arrow
                           >
-                             <Link
+                            <Link
                               className="text-white sub-h"
                               to="/customsubpara?name=cus11b"
                             >
                               Duty Recovered/Duty involved
-                           </Link> 
+                            </Link>
                           </Tooltip>
                         </li>
                       </ol>
@@ -2187,7 +2187,7 @@ const AllParamDashboard = ({
                             <Link
                               className="text-white sub-h"
                               to="/customsubpara?name=cus13c"
-                            > 
+                            >
                               {" "}
                               Recovered/detected
                             </Link>
@@ -2202,10 +2202,10 @@ const AllParamDashboard = ({
                             <Link
                               className="text-white sub-h"
                               to="/customsubpara?name=cus13d"
-                            > 
+                            >
                               {" "}
                               BEs pending &gt; 6 months
-                             </Link>
+                            </Link>
                           </Tooltip>
                         </li>
                         <li className="text-white">
@@ -2217,7 +2217,7 @@ const AllParamDashboard = ({
                             <Link
                               className="text-white sub-h"
                               to="/customsubpara?name=cus13e"
-                            > 
+                            >
                               {" "}
                               SBs Pending &gt; 6 months{" "}
                             </Link>

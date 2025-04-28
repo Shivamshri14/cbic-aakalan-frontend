@@ -1004,8 +1004,12 @@ const AllZones = ({
       // Combine and merge data
       const mergedData = mergeDataByZone(Data_Disposal_Pendency, Data_epcg, Data_aa, Data_Adjudication, Investiation_cus_Data, arrest_and_prosecution_cus_Data, timelyrefunds_cus_Data, unclaimed_cargo_cus_Data, DisposalOfConfiscatedGoldAndNDPS_cus_Data, recovery_of_arrears_cus_Data, management_of_warehousing_bonds_cus_Data, audit_cus_Data, CommissionerAppeals_cus_Data);
 
+      const filteredData = mergedData.filter((item) =>
+        !["DG NORTH", "DG WEST", "DG EAST", "DG SOUTH", "DG (HQ)", "DRI DG"].includes(item.zone_name)
+      );
+
       // Final data mapping and adding totals
-      const finalData = mergedData.map((item) => {
+      const finalData = filteredData.map((item) => {
         // Format the fields
         item.weighted_average_out_of_11 = ((item.weighted_average_out_of_11 * 11) / 10).toFixed(1);
         item.weighted_average_out_of_7_epcg = ((item.weighted_average_out_of_7_epcg * 7) / 10).toFixed(1);

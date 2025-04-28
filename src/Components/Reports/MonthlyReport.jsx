@@ -28,6 +28,7 @@ const MonthlyReport = ({
   };
 
   const [data, setData] = useState([]);
+  const [datacustoms, setDatacustoms] = useState([]);
   const newdate = dayjs(selectedDate).format("YYYY-MM-DD");
   console.log("test", selectedDate);
 
@@ -58,142 +59,141 @@ const MonthlyReport = ({
 
   const fetchData = async () => {
     try {
-      const endpoints_audit = ["gst10a", "gst10b", "gst10c"];
-      const responses_audit = await Promise.all(
-        endpoints_audit.map((endpoint) =>
-          apiClient
-            .get(`/cbic/${endpoint}`, {
-              params: { month_date: newdate, type: "zone" },
-            })
-            .then((response) => ({
-              data: response.data.map(item => ({
-                ...item,
-                sub_parameter_weighted_average: parseFloat(
-                  ((item.sub_parameter_weighted_average * 12) / 10).toFixed(2)
-                ),
-              })),
-              gst: endpoint.toUpperCase(),
-            }))
-        )
-      );
+      const endpointsGrouped = {
+        registration: ["gst1a", "gst1b", "gst1c", "gst1d", "gst1e", "gst1f"],
+        audit: ["gst10a", "gst10b", "gst10c"],
+        scrutiny_assessment: ["gst3a", "gst3b"],
+        investigation: ["gst4a", "gst4b", "gst4c", "gst4d"],
+        recovery_of_arrears: ["gst8a", "gst8b"],
+        arrest_prosecution: ["gst9a", "gst9b"],
+        adjudication: ["gst5a", "gst5b"],
+        adjudication_legacy: ["gst6a", "gst6b", "gst6c", "gst6d"],
+        refunds: ["gst7"],
+        appeals: ["gst11a", "gst11b", "gst11c", "gst11d"],
+        return_filing: ["gst2"],
+      };
 
-      const endpoints_scrutiny_assessment = ["gst3a", "gst3b"];
-      const responses_scrutiny_assessment = await Promise.all(
-        endpoints_scrutiny_assessment.map((endpoint) =>
-          apiClient
-            .get(`/cbic/${endpoint}`, {
-              params: { month_date: newdate, type: "zone" },
-            })
-            .then((response) => ({
-              data: response.data,
-              gst: endpoint.toUpperCase(),
-            }))
-        )
-      );
+      const scaleMap = {
+        audit: 12,
+        recovery_of_arrears: 8,
+        arrest_prosecution: 6,
+        refunds: 5,
+        return_filing: 5,
+        appeals: 12,
+      };
 
-      const endpoints_investigation = ["gst4a", "gst4b", "gst4c", "gst4d"];
-      const responses_investigation = await Promise.all(
-        endpoints_investigation.map((endpoint) =>
-          apiClient
-            .get(`/cbic/${endpoint}`, {
-              params: { month_date: newdate, type: "zone" },
-            })
-            .then((response) => ({
-              data: response.data,
-              gst: endpoint.toUpperCase(),
-            }))
-        )
-      );
+      const fetchEndpoints = async (group, scale = null) => {
+        return Promise.all(
+          endpointsGrouped[group].map((endpoint) =>
+            apiClient
+              .get(`/cbic/${endpoint}`, {
+                params: { month_date: newdate, type: "zone" },
+              })
+              .then((response) => ({
+                data: response.data.map(item => ({
+                  ...item,
+                  sub_parameter_weighted_average: parseFloat(
+                    scale
+                      ? ((item.sub_parameter_weighted_average * scale) / 10).toFixed(2)
+                      : parseFloat(item.sub_parameter_weighted_average).toFixed(2)
+                  ),
+                })),
+                gst: endpoint.toUpperCase(),
+              }))
+          )
+        );
+      };
 
-      const endpoints_recovery_of_arrears = ["gst8a", "gst8b"];
-      const responses_recovery_of_arrears = await Promise.all(
-        endpoints_recovery_of_arrears.map((endpoint) =>
-          apiClient
-            .get(`/cbic/${endpoint}`, {
-              params: { month_date: newdate, type: "zone" },
-            })
-            .then((response) => ({
-              data: response.data.map(item => ({
-                ...item,
-                sub_parameter_weighted_average: parseFloat(
-                  ((item.sub_parameter_weighted_average * 8) / 10).toFixed(2)
-                ),
-              })),
-              gst: endpoint.toUpperCase(),
-            }))
-        )
-      );
+      // Fetch all groups
+      const [
+        responses_registration,
+        responses_audit,
+        responses_scrutiny,
+        responses_investigation,
+        responses_recovery,
+        responses_arrest,
+        responses_adjudication,
+        responses_adjudication_legacy,
+        responses_refunds,
+        responses_appeals,
+        responses_return_filing,
+      ] = await Promise.all([
+        fetchEndpoints("registration"),
+        fetchEndpoints("audit", scaleMap.audit),
+        fetchEndpoints("scrutiny_assessment"),
+        fetchEndpoints("investigation"),
+        fetchEndpoints("recovery_of_arrears", scaleMap.recovery_of_arrears),
+        fetchEndpoints("arrest_prosecution", scaleMap.arrest_prosecution),
+        fetchEndpoints("adjudication"),
+        fetchEndpoints("adjudication_legacy"),
+        fetchEndpoints("refunds", scaleMap.refunds),
+        fetchEndpoints("appeals", scaleMap.appeals),
+        fetchEndpoints("return_filing", scaleMap.return_filing),
+      ]);
 
-      const endpoints_gst_arrest_and_prosecution = ["gst9a", "gst9b"];
-      const responses_gst_arrest_and_prosecution = await Promise.all(
-        endpoints_gst_arrest_and_prosecution.map((endpoint) =>
-          apiClient
-            .get(`/cbic/${endpoint}`, {
-              params: { month_date: newdate, type: "zone" },
-            })
-            .then((response) => ({
-              data: response.data.map(item => ({
-                ...item,
-                sub_parameter_weighted_average: parseFloat(
-                  ((item.sub_parameter_weighted_average * 6) / 10).toFixed(2)
-                ),
-              })),
-              gst: endpoint.toUpperCase(),
-            }))
-        )
-      );
+      // 🔍 Log helper
+      const logZoneWiseScores = (label, responses) => {
+        const flatData = responses.flatMap((res) => res.data);
+        const zoneMap = {};
 
-      const endpoints = [
-        "returnFiling",
-        "adjudication",
-        "adjudication(legacy cases)",
-        "refunds",
-        "appeals",
-      ];
-      const responses = await Promise.all(
-        endpoints.map((endpoint) =>
-          apiClient
-            .get(`/cbic/t_score/${endpoint}`, {
-              params: { month_date: newdate, type: "parameter" },
-            })
-            .then((response) => ({
-              data: response.data,
-              parameter: endpoint.toUpperCase(),
-            }))
-        )
-      );
+        flatData.forEach((item) => {
+          const zone = item.zone_code;
+          const score = item.sub_parameter_weighted_average || 0;
+          if (!zoneMap[zone]) {
+            zoneMap[zone] = [];
+          }
+          zoneMap[zone].push(score);
+        });
 
-      const combinedResponses = [
-        ...responses,
+        console.log(`\n--- ${label} ---`);
+        Object.entries(zoneMap).forEach(([zone, scores]) => {
+          console.log(`Zone ${zone}: ${scores.join(", ")}`);
+        });
+      };
+
+      // 🔍 Call log function
+      logZoneWiseScores("Registration", responses_registration);
+      logZoneWiseScores("Audit", responses_audit);
+      logZoneWiseScores("Scrutiny Assessment", responses_scrutiny);
+      logZoneWiseScores("Investigation", responses_investigation);
+      logZoneWiseScores("Recovery of Arrears", responses_recovery);
+      logZoneWiseScores("Arrest & Prosecution", responses_arrest);
+      logZoneWiseScores("Adjudication", responses_adjudication);
+      logZoneWiseScores("Adjudication Legacy", responses_adjudication_legacy);
+      logZoneWiseScores("Refunds", responses_refunds);
+      logZoneWiseScores("Appeals", responses_appeals);
+      logZoneWiseScores("Return Filing", responses_return_filing);
+
+      const allResponses = [
+        ...responses_registration,
         ...responses_audit,
-        ...responses_scrutiny_assessment,
+        ...responses_scrutiny,
         ...responses_investigation,
-        ...responses_recovery_of_arrears,
-        ...responses_gst_arrest_and_prosecution,
+        ...responses_recovery,
+        ...responses_arrest,
+        ...responses_adjudication,
+        ...responses_adjudication_legacy,
+        ...responses_refunds,
+        ...responses_appeals,
+        ...responses_return_filing,
       ];
 
-      if (combinedResponses) {
-        setloading(false);
-      }
+      setloading(false);
 
-      const allData = combinedResponses.flatMap((response) =>
-        response.data.map((item) => ({
-          ...item,
-          sub_parameter_weighted_average: parseFloat(
-            item.sub_parameter_weighted_average.toFixed(2)
-          ),
-        }))
-      );
+      const allData = allResponses.flatMap((response) => response.data);
+
       const summedByZone = allData.reduce((acc, item) => {
         const zoneCode = item.zone_code;
-        const value = (item.ra === "Adjudication") ? item.totalScore :
-          (item.ra === "Appeals") ? item.parameter_wise_weighted_average : item.sub_parameter_weighted_average || 0;
+        const value = item.sub_parameter_weighted_average || 0;
+
         if (!acc[zoneCode]) {
           acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
         }
+
         acc[zoneCode].sub_parameter_weighted_average = parseFloat(
           (acc[zoneCode].sub_parameter_weighted_average + value).toFixed(2)
         );
+
         return acc;
       }, {});
 
@@ -209,17 +209,14 @@ const MonthlyReport = ({
 
       for (let i = 0; i < sorted.length; i++) {
         const score = sorted[i].sub_parameter_weighted_average;
-
         if (!scoreIndexMap.has(score)) {
           scoreIndexMap.set(score, currentIndex);
           currentIndex++;
         }
-
         sorted[i].zonal_rank = scoreIndexMap.get(score);
       }
 
       const filteredData = sorted.filter(item => item.zonal_rank <= 21);
-
       setData(filteredData);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -227,8 +224,202 @@ const MonthlyReport = ({
     }
   };
 
+  const fetchDataCom = async () => {
+    try {
+      const endpointsGrouped = {
+        disposal_pendency: ["cus4a", "cus4b", "cus4c", "cus4d"],
+        epcg: ["cus2a", "cus2b", "cus2c"],
+        aa: ["cus3a", "cus3b", "cus3c"],
+        adjudication: ["cus5a", "cus5b", "cus5c"],
+        cus_investigation: ["cus6a", "cus6b", "cus6c", "cus6d", "cus6e", "cus6f"],
+        cus_arrest_prosecution: ["cus7a", "cus7b"],
+        cus_timelyrefunds: ["cus1"],
+        cus_unclaimed_cargo: ["cus8a", "cus8b"],
+        cus_DisposalOfConfiscatedGoldAndNDPS: ["cus9a", "cus9b"],
+        cus_recovery_of_arrears: ["cus10a", "cus10b"],
+        cus_management_of_warehousing_bonds: ["cus11a", "cus11b"],
+        cus_CommissionerAppeals: ["cus12a", "cus12b"],
+        cus_audit: ["cus13a", "cus13b", "cus13c", "cus13d", "cus13e"],
+      };
+  
+      const scaleMap = {
+        disposal_pendency: 11,
+        epcg: 7,
+        aa: 7,
+        adjudication: 8,
+        cus_investigation: 12,
+        cus_arrest_prosecution: 6,
+        cus_timelyrefunds: 5,
+        cus_unclaimed_cargo: 6,
+        cus_DisposalOfConfiscatedGoldAndNDPS: 6,
+        cus_recovery_of_arrears: 6,
+        cus_management_of_warehousing_bonds: 6,
+        cus_CommissionerAppeals: 8,
+        cus_audit: 12,
+      };
+  
+      const fetchEndpoints = async (group, scale = null) => {
+        return Promise.all(
+          endpointsGrouped[group].map((endpoint) =>
+            apiClient
+              .get(`/cbic/custom/${endpoint}`, {
+                params: { month_date: newdate, type: "zone" },
+              })
+              .then((response) => ({
+                data: response.data.map((item) => ({
+                  ...item,
+                  sub_parameter_weighted_average: parseFloat(
+                    scale
+                      ? ((item.sub_parameter_weighted_average * scale) / 10).toFixed(2)
+                      : parseFloat(item.sub_parameter_weighted_average).toFixed(2)
+                  ),
+                })),
+                gst: endpoint.toUpperCase(),
+              }))
+          )
+        );
+      };
+  
+      // Fetch all groups
+      const [
+        responses_disposal_pendency,
+        responses_epcg,
+        responses_aa,
+        responses_adjudication,
+        responses_cus_investigation,
+        responses_cus_arrest_prosecution,
+        responses_cus_timelyrefunds,
+        responses_cus_unclaimed_cargo,
+        responses_cus_DisposalOfConfiscatedGoldAndNDPS,
+        responses_cus_recovery_of_arrears,
+        responses_cus_management_of_warehousing_bonds,
+        responses_cus_CommissionerAppeals,
+        responses_cus_audit,
+      ] = await Promise.all([
+        fetchEndpoints("disposal_pendency", scaleMap.disposal_pendency),
+        fetchEndpoints("epcg", scaleMap.epcg),
+        fetchEndpoints("aa", scaleMap.aa),
+        fetchEndpoints("adjudication", scaleMap.adjudication),
+        fetchEndpoints("cus_investigation", scaleMap.cus_investigation),
+        fetchEndpoints("cus_arrest_prosecution", scaleMap.cus_arrest_prosecution),
+        fetchEndpoints("cus_timelyrefunds", scaleMap.cus_timelyrefunds),
+        fetchEndpoints("cus_unclaimed_cargo", scaleMap.cus_unclaimed_cargo),
+        fetchEndpoints("cus_DisposalOfConfiscatedGoldAndNDPS", scaleMap.cus_DisposalOfConfiscatedGoldAndNDPS),
+        fetchEndpoints("cus_recovery_of_arrears", scaleMap.cus_recovery_of_arrears),
+        fetchEndpoints("cus_management_of_warehousing_bonds", scaleMap.cus_management_of_warehousing_bonds),
+        fetchEndpoints("cus_CommissionerAppeals", scaleMap.cus_CommissionerAppeals),
+        fetchEndpoints("cus_audit", scaleMap.cus_audit),
+      ]);
+  
+      // 🔍 Log helper
+      const logZoneWiseScores = (label, responses) => {
+        const flatData = responses.flatMap((res) => res.data);
+        const zoneMap = {};
+  
+        flatData.forEach((item) => {
+          const zone = item.zone_code;
+          const score = item.sub_parameter_weighted_average || 0;
+          if (!zoneMap[zone]) {
+            zoneMap[zone] = [];
+          }
+          zoneMap[zone].push(score);
+        });
+  
+        console.log(`\n--- ${label} ---`);
+        Object.entries(zoneMap).forEach(([zone, scores]) => {
+          console.log(`Zone ${zone}: ${scores.join(", ")}`);
+        });
+      };
+  
+      // 🔍 Call log function
+      logZoneWiseScores("Disposal Pendency", responses_disposal_pendency);
+      logZoneWiseScores("EPCG", responses_epcg);
+      logZoneWiseScores("AA", responses_aa);
+      logZoneWiseScores("Adjudication", responses_adjudication);
+      logZoneWiseScores("Investigation", responses_cus_investigation);
+      logZoneWiseScores("Arrest Prosecution", responses_cus_arrest_prosecution);
+      logZoneWiseScores("Timely Refunds", responses_cus_timelyrefunds);
+      logZoneWiseScores("Unclaimed Cargo", responses_cus_unclaimed_cargo);
+      logZoneWiseScores("Disposal of Confiscated Gold and NDPS", responses_cus_DisposalOfConfiscatedGoldAndNDPS);
+      logZoneWiseScores("Recovery of Arrears", responses_cus_recovery_of_arrears);
+      logZoneWiseScores("Warehousing Bonds", responses_cus_management_of_warehousing_bonds);
+      logZoneWiseScores("Commissioner Appeals", responses_cus_CommissionerAppeals);
+      logZoneWiseScores("Audit", responses_cus_audit);
+  
+      const allResponses = [
+        ...responses_disposal_pendency,
+        ...responses_epcg,
+        ...responses_aa,
+        ...responses_adjudication,
+        ...responses_cus_investigation,
+        // ...responses_cus_arrest_prosecution,
+        // ...responses_cus_timelyrefunds,
+        // ...responses_cus_unclaimed_cargo,
+        // ...responses_cus_DisposalOfConfiscatedGoldAndNDPS,
+        // ...responses_cus_recovery_of_arrears,
+        // ...responses_cus_management_of_warehousing_bonds,
+        // ...responses_cus_CommissionerAppeals,
+        // ...responses_cus_audit,
+      ];
+  
+      setloading(false);
+  
+      const allData = allResponses.flatMap((response) => response.data);
+  
+      // Calculate the total weighted average for each zone and fix to 2 decimal places
+      const summedByZone = allData.reduce((acc, item) => {
+        const zoneCode = item.zone_code;
+        const value = item.sub_parameter_weighted_average || 0;
+  
+        if (!acc[zoneCode]) {
+          acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0, total_weighted_average: 0 };
+        }
+  
+        // Add the individual sub_parameter_weighted_average to the zone
+        acc[zoneCode].sub_parameter_weighted_average = parseFloat(
+          (acc[zoneCode].sub_parameter_weighted_average + value).toFixed(2)
+        );
+  
+        // Update the total weighted average by adding the weighted averages from all datasets
+        acc[zoneCode].total_weighted_average = parseFloat(
+          (acc[zoneCode].total_weighted_average + value).toFixed(2)
+        );
+  
+        return acc;
+      }, {});
+  
+      const reducedAllData = Object.values(summedByZone);
+  
+      const sorted = reducedAllData.sort(
+        (a, b) =>
+          b.total_weighted_average - a.total_weighted_average
+      );
+  
+      const scoreIndexMap = new Map();
+      let currentIndex = 1;
+  
+      for (let i = 0; i < sorted.length; i++) {
+        const score = sorted[i].total_weighted_average;
+        if (!scoreIndexMap.has(score)) {
+          scoreIndexMap.set(score, currentIndex);
+          currentIndex++;
+        }
+        sorted[i].zonal_rank = scoreIndexMap.get(score);
+      }
+  
+      const filteredData = sorted.filter(item => item.zonal_rank <= 20 );
+      setDatacustoms(filteredData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setloading(false);
+    }
+  };
+  
+  
+  
   useEffect(() => {
     fetchData();
+    fetchDataCom();
   }, [newdate]);
 
   const [details, setDetails] = useState([]);
@@ -239,7 +430,7 @@ const MonthlyReport = ({
       label: "Ranking",
     },
     {
-      key: "zoneName",
+      key: "zone_name",
       label: "Zone",
     },
     {
@@ -251,12 +442,35 @@ const MonthlyReport = ({
       _props: { className: "current-month-score" },
       formatter: (item) => {
         if (!item || item.sub_parameter_weighted_average == null) return "0";
-        
-        // Ensure the value is rounded down and converted to a string
         return Math.trunc(Number(item.sub_parameter_weighted_average)).toString();
       },
     },
   ];
+
+  const columnsCustom = [
+    {
+      key: "zonal_rank",
+      label: "Ranking",
+    },
+    {
+      key: "zone_name",
+      label: "Zone",
+    },
+    {
+      key: "total_weighted_average",
+      label: "Current Month Score",
+      _style: { minWidth: "150px" },
+      filter: false,
+      sorter: false,
+      _props: { className: "current-month-score" },
+      formatter: (item) => {
+        if (!item || item.total_weighted_average == null) return "0";
+        return Math.trunc(Number(item.total_weighted_average)).toString();
+      },
+    },
+  ];
+  
+
   const headerStyles = {
     backgroundColor: "#4CAF50",
     color: "white",
@@ -339,7 +553,7 @@ const MonthlyReport = ({
                 <div className="view-btn">
                   <Button
                     variant="contained"
-                    className="ml-4  cust-btn"
+                    className="ml-4 cust-btn"
                     onClick={handleBack}
                   >
                     Back
@@ -351,9 +565,7 @@ const MonthlyReport = ({
               <div className="lft-sec">
                 <div className="date-main">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer
-                      components={["DatePicker", "DatePicker", "DatePicker"]}
-                    >
+                    <DemoContainer components={["DatePicker", "DatePicker", "DatePicker"]}>
                       <DatePicker
                         label={"Month and Year"}
                         views={["month", "year"]}
@@ -411,48 +623,91 @@ const MonthlyReport = ({
                 </div>
               </div>
             </div>
-            <div className="box-main bg-blue col1">
-              <div className="row custom-tb mb col ">
-                <div className="export-btn">
-                  <button onClick={exportToXLS} className="btn btn-primary m-3">
-                    Export XLS
-                  </button>
+            {selectedOption === "CGST" ? (
+              <div className="box-main bg-blue col1">
+                <div className="row custom-tb mb col">
+                  <div className="export-btn">
+                    <button onClick={exportToXLS} className="btn btn-primary m-3">
+                      Export XLS
+                    </button>
+                  </div>
+                  <CSmartTable
+                    activePage={1}
+                    cleaner
+                    clickableRows={false}
+                    columns={columns}
+                    columnSorter
+                    items={data}
+                    itemsPerPageSelect
+                    itemsPerPage={10}
+                    pagination
+                    onRowClick={onRowClick}
+                    onFilteredItemsChange={(items) => {
+                      console.log(items);
+                    }}
+                    onSelectedItemsChange={(items) => {
+                      console.log(items);
+                    }}
+                    sorterValue={{ column: "status", state: "asc" }}
+                    tableFilter
+                    tableProps={{
+                      className: "add-this-class",
+                      responsive: true,
+                      hover: true,
+                      align: "middle",
+                      border: "primary",
+                    }}
+                    onKeyDown={(e) => checkSpecialChar(e)}
+                  />
                 </div>
-                <CSmartTable
-                  activePage={1}
-                  cleaner
-                  clickableRows={false}
-                  columns={columns}
-                  columnSorter
-                  items={data}
-                  itemsPerPageSelect
-                  itemsPerPage={10}
-                  pagination
-                  onRowClick={onRowClick}
-                  onFilteredItemsChange={(items) => {
-                    console.log(items);
-                  }}
-                  onSelectedItemsChange={(items) => {
-                    console.log(items);
-                  }}
-                  sorterValue={{ column: "status", state: "asc" }}
-                  tableFilter
-                  tableProps={{
-                    className: "add-this-class",
-                    responsive: true,
-                    hover: true,
-                    align: "middle",
-                    border: "primary",
-                  }}
-                  onKeyDown={(e) => checkSpecialChar(e)}
-                />
               </div>
+            ) : (
+              <div className="box-main bg-blue col1">
+                <div className="row custom-tb mb col">
+                  <div className="export-btn">
+                    <button onClick={exportToXLS} className="btn btn-primary m-3">
+                      Export XLS
+                    </button>
+                  </div>
+                  {<CSmartTable
+                    activePage={1}
+                    cleaner
+                    clickableRows={false}
+                    columns={columnsCustom}
+                    columnSorter
+                    items={datacustoms}
+                    itemsPerPageSelect
+                    itemsPerPage={10}
+                    pagination
+                    onRowClick={onRowClick}
+                    onFilteredItemsChange={(items) => {
+                      console.log(items);
+                    }}
+                    onSelectedItemsChange={(items) => {
+                      console.log(items);
+                    }}
+                    sorterValue={{ column: "status", state: "asc" }}
+                    tableFilter
+                    tableProps={{
+                      className: "add-this-class",
+                      responsive: true,
+                      hover: true,
+                      align: "middle",
+                      border: "primary",
+                    }}
+                    onKeyDown={(e) => checkSpecialChar(e)}
+                  /> }
+                </div>
+              </div>
+            )}
+
+            <div className="row">
             </div>
-            <div className="row"></div>
           </div>
         </div>
       )}
     </>
+
   );
 };
 export default MonthlyReport;

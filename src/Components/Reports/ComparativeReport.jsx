@@ -34,26 +34,45 @@ const ComparativeReport = ({
   const [data1, setData1] = useState([]);
   const [data2, setData2] = useState([]);
   const [data3, setData3] = useState([]);
+  const [data4, setData4] = useState([]);
+  const [data5, setData5] = useState([]);
+  const [data6, setData6] = useState([]);
 
   const [response, setResponse] = useState(null);
+
 
   const newdate = dayjs(selectedDate).format("YYYY-MM-DD");
   const date1 = dayjs(newdate).format("MMMM YYYY");
 
   const previousmonth1 = dayjs(selectedDate)
-  .subtract(1, "month")
-  .format("YYYY-MM-DD");
+    .subtract(1, "month")
+    .format("YYYY-MM-DD");
   const date2 = dayjs(previousmonth1).format("MMMM YYYY");
 
-const previousmonth2 = dayjs(selectedDate)
-  .subtract(2, "month")
-  .format("YYYY-MM-DD");
+  const previousmonth2 = dayjs(selectedDate)
+    .subtract(2, "month")
+    .format("YYYY-MM-DD");
   const date3 = dayjs(previousmonth2).format("MMMM YYYY");
 
-  console.log("newdate",newdate);
-  console.log("date1",date1);
-  console.log("previousmonth1",previousmonth1);
-  console.log("previousmonth2",previousmonth2);
+  const previousmonth3 = dayjs(selectedDate)
+    .subtract(3, "month")
+    .format("YYYY-MM-DD");
+  const date4 = dayjs(previousmonth3).format("MMMM YYYY");
+
+  const previousmonth4 = dayjs(selectedDate)
+    .subtract(4, "month")
+    .format("YYYY-MM-DD");
+  const date5 = dayjs(previousmonth4).format("MMMM YYYY");
+
+  const previousmonth5 = dayjs(selectedDate)
+    .subtract(5, "month")
+    .format("YYYY-MM-DD");
+  const date6 = dayjs(previousmonth5).format("MMMM YYYY");
+
+  console.log("newdate", newdate);
+  console.log("date1", date1);
+  console.log("previousmonth1", previousmonth1);
+  console.log("previousmonth2", previousmonth2);
 
   // Function to disable years less than 2022
   const shouldDisableYear = (year) => {
@@ -80,24 +99,24 @@ const previousmonth2 = dayjs(selectedDate)
     onSelectedOption1(e.target.value);
     console.log(e.target.value);
   };
-      const fetchData = async () => {
-          try {
-            const endpoints_audit = ["gst10a", "gst10b", "gst10c"];
-            const responses_audit = await Promise.all(
-              endpoints_audit.map((endpoint) =>
-                apiClient
-                  .get(`/cbic/${endpoint}`, {
-                    params: { month_date: newdate, type: "zone" },
-                  })
-                  .then((response) => ({
-                    data: response.data.map(item => ({
-                      ...item,
-                      sub_parameter_weighted_average: (item.sub_parameter_weighted_average * 12) / 10
-                    })),
-                    gst: endpoint.toUpperCase(),
-                  }))
-              )
-            );
+  const fetchData = async () => {
+    try {
+      const endpoints_audit = ["gst10a", "gst10b", "gst10c"];
+      const responses_audit = await Promise.all(
+        endpoints_audit.map((endpoint) =>
+          apiClient
+            .get(`/cbic/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data.map(item => ({
+                ...item,
+                sub_parameter_weighted_average: (item.sub_parameter_weighted_average * 12) / 10
+              })),
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
       const endpoints_scrutiny_assessment = ["gst3a", "gst3b"];
       const responses_scrutiny_assessment = await Promise.all(
         endpoints_scrutiny_assessment.map((endpoint) =>
@@ -172,7 +191,7 @@ const previousmonth2 = dayjs(selectedDate)
       const responses1 = await Promise.all(
         endpoints.map((endpoint) =>
           apiClient
-            .get(`/cbic/t_score/${endpoint}`, { 
+            .get(`/cbic/t_score/${endpoint}`, {
               params: { month_date: newdate, type: "parameter" },
             })
             .then((response) => ({
@@ -207,22 +226,65 @@ const previousmonth2 = dayjs(selectedDate)
             }))
         )
       );
+
+      const responses4 = await Promise.all(
+        endpoints.map((endpoint) =>
+          apiClient
+            .get(`/cbic/t_score/${endpoint}`, {
+              params: { month_date: previousmonth3, type: "parameter" },
+            })
+            .then((response) => ({
+              data: response.data,
+              parameter: endpoint.toUpperCase(),
+            }))
+        )
+      );
+
+      const responses5 = await Promise.all(
+        endpoints.map((endpoint) =>
+          apiClient
+            .get(`/cbic/t_score/${endpoint}`, {
+              params: { month_date: previousmonth4, type: "parameter" },
+            })
+            .then((response) => ({
+              data: response.data,
+              parameter: endpoint.toUpperCase(),
+            }))
+        )
+      );
+
+      const responses6 = await Promise.all(
+        endpoints.map((endpoint) =>
+          apiClient
+            .get(`/cbic/t_score/${endpoint}`, {
+              params: { month_date: previousmonth5, type: "parameter" },
+            })
+            .then((response) => ({
+              data: response.data,
+              parameter: endpoint.toUpperCase(),
+            }))
+        )
+      );
+
       const combinedResponses = [
         ...responses1,
         ...responses2,
         ...responses3,
+        ...responses4,
+        ...responses5,
+        ...responses6,
         ...responses_audit,
         ...responses_scrutiny_assessment,
         ...responses_investigation,
         ...responses_recovery_of_arrears,
         ...responses_gst_arrest_and_prosecution,
       ];
-      
-      if (responses1 && responses2 && responses3 && responses_audit && responses_scrutiny_assessment && responses_investigation && responses_recovery_of_arrears && responses_gst_arrest_and_prosecution && combinedResponses ) {
+
+      if (responses1 && responses2 && responses3 && responses4 && responses5 && responses6 && responses_audit && responses_scrutiny_assessment && responses_investigation && responses_recovery_of_arrears && responses_gst_arrest_and_prosecution && combinedResponses) {
         setloading(false);
       }
 
-      console.log("Response1",responses1);
+      console.log("Response1", responses1);
       const allData1 = responses1.flatMap((response) =>
         response.data.map((item) => ({ ...item }))
       );
@@ -246,8 +308,8 @@ const previousmonth2 = dayjs(selectedDate)
 
       const summedByZone1 = allData1WithAudit.reduce((acc, item) => {
         const zoneCode = item.zone_code;
-        const value = (item.ra==="Adjudication")?item.totalScore:
-        (item.ra==="Appeals")?item.parameter_wise_weighted_average:item.sub_parameter_weighted_average|| 0; // Default to 0 if missing
+        const value = (item.ra === "Adjudication") ? item.totalScore :
+          (item.ra === "Appeals") ? item.parameter_wise_weighted_average : item.sub_parameter_weighted_average || 0; // Default to 0 if missing
 
         // If zone_code is encountered for the first time, initialize it
         if (!acc[zoneCode]) {
@@ -255,7 +317,7 @@ const previousmonth2 = dayjs(selectedDate)
         }
 
         // Sum only the sub_parameter_weighted_average for each zone_code
-        acc[zoneCode].sub_parameter_weighted_average+= value;
+        acc[zoneCode].sub_parameter_weighted_average += value;
 
         return acc;
       }, {});
@@ -268,18 +330,18 @@ const previousmonth2 = dayjs(selectedDate)
       console.log("Reduced All Data:", reducedAllData1);
       const sorted1 = reducedAllData1.sort(
         (a, b) => b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
-      ).slice(0, 21); // Limit to 21 items
+      ).slice(0, 21); // Limit to 21 items 
       console.log("Sorted1", sorted1);
 
 
-      
+
       const allData2 = responses2.flatMap((response) =>
         response.data.map((item) => ({ ...item }))
       );
       const summedByZone2 = allData2.reduce((acc, item) => {
         const zoneCode = item.zone_code;
-        const value = (item.ra==="Adjudication")?item.totalScore:
-        (item.ra==="Appeals")?item.parameter_wise_weighted_average: item.sub_parameter_weighted_average || 0; // Default to 0 if missing
+        const value = (item.ra === "Adjudication") ? item.totalScore :
+          (item.ra === "Appeals") ? item.parameter_wise_weighted_average : item.sub_parameter_weighted_average || 0; // Default to 0 if missing
 
         // If zone_code is encountered for the first time, initialize it
         if (!acc[zoneCode]) {
@@ -310,8 +372,8 @@ const previousmonth2 = dayjs(selectedDate)
       );
       const summedByZone3 = allData3.reduce((acc, item) => {
         const zoneCode = item.zone_code;
-        const value = (item.ra==="Adjudication")?item.totalScore:
-        (item.ra==="Appeals")?item.parameter_wise_weighted_average:item.sub_parameter_weighted_average || 0; // Default to 0 if missing
+        const value = (item.ra === "Adjudication") ? item.totalScore :
+          (item.ra === "Appeals") ? item.parameter_wise_weighted_average : item.sub_parameter_weighted_average || 0; // Default to 0 if missing
 
         // If zone_code is encountered for the first time, initialize it
         if (!acc[zoneCode]) {
@@ -323,22 +385,111 @@ const previousmonth2 = dayjs(selectedDate)
 
         return acc;
       }, {});
-
       const reducedAllData3 = Object.values(summedByZone3).map(item => ({
         ...item,
         sub_parameter_weighted_average: parseFloat(item.sub_parameter_weighted_average.toFixed(2)) // Format to 2 decimal places
       }));
-
       console.log("Reduced All Data:", reducedAllData3);
       const sorted3 = reducedAllData3.sort(
         (a, b) => b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
       ).slice(0, 21); // Limit to 21 items
-
       console.log("Sorted3", sorted3);
 
-      setData1(sorted1.map((item,index)=>({...item, s_no:index+1})));
-      setData2(sorted2.map((item,index)=>({...item, s_no:index+1})));
-      setData3(sorted3.map((item,index)=>({...item, s_no:index+1})));
+
+      const allData4 = responses4.flatMap((response) =>
+        response.data.map((item) => ({ ...item }))
+      );
+      const summedByZone4 = allData4.reduce((acc, item) => {
+        const zoneCode = item.zone_code;
+        const value = (item.ra === "Adjudication") ? item.totalScore :
+          (item.ra === "Appeals") ? item.parameter_wise_weighted_average : item.sub_parameter_weighted_average || 0; // Default to 0 if missing
+
+        // If zone_code is encountered for the first time, initialize it
+        if (!acc[zoneCode]) {
+          acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+        }
+
+        // Sum only the sub_parameter_weighted_average for each zone_code
+        acc[zoneCode].sub_parameter_weighted_average += value;
+
+        return acc;
+      }, {});
+      const reducedAllData4 = Object.values(summedByZone4).map(item => ({
+        ...item,
+        sub_parameter_weighted_average: parseFloat(item.sub_parameter_weighted_average.toFixed(2)) // Format to 2 decimal places
+      }));
+      console.log("Reduced All Data:", reducedAllData4);
+      const sorted4 = reducedAllData4.sort(
+        (a, b) => b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+      ).slice(0, 21); // Limit to 21 items
+      console.log("Sorted4", sorted4);
+
+
+
+      const allData5 = responses5.flatMap((response) =>
+        response.data.map((item) => ({ ...item }))
+      );
+      const summedByZone5 = allData5.reduce((acc, item) => {
+        const zoneCode = item.zone_code;
+        const value = (item.ra === "Adjudication") ? item.totalScore :
+          (item.ra === "Appeals") ? item.parameter_wise_weighted_average : item.sub_parameter_weighted_average || 0; // Default to 0 if missing
+
+        // If zone_code is encountered for the first time, initialize it
+        if (!acc[zoneCode]) {
+          acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+        }
+
+        // Sum only the sub_parameter_weighted_average for each zone_code
+        acc[zoneCode].sub_parameter_weighted_average += value;
+
+        return acc;
+      }, {});
+      const reducedAllData5 = Object.values(summedByZone5).map(item => ({
+        ...item,
+        sub_parameter_weighted_average: parseFloat(item.sub_parameter_weighted_average.toFixed(2)) // Format to 2 decimal places
+      }));
+      console.log("Reduced All Data:", reducedAllData5);
+      const sorted5 = reducedAllData5.sort(
+        (a, b) => b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+      ).slice(0, 21); // Limit to 21 items
+      console.log("Sorted5", sorted5);
+
+
+
+      const allData6 = responses6.flatMap((response) =>
+        response.data.map((item) => ({ ...item }))
+      );
+      const summedByZone6 = allData6.reduce((acc, item) => {
+        const zoneCode = item.zone_code;
+        const value = (item.ra === "Adjudication") ? item.totalScore :
+          (item.ra === "Appeals") ? item.parameter_wise_weighted_average : item.sub_parameter_weighted_average || 0; // Default to 0 if missing
+
+        // If zone_code is encountered for the first time, initialize it
+        if (!acc[zoneCode]) {
+          acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+        }
+
+        // Sum only the sub_parameter_weighted_average for each zone_code
+        acc[zoneCode].sub_parameter_weighted_average += value;
+
+        return acc;
+      }, {});
+      const reducedAllData6 = Object.values(summedByZone6).map(item => ({
+        ...item,
+        sub_parameter_weighted_average: parseFloat(item.sub_parameter_weighted_average.toFixed(2)) // Format to 2 decimal places
+      }));
+      console.log("Reduced All Data:", reducedAllData6);
+      const sorted6 = reducedAllData6.sort(
+        (a, b) => b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+      ).slice(0, 21); // Limit to 21 items
+      console.log("Sorted6", sorted6);
+
+      setData1(sorted1.map((item, index) => ({ ...item, s_no: index + 1 })));
+      setData2(sorted2.map((item, index) => ({ ...item, s_no: index + 1 })));
+      setData3(sorted3.map((item, index) => ({ ...item, s_no: index + 1 })));
+      setData4(sorted4.map((item, index) => ({ ...item, s_no: index + 1 })));
+      setData5(sorted5.map((item, index) => ({ ...item, s_no: index + 1 })));
+      setData6(sorted6.map((item, index) => ({ ...item, s_no: index + 1 })));
 
     } catch (error) {
       // Log any errors that occur during fetching
@@ -348,7 +499,7 @@ const previousmonth2 = dayjs(selectedDate)
   };
 
   useEffect(() => {
-      fetchData();
+    fetchData();
   }, [newdate]); // Empty dependency array indicates that this effect runs only once
 
   const [details, setDetails] = useState([]);
@@ -361,6 +512,19 @@ const previousmonth2 = dayjs(selectedDate)
     {
       key: "zone_name",
       label: "Zone",
+    },
+    {
+      key: "sub_parameter_weighted_average_6",
+      label: `${date6}`,
+    },
+    {
+      key: "sub_parameter_weighted_average_5",
+      label: `${date5}`,
+    },
+
+    {
+      key: "sub_parameter_weighted_average_4",
+      label: `${date4}`,
     },
     {
       key: "sub_parameter_weighted_average_3",
@@ -377,165 +541,231 @@ const previousmonth2 = dayjs(selectedDate)
     },
   ];
 
-  const userData=[
+  const userData = [
     {
-    s_no: data1.map(item=>item.s_no)[0],
-    zone_name: data1.map(item=>item.zoneName)[0],
-    sub_parameter_weighted_average_1: data1.map(item=>item.sub_parameter_weighted_average)[0],
-    sub_parameter_weighted_average_2: data2.map(item=>item.sub_parameter_weighted_average)[0],
-    sub_parameter_weighted_average_3: data3.map(item=>item.sub_parameter_weighted_average)[0],
-  },
-  {
-    s_no: data1.map(item=>item.s_no)[1],
-    zone_name: data1.map(item=>item.zoneName)[1],
-    sub_parameter_weighted_average_1: data1.map(item=>item.sub_parameter_weighted_average)[1],
-    sub_parameter_weighted_average_2: data2.map(item=>item.sub_parameter_weighted_average)[1],
-    sub_parameter_weighted_average_3: data3.map(item=>item.sub_parameter_weighted_average)[1],
-  },
-  {
-    s_no: data1.map(item=>item.s_no)[2],
-    zone_name: data1.map(item=>item.zoneName)[2],
-    sub_parameter_weighted_average_1: data1.map(item=>item.sub_parameter_weighted_average)[2],
-    sub_parameter_weighted_average_2: data2.map(item=>item.sub_parameter_weighted_average)[2],
-    sub_parameter_weighted_average_3: data3.map(item=>item.sub_parameter_weighted_average)[2],
-  },
-  {
-    s_no: data1.map(item=>item.s_no)[3],
-    zone_name: data1.map(item=>item.zoneName)[3],
-    sub_parameter_weighted_average_1: data1.map(item=>item.sub_parameter_weighted_average)[3],
-    sub_parameter_weighted_average_2: data2.map(item=>item.sub_parameter_weighted_average)[3],
-    sub_parameter_weighted_average_3: data3.map(item=>item.sub_parameter_weighted_average)[3],
-  },
-  {
-    s_no: data1.map(item=>item.s_no)[4],
-    zone_name: data1.map(item=>item.zoneName)[4],
-    sub_parameter_weighted_average_1: data1.map(item=>item.sub_parameter_weighted_average)[4],
-    sub_parameter_weighted_average_2: data2.map(item=>item.sub_parameter_weighted_average)[4],
-    sub_parameter_weighted_average_3: data3.map(item=>item.sub_parameter_weighted_average)[4],
-  },
-  {
-    s_no: data1.map(item=>item.s_no)[5],
-    zone_name: data1.map(item=>item.zoneName)[5],
-    sub_parameter_weighted_average_1: data1.map(item=>item.sub_parameter_weighted_average)[5],
-    sub_parameter_weighted_average_2: data2.map(item=>item.sub_parameter_weighted_average)[5],
-    sub_parameter_weighted_average_3: data3.map(item=>item.sub_parameter_weighted_average)[5],
-  },
-  {
-    s_no: data1.map(item=>item.s_no)[6],
-    zone_name: data1.map(item=>item.zoneName)[6],
-    sub_parameter_weighted_average_1: data1.map(item=>item.sub_parameter_weighted_average)[6],
-    sub_parameter_weighted_average_2: data2.map(item=>item.sub_parameter_weighted_average)[6],
-    sub_parameter_weighted_average_3: data3.map(item=>item.sub_parameter_weighted_average)[6],
-  },
-  {
-    s_no: data1.map(item=>item.s_no)[7],
-    zone_name: data1.map(item=>item.zoneName)[7],
-    sub_parameter_weighted_average_1: data1.map(item=>item.sub_parameter_weighted_average)[7],
-    sub_parameter_weighted_average_2: data2.map(item=>item.sub_parameter_weighted_average)[7],
-    sub_parameter_weighted_average_3: data3.map(item=>item.sub_parameter_weighted_average)[7],
-  },
-  {
-    s_no: data1.map(item=>item.s_no)[8],
-    zone_name: data1.map(item=>item.zoneName)[8],
-    sub_parameter_weighted_average_1: data1.map(item=>item.sub_parameter_weighted_average)[8],
-    sub_parameter_weighted_average_2: data2.map(item=>item.sub_parameter_weighted_average)[8],
-    sub_parameter_weighted_average_3: data3.map(item=>item.sub_parameter_weighted_average)[8],
-  },
-  {
-    s_no: data1.map(item=>item.s_no)[9],
-    zone_name: data1.map(item=>item.zoneName)[9],
-    sub_parameter_weighted_average_1: data1.map(item=>item.sub_parameter_weighted_average)[9],
-    sub_parameter_weighted_average_2: data2.map(item=>item.sub_parameter_weighted_average)[9],
-    sub_parameter_weighted_average_3: data3.map(item=>item.sub_parameter_weighted_average)[9],
-  },
-  {
-    s_no: data1.map(item=>item.s_no)[10],
-    zone_name: data1.map(item=>item.zoneName)[10],
-    sub_parameter_weighted_average_1: data1.map(item=>item.sub_parameter_weighted_average)[10],
-    sub_parameter_weighted_average_2: data2.map(item=>item.sub_parameter_weighted_average)[10],
-    sub_parameter_weighted_average_3: data3.map(item=>item.sub_parameter_weighted_average)[10],
-  },
-  {
-    s_no: data1.map(item=>item.s_no)[11],
-    zone_name: data1.map(item=>item.zoneName)[11],
-    sub_parameter_weighted_average_1: data1.map(item=>item.sub_parameter_weighted_average)[11],
-    sub_parameter_weighted_average_2: data2.map(item=>item.sub_parameter_weighted_average)[11],
-    sub_parameter_weighted_average_3: data3.map(item=>item.sub_parameter_weighted_average)[11],
-  },
-  {
-    s_no: data1.map(item=>item.s_no)[12],
-    zone_name: data1.map(item=>item.zoneName)[12],
-    sub_parameter_weighted_average_1: data1.map(item=>item.sub_parameter_weighted_average)[12],
-    sub_parameter_weighted_average_2: data2.map(item=>item.sub_parameter_weighted_average)[12],
-    sub_parameter_weighted_average_3: data3.map(item=>item.sub_parameter_weighted_average)[12],
-  },
-  {
-    s_no: data1.map(item=>item.s_no)[13],
-    zone_name: data1.map(item=>item.zoneName)[13],
-    sub_parameter_weighted_average_1: data1.map(item=>item.sub_parameter_weighted_average)[13],
-    sub_parameter_weighted_average_2: data2.map(item=>item.sub_parameter_weighted_average)[13],
-    sub_parameter_weighted_average_3: data3.map(item=>item.sub_parameter_weighted_average)[13],
-  },
-  {
-    s_no: data1.map(item=>item.s_no)[14],
-    zone_name: data1.map(item=>item.zoneName)[14],
-    sub_parameter_weighted_average_1: data1.map(item=>item.sub_parameter_weighted_average)[14],
-    sub_parameter_weighted_average_2: data2.map(item=>item.sub_parameter_weighted_average)[14],
-    sub_parameter_weighted_average_3: data3.map(item=>item.sub_parameter_weighted_average)[14],
-  },
-  {
-    s_no: data1.map(item=>item.s_no)[15],
-    zone_name: data1.map(item=>item.zoneName)[15],
-    sub_parameter_weighted_average_1: data1.map(item=>item.sub_parameter_weighted_average)[15],
-    sub_parameter_weighted_average_2: data2.map(item=>item.sub_parameter_weighted_average)[15],
-    sub_parameter_weighted_average_3: data3.map(item=>item.sub_parameter_weighted_average)[15],
-  },
-  {
-    s_no: data1.map(item=>item.s_no)[16],
-    zone_name: data1.map(item=>item.zoneName)[16],
-    sub_parameter_weighted_average_1: data1.map(item=>item.sub_parameter_weighted_average)[16],
-    sub_parameter_weighted_average_2: data2.map(item=>item.sub_parameter_weighted_average)[16],
-    sub_parameter_weighted_average_3: data3.map(item=>item.sub_parameter_weighted_average)[16],
-  },
-  {
-    s_no: data1.map(item=>item.s_no)[17],
-    zone_name: data1.map(item=>item.zoneName)[17],
-    sub_parameter_weighted_average_1: data1.map(item=>item.sub_parameter_weighted_average)[17],
-    sub_parameter_weighted_average_2: data2.map(item=>item.sub_parameter_weighted_average)[17],
-    sub_parameter_weighted_average_3: data3.map(item=>item.sub_parameter_weighted_average)[17],
-  },
-  {
-    s_no: data1.map(item=>item.s_no)[18],
-    zone_name: data1.map(item=>item.zoneName)[18],
-    sub_parameter_weighted_average_1: data1.map(item=>item.sub_parameter_weighted_average)[18],
-    sub_parameter_weighted_average_2: data2.map(item=>item.sub_parameter_weighted_average)[18],
-    sub_parameter_weighted_average_3: data3.map(item=>item.sub_parameter_weighted_average)[18],
-  },
-  {
-    s_no: data1.map(item=>item.s_no)[19],
-    zone_name: data1.map(item=>item.zoneName)[19],
-    sub_parameter_weighted_average_1: data1.map(item=>item.sub_parameter_weighted_average)[19],
-    sub_parameter_weighted_average_2: data2.map(item=>item.sub_parameter_weighted_average)[19],
-    sub_parameter_weighted_average_3: data3.map(item=>item.sub_parameter_weighted_average)[19],
-  },
-  {
-    s_no: data1.map(item=>item.s_no)[20],
-    zone_name: data1.map(item=>item.zoneName)[20],
-    sub_parameter_weighted_average_1: data1.map(item=>item.sub_parameter_weighted_average)[20],
-    sub_parameter_weighted_average_2: data2.map(item=>item.sub_parameter_weighted_average)[20],
-    sub_parameter_weighted_average_3: data3.map(item=>item.sub_parameter_weighted_average)[20],
-  },
-  {
-    s_no: data1.map(item=>item.s_no)[21],
-    zone_name: data1.map(item=>item.zoneName)[21],
-    sub_parameter_weighted_average_1: data1.map(item=>item.sub_parameter_weighted_average)[21],
-    sub_parameter_weighted_average_2: data2.map(item=>item.sub_parameter_weighted_average)[21],
-    sub_parameter_weighted_average_3: data3.map(item=>item.sub_parameter_weighted_average)[21],
-  }
+      s_no: data1.map(item => item.s_no)[0],
+      zone_name: data1.map(item => item.zoneName)[0],
+      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[0],
+      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[0],
+      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[0],
+      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[0],
+      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[0],
+      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[0],
+    },
+    {
+      s_no: data1.map(item => item.s_no)[1],
+      zone_name: data1.map(item => item.zoneName)[1],
+      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[1],
+      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[1],
+      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[1],
+      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[1],
+      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[1],
+      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[1],
+    },
+    {
+      s_no: data1.map(item => item.s_no)[2],
+      zone_name: data1.map(item => item.zoneName)[2],
+      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[2],
+      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[2],
+      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[2],
+      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[2],
+      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[2],
+      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[2],
+    },
+    {
+      s_no: data1.map(item => item.s_no)[3],
+      zone_name: data1.map(item => item.zoneName)[3],
+      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[3],
+      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[3],
+      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[3],
+      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[3],
+      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[3],
+      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[3],
+    },
+    {
+      s_no: data1.map(item => item.s_no)[4],
+      zone_name: data1.map(item => item.zoneName)[4],
+      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[4],
+      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[4],
+      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[4],
+      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[4],
+      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[4],
+      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[4],
+    },
+    {
+      s_no: data1.map(item => item.s_no)[5],
+      zone_name: data1.map(item => item.zoneName)[5],
+      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[5],
+      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[5],
+      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[5],
+      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[5],
+      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[5],
+      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[5],
+    },
+    {
+      s_no: data1.map(item => item.s_no)[6],
+      zone_name: data1.map(item => item.zoneName)[6],
+      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[6],
+      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[6],
+      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[6],
+      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[6],
+      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[6],
+      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[6],
+    },
+    {
+      s_no: data1.map(item => item.s_no)[7],
+      zone_name: data1.map(item => item.zoneName)[7],
+      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[7],
+      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[7],
+      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[7],
+      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[7],
+      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[7],
+      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[7],
+    },
+    {
+      s_no: data1.map(item => item.s_no)[8],
+      zone_name: data1.map(item => item.zoneName)[8],
+      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[8],
+      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[8],
+      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[8],
+      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[8],
+      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[8],
+      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[8],
+    },
+    {
+      s_no: data1.map(item => item.s_no)[9],
+      zone_name: data1.map(item => item.zoneName)[9],
+      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[9],
+      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[9],
+      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[9],
+      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[9],
+      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[9],
+      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[9],
+    },
+    {
+      s_no: data1.map(item => item.s_no)[10],
+      zone_name: data1.map(item => item.zoneName)[10],
+      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[10],
+      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[10],
+      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[10],
+      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[10],
+      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[10],
+      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[10],
+    },
+    {
+      s_no: data1.map(item => item.s_no)[11],
+      zone_name: data1.map(item => item.zoneName)[11],
+      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[11],
+      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[11],
+      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[11],
+      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[11],
+      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[11],
+      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[11],
+    },
+    {
+      s_no: data1.map(item => item.s_no)[12],
+      zone_name: data1.map(item => item.zoneName)[12],
+      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[12],
+      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[12],
+      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[12],
+      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[12],
+      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[12],
+      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[12],
+    },
+    {
+      s_no: data1.map(item => item.s_no)[13],
+      zone_name: data1.map(item => item.zoneName)[13],
+      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[13],
+      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[13],
+      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[13],
+      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[13],
+      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[13],
+      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[13],
+    },
+    {
+      s_no: data1.map(item => item.s_no)[14],
+      zone_name: data1.map(item => item.zoneName)[14],
+      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[14],
+      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[14],
+      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[14],
+      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[14],
+      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[14],
+      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[14],
+    },
+    {
+      s_no: data1.map(item => item.s_no)[15],
+      zone_name: data1.map(item => item.zoneName)[15],
+      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[15],
+      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[15],
+      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[15],
+      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[15],
+      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[15],
+      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[15],
+    },
+    {
+      s_no: data1.map(item => item.s_no)[16],
+      zone_name: data1.map(item => item.zoneName)[16],
+      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[16],
+      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[16],
+      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[16],
+      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[16],
+      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[16],
+      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[16],
+    },
+    {
+      s_no: data1.map(item => item.s_no)[17],
+      zone_name: data1.map(item => item.zoneName)[17],
+      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[17],
+      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[17],
+      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[17],
+      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[17],
+      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[17],
+      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[17],
+    },
+    {
+      s_no: data1.map(item => item.s_no)[18],
+      zone_name: data1.map(item => item.zoneName)[18],
+      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[18],
+      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[18],
+      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[18],
+      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[18],
+      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[18],
+      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[18],
+    },
+    {
+      s_no: data1.map(item => item.s_no)[19],
+      zone_name: data1.map(item => item.zoneName)[19],
+      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[19],
+      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[19],
+      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[19],
+      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[19],
+      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[19],
+      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[19],
+    },
+    {
+      s_no: data1.map(item => item.s_no)[20],
+      zone_name: data1.map(item => item.zoneName)[20],
+      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[20],
+      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[20],
+      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[20],
+      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[20],
+      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[20],
+      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[20],
+    },
+    {
+      s_no: data1.map(item => item.s_no)[21],
+      zone_name: data1.map(item => item.zoneName)[21],
+      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[21],
+      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[21],
+      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[21],
+      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[21],
+      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[21],
+      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[21],
+    }
 
-]
+  ]
 
-  console.log("usersdata",userData);
+  console.log("usersdata", userData);
 
   const headerStyles = {
     backgroundColor: "#4CAF50",
@@ -696,8 +926,8 @@ const previousmonth2 = dayjs(selectedDate)
                     id="switchZones"
                     name="switchPlan2"
                     value="Zones"
-                    // checked={selectedOption1 === "Zones"}
-                    // onChange={handleChange1}
+                  // checked={selectedOption1 === "Zones"}
+                  // onChange={handleChange1}
                   />
                   {/* <input
                     type="radio"
@@ -710,10 +940,10 @@ const previousmonth2 = dayjs(selectedDate)
                   {/* <label htmlFor="switchZones">Zones</label> */}
                   {/* <label htmlFor="switchCommissionerate">Commissionerate</label> */}
                   {/* <div className="switch-wrapper2"> */}
-                    {/* <div className="switch2">
+                  {/* <div className="switch2">
                       <div>Zones</div>
                       <div>Commissionerate</div> */}
-                    {/* </div>
+                  {/* </div>
                   </div> */}
                 </div>
               </div>
@@ -756,13 +986,13 @@ const previousmonth2 = dayjs(selectedDate)
                     border: "primary",
                   }}
                   onKeyDown={(e) => checkSpecialChar(e)}
-                  // tableBodyProps={{
-                  //   className: "align-middle border-info",
-                  //   color:'primary',
-                  // }}
-                  // tableHeadProps={{
-                  //   className:"border-info alert-dark",
-                  // }}
+                // tableBodyProps={{
+                //   className: "align-middle border-info",
+                //   color:'primary',
+                // }}
+                // tableHeadProps={{
+                //   className:"border-info alert-dark",
+                // }}
                 />
               </div>
             </div>
