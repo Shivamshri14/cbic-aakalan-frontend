@@ -335,16 +335,16 @@ const AllZones = ({
 
       // Final data mapping and adding totals
       const finalData = filteredData.map((item) => {
-        item.sub_parameter_weighted_average_scrutiny_assessment = parseFloat(item.sub_parameter_weighted_average_scrutiny_assessment).toFixed(1);
-        item.sub_parameter_weighted_average_investigation = parseFloat(item.sub_parameter_weighted_average_investigation).toFixed(1);
-        item.sub_parameter_weighted_average_Adjudication = parseFloat(item.sub_parameter_weighted_average_Adjudication).toFixed(1);
-        item.sub_parameter_weighted_average_adjudication_legacy_cases = parseFloat(item.sub_parameter_weighted_average_adjudication_legacy_cases).toFixed(1);
-        item.weighted_average_out_of_5_refunds = parseFloat((item.weighted_average_out_of_5_refunds * 5) / 10).toFixed(1);
-        item.weighted_average_out_of_8_recovery_of_arrears = parseFloat((item.weighted_average_out_of_8_recovery_of_arrears * 8) / 10).toFixed(1);
-        item.weighted_average_out_of_6_arrest_prosecution = parseFloat((item.weighted_average_out_of_6_arrest_prosecution * 6) / 10).toFixed(1);
-        item.weighted_average_out_of_12_audit = parseFloat((item.weighted_average_out_of_12_audit * 12) / 10).toFixed(1);
-        item.weighted_average_out_of_12_appeals = parseFloat((item.weighted_average_out_of_12_appeals * 12) / 10).toFixed(1);
-        item.weighted_average_out_of_5_return_filing = parseFloat((item.weighted_average_out_of_5_return_filing * 5) / 10).toFixed(1); // For return filing
+        item.sub_parameter_weighted_average_scrutiny_assessment = parseFloat(item.sub_parameter_weighted_average_scrutiny_assessment).toFixed(2);
+        item.sub_parameter_weighted_average_investigation = parseFloat(item.sub_parameter_weighted_average_investigation).toFixed(2);
+        item.sub_parameter_weighted_average_Adjudication = parseFloat(item.sub_parameter_weighted_average_Adjudication).toFixed(2);
+        item.sub_parameter_weighted_average_adjudication_legacy_cases = parseFloat(item.sub_parameter_weighted_average_adjudication_legacy_cases).toFixed(2);
+        item.weighted_average_out_of_5_refunds = parseFloat((item.weighted_average_out_of_5_refunds * 5) / 10).toFixed(2);
+        item.weighted_average_out_of_8_recovery_of_arrears = parseFloat((item.weighted_average_out_of_8_recovery_of_arrears * 8) / 10).toFixed(2);
+        item.weighted_average_out_of_6_arrest_prosecution = parseFloat((item.weighted_average_out_of_6_arrest_prosecution * 6) / 10).toFixed(2);
+        item.weighted_average_out_of_12_audit = parseFloat((item.weighted_average_out_of_12_audit * 12) / 10).toFixed(2);
+        item.weighted_average_out_of_12_appeals = parseFloat((item.weighted_average_out_of_12_appeals * 12) / 10).toFixed(2);
+        item.weighted_average_out_of_5_return_filing = parseFloat((item.weighted_average_out_of_5_return_filing * 5) / 10).toFixed(2); // For return filing
 
         // Calculate the total weighted average by adding all weighted averages
         const total_weighted_average =
@@ -1011,19 +1011,19 @@ const AllZones = ({
       // Final data mapping and adding totals
       const finalData = filteredData.map((item) => {
         // Format the fields
-        item.weighted_average_out_of_11 = ((item.weighted_average_out_of_11 * 11) / 10).toFixed(1);
-        item.weighted_average_out_of_7_epcg = ((item.weighted_average_out_of_7_epcg * 7) / 10).toFixed(1);
-        item.weighted_average_out_of_7_aa = ((item.weighted_average_out_of_7_aa * 7) / 10).toFixed(1);
-        item.sub_parameter_weighted_average_AdjudicationData = parseFloat(item.sub_parameter_weighted_average_AdjudicationData).toFixed(1);
-        item.weighted_average_out_of_12_investigation = ((item.weighted_average_out_of_12_investigation * 12) / 10).toFixed(1);
-        item.weighted_average_out_of_6_cus_arrest_prosecution = ((item.weighted_average_out_of_6_cus_arrest_prosecution * 6) / 10).toFixed(1);
-        item.weighted_average_out_of_5_cus_timelyrefunds = ((item.weighted_average_out_of_5_cus_timelyrefunds)).toFixed(1);
-        item.weighted_average_out_of_6_cus_unclaimed_cargo = ((item.weighted_average_out_of_6_cus_unclaimed_cargo * 6 )/10).toFixed(1);
-        item.weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS = ((item.weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS * 6 )/10).toFixed(1);
-        item.weighted_average_out_of_6_cus_recovery_of_arrears = ((item.weighted_average_out_of_6_cus_recovery_of_arrears * 6 )/10).toFixed(1);
-        item.weighted_average_out_of_6_cus_management_of_warehousing_bonds = ((item.weighted_average_out_of_6_cus_management_of_warehousing_bonds * 6 )/10).toFixed(1);
-        item.weighted_average_out_of_8_cus_CommissionerAppeals = ((item.weighted_average_out_of_8_cus_CommissionerAppeals * 8 )/10).toFixed(1);
-        item.weighted_average_out_of_12_cus_audit = ((item.weighted_average_out_of_12_cus_audit * 12 )/10).toFixed(1);
+        item.weighted_average_out_of_11 = ((item.weighted_average_out_of_11 * 11) / 10).toFixed(2);
+        item.weighted_average_out_of_7_epcg = ((item.weighted_average_out_of_7_epcg * 7) / 10).toFixed(2);
+        item.weighted_average_out_of_7_aa = ((item.weighted_average_out_of_7_aa * 7) / 10).toFixed(2);
+        item.sub_parameter_weighted_average_AdjudicationData = parseFloat(item.sub_parameter_weighted_average_AdjudicationData).toFixed(2);
+        item.weighted_average_out_of_12_investigation = ((item.weighted_average_out_of_12_investigation * 12) / 10).toFixed(2);
+        item.weighted_average_out_of_6_cus_arrest_prosecution = ((item.weighted_average_out_of_6_cus_arrest_prosecution * 6) / 10).toFixed(2);
+        item.weighted_average_out_of_5_cus_timelyrefunds = ((item.weighted_average_out_of_5_cus_timelyrefunds)).toFixed(2);
+        item.weighted_average_out_of_6_cus_unclaimed_cargo = ((item.weighted_average_out_of_6_cus_unclaimed_cargo * 6 )/10).toFixed(2);
+        item.weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS = ((item.weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS * 4 )/10).toFixed(2);
+        item.weighted_average_out_of_6_cus_recovery_of_arrears = ((item.weighted_average_out_of_6_cus_recovery_of_arrears * 6 )/10).toFixed(2);
+        item.weighted_average_out_of_6_cus_management_of_warehousing_bonds = ((item.weighted_average_out_of_6_cus_management_of_warehousing_bonds * 6 )/10).toFixed(2);
+        item.weighted_average_out_of_8_cus_CommissionerAppeals = ((item.weighted_average_out_of_8_cus_CommissionerAppeals * 8 )/10).toFixed(2);
+        item.weighted_average_out_of_12_cus_audit = ((item.weighted_average_out_of_12_cus_audit * 12 )/10).toFixed(2);
 
         // Calculate the total weighted average by adding all weighted averages
         const total_weighted_average =

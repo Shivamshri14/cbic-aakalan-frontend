@@ -72,7 +72,7 @@ const MonthlyReport = ({
         appeals: ["gst11a", "gst11b", "gst11c", "gst11d"],
         return_filing: ["gst2"],
       };
-
+  
       const scaleMap = {
         audit: 12,
         recovery_of_arrears: 8,
@@ -81,7 +81,7 @@ const MonthlyReport = ({
         return_filing: 5,
         appeals: 12,
       };
-
+  
       const fetchEndpoints = async (group, scale = null) => {
         return Promise.all(
           endpointsGrouped[group].map((endpoint) =>
@@ -103,7 +103,7 @@ const MonthlyReport = ({
           )
         );
       };
-
+  
       // Fetch all groups
       const [
         responses_registration,
@@ -130,40 +130,7 @@ const MonthlyReport = ({
         fetchEndpoints("appeals", scaleMap.appeals),
         fetchEndpoints("return_filing", scaleMap.return_filing),
       ]);
-
-      // 🔍 Log helper
-      const logZoneWiseScores = (label, responses) => {
-        const flatData = responses.flatMap((res) => res.data);
-        const zoneMap = {};
-
-        flatData.forEach((item) => {
-          const zone = item.zone_code;
-          const score = item.sub_parameter_weighted_average || 0;
-          if (!zoneMap[zone]) {
-            zoneMap[zone] = [];
-          }
-          zoneMap[zone].push(score);
-        });
-
-        console.log(`\n--- ${label} ---`);
-        Object.entries(zoneMap).forEach(([zone, scores]) => {
-          console.log(`Zone ${zone}: ${scores.join(", ")}`);
-        });
-      };
-
-      // 🔍 Call log function
-      logZoneWiseScores("Registration", responses_registration);
-      logZoneWiseScores("Audit", responses_audit);
-      logZoneWiseScores("Scrutiny Assessment", responses_scrutiny);
-      logZoneWiseScores("Investigation", responses_investigation);
-      logZoneWiseScores("Recovery of Arrears", responses_recovery);
-      logZoneWiseScores("Arrest & Prosecution", responses_arrest);
-      logZoneWiseScores("Adjudication", responses_adjudication);
-      logZoneWiseScores("Adjudication Legacy", responses_adjudication_legacy);
-      logZoneWiseScores("Refunds", responses_refunds);
-      logZoneWiseScores("Appeals", responses_appeals);
-      logZoneWiseScores("Return Filing", responses_return_filing);
-
+  
       const allResponses = [
         ...responses_registration,
         ...responses_audit,
@@ -177,36 +144,36 @@ const MonthlyReport = ({
         ...responses_appeals,
         ...responses_return_filing,
       ];
-
+  
       setloading(false);
-
+  
       const allData = allResponses.flatMap((response) => response.data);
-
+  
       const summedByZone = allData.reduce((acc, item) => {
         const zoneCode = item.zone_code;
         const value = item.sub_parameter_weighted_average || 0;
-
+  
         if (!acc[zoneCode]) {
           acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
         }
-
+  
         acc[zoneCode].sub_parameter_weighted_average = parseFloat(
           (acc[zoneCode].sub_parameter_weighted_average + value).toFixed(2)
         );
-
+  
         return acc;
       }, {});
-
+  
       const reducedAllData = Object.values(summedByZone);
-
+  
       const sorted = reducedAllData.sort(
         (a, b) =>
           b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
       );
-
+  
       const scoreIndexMap = new Map();
       let currentIndex = 1;
-
+  
       for (let i = 0; i < sorted.length; i++) {
         const score = sorted[i].sub_parameter_weighted_average;
         if (!scoreIndexMap.has(score)) {
@@ -215,14 +182,39 @@ const MonthlyReport = ({
         }
         sorted[i].zonal_rank = scoreIndexMap.get(score);
       }
-
-      const filteredData = sorted.filter(item => item.zonal_rank <= 21);
+  
+      // Apply color-coding and enhance the data
+      const enhancedData = sorted.map((item, index) => {
+        const total = item.sub_parameter_weighted_average;
+  
+        let props = {};
+        if (total <= 100 && total >= 75) {
+          props = { scope: "row", color: "success" }; // Top entries
+        } else if (total < 75 && total >= 50) {
+          props = { scope: "row", color: "warning" };
+        } else if (total >= 0 && total <= 25) {
+          props = { scope: "row", color: "danger" }; // Bottom entries
+        } else {
+          props = { scope: "row", color: "primary" }; // Remaining entries
+        }
+  
+        return {
+          ...item,
+          _props: props, // Add _props field dynamically
+          s_no: index + 1,
+        };
+      });
+  
+      // Filter top 21 entries
+      const filteredData = enhancedData.filter(item => item.zonal_rank <= 21);
+  
       setData(filteredData);
     } catch (error) {
       console.error("Error fetching data:", error);
       setloading(false);
     }
   };
+  
 
   const fetchDataCom = async () => {
     try {
@@ -246,12 +238,12 @@ const MonthlyReport = ({
         disposal_pendency: 11,
         epcg: 7,
         aa: 7,
-        adjudication: 8,
+        adjudication: 10,
         cus_investigation: 12,
         cus_arrest_prosecution: 6,
-        cus_timelyrefunds: 5,
+        //cus_timelyrefunds: 1,
         cus_unclaimed_cargo: 6,
-        cus_DisposalOfConfiscatedGoldAndNDPS: 6,
+        cus_DisposalOfConfiscatedGoldAndNDPS: 4,
         cus_recovery_of_arrears: 6,
         cus_management_of_warehousing_bonds: 6,
         cus_CommissionerAppeals: 8,
@@ -315,7 +307,7 @@ const MonthlyReport = ({
       const logZoneWiseScores = (label, responses) => {
         const flatData = responses.flatMap((res) => res.data);
         const zoneMap = {};
-  
+      
         flatData.forEach((item) => {
           const zone = item.zone_code;
           const score = item.sub_parameter_weighted_average || 0;
@@ -324,12 +316,14 @@ const MonthlyReport = ({
           }
           zoneMap[zone].push(score);
         });
-  
+      
         console.log(`\n--- ${label} ---`);
         Object.entries(zoneMap).forEach(([zone, scores]) => {
-          console.log(`Zone ${zone}: ${scores.join(", ")}`);
+          const sum = scores.reduce((acc, score) => acc + score, 0); // Calculate sum of scores
+          console.log(`Zone ${zone}: ${scores.join(", ")} (Sum: ${sum})`);
         });
       };
+      
   
       // 🔍 Call log function
       logZoneWiseScores("Disposal Pendency", responses_disposal_pendency);
@@ -352,14 +346,14 @@ const MonthlyReport = ({
         ...responses_aa,
         ...responses_adjudication,
         ...responses_cus_investigation,
-        // ...responses_cus_arrest_prosecution,
-        // ...responses_cus_timelyrefunds,
-        // ...responses_cus_unclaimed_cargo,
-        // ...responses_cus_DisposalOfConfiscatedGoldAndNDPS,
-        // ...responses_cus_recovery_of_arrears,
-        // ...responses_cus_management_of_warehousing_bonds,
-        // ...responses_cus_CommissionerAppeals,
-        // ...responses_cus_audit,
+        ...responses_cus_arrest_prosecution,
+        ...responses_cus_timelyrefunds,
+        ...responses_cus_unclaimed_cargo,
+        ...responses_cus_DisposalOfConfiscatedGoldAndNDPS,
+        ...responses_cus_recovery_of_arrears,
+        ...responses_cus_management_of_warehousing_bonds,
+        ...responses_cus_CommissionerAppeals,
+        ...responses_cus_audit,
       ];
   
       setloading(false);
