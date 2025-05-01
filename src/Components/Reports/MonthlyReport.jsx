@@ -60,19 +60,19 @@ const MonthlyReport = ({
   const fetchData = async () => {
     try {
       const endpointsGrouped = {
-        registration: ["gst1a", "gst1b", "gst1c", "gst1d", "gst1e", "gst1f"],
+        //registration: ["gst1a", "gst1b", "gst1c", "gst1d", "gst1e", "gst1f"],
         audit: ["gst10a", "gst10b", "gst10c"],
         scrutiny_assessment: ["gst3a", "gst3b"],
         investigation: ["gst4a", "gst4b", "gst4c", "gst4d"],
         recovery_of_arrears: ["gst8a", "gst8b"],
         arrest_prosecution: ["gst9a", "gst9b"],
         adjudication: ["gst5a", "gst5b"],
-        adjudication_legacy: ["gst6a", "gst6b", "gst6c", "gst6d"],
+        adjudication_legacy: ["gst6a", "gst6b", /* "gst6c", */ "gst6d"],
         refunds: ["gst7"],
         appeals: ["gst11a", "gst11b", "gst11c", "gst11d"],
         return_filing: ["gst2"],
       };
-  
+
       const scaleMap = {
         audit: 12,
         recovery_of_arrears: 8,
@@ -81,7 +81,7 @@ const MonthlyReport = ({
         return_filing: 5,
         appeals: 12,
       };
-  
+
       const fetchEndpoints = async (group, scale = null) => {
         return Promise.all(
           endpointsGrouped[group].map((endpoint) =>
@@ -103,10 +103,10 @@ const MonthlyReport = ({
           )
         );
       };
-  
+
       // Fetch all groups
       const [
-        responses_registration,
+        //responses_registration,
         responses_audit,
         responses_scrutiny,
         responses_investigation,
@@ -118,7 +118,7 @@ const MonthlyReport = ({
         responses_appeals,
         responses_return_filing,
       ] = await Promise.all([
-        fetchEndpoints("registration"),
+        //fetchEndpoints("registration"),
         fetchEndpoints("audit", scaleMap.audit),
         fetchEndpoints("scrutiny_assessment"),
         fetchEndpoints("investigation"),
@@ -130,9 +130,9 @@ const MonthlyReport = ({
         fetchEndpoints("appeals", scaleMap.appeals),
         fetchEndpoints("return_filing", scaleMap.return_filing),
       ]);
-  
+
       const allResponses = [
-        ...responses_registration,
+        //...responses_registration,
         ...responses_audit,
         ...responses_scrutiny,
         ...responses_investigation,
@@ -144,49 +144,60 @@ const MonthlyReport = ({
         ...responses_appeals,
         ...responses_return_filing,
       ];
-  
-      setloading(false);
-  
+
+      //setloading(false);
+
       const allData = allResponses.flatMap((response) => response.data);
-  
+
       const summedByZone = allData.reduce((acc, item) => {
         const zoneCode = item.zone_code;
         const value = item.sub_parameter_weighted_average || 0;
-  
+
         if (!acc[zoneCode]) {
           acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
         }
-  
+
         acc[zoneCode].sub_parameter_weighted_average = parseFloat(
           (acc[zoneCode].sub_parameter_weighted_average + value).toFixed(2)
         );
-  
+
         return acc;
       }, {});
-  
+
       const reducedAllData = Object.values(summedByZone);
-  
+
       const sorted = reducedAllData.sort(
         (a, b) =>
           b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
       );
-  
-      const scoreIndexMap = new Map();
+
+      //const scoreIndexMap = new Map();
+      //let currentIndex = 1;
+
+      // for (let i = 0; i < sorted.length; i++) {
+      //   // const score = sorted[i].sub_parameter_weighted_average;
+      //   if (!scoreIndexMap.has(score)) {
+      //     scoreIndexMap.set(score, currentIndex);
+      //     currentIndex++;
+      //   }
+      //   sorted[i].zonal_rank = scoreIndexMap.get(score);
+      // }
+
       let currentIndex = 1;
-  
+      let prevScore = null;
       for (let i = 0; i < sorted.length; i++) {
         const score = sorted[i].sub_parameter_weighted_average;
-        if (!scoreIndexMap.has(score)) {
-          scoreIndexMap.set(score, currentIndex);
-          currentIndex++;
+        if (score !== prevScore) {
+          currentIndex = i + 1;
         }
-        sorted[i].zonal_rank = scoreIndexMap.get(score);
+        sorted[i].zonal_rank = currentIndex;
+        prevScore = score;
       }
-  
+
       // Apply color-coding and enhance the data
       const enhancedData = sorted.map((item, index) => {
         const total = item.sub_parameter_weighted_average;
-  
+      
         let props = {};
         if (total <= 100 && total >= 75) {
           props = { scope: "row", color: "success" }; // Top entries
@@ -197,24 +208,24 @@ const MonthlyReport = ({
         } else {
           props = { scope: "row", color: "primary" }; // Remaining entries
         }
-  
+      
         return {
           ...item,
-          _props: props, // Add _props field dynamically
+          _props: props, // Add dynamic background color properties
           s_no: index + 1,
         };
-      });
-  
+      });      
+
       // Filter top 21 entries
       const filteredData = enhancedData.filter(item => item.zonal_rank <= 21);
-  
+
       setData(filteredData);
     } catch (error) {
       console.error("Error fetching data:", error);
       setloading(false);
     }
   };
-  
+
 
   const fetchDataCom = async () => {
     try {
@@ -233,7 +244,7 @@ const MonthlyReport = ({
         cus_CommissionerAppeals: ["cus12a", "cus12b"],
         cus_audit: ["cus13a", "cus13b", "cus13c", "cus13d", "cus13e"],
       };
-  
+
       const scaleMap = {
         disposal_pendency: 11,
         epcg: 7,
@@ -249,7 +260,7 @@ const MonthlyReport = ({
         cus_CommissionerAppeals: 8,
         cus_audit: 12,
       };
-  
+
       const fetchEndpoints = async (group, scale = null) => {
         return Promise.all(
           endpointsGrouped[group].map((endpoint) =>
@@ -271,7 +282,7 @@ const MonthlyReport = ({
           )
         );
       };
-  
+
       // Fetch all groups
       const [
         responses_disposal_pendency,
@@ -302,12 +313,12 @@ const MonthlyReport = ({
         fetchEndpoints("cus_CommissionerAppeals", scaleMap.cus_CommissionerAppeals),
         fetchEndpoints("cus_audit", scaleMap.cus_audit),
       ]);
-  
+
       // 🔍 Log helper
       const logZoneWiseScores = (label, responses) => {
         const flatData = responses.flatMap((res) => res.data);
         const zoneMap = {};
-      
+
         flatData.forEach((item) => {
           const zone = item.zone_code;
           const score = item.sub_parameter_weighted_average || 0;
@@ -316,15 +327,15 @@ const MonthlyReport = ({
           }
           zoneMap[zone].push(score);
         });
-      
+
         console.log(`\n--- ${label} ---`);
         Object.entries(zoneMap).forEach(([zone, scores]) => {
           const sum = scores.reduce((acc, score) => acc + score, 0); // Calculate sum of scores
           console.log(`Zone ${zone}: ${scores.join(", ")} (Sum: ${sum})`);
         });
       };
-      
-  
+
+
       // 🔍 Call log function
       logZoneWiseScores("Disposal Pendency", responses_disposal_pendency);
       logZoneWiseScores("EPCG", responses_epcg);
@@ -339,7 +350,7 @@ const MonthlyReport = ({
       logZoneWiseScores("Warehousing Bonds", responses_cus_management_of_warehousing_bonds);
       logZoneWiseScores("Commissioner Appeals", responses_cus_CommissionerAppeals);
       logZoneWiseScores("Audit", responses_cus_audit);
-  
+
       const allResponses = [
         ...responses_disposal_pendency,
         ...responses_epcg,
@@ -355,62 +366,96 @@ const MonthlyReport = ({
         ...responses_cus_CommissionerAppeals,
         ...responses_cus_audit,
       ];
-  
+
       setloading(false);
-  
+
       const allData = allResponses.flatMap((response) => response.data);
-  
+
       // Calculate the total weighted average for each zone and fix to 2 decimal places
       const summedByZone = allData.reduce((acc, item) => {
         const zoneCode = item.zone_code;
         const value = item.sub_parameter_weighted_average || 0;
-  
+
         if (!acc[zoneCode]) {
           acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0, total_weighted_average: 0 };
         }
-  
+
         // Add the individual sub_parameter_weighted_average to the zone
         acc[zoneCode].sub_parameter_weighted_average = parseFloat(
           (acc[zoneCode].sub_parameter_weighted_average + value).toFixed(2)
         );
-  
+
         // Update the total weighted average by adding the weighted averages from all datasets
         acc[zoneCode].total_weighted_average = parseFloat(
           (acc[zoneCode].total_weighted_average + value).toFixed(2)
         );
-  
+
         return acc;
       }, {});
-  
+
       const reducedAllData = Object.values(summedByZone);
-  
+
       const sorted = reducedAllData.sort(
         (a, b) =>
           b.total_weighted_average - a.total_weighted_average
       );
-  
-      const scoreIndexMap = new Map();
+
+      // const scoreIndexMap = new Map();
+      // let currentIndex = 1;
+
+      // for (let i = 0; i < sorted.length; i++) {
+      //   const score = sorted[i].total_weighted_average;
+      //   if (!scoreIndexMap.has(score)) {
+      //     scoreIndexMap.set(score, currentIndex);
+      //     currentIndex++;
+      //   }
+      //   sorted[i].zonal_rank = scoreIndexMap.get(score);
+      // }
+
       let currentIndex = 1;
-  
+      let prevScore = null;
       for (let i = 0; i < sorted.length; i++) {
         const score = sorted[i].total_weighted_average;
-        if (!scoreIndexMap.has(score)) {
-          scoreIndexMap.set(score, currentIndex);
-          currentIndex++;
+        if (score !== prevScore) {
+          currentIndex = i + 1;
         }
-        sorted[i].zonal_rank = scoreIndexMap.get(score);
+        sorted[i].zonal_rank = currentIndex;
+        prevScore = score;
       }
-  
-      const filteredData = sorted.filter(item => item.zonal_rank <= 20 );
+
+      const enhancedData = sorted.map((item, index) => {
+        const total = item.total_weighted_average;
+
+        let props = {};
+        if (total <= 100 && total >= 75) {
+          props = { scope: "row", color: "success" }; // Top entries
+        } else if (total < 75 && total >= 50) {
+          props = { scope: "row", color: "warning" };
+        } else if (total >= 0 && total <= 25) {
+          props = { scope: "row", color: "danger" }; // Bottom entries
+        } else {
+          props = { scope: "row", color: "primary" }; // Remaining entries
+        }
+
+        return {
+          ...item,
+          _props: props, // Add _props field dynamically
+          s_no: index + 1,
+        };
+      });
+
+      const filteredData = enhancedData.filter(item => item.zonal_rank <= 20);
+
+      //const filteredData = sorted.filter(item => item.zonal_rank <= 20 );
       setDatacustoms(filteredData);
     } catch (error) {
       console.error("Error fetching data:", error);
       setloading(false);
     }
   };
-  
-  
-  
+
+
+
   useEffect(() => {
     fetchData();
     fetchDataCom();
@@ -418,6 +463,7 @@ const MonthlyReport = ({
 
   const [details, setDetails] = useState([]);
   const [selectedRow, setSelectedRow] = useState();
+
   const columns = [
     {
       key: "zonal_rank",
@@ -439,7 +485,24 @@ const MonthlyReport = ({
         return Math.trunc(Number(item.sub_parameter_weighted_average)).toString();
       },
     },
+    {
+      key: "show_details",
+      label: "Show Parameterwise by Bifurcation",
+      filter: false,
+      sorter: false,
+      _props: { className: "current-month-score" },
+      // formatter: (item) => {
+      //   return (
+      //     <Link to="/allzones" state={{ data: item }}> 
+      //       <CButton variant="outline" shape="square" size="sm" color="primary">
+      //         Show
+      //       </CButton>
+      //     </Link>
+      //   );
+      // },
+    },
   ];
+  
 
   const columnsCustom = [
     {
@@ -462,8 +525,57 @@ const MonthlyReport = ({
         return Math.trunc(Number(item.total_weighted_average)).toString();
       },
     },
+    {
+      key: "show_details",
+      label: "Show Parameterwise by Bifurcation",
+      filter: false,
+      sorter: false,
+      _props: { scope: "col" },
+      formatter: (item) => {
+        return (
+          <Link to="/allzones" state={{ data: item }}> 
+            <CButton variant="outline" shape="square" size="sm" color="primary">
+              Show
+            </CButton>
+          </Link>
+        );
+      },
+    },
   ];
-  
+
+    const scopedColumns = {
+      show_details: (item) => {
+        return (
+          <td className="py-2">
+            <Link
+              to={`/allzones`}
+            >
+              <CButton color="primary" variant="outline" shape="square" size="sm">
+                Show
+              </CButton>
+            </Link>
+          </td>
+        );
+      },
+
+    };
+
+  const scopedColumnscustoms = {
+    show_details: (item) => {
+      return (
+        <td className="py-2">
+          <Link
+            to={`/allzones`}
+          > 
+            <CButton color="primary" variant="outline" shape="square" size="sm">
+              Show
+            </CButton>
+          </Link>
+        </td>
+      );
+    },
+  };
+
 
   const headerStyles = {
     backgroundColor: "#4CAF50",
@@ -642,6 +754,7 @@ const MonthlyReport = ({
                     onSelectedItemsChange={(items) => {
                       console.log(items);
                     }}
+                    scopedColumns={scopedColumns}
                     sorterValue={{ column: "status", state: "asc" }}
                     tableFilter
                     tableProps={{
@@ -680,6 +793,7 @@ const MonthlyReport = ({
                     onSelectedItemsChange={(items) => {
                       console.log(items);
                     }}
+                    scopedColumns={scopedColumnscustoms}
                     sorterValue={{ column: "status", state: "asc" }}
                     tableFilter
                     tableProps={{
@@ -690,7 +804,7 @@ const MonthlyReport = ({
                       border: "primary",
                     }}
                     onKeyDown={(e) => checkSpecialChar(e)}
-                  /> }
+                  />}
                 </div>
               </div>
             )}

@@ -79,6 +79,7 @@ const AllZones = ({
   const fetchData = async () => {
     try {
       // Define the endpoints for each dataset
+     //const endpoints_registration = ["gst1a", "gst1b", "gst1c", "gst1d", "gst1e", "gst1f"],
       const endpoints_scrutiny_assessment = ["gst3a", "gst3b"];
       const endpoints_investigation = ["gst4a", "gst4b", "gst4c", "gst4d"];
       const endpoints_gst_adjudication = ["gst5a", "gst5b"];
@@ -405,7 +406,7 @@ const AllZones = ({
       );
       setData1(
         sortedFinalData.filter((item) => item.weighted_average_out_of_5_return_filing > 0)
-      ); // New state for return filing
+      ); 
     } catch (error) {
       console.error("Error fetching data:", error);
     }

@@ -31,6 +31,7 @@ const ComparativeReport = ({
     onChangeDate(value);
   };
 
+  const [data, setData] = useState([]);
   const [data1, setData1] = useState([]);
   const [data2, setData2] = useState([]);
   const [data3, setData3] = useState([]);
@@ -38,41 +39,37 @@ const ComparativeReport = ({
   const [data5, setData5] = useState([]);
   const [data6, setData6] = useState([]);
 
-  const [response, setResponse] = useState(null);
+  const [datacustoms1, setDatacustoms1] = useState([]);
+  const [datacustoms2, setDatacustoms2] = useState([]);
+  const [datacustoms3, setDatacustoms3] = useState([]);
+  const [datacustoms4, setDatacustoms4] = useState([]);
+  const [datacustoms5, setDatacustoms5] = useState([]);
+  const [datacustoms6, setDatacustoms6] = useState([]);
 
+  
+  const [datacustoms, setDatacustoms] = useState([]);
+
+
+  const [response, setResponse] = useState(null);
 
   const newdate = dayjs(selectedDate).format("YYYY-MM-DD");
   const date1 = dayjs(newdate).format("MMMM YYYY");
 
-  const previousmonth1 = dayjs(selectedDate)
-    .subtract(1, "month")
-    .format("YYYY-MM-DD");
+  const previousmonth1 = dayjs(selectedDate).subtract(1, "month").format("YYYY-MM-DD");
   const date2 = dayjs(previousmonth1).format("MMMM YYYY");
 
-  const previousmonth2 = dayjs(selectedDate)
-    .subtract(2, "month")
-    .format("YYYY-MM-DD");
+  const previousmonth2 = dayjs(selectedDate).subtract(2, "month").format("YYYY-MM-DD");
   const date3 = dayjs(previousmonth2).format("MMMM YYYY");
 
-  const previousmonth3 = dayjs(selectedDate)
-    .subtract(3, "month")
-    .format("YYYY-MM-DD");
+  const previousmonth3 = dayjs(selectedDate).subtract(3, "month").format("YYYY-MM-DD");
   const date4 = dayjs(previousmonth3).format("MMMM YYYY");
 
-  const previousmonth4 = dayjs(selectedDate)
-    .subtract(4, "month")
-    .format("YYYY-MM-DD");
+  const previousmonth4 = dayjs(selectedDate).subtract(4, "month").format("YYYY-MM-DD");
   const date5 = dayjs(previousmonth4).format("MMMM YYYY");
 
-  const previousmonth5 = dayjs(selectedDate)
-    .subtract(5, "month")
-    .format("YYYY-MM-DD");
+  const previousmonth5 = dayjs(selectedDate).subtract(5, "month").format("YYYY-MM-DD");
   const date6 = dayjs(previousmonth5).format("MMMM YYYY");
 
-  console.log("newdate", newdate);
-  console.log("date1", date1);
-  console.log("previousmonth1", previousmonth1);
-  console.log("previousmonth2", previousmonth2);
 
   // Function to disable years less than 2022
   const shouldDisableYear = (year) => {
@@ -99,411 +96,360 @@ const ComparativeReport = ({
     onSelectedOption1(e.target.value);
     console.log(e.target.value);
   };
+
   const fetchData = async () => {
     try {
-      const endpoints_audit = ["gst10a", "gst10b", "gst10c"];
-      const responses_audit = await Promise.all(
-        endpoints_audit.map((endpoint) =>
-          apiClient
-            .get(`/cbic/${endpoint}`, {
-              params: { month_date: newdate, type: "zone" },
-            })
-            .then((response) => ({
-              data: response.data.map(item => ({
-                ...item,
-                sub_parameter_weighted_average: (item.sub_parameter_weighted_average * 12) / 10
-              })),
-              gst: endpoint.toUpperCase(),
-            }))
-        )
-      );
-      const endpoints_scrutiny_assessment = ["gst3a", "gst3b"];
-      const responses_scrutiny_assessment = await Promise.all(
-        endpoints_scrutiny_assessment.map((endpoint) =>
-          apiClient
-            .get(`/cbic/${endpoint}`, {
-              params: { month_date: newdate, type: "zone" },
-            })
-            .then((response) => ({
-              data: response.data,
-              gst: endpoint.toUpperCase(),
-            }))
-        )
-      );
+      const endpointsGrouped = {
+        //registration: ["gst1a", "gst1b", "gst1c", "gst1d", "gst1e", "gst1f"],
+        audit: ["gst10a", "gst10b", "gst10c"],
+        scrutiny_assessment: ["gst3a", "gst3b"],
+        investigation: ["gst4a", "gst4b", "gst4c", "gst4d"],
+        recovery_of_arrears: ["gst8a", "gst8b"],
+        arrest_prosecution: ["gst9a", "gst9b"],
+        adjudication: ["gst5a", "gst5b"],
+        adjudication_legacy: ["gst6a", "gst6b", /* "gst6c", */ "gst6d"],
+        refunds: ["gst7"],
+        appeals: ["gst11a", "gst11b", "gst11c", "gst11d"],
+        return_filing: ["gst2"],
+      };
 
-      const endpoints_investigation = ["gst4a", "gst4b", "gst4c", "gst4d"];
-      const responses_investigation = await Promise.all(
-        endpoints_investigation.map((endpoint) =>
-          apiClient
-            .get(`/cbic/${endpoint}`, {
-              params: { month_date: newdate, type: "zone" },
-            })
-            .then((response) => ({
-              data: response.data,
-              gst: endpoint.toUpperCase(),
-            }))
-        )
-      );
+      const scaleMap = {
+        audit: 12,
+        recovery_of_arrears: 8,
+        arrest_prosecution: 6,
+        refunds: 5,
+        return_filing: 5,
+        appeals: 12,
+      };
 
-      const endpoints_recovery_of_arrears = ["gst8a", "gst8b"];
-      const responses_recovery_of_arrears = await Promise.all(
-        endpoints_recovery_of_arrears.map((endpoint) =>
-          apiClient
-            .get(`/cbic/${endpoint}`, {
-              params: { month_date: newdate, type: "zone" },
-            })
-            .then((response) => ({
-              data: response.data.map(item => ({
-                ...item,
-                sub_parameter_weighted_average: (item.sub_parameter_weighted_average * 8) / 10
-              })),
-              gst: endpoint.toUpperCase(),
-            }))
-        )
-      );
+      const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
 
-      const endpoints_gst_arrest_and_prosecution = ["gst9a", "gst9b"];
-      const responses_gst_arrest_and_prosecution = await Promise.all(
-        endpoints_gst_arrest_and_prosecution.map((endpoint) =>
-          apiClient
-            .get(`/cbic/${endpoint}`, {
-              params: { month_date: newdate, type: "zone" },
-            })
-            .then((response) => ({
-              data: response.data.map(item => ({
-                ...item,
-                sub_parameter_weighted_average: (item.sub_parameter_weighted_average * 6) / 10
-              })),
-              gst: endpoint.toUpperCase(),
-            }))
-        )
-      );
+      // Adjusted fetchEndpoints function to accept only a single month
+      const fetchEndpoints = async (group, scale = null, month) => {
+        return Promise.all(
+          endpointsGrouped[group].map((endpoint) =>
+            apiClient
+              .get(`/cbic/${endpoint}`, {
+                params: { month_date: month, type: "zone" },
+              })
+              .then((response) => ({
+                data: response.data.map(item => ({
+                  ...item,
+                  sub_parameter_weighted_average: parseFloat(
+                    scale
+                      ? ((item.sub_parameter_weighted_average * scale) / 10).toFixed(2)
+                      : parseFloat(item.sub_parameter_weighted_average).toFixed(2)
+                  ),
+                })),
+                gst: endpoint.toUpperCase(),
+              }))
+          )
+        );
+      };
 
-      const endpoints = [
-        "returnFiling",
-        // "scrutiny/assessment",
-        "adjudication",
-        "adjudication(legacy cases)",
-        "refunds",
-        "appeals",
-      ];
+      const getMonthData = async (month) => {
+        const [
+          //responses_registration,
+          responses_audit,
+          responses_scrutiny,
+          responses_investigation,
+          responses_recovery,
+          responses_arrest,
+          responses_adjudication,
+          responses_adjudication_legacy,
+          responses_refunds,
+          responses_appeals,
+          responses_return_filing,
+        ] = await Promise.all([
+          //fetchEndpoints("registration", null, month),
+          fetchEndpoints("audit", scaleMap.audit, month),
+          fetchEndpoints("scrutiny_assessment", null, month),
+          fetchEndpoints("investigation", null, month),
+          fetchEndpoints("recovery_of_arrears", scaleMap.recovery_of_arrears, month),
+          fetchEndpoints("arrest_prosecution", scaleMap.arrest_prosecution, month),
+          fetchEndpoints("adjudication", null, month),
+          fetchEndpoints("adjudication_legacy", null, month),
+          fetchEndpoints("refunds", scaleMap.refunds, month),
+          fetchEndpoints("appeals", scaleMap.appeals, month),
+          fetchEndpoints("return_filing", scaleMap.return_filing, month),
+        ]);
 
-      const responses1 = await Promise.all(
-        endpoints.map((endpoint) =>
-          apiClient
-            .get(`/cbic/t_score/${endpoint}`, {
-              params: { month_date: newdate, type: "parameter" },
-            })
-            .then((response) => ({
-              data: response.data,
-              parameter: endpoint.toUpperCase(),
-            }))
-        )
-      );
+        const allResponses = [
+          //...responses_registration,
+          ...responses_audit,
+          ...responses_scrutiny,
+          ...responses_investigation,
+          ...responses_recovery,
+          ...responses_arrest,
+          ...responses_adjudication,
+          ...responses_adjudication_legacy,
+          ...responses_refunds,
+          ...responses_appeals,
+          ...responses_return_filing,
+        ];
 
-      const responses2 = await Promise.all(
-        endpoints.map((endpoint) =>
-          apiClient
-            .get(`/cbic/t_score/${endpoint}`, {
-              params: { month_date: previousmonth1, type: "parameter" },
-            })
-            .then((response) => ({
-              data: response.data,
-              parameter: endpoint.toUpperCase(),
-            }))
-        )
-      );
+        const allData = allResponses.flatMap((response) => response.data);
 
-      const responses3 = await Promise.all(
-        endpoints.map((endpoint) =>
-          apiClient
-            .get(`/cbic/t_score/${endpoint}`, {
-              params: { month_date: previousmonth2, type: "parameter" },
-            })
-            .then((response) => ({
-              data: response.data,
-              parameter: endpoint.toUpperCase(),
-            }))
-        )
-      );
+        const summedByZone = allData.reduce((acc, item) => {
+          const zoneCode = item.zone_code;
+          const value = item.sub_parameter_weighted_average || 0;
 
-      const responses4 = await Promise.all(
-        endpoints.map((endpoint) =>
-          apiClient
-            .get(`/cbic/t_score/${endpoint}`, {
-              params: { month_date: previousmonth3, type: "parameter" },
-            })
-            .then((response) => ({
-              data: response.data,
-              parameter: endpoint.toUpperCase(),
-            }))
-        )
-      );
+          if (!acc[zoneCode]) {
+            acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
+          }
 
-      const responses5 = await Promise.all(
-        endpoints.map((endpoint) =>
-          apiClient
-            .get(`/cbic/t_score/${endpoint}`, {
-              params: { month_date: previousmonth4, type: "parameter" },
-            })
-            .then((response) => ({
-              data: response.data,
-              parameter: endpoint.toUpperCase(),
-            }))
-        )
-      );
+          acc[zoneCode].sub_parameter_weighted_average = parseFloat(
+            (acc[zoneCode].sub_parameter_weighted_average + value).toFixed(2)
+          );
 
-      const responses6 = await Promise.all(
-        endpoints.map((endpoint) =>
-          apiClient
-            .get(`/cbic/t_score/${endpoint}`, {
-              params: { month_date: previousmonth5, type: "parameter" },
-            })
-            .then((response) => ({
-              data: response.data,
-              parameter: endpoint.toUpperCase(),
-            }))
-        )
-      );
+          return acc;
+        }, {});
 
-      const combinedResponses = [
-        ...responses1,
-        ...responses2,
-        ...responses3,
-        ...responses4,
-        ...responses5,
-        ...responses6,
-        ...responses_audit,
-        ...responses_scrutiny_assessment,
-        ...responses_investigation,
-        ...responses_recovery_of_arrears,
-        ...responses_gst_arrest_and_prosecution,
-      ];
+        const reducedAllData = Object.values(summedByZone);
 
-      if (responses1 && responses2 && responses3 && responses4 && responses5 && responses6 && responses_audit && responses_scrutiny_assessment && responses_investigation && responses_recovery_of_arrears && responses_gst_arrest_and_prosecution && combinedResponses) {
-        setloading(false);
-      }
+        // Sorting by weighted average in descending order
+        const sorted = reducedAllData.sort(
+          (a, b) =>
+            b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+        );
 
-      console.log("Response1", responses1);
-      const allData1 = responses1.flatMap((response) =>
-        response.data.map((item) => ({ ...item }))
-      );
-      const allDataAudit = responses_audit.flatMap((response) =>
-        response.data.map((item) => ({ ...item }))
-      );
-      const allDataScrutinyAssessment = responses_scrutiny_assessment.flatMap((response) =>
-        response.data.map((item) => ({ ...item }))
-      );
-      const allDataInvestigation = responses_investigation.flatMap((response) =>
-        response.data.map((item) => ({ ...item }))
-      );
-      const allDataRecoveryOfArrears = responses_recovery_of_arrears.flatMap((response) =>
-        response.data.map((item) => ({ ...item }))
-      );
-      const allDataGstArrestAndProsecution = responses_gst_arrest_and_prosecution.flatMap((response) =>
-        response.data.map((item) => ({ ...item }))
-      );
-      const allData1WithAudit = [...allData1, ...allDataAudit, ...allDataScrutinyAssessment, ...allDataInvestigation, ...allDataRecoveryOfArrears, ...allDataGstArrestAndProsecution];
-      console.log("allData1WithAudit", allData1WithAudit);
-
-      const summedByZone1 = allData1WithAudit.reduce((acc, item) => {
-        const zoneCode = item.zone_code;
-        const value = (item.ra === "Adjudication") ? item.totalScore :
-          (item.ra === "Appeals") ? item.parameter_wise_weighted_average : item.sub_parameter_weighted_average || 0; // Default to 0 if missing
-
-        // If zone_code is encountered for the first time, initialize it
-        if (!acc[zoneCode]) {
-          acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
+        // Correcting rank calculation to handle ties better
+        let currentRank = 1;
+        let prevScore = null;
+        for (let i = 0; i < sorted.length; i++) {
+          const score = sorted[i].sub_parameter_weighted_average;
+          if (score !== prevScore) {
+            currentRank = i + 1; // Update rank only when score changes
+          }
+          sorted[i].zonal_rank = currentRank;
+          prevScore = score;
         }
 
-        // Sum only the sub_parameter_weighted_average for each zone_code
-        acc[zoneCode].sub_parameter_weighted_average += value;
+        console.log("Sorted with Ranks:", sorted);
 
-        return acc;
-      }, {});
+        // Filtering for the top 21 zonal ranks
+        console.log("Before filtering:", sorted);
+        const filteredData = sorted.filter((item) => item.zonal_rank <= 21);
+        console.log("After filtering:", filteredData);
 
-      const reducedAllData1 = Object.values(summedByZone1).map(item => ({
-        ...item,
-        sub_parameter_weighted_average: parseFloat(item.sub_parameter_weighted_average.toFixed(2)) // Format to 2 decimal places
-      }));
+        return filteredData.map((item, index) => ({ ...item, s_no: index + 1 }));
+      };
 
-      console.log("Reduced All Data:", reducedAllData1);
-      const sorted1 = reducedAllData1.sort(
-        (a, b) => b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
-      ).slice(0, 21); // Limit to 21 items 
-      console.log("Sorted1", sorted1);
+      // Fetching data for all months
+      const allMonthData = await Promise.all(months.map((month) => getMonthData(month)));
 
+      // Set data for each month
+      setData1(allMonthData[0]);
+      setData2(allMonthData[1]);
+      setData3(allMonthData[2]);
+      setData4(allMonthData[3]);
+      setData5(allMonthData[4]);
+      setData6(allMonthData[5]);
 
-
-      const allData2 = responses2.flatMap((response) =>
-        response.data.map((item) => ({ ...item }))
-      );
-      const summedByZone2 = allData2.reduce((acc, item) => {
-        const zoneCode = item.zone_code;
-        const value = (item.ra === "Adjudication") ? item.totalScore :
-          (item.ra === "Appeals") ? item.parameter_wise_weighted_average : item.sub_parameter_weighted_average || 0; // Default to 0 if missing
-
-        // If zone_code is encountered for the first time, initialize it
-        if (!acc[zoneCode]) {
-          acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
-        }
-
-        // Sum only the sub_parameter_weighted_average for each zone_code
-        acc[zoneCode].sub_parameter_weighted_average += value;
-
-        return acc;
-      }, {});
-
-      const reducedAllData2 = Object.values(summedByZone2).map(item => ({
-        ...item,
-        sub_parameter_weighted_average: parseFloat(item.sub_parameter_weighted_average.toFixed(2)) // Format to 2 decimal places
-      }));
-
-      console.log("Reduced All Data:", reducedAllData2);
-      const sorted2 = reducedAllData2.sort(
-        (a, b) => b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
-      ).slice(0, 21); // Limit to 21 items
-
-      console.log("Sorted2", sorted2);
-
-
-      const allData3 = responses3.flatMap((response) =>
-        response.data.map((item) => ({ ...item }))
-      );
-      const summedByZone3 = allData3.reduce((acc, item) => {
-        const zoneCode = item.zone_code;
-        const value = (item.ra === "Adjudication") ? item.totalScore :
-          (item.ra === "Appeals") ? item.parameter_wise_weighted_average : item.sub_parameter_weighted_average || 0; // Default to 0 if missing
-
-        // If zone_code is encountered for the first time, initialize it
-        if (!acc[zoneCode]) {
-          acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
-        }
-
-        // Sum only the sub_parameter_weighted_average for each zone_code
-        acc[zoneCode].sub_parameter_weighted_average += value;
-
-        return acc;
-      }, {});
-      const reducedAllData3 = Object.values(summedByZone3).map(item => ({
-        ...item,
-        sub_parameter_weighted_average: parseFloat(item.sub_parameter_weighted_average.toFixed(2)) // Format to 2 decimal places
-      }));
-      console.log("Reduced All Data:", reducedAllData3);
-      const sorted3 = reducedAllData3.sort(
-        (a, b) => b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
-      ).slice(0, 21); // Limit to 21 items
-      console.log("Sorted3", sorted3);
-
-
-      const allData4 = responses4.flatMap((response) =>
-        response.data.map((item) => ({ ...item }))
-      );
-      const summedByZone4 = allData4.reduce((acc, item) => {
-        const zoneCode = item.zone_code;
-        const value = (item.ra === "Adjudication") ? item.totalScore :
-          (item.ra === "Appeals") ? item.parameter_wise_weighted_average : item.sub_parameter_weighted_average || 0; // Default to 0 if missing
-
-        // If zone_code is encountered for the first time, initialize it
-        if (!acc[zoneCode]) {
-          acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
-        }
-
-        // Sum only the sub_parameter_weighted_average for each zone_code
-        acc[zoneCode].sub_parameter_weighted_average += value;
-
-        return acc;
-      }, {});
-      const reducedAllData4 = Object.values(summedByZone4).map(item => ({
-        ...item,
-        sub_parameter_weighted_average: parseFloat(item.sub_parameter_weighted_average.toFixed(2)) // Format to 2 decimal places
-      }));
-      console.log("Reduced All Data:", reducedAllData4);
-      const sorted4 = reducedAllData4.sort(
-        (a, b) => b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
-      ).slice(0, 21); // Limit to 21 items
-      console.log("Sorted4", sorted4);
-
-
-
-      const allData5 = responses5.flatMap((response) =>
-        response.data.map((item) => ({ ...item }))
-      );
-      const summedByZone5 = allData5.reduce((acc, item) => {
-        const zoneCode = item.zone_code;
-        const value = (item.ra === "Adjudication") ? item.totalScore :
-          (item.ra === "Appeals") ? item.parameter_wise_weighted_average : item.sub_parameter_weighted_average || 0; // Default to 0 if missing
-
-        // If zone_code is encountered for the first time, initialize it
-        if (!acc[zoneCode]) {
-          acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
-        }
-
-        // Sum only the sub_parameter_weighted_average for each zone_code
-        acc[zoneCode].sub_parameter_weighted_average += value;
-
-        return acc;
-      }, {});
-      const reducedAllData5 = Object.values(summedByZone5).map(item => ({
-        ...item,
-        sub_parameter_weighted_average: parseFloat(item.sub_parameter_weighted_average.toFixed(2)) // Format to 2 decimal places
-      }));
-      console.log("Reduced All Data:", reducedAllData5);
-      const sorted5 = reducedAllData5.sort(
-        (a, b) => b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
-      ).slice(0, 21); // Limit to 21 items
-      console.log("Sorted5", sorted5);
-
-
-
-      const allData6 = responses6.flatMap((response) =>
-        response.data.map((item) => ({ ...item }))
-      );
-      const summedByZone6 = allData6.reduce((acc, item) => {
-        const zoneCode = item.zone_code;
-        const value = (item.ra === "Adjudication") ? item.totalScore :
-          (item.ra === "Appeals") ? item.parameter_wise_weighted_average : item.sub_parameter_weighted_average || 0; // Default to 0 if missing
-
-        // If zone_code is encountered for the first time, initialize it
-        if (!acc[zoneCode]) {
-          acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 }; // Keep other properties intact
-        }
-
-        // Sum only the sub_parameter_weighted_average for each zone_code
-        acc[zoneCode].sub_parameter_weighted_average += value;
-
-        return acc;
-      }, {});
-      const reducedAllData6 = Object.values(summedByZone6).map(item => ({
-        ...item,
-        sub_parameter_weighted_average: parseFloat(item.sub_parameter_weighted_average.toFixed(2)) // Format to 2 decimal places
-      }));
-      console.log("Reduced All Data:", reducedAllData6);
-      const sorted6 = reducedAllData6.sort(
-        (a, b) => b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
-      ).slice(0, 21); // Limit to 21 items
-      console.log("Sorted6", sorted6);
-
-      setData1(sorted1.map((item, index) => ({ ...item, s_no: index + 1 })));
-      setData2(sorted2.map((item, index) => ({ ...item, s_no: index + 1 })));
-      setData3(sorted3.map((item, index) => ({ ...item, s_no: index + 1 })));
-      setData4(sorted4.map((item, index) => ({ ...item, s_no: index + 1 })));
-      setData5(sorted5.map((item, index) => ({ ...item, s_no: index + 1 })));
-      setData6(sorted6.map((item, index) => ({ ...item, s_no: index + 1 })));
-
+      setloading(false);
     } catch (error) {
-      // Log any errors that occur during fetching
       console.error("Error fetching data:", error);
       setloading(false);
     }
   };
 
+
+  // const fetchDatacustoms = async () => {
+  //   try {
+  //     const endpointsGrouped = {
+  //       disposal_pendency: ["cus4a", "cus4b", "cus4c", "cus4d"],
+  //       epcg: ["cus2a", "cus2b", "cus2c"],
+  //       aa: ["cus3a", "cus3b", "cus3c"],
+  //       adjudication: ["cus5a", "cus5b", "cus5c"],
+  //       cus_investigation: ["cus6a", "cus6b", "cus6c", "cus6d", "cus6e", "cus6f"],
+  //       cus_arrest_prosecution: ["cus7a", "cus7b"],
+  //       cus_timelyrefunds: ["cus1"],
+  //       cus_unclaimed_cargo: ["cus8a", "cus8b"],
+  //       cus_DisposalOfConfiscatedGoldAndNDPS: ["cus9a", "cus9b"],
+  //       cus_recovery_of_arrears: ["cus10a", "cus10b"],
+  //       cus_management_of_warehousing_bonds: ["cus11a", "cus11b"],
+  //       cus_CommissionerAppeals: ["cus12a", "cus12b"],
+  //       cus_audit: ["cus13a", "cus13b", "cus13c", "cus13d", "cus13e"],
+  //     };
+  
+  //     const scaleMap = {
+  //       disposal_pendency: 11,
+  //       epcg: 7,
+  //       aa: 7,
+  //       adjudication: 10,
+  //       cus_investigation: 12,
+  //       cus_arrest_prosecution: 6,
+  //       //cus_timelyrefunds: 1,
+  //       cus_unclaimed_cargo: 6,
+  //       cus_DisposalOfConfiscatedGoldAndNDPS: 4,
+  //       cus_recovery_of_arrears: 6,
+  //       cus_management_of_warehousing_bonds: 6,
+  //       cus_CommissionerAppeals: 8,
+  //       cus_audit: 12,
+  //     };
+  
+  //     const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];  // Adjust your months as required
+  
+  //     // Adjusted fetchEndpoints function to accept a single month
+  //     const fetchEndpoints = async (group, scale = null, month) => {
+  //       return Promise.all(
+  //         endpointsGrouped[group].map((endpoint) =>
+  //           apiClient
+  //             .get(`/cbic/custom/${endpoint}`, {
+  //               params: { month_date: month, type: "zone" },
+  //             })
+  //             .then((response) => ({
+  //               data: response.data.map((item) => ({
+  //                 ...item,
+  //                 sub_parameter_weighted_average: parseFloat(
+  //                   scale
+  //                     ? ((item.sub_parameter_weighted_average * scale) / 10).toFixed(2)
+  //                     : parseFloat(item.sub_parameter_weighted_average).toFixed(2)
+  //                 ),
+  //               })),
+  //               gst: endpoint.toUpperCase(),
+  //             }))
+  //         )
+  //       );
+  //     };
+  
+  //     // Function to fetch data for a specific month
+  //     const getMonthData = async (month) => {
+  //       const [
+  //         responses_disposal_pendency,
+  //         responses_epcg,
+  //         responses_aa,
+  //         responses_adjudication,
+  //         responses_cus_investigation,
+  //         responses_cus_arrest_prosecution,
+  //         responses_cus_timelyrefunds,
+  //         responses_cus_unclaimed_cargo,
+  //         responses_cus_DisposalOfConfiscatedGoldAndNDPS,
+  //         responses_cus_recovery_of_arrears,
+  //         responses_cus_management_of_warehousing_bonds,
+  //         responses_cus_CommissionerAppeals,
+  //         responses_cus_audit,
+  //       ] = await Promise.all([
+  //         fetchEndpoints("disposal_pendency", scaleMap.disposal_pendency, month),
+  //         fetchEndpoints("epcg", scaleMap.epcg, month),
+  //         fetchEndpoints("aa", scaleMap.aa, month),
+  //         fetchEndpoints("adjudication", scaleMap.adjudication, month),
+  //         fetchEndpoints("cus_investigation", scaleMap.cus_investigation, month),
+  //         fetchEndpoints("cus_arrest_prosecution", scaleMap.cus_arrest_prosecution, month),
+  //         fetchEndpoints("cus_timelyrefunds", scaleMap.cus_timelyrefunds, month),
+  //         fetchEndpoints("cus_unclaimed_cargo", scaleMap.cus_unclaimed_cargo, month),
+  //         fetchEndpoints("cus_DisposalOfConfiscatedGoldAndNDPS", scaleMap.cus_DisposalOfConfiscatedGoldAndNDPS, month),
+  //         fetchEndpoints("cus_recovery_of_arrears", scaleMap.cus_recovery_of_arrears, month),
+  //         fetchEndpoints("cus_management_of_warehousing_bonds", scaleMap.cus_management_of_warehousing_bonds, month),
+  //         fetchEndpoints("cus_CommissionerAppeals", scaleMap.cus_CommissionerAppeals, month),
+  //         fetchEndpoints("cus_audit", scaleMap.cus_audit, month),
+  //       ]);
+  
+  //       const allResponses = [
+  //         ...responses_disposal_pendency,
+  //         ...responses_epcg,
+  //         ...responses_aa,
+  //         ...responses_adjudication,
+  //         ...responses_cus_investigation,
+  //         ...responses_cus_arrest_prosecution,
+  //         ...responses_cus_timelyrefunds,
+  //         ...responses_cus_unclaimed_cargo,
+  //         ...responses_cus_DisposalOfConfiscatedGoldAndNDPS,
+  //         ...responses_cus_recovery_of_arrears,
+  //         ...responses_cus_management_of_warehousing_bonds,
+  //         ...responses_cus_CommissionerAppeals,
+  //         ...responses_cus_audit,
+  //       ];
+  
+  //       const allData = allResponses.flatMap((response) => response.data);
+  
+  //       // Sum by zone and calculate ranks
+  //       const summedByZone = allData.reduce((acc, item) => {
+  //         const zoneCode = item.zone_code;
+  //         const value = item.sub_parameter_weighted_average || 0;
+  
+  //         if (!acc[zoneCode]) {
+  //           acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0, total_weighted_average: 0 };
+  //         }
+  
+  //         acc[zoneCode].sub_parameter_weighted_average = parseFloat(
+  //           (acc[zoneCode].sub_parameter_weighted_average + value).toFixed(2)
+  //         );
+  
+  //         acc[zoneCode].total_weighted_average = parseFloat(
+  //           (acc[zoneCode].total_weighted_average + value).toFixed(2)
+  //         );
+  
+  //         return acc;
+  //       }, {});
+  
+  //       const reducedAllData = Object.values(summedByZone);
+  
+  //       const sorted = reducedAllData.sort(
+  //         (a, b) =>
+  //           b.total_weighted_average - a.total_weighted_average
+  //       );
+  
+  //       let currentRank = 1;
+  //       let prevScore = null;
+  //       for (let i = 0; i < sorted.length; i++) {
+  //         const score = sorted[i].total_weighted_average;
+  //         if (score !== prevScore) {
+  //           currentRank = i + 1;
+  //         }
+  //         sorted[i].zonal_rank = currentRank;
+  //         prevScore = score;
+  //       }
+  
+  //       const enhancedData = sorted.map((item, index) => {
+  //         const total = item.total_weighted_average;
+  //         let props = {};
+  //         if (total <= 100 && total >= 75) {
+  //           props = { scope: "row", color: "success" };
+  //         } else if (total < 75 && total >= 50) {
+  //           props = { scope: "row", color: "warning" };
+  //         } else if (total >= 0 && total <= 25) {
+  //           props = { scope: "row", color: "danger" };
+  //         } else {
+  //           props = { scope: "row", color: "primary" };
+  //         }
+  
+  //         return { ...item, _props: props, s_no: index + 1 };
+  //       });
+  
+  //       const filteredData = enhancedData.filter(item => item.zonal_rank <= 20);
+  
+  //       return filteredData;
+  //     };
+  
+  //     // Fetching data for all months
+  //     const allMonthData = await Promise.all(months.map((month) => getMonthData(month)));
+  
+  //     // Set data for each month
+  //     setDatacustoms1(allMonthData[0]);
+  //     setDatacustoms2(allMonthData[1]);
+  //     setDatacustoms3(allMonthData[2]);
+  //     setDatacustoms4(allMonthData[3]);
+  //     setDatacustoms5(allMonthData[4]);
+  //     setDatacustoms6(allMonthData[5]);
+  
+  //     setloading(false);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //     setloading(false);
+  //   }
+  // };
+  
+
+
   useEffect(() => {
     fetchData();
+    //fetchDatacustoms();
   }, [newdate]); // Empty dependency array indicates that this effect runs only once
 
   const [details, setDetails] = useState([]);
   const [selectedRow, setSelectedRow] = useState();
+
   const columns = [
     {
       key: "s_no",
@@ -521,7 +467,6 @@ const ComparativeReport = ({
       key: "sub_parameter_weighted_average_5",
       label: `${date5}`,
     },
-
     {
       key: "sub_parameter_weighted_average_4",
       label: `${date4}`,
@@ -534,238 +479,81 @@ const ComparativeReport = ({
       key: "sub_parameter_weighted_average_2",
       label: `${date2}`,
     },
-
     {
       key: "sub_parameter_weighted_average_1",
       label: `${date1}`,
     },
   ];
 
-  const userData = [
-    {
-      s_no: data1.map(item => item.s_no)[0],
-      zone_name: data1.map(item => item.zoneName)[0],
-      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[0],
-      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[0],
-      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[0],
-      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[0],
-      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[0],
-      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[0],
-    },
-    {
-      s_no: data1.map(item => item.s_no)[1],
-      zone_name: data1.map(item => item.zoneName)[1],
-      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[1],
-      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[1],
-      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[1],
-      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[1],
-      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[1],
-      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[1],
-    },
-    {
-      s_no: data1.map(item => item.s_no)[2],
-      zone_name: data1.map(item => item.zoneName)[2],
-      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[2],
-      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[2],
-      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[2],
-      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[2],
-      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[2],
-      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[2],
-    },
-    {
-      s_no: data1.map(item => item.s_no)[3],
-      zone_name: data1.map(item => item.zoneName)[3],
-      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[3],
-      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[3],
-      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[3],
-      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[3],
-      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[3],
-      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[3],
-    },
-    {
-      s_no: data1.map(item => item.s_no)[4],
-      zone_name: data1.map(item => item.zoneName)[4],
-      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[4],
-      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[4],
-      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[4],
-      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[4],
-      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[4],
-      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[4],
-    },
-    {
-      s_no: data1.map(item => item.s_no)[5],
-      zone_name: data1.map(item => item.zoneName)[5],
-      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[5],
-      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[5],
-      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[5],
-      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[5],
-      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[5],
-      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[5],
-    },
-    {
-      s_no: data1.map(item => item.s_no)[6],
-      zone_name: data1.map(item => item.zoneName)[6],
-      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[6],
-      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[6],
-      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[6],
-      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[6],
-      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[6],
-      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[6],
-    },
-    {
-      s_no: data1.map(item => item.s_no)[7],
-      zone_name: data1.map(item => item.zoneName)[7],
-      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[7],
-      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[7],
-      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[7],
-      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[7],
-      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[7],
-      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[7],
-    },
-    {
-      s_no: data1.map(item => item.s_no)[8],
-      zone_name: data1.map(item => item.zoneName)[8],
-      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[8],
-      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[8],
-      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[8],
-      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[8],
-      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[8],
-      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[8],
-    },
-    {
-      s_no: data1.map(item => item.s_no)[9],
-      zone_name: data1.map(item => item.zoneName)[9],
-      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[9],
-      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[9],
-      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[9],
-      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[9],
-      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[9],
-      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[9],
-    },
-    {
-      s_no: data1.map(item => item.s_no)[10],
-      zone_name: data1.map(item => item.zoneName)[10],
-      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[10],
-      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[10],
-      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[10],
-      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[10],
-      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[10],
-      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[10],
-    },
-    {
-      s_no: data1.map(item => item.s_no)[11],
-      zone_name: data1.map(item => item.zoneName)[11],
-      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[11],
-      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[11],
-      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[11],
-      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[11],
-      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[11],
-      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[11],
-    },
-    {
-      s_no: data1.map(item => item.s_no)[12],
-      zone_name: data1.map(item => item.zoneName)[12],
-      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[12],
-      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[12],
-      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[12],
-      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[12],
-      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[12],
-      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[12],
-    },
-    {
-      s_no: data1.map(item => item.s_no)[13],
-      zone_name: data1.map(item => item.zoneName)[13],
-      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[13],
-      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[13],
-      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[13],
-      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[13],
-      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[13],
-      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[13],
-    },
-    {
-      s_no: data1.map(item => item.s_no)[14],
-      zone_name: data1.map(item => item.zoneName)[14],
-      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[14],
-      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[14],
-      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[14],
-      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[14],
-      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[14],
-      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[14],
-    },
-    {
-      s_no: data1.map(item => item.s_no)[15],
-      zone_name: data1.map(item => item.zoneName)[15],
-      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[15],
-      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[15],
-      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[15],
-      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[15],
-      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[15],
-      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[15],
-    },
-    {
-      s_no: data1.map(item => item.s_no)[16],
-      zone_name: data1.map(item => item.zoneName)[16],
-      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[16],
-      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[16],
-      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[16],
-      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[16],
-      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[16],
-      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[16],
-    },
-    {
-      s_no: data1.map(item => item.s_no)[17],
-      zone_name: data1.map(item => item.zoneName)[17],
-      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[17],
-      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[17],
-      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[17],
-      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[17],
-      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[17],
-      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[17],
-    },
-    {
-      s_no: data1.map(item => item.s_no)[18],
-      zone_name: data1.map(item => item.zoneName)[18],
-      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[18],
-      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[18],
-      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[18],
-      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[18],
-      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[18],
-      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[18],
-    },
-    {
-      s_no: data1.map(item => item.s_no)[19],
-      zone_name: data1.map(item => item.zoneName)[19],
-      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[19],
-      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[19],
-      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[19],
-      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[19],
-      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[19],
-      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[19],
-    },
-    {
-      s_no: data1.map(item => item.s_no)[20],
-      zone_name: data1.map(item => item.zoneName)[20],
-      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[20],
-      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[20],
-      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[20],
-      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[20],
-      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[20],
-      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[20],
-    },
-    {
-      s_no: data1.map(item => item.s_no)[21],
-      zone_name: data1.map(item => item.zoneName)[21],
-      sub_parameter_weighted_average_1: data1.map(item => item.sub_parameter_weighted_average)[21],
-      sub_parameter_weighted_average_2: data2.map(item => item.sub_parameter_weighted_average)[21],
-      sub_parameter_weighted_average_3: data3.map(item => item.sub_parameter_weighted_average)[21],
-      sub_parameter_weighted_average_4: data4.map(item => item.sub_parameter_weighted_average)[21],
-      sub_parameter_weighted_average_5: data5.map(item => item.sub_parameter_weighted_average)[21],
-      sub_parameter_weighted_average_6: data6.map(item => item.sub_parameter_weighted_average)[21],
-    }
-
-  ]
-
+  const userData = [];
+  const maxLength = Math.max(data1.length, data2.length, data3.length, data4.length, data5.length, data6.length);
+  // Loop through all indices up to the maximum length
+  for (let i = 0; i < maxLength; i++) {
+    userData.push({
+      s_no: data1[i]?.s_no || null,  // Access s_no from data1
+      zone_name: data1[i]?.zone_name || null,  // Access zone_name from data1
+      sub_parameter_weighted_average_1: data1[i]?.sub_parameter_weighted_average || null,  // Handle missing data for data1
+      sub_parameter_weighted_average_2: data2[i]?.sub_parameter_weighted_average || null,  // Handle missing data for data2
+      sub_parameter_weighted_average_3: data3[i]?.sub_parameter_weighted_average || null,  // Handle missing data for data3
+      sub_parameter_weighted_average_4: data4[i]?.sub_parameter_weighted_average || null,  // Handle missing data for data4
+      sub_parameter_weighted_average_5: data5[i]?.sub_parameter_weighted_average || null,  // Handle missing data for data5
+      sub_parameter_weighted_average_6: data6[i]?.sub_parameter_weighted_average || null,  // Handle missing data for data6
+    });
+  }
   console.log("usersdata", userData);
+
+  const columnscustoms = [
+    {
+      key: "s_no",
+      label: "S no.",
+    },
+    {
+      key: "zone_name",
+      label: "Zone",
+    },
+    {
+      key: "sub_parameter_weighted_average_6",
+      label: `${date6}`,
+    },
+    {
+      key: "sub_parameter_weighted_average_5",
+      label: `${date5}`,
+    },
+    {
+      key: "sub_parameter_weighted_average_4",
+      label: `${date4}`,
+    },
+    {
+      key: "sub_parameter_weighted_average_3",
+      label: `${date3}`,
+    },
+    {
+      key: "sub_parameter_weighted_average_2",
+      label: `${date2}`,
+    },
+    {
+      key: "sub_parameter_weighted_average_1",
+      label: `${date1}`,
+    },
+  ];
+
+  const userDatacustoms = [];
+  const maxLengthcustoms = Math.max(datacustoms1.length, datacustoms2.length, datacustoms3.length, datacustoms4.length, datacustoms5.length, datacustoms6.length);
+  // Loop through all indices up to the maximum length
+  for (let i = 0; i < maxLengthcustoms; i++) {
+    userDatacustoms.push({
+      s_no: datacustoms1[i]?.s_no || null,  // Access s_no from data1
+      zone_name: datacustoms1[i]?.zone_name || null,  // Access zone_name from data1
+      sub_parameter_weighted_average_1: datacustoms1[i]?.sub_parameter_weighted_average || null,  // Handle missing data for data1
+      sub_parameter_weighted_average_2: datacustoms2[i]?.sub_parameter_weighted_average || null,  // Handle missing data for data2
+      sub_parameter_weighted_average_3: datacustoms3[i]?.sub_parameter_weighted_average || null,  // Handle missing data for data3
+      sub_parameter_weighted_average_4: datacustoms4[i]?.sub_parameter_weighted_average || null,  // Handle missing data for data4
+      sub_parameter_weighted_average_5: datacustoms5[i]?.sub_parameter_weighted_average || null,  // Handle missing data for data5
+      sub_parameter_weighted_average_6: datacustoms6[i]?.sub_parameter_weighted_average || null,  // Handle missing data for data6
+    });
+  }
+  console.log("usersdata", userDatacustoms);
+
 
   const headerStyles = {
     backgroundColor: "#4CAF50",
@@ -892,7 +680,7 @@ const ComparativeReport = ({
               </div>
 
               <div className="col-md-4">
-                <div className="switches-container">
+              <div className="switches-container">
                   <input
                     type="radio"
                     id="switchMonthly"
@@ -901,14 +689,14 @@ const ComparativeReport = ({
                     checked={selectedOption === "CGST"}
                     onChange={handleChange}
                   />
-                  {/* <input
+                  <input
                     type="radio"
                     id="switchYearly"
                     name="switchPlan"
                     value="Customs"
                     checked={selectedOption === "Customs"}
                     onChange={handleChange}
-                  /> */}
+                  />
                   <label htmlFor="switchMonthly">CGST</label>
                   <label htmlFor="switchYearly">Customs</label>
                   <div className="switch-wrapper">
@@ -921,15 +709,15 @@ const ComparativeReport = ({
               </div>
               <div className="col-md-4">
                 <div className="switches-container2">
-                  <input
+                  {/* <input
                     type="radio"
                     id="switchZones"
                     name="switchPlan2"
                     value="Zones"
-                  // checked={selectedOption1 === "Zones"}
-                  // onChange={handleChange1}
+                  checked={selectedOption1 === "Zones"}
+                  onChange={handleChange1}
                   />
-                  {/* <input
+                  <input
                     type="radio"
                     id="switchCommissionerate"
                     name="switchPlan2"
@@ -948,54 +736,105 @@ const ComparativeReport = ({
                 </div>
               </div>
             </div>
-            <div className="box-main bg-blue col1">
-              <div className="row custom-tb mb col ">
-                <div className="export-btn">
-                  <button onClick={exportToXLS} className="btn btn-primary m-3">
-                    Export XLS
-                  </button>
-                </div>
+            {selectedOption === "CGST" ? (
+              <div className="box-main bg-blue col1">
+                <div className="row custom-tb mb col ">
+                  <div className="export-btn">
+                    <button onClick={exportToXLS} className="btn btn-primary m-3">
+                      Export XLS
+                    </button>
+                  </div>
 
-                <CSmartTable
-                  activePage={1}
-                  cleaner
-                  clickableRows={false}
-                  columns={columns}
-                  columnSorter
-                  items={userData}
-                  itemsPerPageSelect
-                  itemsPerPage={10}
-                  pagination
-                  onRowClick={onRowClick}
-                  onFilteredItemsChange={(items) => {
-                    console.log(items);
-                  }}
-                  onSelectedItemsChange={(items) => {
-                    console.log(items);
-                  }}
-                  sorterValue={{ column: "status", state: "asc" }}
-                  tableFilter
-                  tableProps={{
-                    className: "add-this-class",
-                    responsive: true,
-                    // striped: true,
-                    hover: true,
-                    // bordered:true,
-                    align: "middle",
-                    // borderColor:'info',
-                    border: "primary",
-                  }}
-                  onKeyDown={(e) => checkSpecialChar(e)}
-                // tableBodyProps={{
-                //   className: "align-middle border-info",
-                //   color:'primary',
-                // }}
-                // tableHeadProps={{
-                //   className:"border-info alert-dark",
-                // }}
-                />
+                  <CSmartTable
+                    activePage={1}
+                    cleaner
+                    clickableRows={false}
+                    columns={columns}
+                    columnSorter
+                    items={userData}
+                    itemsPerPageSelect
+                    itemsPerPage={10}
+                    pagination
+                    onRowClick={onRowClick}
+                    onFilteredItemsChange={(items) => {
+                      console.log(items);
+                    }}
+                    onSelectedItemsChange={(items) => {
+                      console.log(items);
+                    }}
+                    sorterValue={{ column: "status", state: "asc" }}
+                    tableFilter
+                    tableProps={{
+                      className: "add-this-class",
+                      responsive: true,
+                      // striped: true,
+                      hover: true,
+                      // bordered:true,
+                      align: "middle",
+                      // borderColor:'info',
+                      border: "primary",
+                    }}
+                    onKeyDown={(e) => checkSpecialChar(e)}
+                  // tableBodyProps={{
+                  //   className: "align-middle border-info",
+                  //   color:'primary',
+                  // }}
+                  // tableHeadProps={{
+                  //   className:"border-info alert-dark",
+                  // }}
+                  />
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="box-main bg-blue col1">
+                <div className="row custom-tb mb col ">
+                  <div className="export-btn">
+                    <button onClick={exportToXLS} className="btn btn-primary m-3">
+                      Export XLS
+                    </button>
+                  </div>
+
+                  <CSmartTable
+                    activePage={1}
+                    cleaner
+                    clickableRows={false}
+                    columns={columnscustoms}
+                    columnSorter
+                    items={userDatacustoms}
+                    itemsPerPageSelect
+                    itemsPerPage={10}
+                    pagination
+                    onRowClick={onRowClick}
+                    onFilteredItemsChange={(items) => {
+                      console.log(items);
+                    }}
+                    onSelectedItemsChange={(items) => {
+                      console.log(items);
+                    }}
+                    sorterValue={{ column: "status", state: "asc" }}
+                    tableFilter
+                    tableProps={{
+                      className: "add-this-class",
+                      responsive: true,
+                      // striped: true,
+                      hover: true,
+                      // bordered:true,
+                      align: "middle",
+                      // borderColor:'info',
+                      border: "primary",
+                    }}
+                    onKeyDown={(e) => checkSpecialChar(e)}
+                  // tableBodyProps={{
+                  //   className: "align-middle border-info",
+                  //   color:'primary',
+                  // }}
+                  // tableHeadProps={{
+                  //   className:"border-info alert-dark",
+                  // }}
+                  />
+                </div>
+              </div>
+            )}
             <div className="row"></div>
           </div>
         </div>
