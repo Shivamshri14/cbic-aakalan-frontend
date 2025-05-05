@@ -207,29 +207,29 @@ const ComparativeReport = ({
 
         const reducedAllData = Object.values(summedByZone);
 
-        // Sorting by weighted average in descending order
-        const sorted = reducedAllData.sort(
-          (a, b) =>
-            b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
-        );
+        //Sorting by weighted average in descending order
+        // const sorted = reducedAllData.sort(
+        //   (a, b) =>
+        //     b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
+        // );
 
         // Correcting rank calculation to handle ties better
         let currentRank = 1;
         let prevScore = null;
-        for (let i = 0; i < sorted.length; i++) {
-          const score = sorted[i].sub_parameter_weighted_average;
+        for (let i = 0; i < reducedAllData.length; i++) {
+          const score = reducedAllData[i].sub_parameter_weighted_average;
           if (score !== prevScore) {
             currentRank = i + 1; // Update rank only when score changes
           }
-          sorted[i].zonal_rank = currentRank;
+          reducedAllData[i].zonal_rank = currentRank;
           prevScore = score;
         }
 
-        console.log("Sorted with Ranks:", sorted);
+        console.log("Sorted with Ranks:", reducedAllData);
 
         // Filtering for the top 21 zonal ranks
-        console.log("Before filtering:", sorted);
-        const filteredData = sorted.filter((item) => item.zonal_rank <= 21);
+        console.log("Before filtering:", reducedAllData);
+        const filteredData = reducedAllData.filter((item) => item.zonal_rank <= 21);
         console.log("After filtering:", filteredData);
 
         return filteredData.map((item, index) => ({ ...item, s_no: index + 1 }));
@@ -253,198 +253,185 @@ const ComparativeReport = ({
     }
   };
 
-
-  // const fetchDatacustoms = async () => {
-  //   try {
-  //     const endpointsGrouped = {
-  //       disposal_pendency: ["cus4a", "cus4b", "cus4c", "cus4d"],
-  //       epcg: ["cus2a", "cus2b", "cus2c"],
-  //       aa: ["cus3a", "cus3b", "cus3c"],
-  //       adjudication: ["cus5a", "cus5b", "cus5c"],
-  //       cus_investigation: ["cus6a", "cus6b", "cus6c", "cus6d", "cus6e", "cus6f"],
-  //       cus_arrest_prosecution: ["cus7a", "cus7b"],
-  //       cus_timelyrefunds: ["cus1"],
-  //       cus_unclaimed_cargo: ["cus8a", "cus8b"],
-  //       cus_DisposalOfConfiscatedGoldAndNDPS: ["cus9a", "cus9b"],
-  //       cus_recovery_of_arrears: ["cus10a", "cus10b"],
-  //       cus_management_of_warehousing_bonds: ["cus11a", "cus11b"],
-  //       cus_CommissionerAppeals: ["cus12a", "cus12b"],
-  //       cus_audit: ["cus13a", "cus13b", "cus13c", "cus13d", "cus13e"],
-  //     };
+  const fetchDatacustoms = async () => {
+    try {
+      const endpointsGrouped = {
+        disposal_pendency: ["cus4a", "cus4b", "cus4c", "cus4d"],
+        epcg: ["cus2a", "cus2b", "cus2c"],
+        aa: ["cus3a", "cus3b", "cus3c"],
+        adjudication: ["cus5a", "cus5b", "cus5c"],
+        cus_investigation: ["cus6a", "cus6b", "cus6c", "cus6d", "cus6e", "cus6f"],
+        cus_arrest_prosecution: ["cus7a", "cus7b"],
+        cus_timelyrefunds: ["cus1"],
+        cus_unclaimed_cargo: ["cus8a", "cus8b"],
+        cus_DisposalOfConfiscatedGoldAndNDPS: ["cus9a", "cus9b"],
+        cus_recovery_of_arrears: ["cus10a", "cus10b"],
+        cus_management_of_warehousing_bonds: ["cus11a", "cus11b"],
+        cus_CommissionerAppeals: ["cus12a", "cus12b"],
+        cus_audit: ["cus13a", "cus13b", "cus13c", "cus13d", "cus13e"],
+      };
   
-  //     const scaleMap = {
-  //       disposal_pendency: 11,
-  //       epcg: 7,
-  //       aa: 7,
-  //       adjudication: 10,
-  //       cus_investigation: 12,
-  //       cus_arrest_prosecution: 6,
-  //       //cus_timelyrefunds: 1,
-  //       cus_unclaimed_cargo: 6,
-  //       cus_DisposalOfConfiscatedGoldAndNDPS: 4,
-  //       cus_recovery_of_arrears: 6,
-  //       cus_management_of_warehousing_bonds: 6,
-  //       cus_CommissionerAppeals: 8,
-  //       cus_audit: 12,
-  //     };
+      const scaleMap = {
+        disposal_pendency: 11,
+        epcg: 7,
+        aa: 7,
+        adjudication: 10,
+        cus_investigation: 12,
+        cus_arrest_prosecution: 6,
+        cus_unclaimed_cargo: 6,
+        cus_DisposalOfConfiscatedGoldAndNDPS: 4,
+        cus_recovery_of_arrears: 6,
+        cus_management_of_warehousing_bonds: 6,
+        cus_CommissionerAppeals: 8,
+        cus_audit: 12,
+      };
   
-  //     const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];  // Adjust your months as required
+      const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5]; // Adjust your months as required
   
-  //     // Adjusted fetchEndpoints function to accept a single month
-  //     const fetchEndpoints = async (group, scale = null, month) => {
-  //       return Promise.all(
-  //         endpointsGrouped[group].map((endpoint) =>
-  //           apiClient
-  //             .get(`/cbic/custom/${endpoint}`, {
-  //               params: { month_date: month, type: "zone" },
-  //             })
-  //             .then((response) => ({
-  //               data: response.data.map((item) => ({
-  //                 ...item,
-  //                 sub_parameter_weighted_average: parseFloat(
-  //                   scale
-  //                     ? ((item.sub_parameter_weighted_average * scale) / 10).toFixed(2)
-  //                     : parseFloat(item.sub_parameter_weighted_average).toFixed(2)
-  //                 ),
-  //               })),
-  //               gst: endpoint.toUpperCase(),
-  //             }))
-  //         )
-  //       );
-  //     };
+      // Adjusted fetchEndpoints function to accept a single month
+      const fetchEndpoints = async (group, scale = null, month) => {
+        return Promise.all(
+          endpointsGrouped[group].map((endpoint) =>
+            apiClient
+              .get(`/cbic/custom/${endpoint}`, {
+                params: { month_date: month, type: "zone" },
+              })
+              .then((response) => ({
+                data: response.data.map((item) => ({
+                  ...item,
+                  sub_parameter_weighted_average: parseFloat(
+                    scale
+                      ? ((item.sub_parameter_weighted_average * scale) / 10).toFixed(2)
+                      : parseFloat(item.sub_parameter_weighted_average).toFixed(2)
+                  ),
+                })),
+                gst: endpoint.toUpperCase(),
+              }))
+          )
+        );
+      };
   
-  //     // Function to fetch data for a specific month
-  //     const getMonthData = async (month) => {
-  //       const [
-  //         responses_disposal_pendency,
-  //         responses_epcg,
-  //         responses_aa,
-  //         responses_adjudication,
-  //         responses_cus_investigation,
-  //         responses_cus_arrest_prosecution,
-  //         responses_cus_timelyrefunds,
-  //         responses_cus_unclaimed_cargo,
-  //         responses_cus_DisposalOfConfiscatedGoldAndNDPS,
-  //         responses_cus_recovery_of_arrears,
-  //         responses_cus_management_of_warehousing_bonds,
-  //         responses_cus_CommissionerAppeals,
-  //         responses_cus_audit,
-  //       ] = await Promise.all([
-  //         fetchEndpoints("disposal_pendency", scaleMap.disposal_pendency, month),
-  //         fetchEndpoints("epcg", scaleMap.epcg, month),
-  //         fetchEndpoints("aa", scaleMap.aa, month),
-  //         fetchEndpoints("adjudication", scaleMap.adjudication, month),
-  //         fetchEndpoints("cus_investigation", scaleMap.cus_investigation, month),
-  //         fetchEndpoints("cus_arrest_prosecution", scaleMap.cus_arrest_prosecution, month),
-  //         fetchEndpoints("cus_timelyrefunds", scaleMap.cus_timelyrefunds, month),
-  //         fetchEndpoints("cus_unclaimed_cargo", scaleMap.cus_unclaimed_cargo, month),
-  //         fetchEndpoints("cus_DisposalOfConfiscatedGoldAndNDPS", scaleMap.cus_DisposalOfConfiscatedGoldAndNDPS, month),
-  //         fetchEndpoints("cus_recovery_of_arrears", scaleMap.cus_recovery_of_arrears, month),
-  //         fetchEndpoints("cus_management_of_warehousing_bonds", scaleMap.cus_management_of_warehousing_bonds, month),
-  //         fetchEndpoints("cus_CommissionerAppeals", scaleMap.cus_CommissionerAppeals, month),
-  //         fetchEndpoints("cus_audit", scaleMap.cus_audit, month),
-  //       ]);
+      // Function to fetch data for a specific month
+      const getMonthData = async (month) => {
+        const [
+          responses_disposal_pendency,
+          responses_epcg,
+          responses_aa,
+          responses_adjudication,
+          responses_cus_investigation,
+          responses_cus_arrest_prosecution,
+          responses_cus_timelyrefunds,
+          responses_cus_unclaimed_cargo,
+          responses_cus_DisposalOfConfiscatedGoldAndNDPS,
+          responses_cus_recovery_of_arrears,
+          responses_cus_management_of_warehousing_bonds,
+          responses_cus_CommissionerAppeals,
+          responses_cus_audit,
+        ] = await Promise.all([
+          fetchEndpoints("disposal_pendency", scaleMap.disposal_pendency, month),
+          fetchEndpoints("epcg", scaleMap.epcg, month),
+          fetchEndpoints("aa", scaleMap.aa, month),
+          fetchEndpoints("adjudication", scaleMap.adjudication, month),
+          fetchEndpoints("cus_investigation", scaleMap.cus_investigation, month),
+          fetchEndpoints("cus_arrest_prosecution", scaleMap.cus_arrest_prosecution, month),
+          fetchEndpoints("cus_timelyrefunds", scaleMap.cus_timelyrefunds, month),
+          fetchEndpoints("cus_unclaimed_cargo", scaleMap.cus_unclaimed_cargo, month),
+          fetchEndpoints("cus_DisposalOfConfiscatedGoldAndNDPS", scaleMap.cus_DisposalOfConfiscatedGoldAndNDPS, month),
+          fetchEndpoints("cus_recovery_of_arrears", scaleMap.cus_recovery_of_arrears, month),
+          fetchEndpoints("cus_management_of_warehousing_bonds", scaleMap.cus_management_of_warehousing_bonds, month),
+          fetchEndpoints("cus_CommissionerAppeals", scaleMap.cus_CommissionerAppeals, month),
+          fetchEndpoints("cus_audit", scaleMap.cus_audit, month),
+        ]);
   
-  //       const allResponses = [
-  //         ...responses_disposal_pendency,
-  //         ...responses_epcg,
-  //         ...responses_aa,
-  //         ...responses_adjudication,
-  //         ...responses_cus_investigation,
-  //         ...responses_cus_arrest_prosecution,
-  //         ...responses_cus_timelyrefunds,
-  //         ...responses_cus_unclaimed_cargo,
-  //         ...responses_cus_DisposalOfConfiscatedGoldAndNDPS,
-  //         ...responses_cus_recovery_of_arrears,
-  //         ...responses_cus_management_of_warehousing_bonds,
-  //         ...responses_cus_CommissionerAppeals,
-  //         ...responses_cus_audit,
-  //       ];
+        const allResponses = [
+          ...responses_disposal_pendency,
+          ...responses_epcg,
+          ...responses_aa,
+          ...responses_adjudication,
+          ...responses_cus_investigation,
+          ...responses_cus_arrest_prosecution,
+          ...responses_cus_timelyrefunds,
+          ...responses_cus_unclaimed_cargo,
+          ...responses_cus_DisposalOfConfiscatedGoldAndNDPS,
+          ...responses_cus_recovery_of_arrears,
+          ...responses_cus_management_of_warehousing_bonds,
+          ...responses_cus_CommissionerAppeals,
+          ...responses_cus_audit,
+        ];
   
-  //       const allData = allResponses.flatMap((response) => response.data);
+        const allData = allResponses.flatMap((response) => response.data);
   
-  //       // Sum by zone and calculate ranks
-  //       const summedByZone = allData.reduce((acc, item) => {
-  //         const zoneCode = item.zone_code;
-  //         const value = item.sub_parameter_weighted_average || 0;
+        // Step 1: Exclude the unwanted zones first
+        const excludedZones = [
+          "DG NORTH", "DG WEST", "DG EAST", "DG SOUTH", "DG (HQ)", "JAIPUR CE & GST", 
+          "RANCHI CE & GST", "VADODARA CE & GST", "MUMBAI CE & GST", "DRI DG"
+        ];
   
-  //         if (!acc[zoneCode]) {
-  //           acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0, total_weighted_average: 0 };
-  //         }
+        const filteredData = allData.filter(item => !excludedZones.includes(item.zone_name));
   
-  //         acc[zoneCode].sub_parameter_weighted_average = parseFloat(
-  //           (acc[zoneCode].sub_parameter_weighted_average + value).toFixed(2)
-  //         );
+        // Step 2: Sum by zone and calculate ranks after exclusion
+        const summedByZone = filteredData.reduce((acc, item) => {
+          const zoneCode = item.zone_code;
+          const value = item.sub_parameter_weighted_average || 0;
   
-  //         acc[zoneCode].total_weighted_average = parseFloat(
-  //           (acc[zoneCode].total_weighted_average + value).toFixed(2)
-  //         );
+          if (!acc[zoneCode]) {
+            acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0, total_weighted_average: 0 };
+          }
   
-  //         return acc;
-  //       }, {});
+          acc[zoneCode].sub_parameter_weighted_average = parseFloat(
+            (acc[zoneCode].sub_parameter_weighted_average + value).toFixed(2)
+          );
   
-  //       const reducedAllData = Object.values(summedByZone);
+          acc[zoneCode].total_weighted_average = parseFloat(
+            (acc[zoneCode].total_weighted_average + value).toFixed(2)
+          );
   
-  //       const sorted = reducedAllData.sort(
-  //         (a, b) =>
-  //           b.total_weighted_average - a.total_weighted_average
-  //       );
+          return acc;
+        }, {});
   
-  //       let currentRank = 1;
-  //       let prevScore = null;
-  //       for (let i = 0; i < sorted.length; i++) {
-  //         const score = sorted[i].total_weighted_average;
-  //         if (score !== prevScore) {
-  //           currentRank = i + 1;
-  //         }
-  //         sorted[i].zonal_rank = currentRank;
-  //         prevScore = score;
-  //       }
+        const reducedAllData = Object.values(summedByZone);
   
-  //       const enhancedData = sorted.map((item, index) => {
-  //         const total = item.total_weighted_average;
-  //         let props = {};
-  //         if (total <= 100 && total >= 75) {
-  //           props = { scope: "row", color: "success" };
-  //         } else if (total < 75 && total >= 50) {
-  //           props = { scope: "row", color: "warning" };
-  //         } else if (total >= 0 && total <= 25) {
-  //           props = { scope: "row", color: "danger" };
-  //         } else {
-  //           props = { scope: "row", color: "primary" };
-  //         }
+        // Ranking Logic
+        let currentRank = 1;
+        let prevScore = null;
+        //reducedAllData.sort((a, b) => b.total_weighted_average - a.total_weighted_average);  // Sorting first
   
-  //         return { ...item, _props: props, s_no: index + 1 };
-  //       });
+        // Add the `s_no` (Serial Number) after sorting
+        for (let i = 0; i < reducedAllData.length; i++) {
+          const score = reducedAllData[i].total_weighted_average;
+          if (score !== prevScore) {
+            currentRank = i + 1;
+          }
+          reducedAllData[i].zonal_rank = currentRank;
+          reducedAllData[i].s_no = i + 1;  // Add serial number here
+          prevScore = score;
+        }
   
-  //       const filteredData = enhancedData.filter(item => item.zonal_rank <= 20);
+        return reducedAllData;
+      };
   
-  //       return filteredData;
-  //     };
+      // Fetching data for all months
+      const allMonthData = await Promise.all(months.map((month) => getMonthData(month)));
   
-  //     // Fetching data for all months
-  //     const allMonthData = await Promise.all(months.map((month) => getMonthData(month)));
+      // Set data for each month
+      setDatacustoms1(allMonthData[0]);
+      setDatacustoms2(allMonthData[1]);
+      setDatacustoms3(allMonthData[2]);
+      setDatacustoms4(allMonthData[3]);
+      setDatacustoms5(allMonthData[4]);
+      setDatacustoms6(allMonthData[5]);
   
-  //     // Set data for each month
-  //     setDatacustoms1(allMonthData[0]);
-  //     setDatacustoms2(allMonthData[1]);
-  //     setDatacustoms3(allMonthData[2]);
-  //     setDatacustoms4(allMonthData[3]);
-  //     setDatacustoms5(allMonthData[4]);
-  //     setDatacustoms6(allMonthData[5]);
+      setloading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setloading(false);
+    }
+  };
   
-  //     setloading(false);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //     setloading(false);
-  //   }
-  // };
-  
-
 
   useEffect(() => {
     fetchData();
-    //fetchDatacustoms();
+    fetchDatacustoms();
   }, [newdate]); // Empty dependency array indicates that this effect runs only once
 
   const [details, setDetails] = useState([]);

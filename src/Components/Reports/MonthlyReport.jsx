@@ -490,7 +490,7 @@ const MonthlyReport = ({
       label: "Show Parameterwise by Bifurcation",
       filter: false,
       sorter: false,
-      _props: { className: "current-month-score" },
+      //_props: { className: "current-month-score" },
       // formatter: (item) => {
       //   return (
       //     <Link to="/allzones" state={{ data: item }}> 
@@ -530,7 +530,7 @@ const MonthlyReport = ({
       label: "Show Parameterwise by Bifurcation",
       filter: false,
       sorter: false,
-      _props: { scope: "col" },
+      //_props: { scope: "col" },
       formatter: (item) => {
         return (
           <Link to="/allzones" state={{ data: item }}> 
