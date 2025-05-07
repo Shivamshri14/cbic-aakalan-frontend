@@ -602,7 +602,7 @@ const CustomPara = ({
           finalData
         );
 
-        relevantAspects = (name === "disposal/pendency" ? "Disposal/Pendency Of Provisional Assessments" : finalData.map((item) => item.ra)[0]);
+        relevantAspects = "Disposal/Pendency Of Provisional Assessments";
 
         const sorted = finalData.sort(
           (a, b) =>
@@ -2276,8 +2276,7 @@ const CustomPara = ({
           sorted[i].zonal_rank = scoreIndexMap.get(score);
         }
 
-        //setData(sorted.map((item, index) => ({ ...item, s_no: index + 1 })));
-        setBarData([...sorted]);
+        setData(sorted.map((item, index) => ({ ...item, s_no: index + 1 })));
 
         // const topfive = sorted.slice(0, 5);
         // const bottomfive = sorted.slice(-5);
