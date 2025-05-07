@@ -194,12 +194,12 @@ const AllParamDashboard = ({
                   <div className="card-body pb-0 d-flex justify-content-between align-items-start g1">
                     <div className="g1-box">
                       <div className="fs-4 fw-semibold text-danger">
-                        {/* <Link
+                        <Link
                           to="/zoneparameters?name=registration"
                           className="text-white sub-h"
-                        > */}
+                        >
                           Registration
-                          {/* </Link>{" "} */}
+                          </Link>{" "}
                       </div>
                       <ol className="par-list">
                         <li className="text-white">

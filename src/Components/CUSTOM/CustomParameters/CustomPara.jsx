@@ -2277,6 +2277,7 @@ const CustomPara = ({
         }
 
         setData(sorted.map((item, index) => ({ ...item, s_no: index + 1 })));
+        setBarData([...sorted]);
 
         // const topfive = sorted.slice(0, 5);
         // const bottomfive = sorted.slice(-5);
@@ -2366,7 +2367,7 @@ const CustomPara = ({
           // Assign the index to each item based on its score
           sorted[i].zonal_rank = scoreIndexMap.get(score);
         }
-
+        //setBarData([...sorted]);
         setData(sorted.map((item, index) => ({ ...item, s_no: index + 1 })));
 
         const topfive = sorted.slice(0, 5);

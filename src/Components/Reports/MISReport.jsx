@@ -50,7 +50,7 @@ const MISReport = ({
   };
 
   const options = [
-    { id: 1, label: "Registration", value: "registration", color: "red" },
+    { id: 1, label: "Registration", value: "registration", /* color: "red" */ },
     { id: 2, label: "Return Filing", value: "returnFiling" },
     { id: 3, label: "Scrutiny/Assessment", value: "scrutiny", },
     { id: 4, label: "Investigation", value: "investigation", },
@@ -207,7 +207,7 @@ const MISReport = ({
                             onChange={() =>
                               handleCheckboxChange(option.id, option.value)
                             }
-                             disabled={option.id === 1 /* || option.id === 7 */ } 
+                            //  disabled={option.id === 1 /* || option.id === 7 */ } 
                           />
                           <label
                             className="form-check-label"

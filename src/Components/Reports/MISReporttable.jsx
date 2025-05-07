@@ -281,402 +281,109 @@ const MISReporttable = ({
         setData5(enhancedData5);
         setData6(enhancedData6);
       } else if (name === "adjudication") {
-        //Zone parameters API
-        const responsei = await apiClient.get(`/cbic/t_score/adjudication`, {
-          params: {
-            month_date: newdate,
-            type: "parameter",
-          },
-        });
+        const endpoints = ["gst5a", "gst5b"];
+        const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
 
-        console.log("Response", responsei);
-
-        const responseii = await apiClient.get(`/cbic/t_score/adjudication`, {
-          params: {
-            month_date: previousmonth1,
-            type: "parameter",
-          },
-        });
-
-        console.log("Response20", responseii);
-
-        const responseiii = await apiClient.get(`/cbic/t_score/adjudication`, {
-          params: {
-            month_date: previousmonth2,
-            type: "parameter",
-          },
-        });
-
-        console.log("Response20", responseiii);
-
-        const responseiv = await apiClient.get(`/cbic/t_score/adjudication`, {
-          params: {
-            month_date: previousmonth3,
-            type: "parameter",
-          },
-        });
-
-        console.log("Response20", responseiv);
-
-        const responsev = await apiClient.get(`/cbic/t_score/adjudication`, {
-          params: {
-            month_date: previousmonth4,
-            type: "parameter",
-          },
-        });
-
-        console.log("Response20", responsev);
-
-        const responsevi = await apiClient.get(`/cbic/t_score/adjudication`, {
-          params: {
-            month_date: previousmonth5,
-            type: "parameter",
-          },
-        });
-
-        console.log("Response20", responsevi);
-
-        //MIS Reports API
-        const response1 = await apiClient.get(`/cbic/CgstMISReports/${name}`, {
-          params: {
-            month_date: newdate,
-            type: "1_Month",
-          },
-        });
-
-        const response2 = await apiClient.get(`/cbic/CgstMISReports/${name}`, {
-          params: {
-            month_date: newdate,
-            type: "2_Month",
-          },
-        });
-
-        const response3 = await apiClient.get(`/cbic/CgstMISReports/${name}`, {
-          params: {
-            month_date: newdate,
-            type: "3_Month",
-          },
-        });
-
-        const response4 = await apiClient.get(`/cbic/CgstMISReports/${name}`, {
-          params: {
-            month_date: newdate,
-            type: "4_Month",
-          },
-        });
-
-        const response5 = await apiClient.get(`/cbic/CgstMISReports/${name}`, {
-          params: {
-            month_date: newdate,
-            type: "5_Month",
-          },
-        });
-
-        const response6 = await apiClient.get(`/cbic/CgstMISReports/${name}`, {
-          params: {
-            month_date: newdate,
-            type: "6_Month",
-          },
-        });
-
-        console.log("Response1", response1.data);
-        console.log("Response2", response2.data);
-        console.log("Response3", response3.data);
-        console.log("Response4", response4.data);
-        console.log("Response5", response5.data);
-        console.log("Response6", response6.data);
-
-        const sorted1 = responsei.data.sort(
-          (a, b) => b.totalScore - a.totalScore
+        // Fetch data for all months and endpoints
+        const responses = await Promise.all(
+          months.map((month) =>
+            Promise.all(
+              endpoints.map((endpoint) =>
+                apiClient
+                  .get(`/cbic/${endpoint}`, { params: { month_date: month, type: "zone" } })
+                  .then((response) => ({
+                    data: response.data,
+                    gst: endpoint.toUpperCase(),
+                  }))
+                  .catch((error) => {
+                    console.error(`❌ API error for ${endpoint} (${month}):`, error);
+                    return { data: [], gst: endpoint.toUpperCase() }; // Return empty data on failure
+                  })
+              )
+            )
+          )
         );
 
-        console.log("Sorted1", sorted1);
-        const sorted2 = responseii.data.sort(
-          (a, b) => b.totalScore - a.totalScore
-        );
-        const sorted3 = responseiii.data.sort(
-          (a, b) => b.totalScore - a.totalScore
-        );
-        const sorted4 = responseiv.data.sort(
-          (a, b) => b.totalScore - a.totalScore
-        );
-        const sorted5 = responsev.data.sort(
-          (a, b) => b.totalScore - a.totalScore
-        );
-        const sorted6 = responsevi.data.sort(
-          (a, b) => b.totalScore - a.totalScore
-        );
+        // Stop loading when all data is received
+        setLoading(false);
 
-        const enhancedData1 = sorted1.map((item, index) => {
-          const total = item.totalScore;
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" };
-          } else if (total >= 5 && total < 7.5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" };
-          } else {
-            props = { color: "primary" };
-          }
-
-          return {
-            ...item,
-            _props: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        console.log("enhancedData1", enhancedData1);
-
-        // const enhancedData1 = sorted1.map((item, index) => {
-        //   const total = sorted1.length;
-        //   const firstquarter = total * 0.25;
-        //   const secondquarter = total * 0.5;
-        //   const thirdquarter = total * 0.75;
-
-        //   let props = {};
-        //   if (index < firstquarter) {
-        //     props = { color: "success" };
-        //   } else if (index >= firstquarter && index < secondquarter) {
-        //     props = { color: "warning" };
-        //   } else if (index >= thirdquarter) {
-        //     props = { color: "danger" };
-        //   } else {
-        //     props = { color: "primary" };
-        //   }
-
-        //   return {
-        //     ...item,
-        //     _props: props, // Add _props field dynamically
-        //     s_no: index + 1,
-        //   };
-        // });
-
-        const enhancedData2 = sorted2.map((item, index) => {
-          const total = item.totalScore;
-
-
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" };
-          } else if (total >= 5 && total < 7.5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" };
-          } else {
-            props = { color: "primary" };
-          }
-
-          return {
-            ...item,
-            _props: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const enhancedData3 = sorted3.map((item, index) => {
-          const total = item.totalScore;
-
-
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" };
-          } else if (total >= 5 && total < 7.5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" };
-          } else {
-            props = { color: "primary" };
-          }
-
-          return {
-            ...item,
-            _props: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const enhancedData4 = sorted4.map((item, index) => {
-          const total = item.totalScore;
-
-
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" };
-          } else if (total >= 5 && total < 7.5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" };
-          } else {
-            props = { color: "primary" };
-          }
-
-          return {
-            ...item,
-            _props: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const enhancedData5 = sorted5.map((item, index) => {
-          const total = item.totalScore;
-
-
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" };
-          } else if (total >= 5 && total < 7.5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" };
-          } else {
-            props = { color: "primary" };
-          }
-
-          return {
-            ...item,
-            _props: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const enhancedData6 = sorted6.map((item, index) => {
-          const total = item.totalScore;
-
-
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" };
-          } else if (total >= 5 && total < 7.5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" };
-          } else {
-            props = { color: "primary" };
-          }
-
-          return {
-            ...item,
-            _props: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        if (
-          response1 &&
-          response2 &&
-          response3 &&
-          response4 &&
-          response5 &&
-          response6
-        ) {
-          setLoading(false);
-        }
-
-        const matchingdata1 = response1.data.map((item) => {
-          const matchingitem = enhancedData1.find(
-            (item0) => item0.zone_code === item.zone_code
+        // Function to process data
+        const processData = (responseData) => {
+          const allData = responseData.flatMap((response) =>
+            response.data.map((item) => ({ ...item, gst: response.gst }))
           );
-          if (matchingitem) {
+
+          console.log("✅ FINAL RESPONSE", allData);
+
+          // Summing sub_parameter_weighted_average by zone_code
+          const summedByZone = allData.reduce((acc, item) => {
+            const zoneCode = item.zone_code;
+            const value = parseFloat(item.sub_parameter_weighted_average) || 0; // Convert to number, default 0
+
+            if (!acc[zoneCode]) {
+              acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
+            }
+            acc[zoneCode].sub_parameter_weighted_average += value;
+
+            return acc;
+          }, {});
+
+          // Formatting and sorting data
+          const reducedAllData = Object.values(summedByZone).map((item) => ({
+            ...item,
+            weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+          }));
+
+          console.log("✅ Reduced All Data:", reducedAllData);
+
+          const sorted = reducedAllData.sort((a, b) => a.zone_code - b.zone_code);
+
+          // Apply coloring based on weighted_average
+          return sorted.map((item, index) => {
+            const total = item.sub_parameter_weighted_average;
+            let props = {};
+
+            if (total >= 7.5) {
+              props = { color: "success" }; // High performance
+            } else if (total >= 5) {
+              props = { color: "warning" };
+            } else if (total <= 2.5) {
+              props = { color: "danger" }; // Low performance
+            } else {
+              props = { color: "primary" }; // Normal
+            }
+
             return {
               ...item,
-              _cellProps: matchingitem._props, // Substituting _props as _cellProps
+              _cellProps: props,
+              s_no: index + 1,
             };
-          }
+          });
+        };
 
-          return item;
-        });
+        // Process data for each month
+        const enhancedData1 = processData(responses[0]);
+        const enhancedData2 = processData(responses[1]);
+        const enhancedData3 = processData(responses[2]);
+        const enhancedData4 = processData(responses[3]);
+        const enhancedData5 = processData(responses[4]);
+        const enhancedData6 = processData(responses[5]);
 
-        const matchingdata2 = response2.data.map((item) => {
-          const matchingitem = enhancedData2.find(
-            (item0) => item0.zone_code === item.zone_code
-          );
-          if (matchingitem) {
-            return {
-              ...item,
-              _cellProps: matchingitem._props, // Substituting _props as _cellProps
-            };
-          }
+        // Debugging Logs
+        console.log("✅ Enhanced Data 1", enhancedData1);
+        console.log("✅ Enhanced Data 2", enhancedData2);
+        console.log("✅ Enhanced Data 3", enhancedData3);
+        console.log("✅ Enhanced Data 4", enhancedData4);
+        console.log("✅ Enhanced Data 5", enhancedData5);
+        console.log("✅ Enhanced Data 6", enhancedData6);
 
-          return item;
-        });
-
-        const matchingdata3 = response3.data.map((item) => {
-          const matchingitem = enhancedData3.find(
-            (item0) => item0.zone_code === item.zone_code
-          );
-          if (matchingitem) {
-            return {
-              ...item,
-              _cellProps: matchingitem._props, // Substituting _props as _cellProps
-            };
-          }
-
-          return item;
-        });
-
-        const matchingdata4 = response4.data.map((item) => {
-          const matchingitem = enhancedData4.find(
-            (item0) => item0.zone_code === item.zone_code
-          );
-          if (matchingitem) {
-            return {
-              ...item,
-              _cellProps: matchingitem._props, // Substituting _props as _cellProps
-            };
-          }
-
-          return item;
-        });
-
-        const matchingdata5 = response5.data.map((item) => {
-          const matchingitem = enhancedData5.find(
-            (item0) => item0.zone_code === item.zone_code
-          );
-          if (matchingitem) {
-            return {
-              ...item,
-              _cellProps: matchingitem._props, // Substituting _props as _cellProps
-            };
-          }
-
-          return item;
-        });
-
-        const matchingdata6 = response6.data.map((item) => {
-          const matchingitem = enhancedData6.find(
-            (item0) => item0.zone_code === item.zone_code
-          );
-          if (matchingitem) {
-            return {
-              ...item,
-              _cellProps: matchingitem._props, // Substituting _props as _cellProps
-            };
-          }
-
-          return item;
-        });
-
-        console.log("Matching Data1", matchingdata1);
-        console.log("Matching Data2", matchingdata2);
-        console.log("Matching Data3", matchingdata3);
-        console.log("Matching Data4", matchingdata4);
-        console.log("Matching Data5", matchingdata5);
-        console.log("Matching Data6", matchingdata6);
-
-        setData1(matchingdata1);
-        setData2(matchingdata2);
-        setData3(matchingdata3);
-        setData4(matchingdata4);
-        setData5(matchingdata5);
-        setData6(matchingdata6);
+        // Update state with the processed data
+        setData1(enhancedData1);
+        setData2(enhancedData2);
+        setData3(enhancedData3);
+        setData4(enhancedData4);
+        setData5(enhancedData5);
+        setData6(enhancedData6);
       } else if (name === "epcg") {
         const endpoints = ["cus2a", "cus2b", "cus2c"];
         const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
@@ -2046,434 +1753,109 @@ const MISReporttable = ({
         setData5(matchingdata5);
         setData6(matchingdata6);
       } else if (name === "Adjudication") {
-        const responsei = await apiClient.get(
-          `/cbic/custom/parameter/adjudication`,
-          {
-            params: {
-              month_date: newdate,
-              type: "all_commissary",
-            },
-          }
+        const endpoints = ["cus5a", "cus5b", "cus5c"];
+        const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
+
+        // Fetch data for all months and endpoints
+        const responses = await Promise.all(
+          months.map((month) =>
+            Promise.all(
+              endpoints.map((endpoint) =>
+                apiClient
+                  .get(`/cbic/custom/${endpoint}`, { params: { month_date: month, type: "zone" } })
+                  .then((response) => ({
+                    data: response.data,
+                    gst: endpoint.toUpperCase(),
+                  }))
+                  .catch((error) => {
+                    console.error(`❌ API error for ${endpoint} (${month}):`, error);
+                    return { data: [], gst: endpoint.toUpperCase() }; // Return empty data on failure
+                  })
+              )
+            )
+          )
         );
 
-        console.log("Response", responsei);
+        // Stop loading when all data is received
+        setLoading(false);
 
-        const responseii = await apiClient.get(
-          `/cbic/custom/parameter/adjudication`,
-          {
-            params: {
-              month_date: previousmonth1,
-              type: "all_commissary",
-            },
-          }
-        );
-
-        console.log("Response20", responseii);
-
-        const responseiii = await apiClient.get(
-          `/cbic/custom/parameter/adjudication`,
-          {
-            params: {
-              month_date: previousmonth2,
-              type: "all_commissary",
-            },
-          }
-        );
-
-        console.log("Response20", responseiii);
-
-        const responseiv = await apiClient.get(
-          `/cbic/custom/parameter/adjudication`,
-          {
-            params: {
-              month_date: previousmonth3,
-              type: "all_commissary",
-            },
-          }
-        );
-
-        console.log("Response20", responseiv);
-
-        const responsev = await apiClient.get(
-          `/cbic/custom/parameter/adjudication`,
-          {
-            params: {
-              month_date: previousmonth4,
-              type: "all_commissary",
-            },
-          }
-        );
-
-        console.log("Response20", responsev);
-
-        const responsevi = await apiClient.get(
-          `/cbic/custom/parameter/adjudication`,
-          {
-            params: {
-              month_date: previousmonth5,
-              type: "all_commissary",
-            },
-          }
-        );
-
-        console.log("Response20", responsevi);
-
-        //MIS Reports API
-        const response1 = await apiClient.get(
-          `/cbic/CustomMISReports/${name}`,
-          {
-            params: {
-              month_date: newdate,
-              type: "1_Month",
-            },
-          }
-        );
-
-        const response2 = await apiClient.get(
-          `/cbic/CustomMISReports/${name}`,
-          {
-            params: {
-              month_date: newdate,
-              type: "2_Month",
-            },
-          }
-        );
-
-        const response3 = await apiClient.get(
-          `/cbic/CustomMISReports/${name}`,
-          {
-            params: {
-              month_date: newdate,
-              type: "3_Month",
-            },
-          }
-        );
-
-        const response4 = await apiClient.get(
-          `/cbic/CustomMISReports/${name}`,
-          {
-            params: {
-              month_date: newdate,
-              type: "4_Month",
-            },
-          }
-        );
-
-        const response5 = await apiClient.get(
-          `/cbic/CustomMISReports/${name}`,
-          {
-            params: {
-              month_date: newdate,
-              type: "5_Month",
-            },
-          }
-        );
-
-        const response6 = await apiClient.get(
-          `/cbic/CustomMISReports/${name}`,
-          {
-            params: {
-              month_date: newdate,
-              type: "6_Month",
-            },
-          }
-        );
-
-        console.log("Response1", response1.data);
-        console.log("Response2", response2.data);
-        console.log("Response3", response3.data);
-        console.log("Response4", response4.data);
-        console.log("Response5", response5.data);
-        console.log("Response6", response6.data);
-
-        const sorted1 = responsei.data.sort(
-          (a, b) => b.totalScore - a.totalScore
-        );
-        const sorted2 = responseii.data.sort(
-          (a, b) => b.totalScore - a.totalScore
-        );
-        const sorted3 = responseiii.data.sort(
-          (a, b) => b.totalScore - a.totalScore
-        );
-        const sorted4 = responseiv.data.sort(
-          (a, b) => b.totalScore - a.totalScore
-        );
-        const sorted5 = responsev.data.sort(
-          (a, b) => b.totalScore - a.totalScore
-        );
-        const sorted6 = responsevi.data.sort(
-          (a, b) => b.totalScore - a.totalScore
-        );
-
-        const enhancedData1 = sorted1.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
-
-          let props = {};
-          if (total >= 7.5) {
-            props = { color: "success" }; // High performance
-          } else if (total >= 5) {
-            props = { color: "warning" }; // Normal performance
-          } else if (total <= 2.5) {
-            props = { color: "danger" }; // Low performance
-          } else {
-            props = { color: "primary" }; // Default (between 2.5 and 5)
-          }
-
-
-          return {
-            ...item,
-            _props: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        // const enhancedData1 = sorted1.map((item, index) => {
-        //   const total = sorted1.length;
-        //   const firstquarter = total * 0.25;
-        //   const secondquarter = total * 0.5;
-        //   const thirdquarter = total * 0.75;
-
-        //   let props = {};
-        //   if (index < firstquarter) {
-        //     props = { color: "success" };
-        //   } else if (index >= firstquarter && index < secondquarter) {
-        //     props = { color: "warning" };
-        //   } else if (index >= thirdquarter) {
-        //     props = { color: "danger" };
-        //   } else {
-        //     props = { color: "primary" };
-        //   }
-
-        //   return {
-        //     ...item,
-        //     _props: props, // Add _props field dynamically
-        //     s_no: index + 1,
-        //   };
-        // });
-
-        const enhancedData2 = sorted2.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
-
-
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" };
-          } else if (total >= 5 && total < 7.5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" };
-          } else {
-            props = { color: "primary" };
-          }
-
-          return {
-            ...item,
-            _props: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const enhancedData3 = sorted3.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
-
-
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" };
-          } else if (total >= 5 && total < 7.5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" };
-          } else {
-            props = { color: "primary" };
-          }
-
-          return {
-            ...item,
-            _props: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const enhancedData4 = sorted4.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
-
-
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" };
-          } else if (total >= 5 && total < 7.5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" };
-          } else {
-            props = { color: "primary" };
-          }
-
-          return {
-            ...item,
-            _props: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const enhancedData5 = sorted5.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
-
-
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" };
-          } else if (total >= 5 && total < 7.5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" };
-          } else {
-            props = { color: "primary" };
-          }
-
-          return {
-            ...item,
-            _props: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const enhancedData6 = sorted6.map((item, index) => {
-          const total = item.sub_parameter_weighted_average;
-
-
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" };
-          } else if (total >= 5 && total < 7.5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" };
-          } else {
-            props = { color: "primary" };
-          }
-
-          return {
-            ...item,
-            _props: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        if (
-          response1 &&
-          response2 &&
-          response3 &&
-          response4 &&
-          response5 &&
-          response6
-        ) {
-          setLoading(false);
-        }
-
-        const matchingdata1 = response1.data.map((item) => {
-          const matchingitem = enhancedData1.find(
-            (item0) => item0.zone_code === item.zone_code
+        // Function to process data
+        const processData = (responseData) => {
+          const allData = responseData.flatMap((response) =>
+            response.data.map((item) => ({ ...item, gst: response.gst }))
           );
-          if (matchingitem) {
+
+          console.log("✅ FINAL RESPONSE", allData);
+
+          // Summing sub_parameter_weighted_average by zone_code
+          const summedByZone = allData.reduce((acc, item) => {
+            const zoneCode = item.zone_code;
+            const value = parseFloat(item.sub_parameter_weighted_average) || 0; // Convert to number, default 0
+
+            if (!acc[zoneCode]) {
+              acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
+            }
+            acc[zoneCode].sub_parameter_weighted_average += value;
+
+            return acc;
+          }, {});
+
+          // Formatting and sorting data
+          const reducedAllData = Object.values(summedByZone).map((item) => ({
+            ...item,
+            weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+          }));
+
+          console.log("✅ Reduced All Data:", reducedAllData);
+
+          const sorted = reducedAllData.sort((a, b) => a.zone_code - b.zone_code);
+
+          // Apply coloring based on weighted_average
+          return sorted.map((item, index) => {
+            const total = item.sub_parameter_weighted_average;
+            let props = {};
+
+            if (total >= 7.5) {
+              props = { color: "success" }; // High performance
+            } else if (total >= 5) {
+              props = { color: "warning" };
+            } else if (total <= 2.5) {
+              props = { color: "danger" }; // Low performance
+            } else {
+              props = { color: "primary" }; // Normal
+            }
+
             return {
               ...item,
-              _cellProps: matchingitem._props, // Substituting _props as _cellProps
+              _cellProps: props,
+              s_no: index + 1,
             };
-          }
+          });
+        };
 
-          return item;
-        });
+        // Process data for each month
+        const enhancedData1 = processData(responses[0]);
+        const enhancedData2 = processData(responses[1]);
+        const enhancedData3 = processData(responses[2]);
+        const enhancedData4 = processData(responses[3]);
+        const enhancedData5 = processData(responses[4]);
+        const enhancedData6 = processData(responses[5]);
 
-        const matchingdata2 = response2.data.map((item) => {
-          const matchingitem = enhancedData2.find(
-            (item0) => item0.zone_code === item.zone_code
-          );
-          if (matchingitem) {
-            return {
-              ...item,
-              _cellProps: matchingitem._props, // Substituting _props as _cellProps
-            };
-          }
+        // Debugging Logs
+        console.log("✅ Enhanced Data 1", enhancedData1);
+        console.log("✅ Enhanced Data 2", enhancedData2);
+        console.log("✅ Enhanced Data 3", enhancedData3);
+        console.log("✅ Enhanced Data 4", enhancedData4);
+        console.log("✅ Enhanced Data 5", enhancedData5);
+        console.log("✅ Enhanced Data 6", enhancedData6);
 
-          return item;
-        });
-
-        const matchingdata3 = response3.data.map((item) => {
-          const matchingitem = enhancedData3.find(
-            (item0) => item0.zone_code === item.zone_code
-          );
-          if (matchingitem) {
-            return {
-              ...item,
-              _cellProps: matchingitem._props, // Substituting _props as _cellProps
-            };
-          }
-
-          return item;
-        });
-
-        const matchingdata4 = response4.data.map((item) => {
-          const matchingitem = enhancedData4.find(
-            (item0) => item0.zone_code === item.zone_code
-          );
-          if (matchingitem) {
-            return {
-              ...item,
-              _cellProps: matchingitem._props, // Substituting _props as _cellProps
-            };
-          }
-
-          return item;
-        });
-
-        const matchingdata5 = response5.data.map((item) => {
-          const matchingitem = enhancedData5.find(
-            (item0) => item0.zone_code === item.zone_code
-          );
-          if (matchingitem) {
-            return {
-              ...item,
-              _cellProps: matchingitem._props, // Substituting _props as _cellProps
-            };
-          }
-
-          return item;
-        });
-
-        const matchingdata6 = response6.data.map((item) => {
-          const matchingitem = enhancedData6.find(
-            (item0) => item0.zone_code === item.zone_code
-          );
-          if (matchingitem) {
-            return {
-              ...item,
-              _cellProps: matchingitem._props, // Substituting _props as _cellProps
-            };
-          }
-
-          return item;
-        });
-
-        console.log("Matching Data1", matchingdata1);
-        console.log("Matching Data2", matchingdata2);
-        console.log("Matching Data3", matchingdata3);
-        console.log("Matching Data4", matchingdata4);
-        console.log("Matching Data5", matchingdata5);
-        console.log("Matching Data6", matchingdata6);
-
-        setData1(matchingdata1);
-        setData2(matchingdata2);
-        setData3(matchingdata3);
-        setData4(matchingdata4);
-        setData5(matchingdata5);
-        setData6(matchingdata6);
+        // Update state with the processed data
+        setData1(enhancedData1);
+        setData2(enhancedData2);
+        setData3(enhancedData3);
+        setData4(enhancedData4);
+        setData5(enhancedData5);
+        setData6(enhancedData6);
       } else if (name === "cus_investigation") {
         const endpoints = ["cus6a", "cus6b", "cus6c", "cus6d", "cus6e", "cus6f"];
         const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
@@ -4348,7 +3730,8 @@ const MISReporttable = ({
         registration: "CGST (Registration)",
         returnFiling: "CGST (Return Filing)",
         investigation: "CGST (Investigation)",
-        adjudication: "CGST (Adjudication)",
+        Adjudication: "CGST (Adjudication)",
+        adjudication: "CUSTOMS (Adjudication)",
         refunds: "CGST (Refunds)",
         disposalPendency: "CGST (Disposal Pendency)",
         audit: "CGST (Audit)",
