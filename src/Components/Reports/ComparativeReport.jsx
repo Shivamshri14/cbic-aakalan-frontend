@@ -46,7 +46,7 @@ const ComparativeReport = ({
   const [datacustoms5, setDatacustoms5] = useState([]);
   const [datacustoms6, setDatacustoms6] = useState([]);
 
-  
+
   const [datacustoms, setDatacustoms] = useState([]);
 
 
@@ -107,7 +107,7 @@ const ComparativeReport = ({
         recovery_of_arrears: ["gst8a", "gst8b"],
         arrest_prosecution: ["gst9a", "gst9b"],
         adjudication: ["gst5a", "gst5b"],
-        adjudication_legacy: ["gst6a", "gst6b", /* "gst6c", */ "gst6d"],
+        adjudication_legacy: ["gst6a", "gst6b", "gst6c", "gst6d"],
         refunds: ["gst7"],
         appeals: ["gst11a", "gst11b", "gst11c", "gst11d"],
         return_filing: ["gst2"],
@@ -213,24 +213,34 @@ const ComparativeReport = ({
         //     b.sub_parameter_weighted_average - a.sub_parameter_weighted_average
         // );
 
-        // Correcting rank calculation to handle ties better
-        let currentRank = 1;
+
+        let currentIndex = 1;
         let prevScore = null;
         for (let i = 0; i < reducedAllData.length; i++) {
           const score = reducedAllData[i].sub_parameter_weighted_average;
           if (score !== prevScore) {
-            currentRank = i + 1; // Update rank only when score changes
+            currentIndex = i + 1;
           }
-          reducedAllData[i].zonal_rank = currentRank;
+          reducedAllData[i].zonal_rank = currentIndex;
           prevScore = score;
         }
 
-        console.log("Sorted with Ranks:", reducedAllData);
+        // Correcting rank calculation to handle ties better
+        // let currentRank = 1;
+        // let prevScore = null;
+        // for (let i = 0; i < reducedAllData.length; i++) {
+        //   const score = reducedAllData[i].sub_parameter_weighted_average;
+        //   if (score !== prevScore) {
+        //     currentRank = i + 1; // Update rank only when score changes
+        //   }
+        //   reducedAllData[i].zonal_rank = currentRank;
+        //   prevScore = score;
+        // }
 
-        // Filtering for the top 21 zonal ranks
-        console.log("Before filtering:", reducedAllData);
+        //console.log("Sorted with Ranks:", reducedAllData);
+
         const filteredData = reducedAllData.filter((item) => item.zonal_rank <= 21);
-        console.log("After filtering:", filteredData);
+        //console.log("After filtering:", filteredData);
 
         return filteredData.map((item, index) => ({ ...item, s_no: index + 1 }));
       };
@@ -270,7 +280,7 @@ const ComparativeReport = ({
         cus_CommissionerAppeals: ["cus12a", "cus12b"],
         cus_audit: ["cus13a", "cus13b", "cus13c", "cus13d", "cus13e"],
       };
-  
+
       const scaleMap = {
         disposal_pendency: 11,
         epcg: 7,
@@ -285,9 +295,9 @@ const ComparativeReport = ({
         cus_CommissionerAppeals: 8,
         cus_audit: 12,
       };
-  
+
       const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5]; // Adjust your months as required
-  
+
       // Adjusted fetchEndpoints function to accept a single month
       const fetchEndpoints = async (group, scale = null, month) => {
         return Promise.all(
@@ -310,7 +320,7 @@ const ComparativeReport = ({
           )
         );
       };
-  
+
       // Function to fetch data for a specific month
       const getMonthData = async (month) => {
         const [
@@ -342,7 +352,7 @@ const ComparativeReport = ({
           fetchEndpoints("cus_CommissionerAppeals", scaleMap.cus_CommissionerAppeals, month),
           fetchEndpoints("cus_audit", scaleMap.cus_audit, month),
         ]);
-  
+
         const allResponses = [
           ...responses_disposal_pendency,
           ...responses_epcg,
@@ -358,44 +368,44 @@ const ComparativeReport = ({
           ...responses_cus_CommissionerAppeals,
           ...responses_cus_audit,
         ];
-  
+
         const allData = allResponses.flatMap((response) => response.data);
-  
+
         // Step 1: Exclude the unwanted zones first
         const excludedZones = [
-          "DG NORTH", "DG WEST", "DG EAST", "DG SOUTH", "DG (HQ)", "JAIPUR CE & GST", 
+          "DG NORTH", "DG WEST", "DG EAST", "DG SOUTH", "DG (HQ)", "JAIPUR CE & GST",
           "RANCHI CE & GST", "VADODARA CE & GST", "MUMBAI CE & GST", "DRI DG"
         ];
-  
+
         const filteredData = allData.filter(item => !excludedZones.includes(item.zone_name));
-  
+
         // Step 2: Sum by zone and calculate ranks after exclusion
         const summedByZone = filteredData.reduce((acc, item) => {
           const zoneCode = item.zone_code;
           const value = item.sub_parameter_weighted_average || 0;
-  
+
           if (!acc[zoneCode]) {
             acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0, total_weighted_average: 0 };
           }
-  
+
           acc[zoneCode].sub_parameter_weighted_average = parseFloat(
             (acc[zoneCode].sub_parameter_weighted_average + value).toFixed(2)
           );
-  
+
           acc[zoneCode].total_weighted_average = parseFloat(
             (acc[zoneCode].total_weighted_average + value).toFixed(2)
           );
-  
+
           return acc;
         }, {});
-  
+
         const reducedAllData = Object.values(summedByZone);
-  
+
         // Ranking Logic
         let currentRank = 1;
         let prevScore = null;
         //reducedAllData.sort((a, b) => b.total_weighted_average - a.total_weighted_average);  // Sorting first
-  
+
         // Add the `s_no` (Serial Number) after sorting
         for (let i = 0; i < reducedAllData.length; i++) {
           const score = reducedAllData[i].total_weighted_average;
@@ -406,13 +416,13 @@ const ComparativeReport = ({
           reducedAllData[i].s_no = i + 1;  // Add serial number here
           prevScore = score;
         }
-  
+
         return reducedAllData;
       };
-  
+
       // Fetching data for all months
       const allMonthData = await Promise.all(months.map((month) => getMonthData(month)));
-  
+
       // Set data for each month
       setDatacustoms1(allMonthData[0]);
       setDatacustoms2(allMonthData[1]);
@@ -420,14 +430,14 @@ const ComparativeReport = ({
       setDatacustoms4(allMonthData[3]);
       setDatacustoms5(allMonthData[4]);
       setDatacustoms6(allMonthData[5]);
-  
+
       setloading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
       setloading(false);
     }
   };
-  
+
 
   useEffect(() => {
     fetchData();
@@ -667,7 +677,7 @@ const ComparativeReport = ({
               </div>
 
               <div className="col-md-4">
-              <div className="switches-container">
+                <div className="switches-container">
                   <input
                     type="radio"
                     id="switchMonthly"

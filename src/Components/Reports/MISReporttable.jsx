@@ -3727,22 +3727,35 @@ const MISReporttable = ({
   const columns = [
     {
       group: {
-        registration: "CGST (Registration)",
-        returnFiling: "CGST (Return Filing)",
-        investigation: "CGST (Investigation)",
-        Adjudication: "CGST (Adjudication)",
-        adjudication: "CUSTOMS (Adjudication)",
-        refunds: "CGST (Refunds)",
-        disposalPendency: "CGST (Disposal Pendency)",
-        audit: "CGST (Audit)",
-        appeals: "CGST (Appeals)",
-        arrestAndProsecution: "CGST (Arrest and Prosecution)",
-        adjudicationLegacy: "CGST (Adjudication (Legacy Cases)",
-        recoveryOfArrears: "CGST (Recovery of Arrears)",
-        scrutiny: "CGST (Scrutiny & Assessment)",
-        epcg: "CUSTOMS (Management of Export Obligation (EPCG))",
-        aa: "CUSTOMS Management of Export Obligation(AA))",
+        // CGST entries
+        registration: 'CGST("Registration")',
+        returnFiling: 'CGST("Return Filing")',
+        scrutiny: 'CGST("Scrutiny/Assessment")',
+        investigation: 'CGST("Investigation")',
+        adjudication: 'CGST("Adjudication")',
+        adjudicationLegacy: 'CGST("Adjudication (Legacy cases)")',
+        refunds: 'CGST("Refunds")',
+        recoveryOfArrears: 'CGST("Recovery of Arrears")',
+        arrestAndProsecution: 'CGST("Arrest and Prosecution")',
+        audit: 'CGST("Audit")',
+        appeals: 'CGST("Appeals")',
+      
+        // CUSTOMS entries
+        TimelyPaymentOfRefunds: 'CUSTOMS("Timely payment of Refunds")',
+        epcg: 'CUSTOMS("Management of Export Obligation(EPCG)")',
+        aa: 'CUSTOMS("Management of Export Obligation(AA)")',
+        disposalPendency: 'CUSTOMS("Disposal/Pendency Of Provisional Assessments")',
+        Adjudication: 'CUSTOMS("Adjudication")',
+        cus_investigation: 'CUSTOMS("Investigation")',
+        cus_arrestAndProsecution: 'CUSTOMS("Arrests and Prosecution")',
+        unclaimed_cargo: 'CUSTOMS("Monitoring Of Un-cleared and Unclaimed cargo")',
+        DisposalOfConfiscatedGoldAndNDPS: 'CUSTOMS("Disposal Of Confiscated Gold and NDPS")',
+        recovery_Of_Arrears: 'CUSTOMS("Recovery of Arrears")',
+        mowb: 'CUSTOMS("Management Of Warehousing bonds")',
+        CommissionerAppeals: 'CUSTOMS("Commissioner (Appeals)")',
+        cus_audit: 'CUSTOMS("Audit")'
       }[name] || "CUSTOMS",
+      
 
       children: [
         {

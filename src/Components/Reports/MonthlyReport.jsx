@@ -67,7 +67,7 @@ const MonthlyReport = ({
         recovery_of_arrears: ["gst8a", "gst8b"],
         arrest_prosecution: ["gst9a", "gst9b"],
         adjudication: ["gst5a", "gst5b"],
-        adjudication_legacy: ["gst6a", "gst6b", /* "gst6c", */ "gst6d"],
+        adjudication_legacy: ["gst6a", "gst6b", "gst6c", "gst6d"],
         refunds: ["gst7"],
         appeals: ["gst11a", "gst11b", "gst11c", "gst11d"],
         return_filing: ["gst2"],

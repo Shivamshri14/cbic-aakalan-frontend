@@ -74,12 +74,12 @@ export const Sidebar = ({ data }) => {
           <li className="nav-title"></li>
           <ul>
             <li className="nav-item">
-            <Link to="/monthlyreport" className="nav-link" /*onClick={(e) => e.preventDefault()} */ style={{ color: "red" }}>
+            <Link to="/monthlyreport" className="nav-link" /*onClick={(e) => e.preventDefault()} style={{ color: "red" }} */ >
                 Monthly Report
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/comparativereport" className="nav-link" /* onClick={(e) => e.preventDefault()} */ style={{ color: "red" }}>
+              <Link to="/comparativereport" className="nav-link" /* onClick={(e) => e.preventDefault()} style={{ color: "red" }} */ >
                 Comparative Report
               </Link>
             </li>
@@ -92,7 +92,7 @@ export const Sidebar = ({ data }) => {
           </li>
 
           <li className="nav-item">
-            <Link to="/cgst" className="nav-link" /* onClick={(e) => e.preventDefault()} */ style={{ color: "red" }}>
+            <Link to="/cgst" className="nav-link" /* onClick={(e) => e.preventDefault()} style={{ color: "red" }} */>
               <DashboardIcon />
               All Zones Graph
             </Link>
