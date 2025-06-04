@@ -594,27 +594,65 @@ const ComparativeReport = ({
     setSelectedRow(clickedRow);
   };
 
-  const handleExport = () => {
-    // Prepare data for export based on selectedOption and potentially other filters
-    const exportData = userData.map((user) => ({
-      // Customize object properties to match desired format
+  // const handleExport = () => {
+  //   // Prepare data for export based on selectedOption and potentially other filters
+  //   const exportData = userData.map((user) => ({
+  //     // Customize object properties to match desired format
+  //     "S no.": user.s_no,
+  //     "Zone Name": user.zone_name,
+  //     "Febraury (2024)": user.Febraury,
+  //     "March (2024)": user.March,
+  //     "April (2024)": user.April,
+  //   }));
+
+  //   return exportData;
+  // };
+
+  // const exportToXLS = () => {
+  //   const data = handleExport();
+  //   const ws = XLSX.utils.json_to_sheet(data);
+  //   const wb = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+  //   XLSX.writeFile(wb, "my_data.xlsx");
+  // };
+
+const handleExport = () => {
+  // Dynamically generate months in reverse order from the selected date (November 2023, December 2023, ...)
+  const months = [];
+  for (let i = 5; i >= 0; i--) {
+    const monthDate = dayjs(selectedDate).subtract(i, 'month');
+    months.push(monthDate.format("MMMM YYYY"));  // e.g., 'November 2023', 'December 2023'
+  }
+
+  // Prepare data for export based on the months
+  const exportData = userData.map((user) => {
+    const monthData = {};
+
+    // Loop over the months array to dynamically add each month's value
+    months.forEach((month, index) => {
+      // Dynamically match data for each month
+      const dataField = `sub_parameter_weighted_average_${6 - index}`;  // Subtract index to align months correctly
+      monthData[month] = user[dataField] || "N/A";  // Assign "N/A" if the data is missing
+    });
+
+    return {
       "S no.": user.s_no,
       "Zone Name": user.zone_name,
-      "Febraury (2024)": user.Febraury,
-      "March (2024)": user.March,
-      "April (2024)": user.April,
-    }));
+      ...monthData,  // Spread the dynamically created month data
+    };
+  });
 
-    return exportData;
-  };
+  return exportData;
+};
 
-  const exportToXLS = () => {
-    const data = handleExport();
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-    XLSX.writeFile(wb, "my_data.xlsx");
-  };
+
+const exportToXLS = () => {
+  const data = handleExport();  // Get the prepared export data
+  const ws = XLSX.utils.json_to_sheet(data);  // Convert to worksheet
+  const wb = XLSX.utils.book_new();  // Create a new workbook
+  XLSX.utils.book_append_sheet(wb, ws, "Monthly Scores");  // Append to workbook
+  XLSX.writeFile(wb, "comparative_report.xlsx");  // Download the file
+};
 
   const checkSpecialChar = (e) => {
     if (!/[0-9a-zA-Z]/.test(e.key)) {

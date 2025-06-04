@@ -619,24 +619,42 @@ const MonthlyReport = ({
     setSelectedRow(clickedRow);
   };
 
+  // const handleExport = () => {
+  //   const exportData = data.map((user) => ({
+  //     Ranking: user.rank,
+  //     Zone: user.zone_name,
+  //     // "Figures(N/D)": user.absolutevale,
+  //     // Percentage: user.percentage,
+  //     "Current Month Score": user.total_weighted_average,
+  //   }));
+  //   return exportData;
+  // };
+
+  // const exportToXLS = () => {
+  //   const data = handleExport();
+  //   const ws = XLSX.utils.json_to_sheet(data);
+  //   const wb = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+  //   XLSX.writeFile(wb, "my_data.xlsx");
+  // };
+
   const handleExport = () => {
     const exportData = data.map((user) => ({
-      Ranking: user.rank,
-      Zone: user.zone_name,
-      "Figures(N/D)": user.absolutevale,
-      Percentage: user.percentage,
-      "Current Month Score": user.total_score,
+        Ranking: user.zonal_rank,  // Corrected the field name
+        Zone: user.zone_name,  // Corrected the field name
+        "Current Month Score": user.sub_parameter_weighted_average,  // Corrected the field name
     }));
     return exportData;
-  };
+};
 
-  const exportToXLS = () => {
+const exportToXLS = () => {
     const data = handleExport();
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-    XLSX.writeFile(wb, "my_data.xlsx");
-  };
+    XLSX.writeFile(wb, "monthly_report.xlsx");  // Changed the filename to "monthly_report.xlsx" for clarity
+};
+
 
   const checkSpecialChar = (e) => {
     if (!/[0-9a-zA-Z]/.test(e.key)) {
