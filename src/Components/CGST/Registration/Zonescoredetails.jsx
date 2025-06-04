@@ -956,7 +956,7 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
           return {
             "S.No.": user.s_no,
             Zone: user.zoneName,
-            "Return Not Filed/Total Returns Due": user.absval,
+            "Return Not Filed (Monthly)/Total Returns Due(Monthly)": user.absval,
             "Percentage Not Filed": user.totalScore,
             "Way to Grade (Marks) Score out of 10": user.way_to_grade,
             "Weighted Average (out of 5)": user.sub_parameter_weighted_average,

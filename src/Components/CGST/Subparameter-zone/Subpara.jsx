@@ -565,7 +565,7 @@ const Subpara = ({
   } else if (name === "gst2") {
     columns.splice(3, 0, {
       key: "absolutevale",
-      label: "Return Not Filed/Total Returns Due",
+      label: "Return Not Filed (Monthly)/Total Returns Due(Monthly)",
     });
 
     columns.splice(4, 0, {
@@ -585,7 +585,7 @@ const Subpara = ({
 
     columnscomm.splice(3, 0, {
       key: "absolutevale",
-      label: "Return Not Filed/Total Returns Due",
+      label: "Return Not Filed (Monthly)/Total Returns Due(Monthly)",
     });
 
     columnscomm.splice(5, 0, {

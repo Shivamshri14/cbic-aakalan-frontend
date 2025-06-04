@@ -3245,7 +3245,7 @@ const Zoneparameters = ({
                 "S.No.": user.s_no,
                 Zone: user.zoneName,
                 Commissionerate: user.commName,
-                "Return Not Filed/Total Returns Due": user.absval,
+                "Return Not Filed (Monthly)/Total Returns Due(Monthly)": user.absval,
                 "Percentage Not Filed": user.totalScore,
                 "Way to Grade (Marks) Score out of 10": user.way_to_grade,
                 "Weighted Average (out of 5)":
