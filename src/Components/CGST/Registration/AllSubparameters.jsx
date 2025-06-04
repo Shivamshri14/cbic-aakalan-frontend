@@ -309,7 +309,7 @@ const AllSubParameters = ({
           : name === "gst1f"
           ? "NATIONAL AVERAGE (Reg pending for revocation)"
           : name === "gst2"
-          ? "NATIONAL AVERAGE (Return due but not filed)"
+          ? "NATIONAL AVERAGE (Return due but not filed (Monthly))"
           : name === "gst3a"
           ? "NATIONAL AVERAGE (Scrutiny Completed/Pending)"
           : name === "gst3b"
@@ -510,7 +510,7 @@ const AllSubParameters = ({
               ) : name === "gst1f" ? (  
                 <h3>Reg Pending for revocation</h3>
               ) : name === "gst2" ? (
-                <h3>Return due but not filed</h3>
+                <h3>Return due but not filed (Monthly)</h3>
               ) : name === "gst4a" ? (
                 <h3>Investigation Completed</h3>
               ) : name === "gst4b" ? (

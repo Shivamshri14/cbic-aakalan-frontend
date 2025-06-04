@@ -2815,8 +2815,8 @@ const Subpara = ({
             : "Top 5 Commissionerates (Least % Reg of Pending for revocation)"
           : name === "gst2"
           ? selectedOption1 === "Zones"
-            ? "Top 5 Zones (Least % of Return due but not filed)"
-            : "Top 5 Commissionerates (Least % of Return due but not filed)"
+            ? "Top 5 Zones (Least % of Return due but not filed (Monthly))"
+            : "Top 5 Commissionerates (Least % of Return due but not filed (Monthly))"
           : name === "gst3a"
           ? selectedOption1 === "Zones"
             ? "Top 5 Zones (Highest % of Scrutiny Completed/Pending)"
@@ -2972,8 +2972,8 @@ const Subpara = ({
             : "Bottom 5 Commissionerates ( Highest % Reg of Pending for revocation)"
           : name === "gst2"
           ? selectedOption1 === "Zones"
-            ? "Bottom 5 Zones (Highest % of Return due but not filed)"
-            : "Bottom 5 Commissionerates (Highest % of Return due but not filed)"
+            ? "Bottom 5 Zones (Highest % of Return due but not filed (Monthly))"
+            : "Bottom 5 Commissionerates (Highest % of Return due but not filed (Monthly))"
           : name === "gst3a"
           ? selectedOption1 === "Zones"
             ? "Bottom 5 Zones (Least % of Scrutiny Completed/Pending)"
@@ -3282,7 +3282,7 @@ const Subpara = ({
                               : name === "gst1b" ? ( <strong>Top 5 Zones (Least % PV not completed (in 30 days)) </strong> ) 
                             : name === "gst1d" ? ( <strong>Top 5 Zones (Least % of Registration application pending) </strong> ) 
                             : name === "gst1e" ? (<strong> Top 5 Zones (Least % of Reg Pending for cancellation)</strong>) 
-                            : name === "gst2" ? (<strong> Top 5 Zones (Least % of Return due but not filed)</strong>) 
+                            : name === "gst2" ? (<strong> Top 5 Zones (Least % of Return due but not filed (Monthly))</strong>) 
                             : name === "gst1f" ? ( <strong>Top 5 Zones (Least % of Reg Pending for revocation) </strong>
                             ) : name === "gst3a" ? (
                               <strong>
@@ -3434,7 +3434,7 @@ const Subpara = ({
                               </strong>
                                ) : name === "gst2" ? (
                                 <strong>
-                                  Top 5 Commissionerates (Least % of Return due but not filed)
+                                  Top 5 Commissionerates (Least % of Return due but not filed (Monthly))
                                 </strong>
                             ) : name === "gst3a" ? (
                               <strong>
@@ -3606,7 +3606,7 @@ const Subpara = ({
                               </strong>
                               ) : name === "gst2" ? (
                                 <strong>
-                                  Bottom 5 Zones (Highest % of Return due but not filed)
+                                  Bottom 5 Zones (Highest % of Return due but not filed (Monthly))
                                 </strong>
                             ) : name === "gst3a" ? (
                               <strong>
@@ -3761,7 +3761,7 @@ const Subpara = ({
                               </strong>
                                ) : name === "gst2" ? (
                                 <strong>
-                                  Bottom 5 Commissionerates (Highest % of Return due but not filed)
+                                  Bottom 5 Commissionerates (Highest % of Return due but not filed (Monthly))
                                 </strong>
                             ) : name === "gst3a" ? (
                               <strong>
