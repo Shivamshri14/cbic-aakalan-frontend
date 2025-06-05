@@ -1969,7 +1969,7 @@ const CustomPara = ({
           item.sub_parameter_weighted_average = parseFloat(
             item.sub_parameter_weighted_average.toFixed(1)
           );
-          item.weighted_average_out_of_4= ((item.sub_parameter_weighted_average * 4) / 10).toFixed(1);
+          item.weighted_average_out_of_4 = ((item.sub_parameter_weighted_average * 4) / 10).toFixed(1);
           item.total_score = parseFloat(item.total_score.toFixed(1));
 
           item.total_score = parseFloat(item.total_score.toFixed(1));
@@ -2991,7 +2991,7 @@ const CustomPara = ({
 
   const getBarColor = (index, parameter) => {
     let total;
-  
+
     // Check if the parameter is "timelyrefunds"
     if (name === "timelyrefunds") {
       const color = bardata.map(item => item.way_to_grade);
@@ -3002,9 +3002,9 @@ const CustomPara = ({
       const colors = color.slice(0, 5);
       total = colors[index % colors.length];
     }
-  
+
     console.log("Total", total);
-  
+
     if (total >= 7.5 && total <= 10) {
       return "#00FF00"; // First 5 bars
     } else if (total < 7.5 && total >= 5) {
@@ -3015,10 +3015,10 @@ const CustomPara = ({
       return "#0000FF"; // Last 5 bars
     }
   };
-  
+
   const getBarColorcomm = (index) => {
     let total;
-  
+
     // Check if the parameter is "timelyrefunds"
     if (name === "timelyrefunds") {
       const color = bardata.map(item => item.way_to_grade);
@@ -3029,9 +3029,9 @@ const CustomPara = ({
       const colors = color.slice(0, 5);
       total = colors[index % colors.length];
     }
-  
+
     console.log("Total", total);
-  
+
     if (total >= 7.5 && total <= 10) {
       return "#00FF00"; // First 5 bars
     } else if (total < 7.5 && total >= 5) {
@@ -3046,7 +3046,7 @@ const CustomPara = ({
   const getBarColorBottom = (index, parameter) => {
 
     let total;
-  
+
     // Check if the parameter is "timelyrefunds"
     if (parameter === "timelyrefunds") {
       const color = bardata.map(item => item.way_to_grade);
@@ -3057,9 +3057,9 @@ const CustomPara = ({
       const colors = color.slice(-5); // Get the last 5 items
       total = colors[index % colors.length];
     }
-  
+
     console.log("Total", total);
-  
+
     if (total >= 7.5 && total <= 10) {
       return "#00FF00"; // First 5 bars
     } else if (total < 7.5 && total >= 5) {
@@ -3074,7 +3074,7 @@ const CustomPara = ({
   const getBarColorcommbottom = (index, parameter) => {
 
     let total;
-  
+
     // Check if the parameter is "timelyrefunds"
     if (parameter === "timelyrefunds") {
       const color = bardata.map(item => item.way_to_grade);
@@ -3085,9 +3085,9 @@ const CustomPara = ({
       const colors = color.slice(-5); // Get the last 5 items
       total = colors[index % colors.length];
     }
-  
+
     console.log("Total", total);
-  
+
     if (total >= 7.5 && total <= 10) {
       return "#00FF00"; // First 5 bars
     } else if (total < 7.5 && total >= 5) {
@@ -3118,16 +3118,16 @@ const CustomPara = ({
     data: bardata.slice(0, 5).map((item, index) => ({
       label:
         name === "investigation" ||
-        name === "epcg" ||
-        name === "recovery_of_arrears" ||
-        name === "management_of_warehousing_bonds" ||
-        name === "disposal/pendency" ||
-        name === "arrest_and_prosecution" ||
-        name === "DisposalOfConfiscatedGoldAndNDPS" ||
-        name === "unclaimed_cargo" ||
-        name === "export_obligation(AA)" ||
-        name === "cus_audit" ||
-        name === "CommissionerAppeals"
+          name === "epcg" ||
+          name === "recovery_of_arrears" ||
+          name === "management_of_warehousing_bonds" ||
+          name === "disposal/pendency" ||
+          name === "arrest_and_prosecution" ||
+          name === "DisposalOfConfiscatedGoldAndNDPS" ||
+          name === "unclaimed_cargo" ||
+          name === "export_obligation(AA)" ||
+          name === "cus_audit" ||
+          name === "CommissionerAppeals"
           ? selectedOption1 === "Zones"
             ? item.zone_name
             : item.commissionerate_name
@@ -3141,7 +3141,7 @@ const CustomPara = ({
       color: selectedOption1 === "Zones" ? getBarColor(index) : getBarColorcomm(index),
     }))
   };
-  
+
 
   console.log("TOP5", top5);
 
@@ -3193,7 +3193,7 @@ const CustomPara = ({
       value: name === "timelyrefunds" ? item.way_to_grade : item.sub_parameter_weighted_average, // Use way_to_grade for timelyrefunds
       color: selectedOption1 === "Zones" ? getBarColorBottom(index) : getBarColorcommbottom(index),
     }))
-    
+
   };
 
   const handleExport = () => {
@@ -3207,8 +3207,8 @@ const CustomPara = ({
                 SNo: user.s_no,
                 "Zone": user.zoneName,
                 "Commissionerate": user.commName,
-                "Absolute Number": user.absval,
-                "Percentage (For the Month)": user.totalScore,
+                // "Absolute Number": user.absval,
+                // "Percentage (For the Month)": user.totalScore,
                 "Way to Grade (Marks) Out of 10": user.way_to_grade,
                 "Weighted Average (out of 10)": user.sub_parameter_weighted_average,
                 "Score Details": "Show",
@@ -3245,6 +3245,17 @@ const CustomPara = ({
                 "Score Details": "Show",
                 "Score Out of 10": user.sub_parameter_weighted_average,
                 "Weighted Average (out of 11)": user.weighted_average_out_of_11,
+                "Zonal Rank": user.zonal_rank,
+              };
+            }
+            case "adjudication": {
+              return {
+                SNo: user.s_no,
+                "Zone": user.zoneName,
+                "Commissionerate": user.commName,
+                // "Score Details": "Show",
+                "Score Out of 10": user.sub_parameter_weighted_average,
+                "Weighted Average (out of 10)": user.sub_parameter_weighted_average,
                 "Zonal Rank": user.zonal_rank,
               };
             }
@@ -3347,8 +3358,8 @@ const CustomPara = ({
                 SNo: user.s_no,
                 "Commissionerate": user.commName,
                 "Zone": user.zoneName,
-                "Absolute Number": user.absval,
-                "Percentage (For the Month)": user.totalScore,
+                // "Absolute Number": user.absval,
+                // "Percentage (For the Month)": user.totalScore,
                 "Way to Grade (Score out of 10)": user.way_to_grade,
                 "Weighted Average (out of 5)": user.sub_parameter_weighted_average,
                 "Score Details": "Show",
@@ -3396,6 +3407,20 @@ const CustomPara = ({
                 "Score out of 10": user.sub_parameter_weighted_average,
                 "Weighted Average (out of 6)": user.weighted_average_out_of_6,
                 "Score Details": "Show",
+                "Commissionerate Rank": user.zonal_rank,
+              };
+            }
+            case "adjudication": {
+              return {
+                SNo: user.s_no,
+                "Commissionerate": user.commName,
+                "Zone": user.zoneName,
+                // "Absolute Number": user.absval,
+                // "Percentage (For the Month)": user.totalScore,
+                // "Way to Grade (Score out of 10)": user.way_to_grade
+                "Score out of 10": user.sub_parameter_weighted_average,
+                "Weighted Average (out of 10)": user.sub_parameter_weighted_average,
+                // "Score Details": "Show",
                 "Commissionerate Rank": user.zonal_rank,
               };
             }
