@@ -3377,9 +3377,12 @@ const Zoneparameters = ({
                 "S.No.": user.s_no,
                 Zone: user.zoneName,
                 Commissionerate: user.commName,
-                "Score Details": "Show",
-                "Appeals Weighted Average(Score out of 12)":
+                // "Score Details": "Show",
+                "Weighted Average (out of 12)":
+                  user.parameter_wise_weighted_average,
+                "Score (out of 10)":
                   user.sub_parameter_weighted_average,
+
                 "Zonal Rank": user.zonal_rank,
               };
             }
@@ -3543,7 +3546,7 @@ const Zoneparameters = ({
                 Zone: user.zone_name,
                 // "Score Details": "Show",
                 "Total Commissionerate Score (For the month)":
-                user.sub_parameter_weighted_average,
+                  user.sub_parameter_weighted_average,
                 "Weighted Average (out of 12)":
                   user.weighted_average_out_of_12,
                 "Commissionerate Rank": user.zonal_rank,
@@ -3557,7 +3560,7 @@ const Zoneparameters = ({
                 Zone: user.zoneName,
                 // "Score Details": "Show",
                 "Total Commissionerate Score (For the month)":
-                user.sub_parameter_weighted_average,
+                  user.sub_parameter_weighted_average,
                 "Weighted Average (out of 12)":
                   user.parameter_wise_weighted_average,
                 "Commissionerate Rank": user.zonal_rank,
