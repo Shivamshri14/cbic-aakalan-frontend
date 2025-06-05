@@ -3211,7 +3211,7 @@ const CustomPara = ({
                 // "Percentage (For the Month)": user.totalScore,
                 "Way to Grade (Marks) Out of 10": user.way_to_grade,
                 "Weighted Average (out of 10)": user.sub_parameter_weighted_average,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Zonal Rank": user.zonal_rank,
               };
             }
@@ -3220,7 +3220,7 @@ const CustomPara = ({
                 SNo: user.s_no,
                 "Zone name ": user.zone_name,
                 "Commissionerate Name": user.commissionerate_name,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Score Out of 10": user.sub_parameter_weighted_average,
                 "Weighted Average (out of 7)": user.weighted_average_out_of_7,
                 "Zonal Rank": user.zonal_rank,
@@ -3231,7 +3231,7 @@ const CustomPara = ({
                 SNo: user.s_no,
                 "Zone name ": user.zone_name,
                 "Commissionerate Name": user.commissionerate_name,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Score Out of 10": user.sub_parameter_weighted_average,
                 "Weighted Average (out of 7)": user.weighted_average_out_of_7,
                 "Zonal Rank": user.zonal_rank,
@@ -3242,7 +3242,7 @@ const CustomPara = ({
                 SNo: user.s_no,
                 "Zone name ": user.zone_name,
                 "Commissionerate Name": user.commissionerate_name,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Score Out of 10": user.sub_parameter_weighted_average,
                 "Weighted Average (out of 11)": user.weighted_average_out_of_11,
                 "Zonal Rank": user.zonal_rank,
@@ -3259,12 +3259,23 @@ const CustomPara = ({
                 "Zonal Rank": user.zonal_rank,
               };
             }
+            case "investigation": {
+              return {
+                SNo: user.s_no,
+                "Zone": user.zone_name,
+                "Commissionerate": user.commissionerate_name,
+                // "Score Details": "Show",
+                "Score Out of 10": user.sub_parameter_weighted_average,
+                "Weighted Average (out of 12)": user.weighted_average_out_of_12,
+                "Zonal Rank": user.zonal_rank,
+              };
+            }
             case "arrest_and_prosecution": {
               return {
                 SNo: user.s_no,
                 "Zone name ": user.zone_name,
                 "Commissionerate Name": user.commissionerate_name,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Score Out of 10": user.sub_parameter_weighted_average,
                 "Weighted Average (out of 6)": user.weighted_average_out_of_6,
                 "Zonal Rank": user.zonal_rank,
@@ -3275,7 +3286,7 @@ const CustomPara = ({
                 SNo: user.s_no,
                 "Zone name ": user.zone_name,
                 "Commissionerate Name": user.commissionerate_name,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Score Out of 10": user.sub_parameter_weighted_average,
                 "Weighted Average (out of 6)": user.weighted_average_out_of_6,
                 "Zonal Rank": user.zonal_rank,
@@ -3286,7 +3297,7 @@ const CustomPara = ({
                 SNo: user.s_no,
                 "Zone name ": user.zone_name,
                 "Commissionerate Name": user.commissionerate_name,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Score Out of 10": user.sub_parameter_weighted_average,
                 "Weighted Average (out of 6)": user.weighted_average_out_of_6,
                 "Zonal Rank": user.zonal_rank,
@@ -3297,7 +3308,7 @@ const CustomPara = ({
                 SNo: user.s_no,
                 "Zone name ": user.zone_name,
                 "Commissionerate Name": user.commissionerate_name,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Score Out of 10": user.sub_parameter_weighted_average,
                 "Weighted Average (out of 6)": user.weighted_average_out_of_6,
                 "Zonal Rank": user.zonal_rank,
@@ -3308,9 +3319,9 @@ const CustomPara = ({
                 SNo: user.s_no,
                 "Zone name ": user.zone_name,
                 "Commissionerate Name": user.commissionerate_name,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Score Out of 10": user.sub_parameter_weighted_average,
-                "Weighted Average (out of 6)": user.weighted_average_out_of_6,
+                "Weighted Average (out of 4)": user.weighted_average_out_of_4,
                 "Zonal Rank": user.zonal_rank,
               };
             }
@@ -3319,7 +3330,7 @@ const CustomPara = ({
                 SNo: user.s_no,
                 "Zone name ": user.zone_name,
                 "Commissionerate Name": user.commissionerate_name,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Score Out of 10": user.sub_parameter_weighted_average,
                 "Weighted Average (out of 8)": user.weighted_average_out_of_8,
                 "Zonal Rank": user.zonal_rank,
@@ -3330,7 +3341,7 @@ const CustomPara = ({
                 SNo: user.s_no,
                 "Zone name ": user.zone_name,
                 "Commissionerate Name": user.commissionerate_name,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Score Out of 10": user.sub_parameter_weighted_average,
                 "Weighted Average (out of 12)": user.weighted_average_out_of_12,
                 "Zonal Rank": user.zonal_rank,
@@ -3362,7 +3373,7 @@ const CustomPara = ({
                 // "Percentage (For the Month)": user.totalScore,
                 "Way to Grade (Score out of 10)": user.way_to_grade,
                 "Weighted Average (out of 5)": user.sub_parameter_weighted_average,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Commissionerate Rank": user.zonal_rank,
               };
             }
@@ -3376,7 +3387,7 @@ const CustomPara = ({
                 // "Way to Grade (Score out of 10)": user.way_to_grade
                 "Score out of 10": user.sub_parameter_weighted_average,
                 "Weighted Average (out of 7)": user.weighted_average_out_of_7,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Commissionerate Rank": user.zonal_rank,
               };
             }
@@ -3391,7 +3402,7 @@ const CustomPara = ({
                 // "Way to Grade (Score out of 10)": user.way_to_grade
                 "Score out of 10": user.sub_parameter_weighted_average,
                 "Weighted Average (out of 7)": user.weighted_average_out_of_7,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Commissionerate Rank": user.zonal_rank,
               };
             }
@@ -3406,7 +3417,7 @@ const CustomPara = ({
                 // "Way to Grade (Score out of 10)": user.way_to_grade
                 "Score out of 10": user.sub_parameter_weighted_average,
                 "Weighted Average (out of 6)": user.weighted_average_out_of_6,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Commissionerate Rank": user.zonal_rank,
               };
             }
@@ -3424,6 +3435,20 @@ const CustomPara = ({
                 "Commissionerate Rank": user.zonal_rank,
               };
             }
+            case "investigation": {
+              return {
+                SNo: user.s_no,
+                "Commissionerate": user.commissionerate_name,
+                "Zone": user.zone_name,
+                // "Absolute Number": user.absval,
+                // "Percentage (For the Month)": user.totalScore,
+                // "Way to Grade (Score out of 10)": user.way_to_grade
+                "Score out of 10": user.sub_parameter_weighted_average,
+                // "Weighted Average (out of 10)": user.sub_parameter_weighted_average,
+                // "Score Details": "Show",
+                "Commissionerate Rank": user.zonal_rank,
+              };
+            }
             case "unclaimed_cargo": {
               return {
                 SNo: user.s_no,
@@ -3434,7 +3459,7 @@ const CustomPara = ({
                 // "Way to Grade (Score out of 10)": user.way_to_grade
                 "Score out of 10": user.sub_parameter_weighted_average,
                 "Weighted Average (out of 6)": user.weighted_average_out_of_6,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Commissionerate Rank": user.zonal_rank,
               };
             }
@@ -3448,7 +3473,7 @@ const CustomPara = ({
                 // "Way to Grade (Score out of 10)": user.way_to_grade
                 "Score out of 10": user.sub_parameter_weighted_average,
                 "Weighted Average (out of 6)": user.weighted_average_out_of_6,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Commissionerate Rank": user.zonal_rank,
               };
             }
@@ -3462,7 +3487,7 @@ const CustomPara = ({
                 // "Way to Grade (Score out of 10)": user.way_to_grade
                 "Score out of 10": user.sub_parameter_weighted_average,
                 "Weighted Average (out of 6)": user.weighted_average_out_of_6,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Commissionerate Rank": user.zonal_rank,
               };
             }
@@ -3475,8 +3500,8 @@ const CustomPara = ({
                 // "Percentage (For the Month)": user.totalScore,
                 // "Way to Grade (Score out of 10)": user.way_to_grade
                 "Score out of 10": user.sub_parameter_weighted_average,
-                "Weighted Average (out of 6)": user.weighted_average_out_of_6,
-                "Score Details": "Show",
+                "Weighted Average (out of 4)": user.weighted_average_out_of_4,
+                // "Score Details": "Show",
                 "Commissionerate Rank": user.zonal_rank,
               };
             }
@@ -3491,7 +3516,7 @@ const CustomPara = ({
                 // "Way to Grade (Score out of 10)": user.way_to_grade
                 "Score out of 10": user.sub_parameter_weighted_average,
                 "Weighted Average (out of 11)": user.weighted_average_out_of_11,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Commissionerate Rank": user.zonal_rank,
               };
             }
@@ -3505,7 +3530,21 @@ const CustomPara = ({
                 // "Way to Grade (Score out of 10)": user.way_to_grade
                 "Score out of 10": user.sub_parameter_weighted_average,
                 "Weighted Average (out of 12)": user.weighted_average_out_of_12,
-                "Score Details": "Show",
+                // "Score Details": "Show",
+                "Commissionerate Rank": user.zonal_rank,
+              };
+            }
+            case "CommissionerAppeals": {
+              return {
+                SNo: user.s_no,
+                "Commissionerate": user.commissionerate_name,
+                "Zone": user.zone_name,
+                // "Absolute Number": user.absval,
+                // "Percentage (For the Month)": user.totalScore,
+                // "Way to Grade (Score out of 10)": user.way_to_grade
+                "Score out of 10": user.sub_parameter_weighted_average,
+                "Weighted Average (out of 8)": user.weighted_average_out_of_8,
+                // "Score Details": "Show",
                 "Commissionerate Rank": user.zonal_rank,
               };
             }
@@ -3519,41 +3558,10 @@ const CustomPara = ({
                 // "Way to Grade (Score out of 10)": user.way_to_grade
                 "Score out of 10": user.sub_parameter_weighted_average,
                 "Weighted Average (out of 12)": user.weighted_average_out_of_12,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Commissionerate Rank": user.zonal_rank,
               };
             }
-
-            case "DisposalOfConfiscatedGoldAndNDPS": {
-              return {
-                SNo: user.s_no,
-                "Commissionerate": user.commissionerate_name,
-                "Zone": user.zone_name,
-                // "Absolute Number": user.absval,
-                // "Percentage (For the Month)": user.totalScore,
-                // "Way to Grade (Score out of 10)": user.way_to_grade
-                "Score out of 10": user.sub_parameter_weighted_average,
-                "Weighted Average (out of 6)": user.weighted_average_out_of_6,
-                "Score Details": "Show",
-                "Commissionerate Rank": user.zonal_rank,
-              };
-            }
-
-            case "DisposalOfConfiscatedGoldAndNDPS": {
-              return {
-                SNo: user.s_no,
-                "Commissionerate": user.commissionerate_name,
-                "Zone": user.zone_name,
-                // "Absolute Number": user.absval,
-                // "Percentage (For the Month)": user.totalScore,
-                // "Way to Grade (Score out of 10)": user.way_to_grade
-                "Score out of 10": user.sub_parameter_weighted_average,
-                "Weighted Average (out of 8)": user.weighted_average_out_of_8,
-                "Score Details": "Show",
-                "Commissionerate Rank": user.zonal_rank,
-              };
-            }
-
 
             // Customize object properties to match desired format
             default: {
