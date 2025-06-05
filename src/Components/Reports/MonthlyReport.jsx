@@ -648,12 +648,23 @@ const MonthlyReport = ({
 };
 
 const exportToXLS = () => {
-    const data = handleExport();
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-    XLSX.writeFile(wb, "monthly_report.xlsx");  // Changed the filename to "monthly_report.xlsx" for clarity
+  // Use the appropriate data based on the selected option
+  const dataToExport = selectedOption === "CGST" ? data : datacustoms;
+
+  const exportData = dataToExport.map((user) => ({
+    Ranking: user.zonal_rank,  // Corrected the field name
+    Zone: user.zone_name,  // Corrected the field name
+    "Current Month Score": user.sub_parameter_weighted_average,  // Corrected the field name
+  }));
+
+  const ws = XLSX.utils.json_to_sheet(exportData);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+  const fileName = selectedOption === "CGST" ? "monthly_report_cgst.xlsx" : "monthly_report_customs.xlsx";
+  XLSX.writeFile(wb, fileName);  // Export with a dynamic filename based on selected option
 };
+
 
 
   const checkSpecialChar = (e) => {

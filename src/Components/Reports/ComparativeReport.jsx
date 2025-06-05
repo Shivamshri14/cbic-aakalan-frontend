@@ -616,43 +616,46 @@ const ComparativeReport = ({
   //   XLSX.writeFile(wb, "my_data.xlsx");
   // };
 
-const handleExport = () => {
-  // Dynamically generate months in reverse order from the selected date (November 2023, December 2023, ...)
-  const months = [];
-  for (let i = 5; i >= 0; i--) {
-    const monthDate = dayjs(selectedDate).subtract(i, 'month');
-    months.push(monthDate.format("MMMM YYYY"));  // e.g., 'November 2023', 'December 2023'
-  }
+  const handleExport = () => {
+    const exportData = selectedOption === "CGST" ? userData : userDatacustoms;
 
-  // Prepare data for export based on the months
-  const exportData = userData.map((user) => {
-    const monthData = {};
+    // Dynamically generate months in reverse order from the selected date (November 2023, December 2023, ...)
+    const months = [];
+    for (let i = 5; i >= 0; i--) {
+      const monthDate = dayjs(selectedDate).subtract(i, 'month');
+      months.push(monthDate.format("MMMM YYYY"));  // e.g., 'November 2023', 'December 2023'
+    }
 
-    // Loop over the months array to dynamically add each month's value
-    months.forEach((month, index) => {
-      // Dynamically match data for each month
-      const dataField = `sub_parameter_weighted_average_${6 - index}`;  // Subtract index to align months correctly
-      monthData[month] = user[dataField] || "N/A";  // Assign "N/A" if the data is missing
+    // Prepare data for export based on the months
+    const dataToExport = exportData.map((user) => {
+      const monthData = {};
+
+      // Loop over the months array to dynamically add each month's value
+      months.forEach((month, index) => {
+        // Dynamically match data for each month
+        const dataField = `sub_parameter_weighted_average_${6 - index}`;  // Subtract index to align months correctly
+        monthData[month] = user[dataField] || "N/A";  // Assign "N/A" if the data is missing
+      });
+
+      return {
+        "S no.": user.s_no,
+        "Zone Name": user.zone_name,
+        ...monthData,  // Spread the dynamically created month data
+      };
     });
 
-    return {
-      "S no.": user.s_no,
-      "Zone Name": user.zone_name,
-      ...monthData,  // Spread the dynamically created month data
-    };
-  });
+    return dataToExport;
+  };
 
-  return exportData;
-};
+  const exportToXLS = () => {
+    const data = handleExport();  // Get the prepared export data
+    const ws = XLSX.utils.json_to_sheet(data);  // Convert to worksheet
+    const wb = XLSX.utils.book_new();  // Create a new workbook
+    XLSX.utils.book_append_sheet(wb, ws, "Monthly Scores");  // Append to workbook
+    const fileName = selectedOption === "CGST" ? "cgst_comparative_report.xlsx" : "customs_comparative_report.xlsx";  // Dynamic filename
+    XLSX.writeFile(wb, fileName);  // Download the file
+  };
 
-
-const exportToXLS = () => {
-  const data = handleExport();  // Get the prepared export data
-  const ws = XLSX.utils.json_to_sheet(data);  // Convert to worksheet
-  const wb = XLSX.utils.book_new();  // Create a new workbook
-  XLSX.utils.book_append_sheet(wb, ws, "Monthly Scores");  // Append to workbook
-  XLSX.writeFile(wb, "comparative_report.xlsx");  // Download the file
-};
 
   const checkSpecialChar = (e) => {
     if (!/[0-9a-zA-Z]/.test(e.key)) {

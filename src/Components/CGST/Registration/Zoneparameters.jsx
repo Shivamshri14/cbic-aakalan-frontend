@@ -2181,7 +2181,7 @@ const Zoneparameters = ({
             s_no: index + 1,
           }));
           setData(sortedserial1);
-          
+
 
           if (sorted1.length <= 5) {
             const topfive1 = sorted1.slice(0, sorted1.length / 2);
@@ -2811,15 +2811,15 @@ const Zoneparameters = ({
     const color =
       name === "refunds" || name === "returnFiling"
         ? bardata.map((item) => item.way_to_grade)
-        : name === "adjudication" 
+        : name === "adjudication"
           ? bardata.map((item) => item.totalScore)
           : bardata.map((item) => item.sub_parameter_weighted_average);
-  
+
     const colors = color.slice(0, 5);
     const total = colors[index % colors.length];
-  
+
     console.log("Total", total);
-  
+
     if (total >= 7.5 && total <= 10) {
       return "#00FF00";
     } else if (total < 7.5 && total >= 5) {
@@ -2830,20 +2830,20 @@ const Zoneparameters = ({
       return "#0000FF";
     }
   };
-  
+
   const getBarColorcomm = (index) => {
     const color =
       name === "refunds" || name === "returnFiling"
         ? bardata.map((item) => item.way_to_grade)
-        : name === "adjudication" 
+        : name === "adjudication"
           ? bardata.map((item) => item.sub_parameter_weighted_average)
           : bardata.map((item) => item.sub_parameter_weighted_average);
-  
+
     const colors = color.slice(0, 5);
     const total = colors[index % colors.length];
-  
+
     console.log("Total", total);
-  
+
     if (total >= 7.5 && total <= 10) {
       return "#00FF00";
     } else if (total < 7.5 && total >= 5) {
@@ -2854,20 +2854,20 @@ const Zoneparameters = ({
       return "#0000FF";
     }
   };
-  
+
   const getBarColorbottom = (index) => {
     const color =
       name === "refunds" || name === "returnFiling"
         ? bardata.map((item) => item.way_to_grade)
-        : name === "adjudication" 
+        : name === "adjudication"
           ? bardata.map((item) => item.totalScore)
           : bardata.map((item) => item.sub_parameter_weighted_average);
-  
+
     const colors = color.slice(-5);
     const total = colors[index % colors.length];
-  
+
     console.log("Total", total);
-  
+
     if (total >= 7.5 && total <= 10) {
       return "#00FF00";
     } else if (total < 7.5 && total >= 5) {
@@ -2878,20 +2878,20 @@ const Zoneparameters = ({
       return "#0000FF";
     }
   };
-  
+
   const getBarColorbottomcomm = (index) => {
     const color =
       name === "refunds" || name === "returnFiling"
         ? bardata.map((item) => item.way_to_grade)
-        : name === "adjudication" 
+        : name === "adjudication"
           ? bardata.map((item) => item.sub_parameter_weighted_average)
           : bardata.map((item) => item.sub_parameter_weighted_average);
-  
+
     const colors = color.slice(-5);
     const total = colors[index % colors.length];
-  
+
     console.log("Total", total);
-  
+
     if (total >= 7.5 && total <= 10) {
       return "#00FF00";
     } else if (total < 7.5 && total >= 5) {
@@ -2902,7 +2902,7 @@ const Zoneparameters = ({
       return "#0000FF";
     }
   };
-  
+
 
   const colorstop = ["#00FF00", "#00FF00", "#00FF00", "#00FF00", "#00FF00"];
 
@@ -3015,7 +3015,7 @@ const Zoneparameters = ({
           }))
           : bardata.slice(0, 5).map((item, index) => ({
             label:
-              name === "recovery_of_arrears"  ||
+              name === "recovery_of_arrears" ||
                 name === "arrest_and_prosecution" || name === "gst_arrest_and_prosecution" || name === "adjudication(legacy cases)" ||
                 name === "registration" || name === "investigation" || name === "audit" || name === "scrutiny/assessment"
                 ? selectedOption1 === "Zones"
@@ -3029,7 +3029,7 @@ const Zoneparameters = ({
                 ? selectedOption1 === "Zones"
                   ? item.totalScore
                   : item.sub_parameter_weighted_average
-                : name === "adjudication(legacy cases)"  
+                : name === "adjudication(legacy cases)"
                   ? item.sub_parameter_weighted_average
                   : name === "refunds" || name === "returnFiling"
                     ? item.way_to_grade
@@ -3155,7 +3155,7 @@ const Zoneparameters = ({
         : bardata.length > 5 && bardata.length <= 10
           ? bardata.slice(-bardata.length / 2).map((item, index) => ({
             label:
-              name === "recovery_of_arrears"  ||
+              name === "recovery_of_arrears" ||
                 name === "arrest_and_prosecution" || name === "gst_arrest_and_prosecution" || name === "adjudication(legacy cases)" ||
                 name === "registration" || name === "investigation" || name === "audit" || name === "scrutiny/assessment"
                 ? selectedOption1 === "Zones"
@@ -3175,7 +3175,7 @@ const Zoneparameters = ({
                   ? item.sub_parameter_weighted_average
                   : name === "appeals" ||
                     name === "arrest_and_prosecution" || name === "gst_arrest_and_prosecution" ||
-                    name === "recovery_of_arrears"  || 
+                    name === "recovery_of_arrears" ||
                     name === "registration" || name === "investigation" || name === "audit" || name === "scrutiny/assessment"
                     ? item.sub_parameter_weighted_average
                     : item.totalScore,
@@ -3187,7 +3187,7 @@ const Zoneparameters = ({
           }))
           : bardata.slice(-5).map((item, index) => ({
             label:
-              name === "recovery_of_arrears"  ||
+              name === "recovery_of_arrears" ||
                 name === "arrest_and_prosecution" || name === "gst_arrest_and_prosecution" || name === "registration" || name === "investigation" || name === "audit" || name === "scrutiny/assessment" || name === "adjudication(legacy cases)"
                 ? selectedOption1 === "Zones"
                   ? item.zone_name
@@ -3310,12 +3310,12 @@ const Zoneparameters = ({
                 "S.No.": user.s_no,
                 Zone: user.zoneName,
                 Commissionerate: user.commName,
-                "Refunds > 60 days/Total Refund Pending": user.absval,
-                "Percentage(For the Month)": user.totalScore,
+                // "Refunds > 60 days/Total Refund Pending": user.absval,
+                // "Percentage(For the Month)": user.totalScore,
                 "Way to Grade (Marks) Score out of 10": user.way_to_grade,
                 "Weighted Average (out of 5)":
                   user.sub_parameter_weighted_average,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Zonal Rank": user.zonal_rank,
               };
             }
@@ -3351,7 +3351,7 @@ const Zoneparameters = ({
                 "S.No.": user.s_no,
                 Zone: user.zone_name,
                 Commissionerate: user.commissionerate_name,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Score(out of 10)": user.sub_parameter_weighted_average,
                 "Weighted Average (out of 10)":
                   user.sub_parameter_weighted_average,
@@ -3415,8 +3415,8 @@ const Zoneparameters = ({
                 "S.No.": user.s_no,
                 Commissionerate: user.commName,
                 Zone: user.zoneName,
-                "Return Not Filed/Total Return Due": user.absval,
-                "Percentage Not Filed": user.totalScore,
+                // "Return Not Filed/Total Return Due": user.absval,
+                // "Percentage Not Filed": user.totalScore,
                 "Way to Grade (Marks) Score out of 10": user.way_to_grade,
                 "Weighted Average(out of 5)":
                   user.sub_parameter_weighted_average,
@@ -3428,12 +3428,13 @@ const Zoneparameters = ({
             case "scrutiny/assessment": {
               return {
                 "S.No.": user.s_no,
-                Commissionerate: user.commName,
-                Zone: user.zoneName,
+                Commissionerate: user.commissionerate_name,
+                Zone: user.zone_name,
                 // "Total Commissionerate Score (For the month)":
                 //   user.totalScore,
-                "Score Details": "Show",
-                "Scrutiny & Assessment of Returns Weighted Average(out of 10)":
+                // "Score Details": "Show",
+                "Way to Grade (Marks) Score out of 10": user.sub_parameter_weighted_average,
+                "Weighted Average(out of 5)":
                   user.sub_parameter_weighted_average,
                 "Commissionerate Rank": user.zonal_rank,
               };
@@ -3442,11 +3443,14 @@ const Zoneparameters = ({
             case "investigation": {
               return {
                 "S.No.": user.s_no,
-                Commissionerate: user.commName,
-                Zone: user.zoneName,
-                "Total Commissionerate Score (For the month)":
-                  user.totalScore,
-                "Score Details": "Show",
+                Commissionerate: user.commissionerate_name,
+                Zone: user.zone_name,
+                // "Return Not Filed/Total Return Due": user.absval,
+                // "Percentage Not Filed": user.totalScore,
+                "Way to Grade (Marks) Score out of 10": user.sub_parameter_weighted_average,
+                "Weighted Average(out of 5)":
+                  user.sub_parameter_weighted_average,
+                // "Score Details": "Show",
                 "Commissionerate Rank": user.zonal_rank,
               };
             }
@@ -3456,11 +3460,13 @@ const Zoneparameters = ({
                 "S.No.": user.s_no,
                 Commissionerate: user.commName,
                 Zone: user.zoneName,
-                // "Total Commissionerate Score (For the month)":
-                //   user.totalScore,
-                "Score Details": "Show",
-                "Adjudication Weighted Average(Score out of 10)":
+
+                // "Return Not Filed/Total Return Due": user.absval,
+                // "Percentage Not Filed": user.totalScore,
+                "Way to Grade (Marks) Score out of 10": user.sub_parameter_weighted_average,
+                " Adjudication Weighted Average(out of 5)":
                   user.sub_parameter_weighted_average,
+                // "Score Details": "Show",
                 "Commissionerate Rank": user.zonal_rank,
               };
             }
@@ -3468,11 +3474,11 @@ const Zoneparameters = ({
             case "adjudication(legacy cases)": {
               return {
                 "S.No.": user.s_no,
-                Commissionerate: user.commName,
-                Zone: user.zoneName,
-                // "Total Commissionerate Score (For the month)":
-                //   user.totalScore,
-                "Score Details": "Show",
+                Commissionerate: user.commissionerate_name,
+                Zone: user.zone_name,
+                "Total Commissionerate Score (For the month)":
+                  user.sub_parameter_weighted_average,
+                //"Score Details": "Show",
                 "adjudication(legacy cases) Weighted Average(Score out of 10)":
                   user.sub_parameter_weighted_average,
                 "Commissionerate Rank": user.zonal_rank,
@@ -3484,12 +3490,12 @@ const Zoneparameters = ({
                 "S.No.": user.s_no,
                 Commissionerate: user.commName,
                 Zone: user.zoneName,
-                "Refund > 60 days/Total Refund Pending": user.absval,
-                "Percentage(For the Month)": user.totalScore,
+                // "Refund > 60 days/Total Refund Pending": user.absval,
+                // "Percentage(For the Month)": user.totalScore,
                 "Way to Grade (Marks) Score out of 10": user.way_to_grade,
                 "Weighted Average (out of 5)":
                   user.sub_parameter_weighted_average,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Commissionerate Rank": user.zonal_rank,
               };
             }
@@ -3499,10 +3505,23 @@ const Zoneparameters = ({
                 "S.No.": user.s_no,
                 Commissionerate: user.commissionerate_name,
                 Zone: user.zone_name,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Score(out of 10)": user.sub_parameter_weighted_average,
                 "Weighted Average (out of 8)":
                   user.weighted_average_out_of_8,
+                "Commissionerate Rank": user.zonal_rank,
+              };
+            }
+
+            case "gst_arrest_and_prosecution": {
+              return {
+                "S.No.": user.s_no,
+                Commissionerate: user.commissionerate_name,
+                Zone: user.zone_name,
+                // "Score Details": "Show",
+                "Score(out of 10)": user.sub_parameter_weighted_average,
+                "Weighted Average (out of 6)":
+                  user.weighted_average_out_of_6,
                 "Commissionerate Rank": user.zonal_rank,
               };
             }
@@ -3520,11 +3539,13 @@ const Zoneparameters = ({
             case "audit": {
               return {
                 "S.No.": user.s_no,
-                Commissionerate: user.commName,
-                Zone: user.zoneName,
+                Commissionerate: user.commissionerate_name,
+                Zone: user.zone_name,
+                // "Score Details": "Show",
                 "Total Commissionerate Score (For the month)":
-                  user.totalScore,
-                "Score Details": "Show",
+                user.sub_parameter_weighted_average,
+                "Weighted Average (out of 12)":
+                  user.weighted_average_out_of_12,
                 "Commissionerate Rank": user.zonal_rank,
               };
             }
@@ -3534,11 +3555,11 @@ const Zoneparameters = ({
                 "S.No.": user.s_no,
                 Commissionerate: user.commName,
                 Zone: user.zoneName,
-                // "Total Commissionerate Score (For the month)":
-                //   user.totalScore,
-                "Score Details": "Show",
-                "Appeals Weighted Average(Score out of 12)":
-                  user.sub_parameter_weighted_average,
+                // "Score Details": "Show",
+                "Total Commissionerate Score (For the month)":
+                user.sub_parameter_weighted_average,
+                "Weighted Average (out of 12)":
+                  user.parameter_wise_weighted_average,
                 "Commissionerate Rank": user.zonal_rank,
               };
             }
