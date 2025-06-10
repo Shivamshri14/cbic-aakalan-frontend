@@ -194,64 +194,64 @@ const AllParamDashboard = ({
                   <div className="card-body pb-0 d-flex justify-content-between align-items-start g1">
                     <div className="g1-box">
                       <div className="fs-4 fw-semibold text-danger">
-                        {/* <Link
+                        <Link
                           to="/zoneparameters?name=registration"
                           className="text-white sub-h"
-                        > */}
+                        >
                           Registration
-                          {/* </Link>{" "} */}
+                          </Link>{" "}
                       </div>
                       <ol className="par-list">
-                        <li className="text-red">
+                        <li className="text-white">
                           <Tooltip
                             title="Number of applications cleared within 07 days vis-à-vis total applications filed with Aadhar verification during the month"
                             placement="right"
                             arrow
                           >
-                            {/* <Link to="/Subpara?name=gst1a" className="text-white sub-h"> */}
+                            <Link to="/Subpara?name=gst1a" className="text-white sub-h">
                             Application cleared within 7 days
-                            {/* </Link> */}
+                            </Link>
                           </Tooltip>
                         </li>
-                        <li className="text-red">
+                        <li className="text-white">
                           <Tooltip
                             title="Number of cases where PV not completed within 30 days vis-à-vis total applications marked for PV for the month"
                             placement="right"
                             arrow
                           >
-                            {/* <Link to="/Subpara?name=gst1b" className="text-white sub-h"> */}
+                            <Link to="/Subpara?name=gst1b" className="text-white sub-h">
                               Pendency of
                               PV
-                            {/* </Link> */}
+                            </Link>
                           </Tooltip>
                         </li>
-                        <li className="text-red">
+                        <li className="text-white">
                           <Tooltip
                             title="Number of Deemed registrations vis-à-vis total number of applications received for registration in the month"
                             placement="right"
                             arrow
                           >
-                            {/* <Link
+                            <Link
                               to="/Subpara?name=gst1c"
                               className="text-white sub-h"
-                            > */}
+                            >
                               Deemed Registration{" "}
-                            {/* </Link> */}
+                            </Link>
                           </Tooltip>
                         </li>
-                        <li className="text-red">
+                        <li className="text-white">
                           <Tooltip
                             title="*Percentage of registration applications pending at the end of the month vis-à-vis total applications for registration received."
                             placement="right"
                             arrow
                           >
-                            {/* <Link
+                            <Link
                               to="/Subpara?name=gst1d"
                               className="text-white sub-h"
-                            > */}
+                            >
                               {" "}
                               Registration application pending
-                            {/* </Link> */}
+                            </Link>
                           </Tooltip>
                         </li>
                         <li>
