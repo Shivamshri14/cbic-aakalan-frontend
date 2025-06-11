@@ -1303,7 +1303,7 @@ const CustomAllPara = ({
 
         setBarData([...sorted]);
         setData(sorted.map((item, index) => ({ ...item, s_no: index + 1 })));
-      } 
+      }
       else if (name === "cus_audit") {
 
         const cusendpoints = [
@@ -1375,7 +1375,7 @@ const CustomAllPara = ({
 
         setBarData([...sorted]);
         setData(sorted.map((item, index) => ({ ...item, s_no: index + 1 })));
-      } 
+      }
       else if (name === "unclaimed_cargo") {
 
         const cusendpoints = [
@@ -1560,16 +1560,16 @@ const CustomAllPara = ({
 
   const getBarColor = (index) => {
     const colors =
-      name === "timelyrefunds" 
+      name === "timelyrefunds"
         ? bardata.map((item) => item.way_to_grade)  // For refunds/returnFiling, use way_to_grade
         : name === "adjudication"
           ? data.map((item) => item.totalScore)
           : bardata.map((item) => item.sub_parameter_weighted_average);
-    
+
     const total = colors[index % colors.length];
-  
+
     console.log("TOTAL", total);
-  
+
     if (total <= 10 && total >= 7.5) {
       return "#00FF00";
     } else if (total >= 5 && total < 7.5) {
@@ -1580,20 +1580,20 @@ const CustomAllPara = ({
       return "#0000FF";
     }
   };
-  
+
 
   const getBarColorComm = (index) => {
     const colors =
-      name === "timelyrefunds" 
+      name === "timelyrefunds"
         ? bardata.map((item) => item.way_to_grade)  // For refunds/returnFiling, use way_to_grade
         // : name === "adjudication"
         //   ? data.map((item) => item.totalScore)
-          : bardata.map((item) => item.sub_parameter_weighted_average);
-    
+        : bardata.map((item) => item.sub_parameter_weighted_average);
+
     const total = colors[index % colors.length];
-  
+
     console.log("TOTAL", total);
-  
+
     if (total <= 10 && total >= 7.5) {
       return "#00FF00";
     } else if (total >= 5 && total < 7.5) {
@@ -1607,7 +1607,7 @@ const CustomAllPara = ({
 
   // const colorsallzones=["#00FF00","#FFFF00","#0000FF","#FF0000"];
 
-  function calculateAverage(data  ) {
+  function calculateAverage(data) {
     const totalScores = data.map((item) => item.total_score);
 
     if (totalScores.length === 0) {
@@ -1652,13 +1652,13 @@ const CustomAllPara = ({
           label:
             name === "investigation" ||
               name === "epcg" ||
-              name === "export_obligation(AA)" || 
+              name === "export_obligation(AA)" ||
               name === "recovery_of_arrears" ||
               name === "arrest_and_prosecution" ||
               name === "disposal/pendency" ||
               name === "management_of_warehousing_bonds" ||
               name === "unclaimed_cargo"
-               || name ==="cus_audit"  || name ==="DisposalOfConfiscatedGoldAndNDPS"
+              || name === "cus_audit" || name === "DisposalOfConfiscatedGoldAndNDPS"
               ? selectedOption1 === "Zones"
                 ? index.zone_name || "Unknown Zone"
                 : index.commissionerate_name || "Unknown Commissionerate"
@@ -1671,25 +1671,25 @@ const CustomAllPara = ({
     dataset: [
       {
         data: bardata.map((item, index) => ({
-          label: 
-          name === "investigation" ||
-          name === "epcg" ||
-          name === "export_obligation(AA)" ||
-          name === "recovery_of_arrears" ||
-          name === "arrest_and_prosecution" ||
-          name === "disposal/pendency" ||
-          name === "unclaimed_cargo" ||
-          name === "cus_audit" ||
-          name === "DisposalOfConfiscatedGoldAndNDPS"
-            ? selectedOption1 === "Zones"
-              ? item.zone_name || "Unknown Zone"
-              : item.commissionerate_name || "Unknown Commissionerate"
-            : selectedOption1 === "Zones"
-              ? item.zoneName || "Unknown Zone"
-              : item.commName || "Unknown Commissionerate",
-          
-        value: name === "timelyrefunds" ? item.way_to_grade : item.sub_parameter_weighted_average || 0,
-        
+          label:
+            name === "investigation" ||
+              name === "epcg" ||
+              name === "export_obligation(AA)" ||
+              name === "recovery_of_arrears" ||
+              name === "arrest_and_prosecution" ||
+              name === "disposal/pendency" ||
+              name === "unclaimed_cargo" ||
+              name === "cus_audit" ||
+              name === "DisposalOfConfiscatedGoldAndNDPS"
+              ? selectedOption1 === "Zones"
+                ? item.zone_name || "Unknown Zone"
+                : item.commissionerate_name || "Unknown Commissionerate"
+              : selectedOption1 === "Zones"
+                ? item.zoneName || "Unknown Zone"
+                : item.commName || "Unknown Commissionerate",
+
+          value: name === "timelyrefunds" ? item.way_to_grade : item.sub_parameter_weighted_average || 0,
+
           color:
             selectedOption1 === "Zones"
               ? getBarColor(index)
@@ -1852,11 +1852,33 @@ const CustomAllPara = ({
               </div>
             </div>
             <div class="row">
-              {selectedOption1 === "Zones" ? (
-                <h3>All Zones</h3>
-              ) : (
-                <h3>All Commissionerates</h3>
-              )}
+              <div className="text-center zone-heading">
+                {name === "epcg" ? (
+                  <h3>{"Management of Export Obligation(EPCG)"}</h3>
+                ) : name === "timelyrefunds" ? (
+                  <h3>{"Timely payment of Refunds"}</h3>
+                ) : name === "export_obligation(AA)" ? (
+                  <h3>{"Management of Export Obligation(AA)"}</h3>
+                ) : name === "disposal/pendency" ? (
+                  <h3>{"Disposal/Pendency Of Provisional Assessments"}</h3>
+                ) : name === "arrest_and_prosecution" ? (
+                  <h3>{"Arrests and Prosecution"}</h3>
+                ) : name === "unclaimed_cargo" ? (
+                  <h3>{"Monitoring Of Un-cleared and Unclaimed cargo"}</h3>
+                ) : name === "DisposalOfConfiscatedGoldAndNDPS" ? (
+                  <h3>{"Disposal Of Confiscated Gold and Narcotics"}</h3>
+                ) : name === "recovery_of_arrears" ? (
+                  <h3>{"Recovery of Arrears"}</h3>
+                ) : name === "management_of_warehousing_bonds" ? (
+                  <h3>{"Management Of Warehousing bonds"}</h3>
+                ) : name === "CommissionerAppeals" ? (
+                  <h3>{"Commissioner (Appeals)"}</h3>
+                ) : name === "cus_audit" ? (
+                  <h3>{"Audit"}</h3>
+                ) : (
+                  <h3>{name.toUpperCase()}</h3>
+                )}
+              </div>
             </div>
           </div>
           <div class="row">

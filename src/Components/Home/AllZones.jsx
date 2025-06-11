@@ -1959,7 +1959,7 @@ const AllZones = ({
       },
     ],
     dataset: [
-            {
+      {
         seriesname: "Timely Refunds",
         data: rearrangedDatacustimelyrefunds
           .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
@@ -2060,21 +2060,21 @@ const AllZones = ({
             color: getBarColor(item), // Pass the entire item to getBarColor
           })),
       },
-            {
-        seriesname: "Audit",
-        data: rearrangedDatacus_cus_audit
-          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
-          .map((item) => ({
-            value: item.weighted_average_out_of_12_cus_audit,
-            color: getBarColor(item), // Pass the entire item to getBarColor
-          })),
-      },
       {
         seriesname: "Commissioner Appeals",
         data: rearrangedDatacus_CommissionerAppeals
           .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
           .map((item) => ({
             value: item.weighted_average_out_of_8_cus_CommissionerAppeals,
+            color: getBarColor(item), // Pass the entire item to getBarColor
+          })),
+      },
+      {
+        seriesname: "Audit",
+        data: rearrangedDatacus_cus_audit
+          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+          .map((item) => ({
+            value: item.weighted_average_out_of_12_cus_audit,
             color: getBarColor(item), // Pass the entire item to getBarColor
           })),
       },

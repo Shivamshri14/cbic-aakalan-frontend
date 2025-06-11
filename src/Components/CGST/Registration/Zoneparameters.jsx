@@ -445,8 +445,7 @@ const Zoneparameters = ({
 
         const reducedAllData = Object.values(summedByZone).map((item) => ({
           ...item,
-          sub_parameter_weighted_average:
-            item.sub_parameter_weighted_average.toFixed(2),
+          weighted_average_out_of_12: ((item.sub_parameter_weighted_average * 12) / 10).toFixed(2),
         }));
 
         console.log("Reduced All Data:", reducedAllData);
@@ -1706,8 +1705,7 @@ const Zoneparameters = ({
 
         const reducedAllData = Object.values(summedByZone).map((item) => ({
           ...item,
-          sub_parameter_weighted_average:
-            item.sub_parameter_weighted_average.toFixed(2), // Format to 2 decimal places
+          weighted_average_out_of_12: ((item.sub_parameter_weighted_average * 12) / 10).toFixed(2),
         }));
 
         console.log("Reduced All Data:", reducedAllData);
@@ -2673,8 +2671,8 @@ const Zoneparameters = ({
       label: " Score (out of 10)",
     });
     columns.splice(5, 0, {
-      key: "sub_parameter_weighted_average",
-      label: " Weighted Average (out of 10)",
+      key: "weighted_average_out_of_12",
+      label: " Weighted Average (out of 12)",
     });
 
     commcolumns.splice(4, 0, {
@@ -2682,8 +2680,8 @@ const Zoneparameters = ({
       label: " Score (out of 10)",
     });
     commcolumns.splice(5, 0, {
-      key: "sub_parameter_weighted_average",
-      label: " Weighted Average (out of 10)",
+      key: "weighted_average_out_of_12",
+      label: " Weighted Average (out of 12)",
     });
   } else if (name === "investigation") {
     columns.splice(4, 0, {
@@ -3232,10 +3230,10 @@ const Zoneparameters = ({
                 "S.No.": user.s_no,
                 Zone: user.zone_name,
                 Commissionerate: user.commissionerate_name,
-                "Score Details": "Show",
+                // "Score Details": "Show",
                 "Score(out of 10)": user.sub_parameter_weighted_average,
-                "Weighted Average (out of 10)":
-                  user.sub_parameter_weighted_average,
+                "Weighted Average (out of 12)":
+                  user.weighted_average_out_of_12,
                 "Zonal Rank": user.zonal_rank,
               };
             }
@@ -3404,11 +3402,12 @@ const Zoneparameters = ({
             case "registration": {
               return {
                 "S.No.": user.s_no,
-                Commissionerate: user.commName,
-                Zone: user.zoneName,
+                Commissionerate: user.commissionerate_name,
+                Zone: user.zone_name,
                 "Total Commissionerate Score (For the month)":
-                  user.totalScore,
-                "Score Details": "Show",
+                  user.sub_parameter_weighted_average,
+                "Weighted Average (out of 12)":
+                  user.weighted_average_out_of_12,
                 "Commissionerate Rank": user.zonal_rank,
               };
             }

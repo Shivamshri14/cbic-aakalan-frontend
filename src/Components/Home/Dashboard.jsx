@@ -192,7 +192,7 @@ export const Dashboard = ({
       const removeZones = [
         "dg north", "dg west", "dg east", "dg south", "DG (HQ)", "DG (HQ)"
       ].map(zone => zone.toLowerCase());
-      
+
       const filterData = (data) =>
         data.filter((item) => !removeZones.includes(item.zone_name.toLowerCase()));
 
@@ -336,7 +336,7 @@ export const Dashboard = ({
       const endpoints_cus_recovery_of_arrears = ["cus10a", "cus10b"];
       const endpoints_cus_management_of_warehousing_bonds = ["cus11a", "cus11b"];
       const endpoints_cus_CommissionerAppeals = ["cus12a", "cus12b"];
-      const endpoints_cus_audit = ["cus13a", "cus13b", "cus13c", "cus13d","cus13e"]; 
+      const endpoints_cus_audit = ["cus13a", "cus13b", "cus13c", "cus13d", "cus13e"];
 
 
       // Fetch the data from the endpoints
@@ -533,8 +533,8 @@ export const Dashboard = ({
               weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
               weighted_average_out_of_6_cus_recovery_of_arrears: 0,
               weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
-              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
-              weighted_average_out_of_12_cus_audit : 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals: 0,
+              weighted_average_out_of_12_cus_audit: 0,
             });
           }
           combinedMap.get(zoneCode).weighted_average_out_of_11 += parseFloat(item.sub_parameter_weighted_average || 0);
@@ -558,8 +558,8 @@ export const Dashboard = ({
               weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
               weighted_average_out_of_6_cus_recovery_of_arrears: 0,
               weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
-              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
-              weighted_average_out_of_12_cus_audit : 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals: 0,
+              weighted_average_out_of_12_cus_audit: 0,
             });
           }
           const current = combinedMap.get(zoneCode);
@@ -587,8 +587,8 @@ export const Dashboard = ({
               weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
               weighted_average_out_of_6_cus_recovery_of_arrears: 0,
               weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
-              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
-              weighted_average_out_of_12_cus_audit : 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals: 0,
+              weighted_average_out_of_12_cus_audit: 0,
             });
           }
           // Ensure zone_name is not overwritten; it should retain the first encountered name
@@ -617,8 +617,8 @@ export const Dashboard = ({
               weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
               weighted_average_out_of_6_cus_recovery_of_arrears: 0,
               weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
-              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
-              weighted_average_out_of_12_cus_audit : 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals: 0,
+              weighted_average_out_of_12_cus_audit: 0,
             });
           }
           // Ensure zone_name is not overwritten; it should retain the first encountered name
@@ -647,8 +647,8 @@ export const Dashboard = ({
               weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
               weighted_average_out_of_6_cus_recovery_of_arrears: 0,
               weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
-              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
-              weighted_average_out_of_12_cus_audit : 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals: 0,
+              weighted_average_out_of_12_cus_audit: 0,
             });
           }
           // Ensure zone_name is not overwritten; it should retain the first encountered name
@@ -676,8 +676,8 @@ export const Dashboard = ({
               weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
               weighted_average_out_of_6_cus_recovery_of_arrears: 0,
               weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
-              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
-              weighted_average_out_of_12_cus_audit : 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals: 0,
+              weighted_average_out_of_12_cus_audit: 0,
             });
           }
           // Ensure zone_name is not overwritten; it should retain the first encountered name
@@ -706,8 +706,8 @@ export const Dashboard = ({
               weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
               weighted_average_out_of_6_cus_recovery_of_arrears: 0,
               weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
-              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
-              weighted_average_out_of_12_cus_audit : 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals: 0,
+              weighted_average_out_of_12_cus_audit: 0,
             });
           }
           // Ensure zone_name is not overwritten; it should retain the first encountered name
@@ -735,8 +735,8 @@ export const Dashboard = ({
               weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
               weighted_average_out_of_6_cus_recovery_of_arrears: 0,
               weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
-              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
-              weighted_average_out_of_12_cus_audit : 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals: 0,
+              weighted_average_out_of_12_cus_audit: 0,
             });
           }
           // Ensure zone_name is not overwritten; it should retain the first encountered name
@@ -764,8 +764,8 @@ export const Dashboard = ({
               weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
               weighted_average_out_of_6_cus_recovery_of_arrears: 0,
               weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
-              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
-              weighted_average_out_of_12_cus_audit : 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals: 0,
+              weighted_average_out_of_12_cus_audit: 0,
             });
           }
           // Ensure zone_name is not overwritten; it should retain the first encountered name
@@ -775,7 +775,7 @@ export const Dashboard = ({
           // Add the investigation data directly without summing or modifying
           current.weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS += parseFloat(item.sub_parameter_weighted_average || 0);
         });
-        
+
         recovery_of_arrears_cus_Data.forEach((item) => {
           const zoneCode = item.zone_code;
           if (!combinedMap.has(zoneCode)) {
@@ -793,8 +793,8 @@ export const Dashboard = ({
               weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
               weighted_average_out_of_6_cus_recovery_of_arrears: 0,
               weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
-              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
-              weighted_average_out_of_12_cus_audit : 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals: 0,
+              weighted_average_out_of_12_cus_audit: 0,
             });
           }
           // Ensure zone_name is not overwritten; it should retain the first encountered name
@@ -822,9 +822,9 @@ export const Dashboard = ({
               weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
               weighted_average_out_of_6_cus_recovery_of_arrears: 0,
               weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
-              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
-              weighted_average_out_of_12_cus_audit : 0,
-              
+              weighted_average_out_of_8_cus_CommissionerAppeals: 0,
+              weighted_average_out_of_12_cus_audit: 0,
+
             });
           }
           // Ensure zone_name is not overwritten; it should retain the first encountered name
@@ -852,8 +852,8 @@ export const Dashboard = ({
               weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
               weighted_average_out_of_6_cus_recovery_of_arrears: 0,
               weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
-              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
-              weighted_average_out_of_12_cus_audit : 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals: 0,
+              weighted_average_out_of_12_cus_audit: 0,
             });
           }
           // Ensure zone_name is not overwritten; it should retain the first encountered name
@@ -863,7 +863,7 @@ export const Dashboard = ({
           // Add the investigation data directly without summing or modifying
           current.weighted_average_out_of_8_cus_CommissionerAppeals += parseFloat(item.sub_parameter_weighted_average || 0);
         });
-        
+
         audit_cus_Data.forEach((item) => {
           const zoneCode = item.zone_code;
           if (!combinedMap.has(zoneCode)) {
@@ -881,8 +881,8 @@ export const Dashboard = ({
               weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS: 0,
               weighted_average_out_of_6_cus_recovery_of_arrears: 0,
               weighted_average_out_of_6_cus_management_of_warehousing_bonds: 0,
-              weighted_average_out_of_8_cus_CommissionerAppeals : 0,
-              weighted_average_out_of_12_cus_audit : 0,
+              weighted_average_out_of_8_cus_CommissionerAppeals: 0,
+              weighted_average_out_of_12_cus_audit: 0,
             });
           }
           // Ensure zone_name is not overwritten; it should retain the first encountered name
@@ -928,12 +928,12 @@ export const Dashboard = ({
         item.weighted_average_out_of_12_investigation = ((item.weighted_average_out_of_12_investigation * 12) / 10).toFixed(2);
         item.weighted_average_out_of_6_cus_arrest_prosecution = ((item.weighted_average_out_of_6_cus_arrest_prosecution * 6) / 10).toFixed(2);
         item.weighted_average_out_of_5_cus_timelyrefunds = ((item.weighted_average_out_of_5_cus_timelyrefunds)).toFixed(2);
-        item.weighted_average_out_of_6_cus_unclaimed_cargo = ((item.weighted_average_out_of_6_cus_unclaimed_cargo * 6 )/10).toFixed(2);
-        item.weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS = ((item.weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS * 4 )/10).toFixed(2);
-        item.weighted_average_out_of_6_cus_recovery_of_arrears = ((item.weighted_average_out_of_6_cus_recovery_of_arrears * 6 )/10).toFixed(2);
-        item.weighted_average_out_of_6_cus_management_of_warehousing_bonds = ((item.weighted_average_out_of_6_cus_management_of_warehousing_bonds * 6 )/10).toFixed(2);
-        item.weighted_average_out_of_8_cus_CommissionerAppeals = ((item.weighted_average_out_of_8_cus_CommissionerAppeals * 8 )/10).toFixed(2);
-        item.weighted_average_out_of_12_cus_audit = ((item.weighted_average_out_of_12_cus_audit * 12 )/10).toFixed(2);
+        item.weighted_average_out_of_6_cus_unclaimed_cargo = ((item.weighted_average_out_of_6_cus_unclaimed_cargo * 6) / 10).toFixed(2);
+        item.weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS = ((item.weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS * 4) / 10).toFixed(2);
+        item.weighted_average_out_of_6_cus_recovery_of_arrears = ((item.weighted_average_out_of_6_cus_recovery_of_arrears * 6) / 10).toFixed(2);
+        item.weighted_average_out_of_6_cus_management_of_warehousing_bonds = ((item.weighted_average_out_of_6_cus_management_of_warehousing_bonds * 6) / 10).toFixed(2);
+        item.weighted_average_out_of_8_cus_CommissionerAppeals = ((item.weighted_average_out_of_8_cus_CommissionerAppeals * 8) / 10).toFixed(2);
+        item.weighted_average_out_of_12_cus_audit = ((item.weighted_average_out_of_12_cus_audit * 12) / 10).toFixed(2);
 
         // Calculate the total weighted average by adding all weighted averages
         const total_weighted_average =
@@ -947,7 +947,7 @@ export const Dashboard = ({
           parseFloat(item.weighted_average_out_of_6_cus_unclaimed_cargo) +
           parseFloat(item.weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS) +
           parseFloat(item.weighted_average_out_of_6_cus_recovery_of_arrears) +
-          parseFloat(item.weighted_average_out_of_6_cus_management_of_warehousing_bonds)+
+          parseFloat(item.weighted_average_out_of_6_cus_management_of_warehousing_bonds) +
           parseFloat(item.weighted_average_out_of_8_cus_CommissionerAppeals) +
           parseFloat(item.weighted_average_out_of_12_cus_audit);
 
@@ -1519,7 +1519,7 @@ export const Dashboard = ({
 
   const custombottomfive = {
     series: [
-      { 
+      {
         name: "Timely payment of Refunds",
         data: [12, 3, 12, 6, 2],
         color: "#FF0000",
@@ -2003,7 +2003,7 @@ export const Dashboard = ({
           })),
       },
     ],
-    
+
     annotations: {
       groups: [
         {
@@ -2160,7 +2160,7 @@ export const Dashboard = ({
           })),
       },
     ],
-    
+
     annotations: {
       groups: [
         {
@@ -2218,6 +2218,16 @@ export const Dashboard = ({
     ],
     dataset: [
       {
+        seriesname: "Timelyrefunds",
+        data: rearrangedDatacustimelyrefunds
+          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+          .slice(0, 5)
+          .map((item, index) => ({
+            value: item.weighted_average_out_of_5_cus_timelyrefunds,
+            color: "00FF00"
+          })),
+      },
+      {
         seriesname: "EPCG",
         data: rearrangedDataepcg
           .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
@@ -2266,7 +2276,7 @@ export const Dashboard = ({
             value: item.weighted_average_out_of_12_investigation,
             color: "00FF00"
           })),
-      }, 
+      },
       {
         seriesname: "Arrest & Prosecution",
         data: rearrangedDatacusarrest_prosecution
@@ -2274,16 +2284,6 @@ export const Dashboard = ({
           .slice(0, 5)
           .map((item, index) => ({
             value: item.weighted_average_out_of_6_cus_arrest_prosecution,
-            color: "00FF00"
-          })),
-      },
-      {
-        seriesname: "Timelyrefunds",
-        data: rearrangedDatacustimelyrefunds
-          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
-          .slice(0, 5)
-          .map((item, index) => ({
-            value: item.weighted_average_out_of_5_cus_timelyrefunds,
             color: "00FF00"
           })),
       },
@@ -2434,6 +2434,15 @@ export const Dashboard = ({
     ],
     dataset: [
       {
+        seriesname: "Timelyrefunds",
+        data: rearrangedDatacustimelyrefunds
+          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
+          .slice(-5) // Bottom 5
+          .map((item) => {
+            return { value: item.weighted_average_out_of_5_cus_timelyrefunds, color: "FF0000" };
+          }),
+      },
+      {
         seriesname: "EPCG",
         data: rearrangedDataepcg
           .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
@@ -2485,15 +2494,6 @@ export const Dashboard = ({
           .slice(-5) // Bottom 5
           .map((item) => {
             return { value: item.weighted_average_out_of_6_cus_arrest_prosecution, color: "FF0000" };
-          }),
-      },
-      {
-        seriesname: "Timelyrefunds",
-        data: rearrangedDatacustimelyrefunds
-          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
-          .slice(-5) // Bottom 5
-          .map((item) => {
-            return { value: item.weighted_average_out_of_5_cus_timelyrefunds, color: "FF0000" };
           }),
       },
       {
@@ -2551,7 +2551,7 @@ export const Dashboard = ({
           }),
       },
     ],
-    
+
   };
 
   return (
@@ -2559,140 +2559,140 @@ export const Dashboard = ({
       {/* {loading ? (
         <Spinner />
       ) : ( */}
-        <div className="body flex-grow-1">
-          <div className="row ">
-            <div className="top-date-sec">
-              <div className="top-date-lft">
-                <div className="date-main">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer
-                      components={["DatePicker", "DatePicker", "DatePicker"]}
-                    >
-                      <DatePicker
-                        label={"Month and Year"}
-                        views={["month", "year"]}
-                        maxDate={dayjs().subtract(1, "month").startOf("month")}
-                        value={selectedDate} // Set value to `value2` state
-                        onChange={handleChangeDate}
-                        renderInput={(params) => <TextField {...params} />}
-                        shouldDisableYear={shouldDisableYear} // Disable years less than 2022
-                        slotProps={{
-                          field: {
-                            readOnly: true
-                          }
-                        }}
-                      />
-                    </DemoContainer>
-                  </LocalizationProvider>
-                </div>
+      <div className="body flex-grow-1">
+        <div className="row ">
+          <div className="top-date-sec">
+            <div className="top-date-lft">
+              <div className="date-main">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer
+                    components={["DatePicker", "DatePicker", "DatePicker"]}
+                  >
+                    <DatePicker
+                      label={"Month and Year"}
+                      views={["month", "year"]}
+                      maxDate={dayjs().subtract(1, "month").startOf("month")}
+                      value={selectedDate} // Set value to `value2` state
+                      onChange={handleChangeDate}
+                      renderInput={(params) => <TextField {...params} />}
+                      shouldDisableYear={shouldDisableYear} // Disable years less than 2022
+                      slotProps={{
+                        field: {
+                          readOnly: true
+                        }
+                      }}
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
               </div>
-              <div className="top-date-rgt">
-                <div className="switches-container">
-                  <input
-                    type="radio"
-                    id="switchMonthly"
-                    name="switchPlan"
-                    value="CGST"
-                    onChange={handleClick}
-                    checked={selectedOption === "CGST"}
-                    defaultChecked
-                  />
-                  <input
-                    type="radio"
-                    id="switchYearly"
-                    name="switchPlan"
-                    onChange={handleClick}
-                    value="Customs"
-                    checked={selectedOption === "Customs"}
-                  />
-                  <label htmlFor="switchMonthly">CGST</label>
-                  <label htmlFor="switchYearly">Customs</label>
-                  <div className="switch-wrapper">
-                    <div className="switch">
-                      <div>CGST</div>
-                      <div>Customs</div>
-                    </div>
+            </div>
+            <div className="top-date-rgt">
+              <div className="switches-container">
+                <input
+                  type="radio"
+                  id="switchMonthly"
+                  name="switchPlan"
+                  value="CGST"
+                  onChange={handleClick}
+                  checked={selectedOption === "CGST"}
+                  defaultChecked
+                />
+                <input
+                  type="radio"
+                  id="switchYearly"
+                  name="switchPlan"
+                  onChange={handleClick}
+                  value="Customs"
+                  checked={selectedOption === "Customs"}
+                />
+                <label htmlFor="switchMonthly">CGST</label>
+                <label htmlFor="switchYearly">Customs</label>
+                <div className="switch-wrapper">
+                  <div className="switch">
+                    <div>CGST</div>
+                    <div>Customs</div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          {selectedOption === "CGST" ? (
-            <>
-              <div className="row">
-                <div className="text-center zone-heading">
-                  <h3>CGST</h3>
-                </div>
+        </div>
+        {selectedOption === "CGST" ? (
+          <>
+            <div className="row">
+              <div className="text-center zone-heading">
+                <h3>CGST</h3>
               </div>
+            </div>
 
-              <div className="row">
-                <div className="col-lg-6 ">
-                  <div className="card mb-4">
-                    <div className="card-header cgst-top-head">
-                      <strong>Top 5 Zones</strong>
-                      <span className="small ms-1">
-                        <Link to="/allzones">View all zones</Link>
-                      </span>
-                    </div>
-                    <div className="card-body">
-                      <div className="responsive-chart main-chart">
-                        <ReactFusioncharts
-                          type="stackedcolumn3dline"
-                          width="100%"
-                          height="650"
-                          dataFormat="JSON"
-                          dataSource={dataSource}
-                        />
-                        <Link to="/allzones">
-                          <Button className="openbtn">
-                            <KeyboardArrowRightIcon />
-                          </Button>
-                        </Link>
-                        {/* <div className="btn-box">
+            <div className="row">
+              <div className="col-lg-6 ">
+                <div className="card mb-4">
+                  <div className="card-header cgst-top-head">
+                    <strong>Top 5 Zones</strong>
+                    <span className="small ms-1">
+                      <Link to="/allzones">View all zones</Link>
+                    </span>
+                  </div>
+                  <div className="card-body">
+                    <div className="responsive-chart main-chart">
+                      <ReactFusioncharts
+                        type="stackedcolumn3dline"
+                        width="100%"
+                        height="650"
+                        dataFormat="JSON"
+                        dataSource={dataSource}
+                      />
+                      <Link to="/allzones">
+                        <Button className="openbtn">
+                          <KeyboardArrowRightIcon />
+                        </Button>
+                      </Link>
+                      {/* <div className="btn-box">
                           <span className=" cust-btn">
                             <Link to="/">View Details</Link>
                           </span>
                         </div> */}
-                        <div id="html-dist"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-6 order-2 order-lg-2">
-                  <div className="card mb-4">
-                    <div className="card-header cgst-btm-head">
-                      <strong>Bottom 5 Zones</strong>
-                      <span className="small ms-1">
-                        <Link to="/allzones">View all zones</Link>
-                      </span>
-                    </div>
-                    <div className="card-body">
-                      <div className="responsive-chart main-chart">
-                        <ReactFusioncharts
-                          type="stackedcolumn3dline"
-                          width="100%"
-                          height="650"
-                          dataFormat="JSON"
-                          dataSource={dataSourcebottom}
-                        />
-                        <Link to="/allzones">
-                          <Button className="openbtn">
-                            <KeyboardArrowRightIcon />
-                          </Button>
-                        </Link>
-                      </div>
-
-                      {/* <div className="btn-box">
-                        <span className=" cust-btn">
-                          <Link to="/">View Details</Link>
-                        </span>
-                      </div> */}
+                      <div id="html-dist"></div>
                     </div>
                   </div>
                 </div>
               </div>
+              <div className="col-lg-6 order-2 order-lg-2">
+                <div className="card mb-4">
+                  <div className="card-header cgst-btm-head">
+                    <strong>Bottom 5 Zones</strong>
+                    <span className="small ms-1">
+                      <Link to="/allzones">View all zones</Link>
+                    </span>
+                  </div>
+                  <div className="card-body">
+                    <div className="responsive-chart main-chart">
+                      <ReactFusioncharts
+                        type="stackedcolumn3dline"
+                        width="100%"
+                        height="650"
+                        dataFormat="JSON"
+                        dataSource={dataSourcebottom}
+                      />
+                      <Link to="/allzones">
+                        <Button className="openbtn">
+                          <KeyboardArrowRightIcon />
+                        </Button>
+                      </Link>
+                    </div>
 
-              {/* <div className="row">
+                    {/* <div className="btn-box">
+                        <span className=" cust-btn">
+                          <Link to="/">View Details</Link>
+                        </span>
+                      </div> */}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* <div className="row">
               <div className="col-lg-6 order-1 order-lg-1">
                 <div>
                   <div>
@@ -2765,7 +2765,7 @@ export const Dashboard = ({
               </div>
             </div> */}
 
-              {/* <div className="row">
+            {/* <div className="row">
               <div className="col-lg-6 order-1 order-lg-1">
                 <div className="card mb-4">
                   <div className="card-header cgst-top-head">
@@ -2818,94 +2818,94 @@ export const Dashboard = ({
                 </div>
               </div>
             </div> */}
-            </>
-          ) : (
-            <>
-              <div className="row">
-                <div className="text-center zone-heading">
-                  <h3>Customs</h3>
-                </div>
+          </>
+        ) : (
+          <>
+            <div className="row">
+              <div className="text-center zone-heading">
+                <h3>Customs</h3>
               </div>
+            </div>
 
-              <div className="row">
-                <div className="col-lg-6 ">
-                  <div className="card mb-4">
-                    <div className="card-header cgst-top-head">
-                      <strong>Top 5 Zones</strong>
-                      <span className="small ms-1">
-                        <Link to="/allzones">
-                          View all zones
-                        </Link>
-                      </span>
-                    </div>
-                    <div className="card-body">
-                      <div className="responsive-chart main-chart">
+            <div className="row">
+              <div className="col-lg-6 ">
+                <div className="card mb-4">
+                  <div className="card-header cgst-top-head">
+                    <strong>Top 5 Zones</strong>
+                    <span className="small ms-1">
+                      <Link to="/allzones">
+                        View all zones
+                      </Link>
+                    </span>
+                  </div>
+                  <div className="card-body">
+                    <div className="responsive-chart main-chart">
 
-                        <ReactFusioncharts
-                          type="stackedcolumn3dline"
-                          width="100%"
-                          height="650"
-                          dataFormat="JSON"
-                          dataSource={dataSourcecustom}
-                        />
+                      <ReactFusioncharts
+                        type="stackedcolumn3dline"
+                        width="100%"
+                        height="650"
+                        dataFormat="JSON"
+                        dataSource={dataSourcecustom}
+                      />
 
-                        {/* <Customtopfive /> */}
-                        <Link to="/allzones">
-                          <Button className="openbtn">
-                            <KeyboardArrowRightIcon />
-                          </Button>
-                        </Link>
-                        {/* <div className="btn-box">
+                      {/* <Customtopfive /> */}
+                      <Link to="/allzones">
+                        <Button className="openbtn">
+                          <KeyboardArrowRightIcon />
+                        </Button>
+                      </Link>
+                      {/* <div className="btn-box">
                           <span className=" cust-btn">
                             <Link to="/">View Details</Link>
                           </span>
                         </div> */}
-                        <div id="html-dist"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-6 order-2 order-lg-2">
-                  <div className="card mb-4">
-                    <div className="card-header cgst-btm-head">
-                      <strong>Bottom 5 Zones</strong>
-                      <span className="small ms-1">
-                        <Link to="/allzones">
-                          View all zones
-                        </Link>
-                      </span>
-                    </div>
-                    <div className="card-body">
-                      <div className="responsive-chart main-chart">
-
-                        {/* <Custombottomfive /> */}
-
-                        <ReactFusioncharts
-                          type="stackedcolumn3dline"
-                          width="100%"
-                          height="650"
-                          dataFormat="JSON"
-                          dataSource={dataSourcebottomcustom}
-                        />
-
-                        <Link to="/allzones">
-                          <Button className="openbtn">
-                            <KeyboardArrowRightIcon />
-                          </Button>
-                        </Link>
-                      </div>
-
-                      {/* <div className="btn-box">
-                        <span className=" cust-btn">
-                          <Link to="/">View Details</Link>
-                        </span>
-                      </div> */}
+                      <div id="html-dist"></div>
                     </div>
                   </div>
                 </div>
               </div>
+              <div className="col-lg-6 order-2 order-lg-2">
+                <div className="card mb-4">
+                  <div className="card-header cgst-btm-head">
+                    <strong>Bottom 5 Zones</strong>
+                    <span className="small ms-1">
+                      <Link to="/allzones">
+                        View all zones
+                      </Link>
+                    </span>
+                  </div>
+                  <div className="card-body">
+                    <div className="responsive-chart main-chart">
 
-              {/* <div className="row">
+                      {/* <Custombottomfive /> */}
+
+                      <ReactFusioncharts
+                        type="stackedcolumn3dline"
+                        width="100%"
+                        height="650"
+                        dataFormat="JSON"
+                        dataSource={dataSourcebottomcustom}
+                      />
+
+                      <Link to="/allzones">
+                        <Button className="openbtn">
+                          <KeyboardArrowRightIcon />
+                        </Button>
+                      </Link>
+                    </div>
+
+                    {/* <div className="btn-box">
+                        <span className=" cust-btn">
+                          <Link to="/">View Details</Link>
+                        </span>
+                      </div> */}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* <div className="row">
               <div className="col-lg-6 order-1 order-lg-1">
                 <div>
                   <div className="card mb-4">
@@ -2971,9 +2971,9 @@ export const Dashboard = ({
                 </div>
               </div>
             </div> */}
-            </>
-          )}
-        </div>
+          </>
+        )}
+      </div>
     </>
   );
 };
