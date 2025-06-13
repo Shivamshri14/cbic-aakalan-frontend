@@ -60,7 +60,7 @@ const MonthlyReport = ({
   const fetchData = async () => {
     try {
       const endpointsGrouped = {
-        //registration: ["gst1a", "gst1b", "gst1c", "gst1d", "gst1e", "gst1f"],
+        registration: ["gst1a", "gst1b", "gst1c", "gst1d", "gst1e", "gst1f"],
         audit: ["gst10a", "gst10b", "gst10c"],
         scrutiny_assessment: ["gst3a", "gst3b"],
         investigation: ["gst4a", "gst4b", "gst4c", "gst4d"],
@@ -80,6 +80,7 @@ const MonthlyReport = ({
         refunds: 5,
         return_filing: 5,
         appeals: 12,
+        registration: 12,
       };
 
       const fetchEndpoints = async (group, scale = null) => {
@@ -106,7 +107,7 @@ const MonthlyReport = ({
 
       // Fetch all groups
       const [
-        //responses_registration,
+        responses_registration,
         responses_audit,
         responses_scrutiny,
         responses_investigation,
@@ -118,7 +119,7 @@ const MonthlyReport = ({
         responses_appeals,
         responses_return_filing,
       ] = await Promise.all([
-        //fetchEndpoints("registration"),
+        fetchEndpoints("registration", scaleMap.registration),
         fetchEndpoints("audit", scaleMap.audit),
         fetchEndpoints("scrutiny_assessment"),
         fetchEndpoints("investigation"),
@@ -132,7 +133,7 @@ const MonthlyReport = ({
       ]);
 
       const allResponses = [
-        //...responses_registration,
+        ...responses_registration,
         ...responses_audit,
         ...responses_scrutiny,
         ...responses_investigation,
@@ -664,7 +665,6 @@ const exportToXLS = () => {
   const fileName = selectedOption === "CGST" ? "monthly_report_cgst.xlsx" : "monthly_report_customs.xlsx";
   XLSX.writeFile(wb, fileName);  // Export with a dynamic filename based on selected option
 };
-
 
 
   const checkSpecialChar = (e) => {

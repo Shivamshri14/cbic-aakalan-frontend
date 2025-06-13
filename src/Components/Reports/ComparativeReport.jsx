@@ -100,7 +100,7 @@ const ComparativeReport = ({
   const fetchData = async () => {
     try {
       const endpointsGrouped = {
-        //registration: ["gst1a", "gst1b", "gst1c", "gst1d", "gst1e", "gst1f"],
+        registration: ["gst1a", "gst1b", "gst1c", "gst1d", "gst1e", "gst1f"],
         audit: ["gst10a", "gst10b", "gst10c"],
         scrutiny_assessment: ["gst3a", "gst3b"],
         investigation: ["gst4a", "gst4b", "gst4c", "gst4d"],
@@ -120,6 +120,7 @@ const ComparativeReport = ({
         refunds: 5,
         return_filing: 5,
         appeals: 12,
+        registration: 12,
       };
 
       const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
@@ -149,7 +150,7 @@ const ComparativeReport = ({
 
       const getMonthData = async (month) => {
         const [
-          //responses_registration,
+          responses_registration,
           responses_audit,
           responses_scrutiny,
           responses_investigation,
@@ -161,7 +162,7 @@ const ComparativeReport = ({
           responses_appeals,
           responses_return_filing,
         ] = await Promise.all([
-          //fetchEndpoints("registration", null, month),
+          fetchEndpoints("registration", scaleMap.registration, month),
           fetchEndpoints("audit", scaleMap.audit, month),
           fetchEndpoints("scrutiny_assessment", null, month),
           fetchEndpoints("investigation", null, month),
@@ -175,7 +176,7 @@ const ComparativeReport = ({
         ]);
 
         const allResponses = [
-          //...responses_registration,
+          ...responses_registration,
           ...responses_audit,
           ...responses_scrutiny,
           ...responses_investigation,

@@ -46,6 +46,7 @@ const AllZones = ({
 
   //cgst
   const [data, setData] = useState([]);
+  const [data_registration, setData_registration] = useState([]);
   const [data1, setData1] = useState([]); //return filing
   const [data_scrutiny_assessment, setData_scrutiny_assessment] = useState([]);
   const [data_investigation, setData_investigation] = useState([]);
@@ -79,7 +80,7 @@ const AllZones = ({
   const fetchData = async () => {
     try {
       // Define the endpoints for each dataset
-      //const endpoints_registration = ["gst1a", "gst1b", "gst1c", "gst1d", "gst1e", "gst1f"],
+      const endpoints_registration = ["gst1a", "gst1b", "gst1c", "gst1d", "gst1e", "gst1f"];
       const endpoints_scrutiny_assessment = ["gst3a", "gst3b"];
       const endpoints_investigation = ["gst4a", "gst4b", "gst4c", "gst4d"];
       const endpoints_gst_adjudication = ["gst5a", "gst5b"];
@@ -92,6 +93,20 @@ const AllZones = ({
       const endpoints_return_filing = ["gst2"]; // New return filing endpoint
 
       // Fetch the data from the endpoints
+      const responses_registration = await Promise.all(
+        endpoints_registration.map((endpoint) =>
+          apiClient
+            .get(`/cbic/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data,
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+      console.log("Responses registration", responses_registration);
+
       const responses_scrutiny_assessment = await Promise.all(
         endpoints_scrutiny_assessment.map((endpoint) =>
           apiClient
@@ -247,6 +262,7 @@ const AllZones = ({
       console.log("responses_return_filing", responses_return_filing);
 
       console.log("Responses from all endpoints:",
+        responses_registration,
         responses_scrutiny_assessment,
         responses_investigation,
         responses_gst_adjudication,
@@ -260,7 +276,7 @@ const AllZones = ({
       );
 
       // Helper function to merge data by zone, ensuring no duplicates and summing the weighted averages
-      const mergeDataByZone = (scrutiny_assessmentData, investigation_Data, gst_adjudication_Data, gst_adjudication_legacy_cases_Data, refund_Data, recovery_of_arrears_Data, arrest_prosecution_Data, audit_Data, appeals_Data, return_filing_Data) => {
+      const mergeDataByZone = (registration_Data, scrutiny_assessmentData, investigation_Data, gst_adjudication_Data, gst_adjudication_legacy_cases_Data, refund_Data, recovery_of_arrears_Data, arrest_prosecution_Data, audit_Data, appeals_Data, return_filing_Data) => {
         const combinedMap = new Map();
 
         // Merge all data categories
@@ -271,6 +287,7 @@ const AllZones = ({
               combinedMap.set(zoneCode, {
                 zone_code: zoneCode,
                 zone_name: item[zoneNameField],
+                weighted_average_out_of_12_registration: 0,
                 sub_parameter_weighted_average_scrutiny_assessment: 0,
                 sub_parameter_weighted_average_investigation: 0,
                 sub_parameter_weighted_average_Adjudication: 0,
@@ -289,6 +306,7 @@ const AllZones = ({
         };
 
         // Merge each dataset
+        mergeData(registration_Data, 'zone_code', 'zone_name', 'weighted_average_out_of_12_registration');
         mergeData(scrutiny_assessmentData, 'zone_code', 'zone_name', 'sub_parameter_weighted_average_scrutiny_assessment');
         mergeData(investigation_Data, 'zone_code', 'zone_name', 'sub_parameter_weighted_average_investigation');
         mergeData(gst_adjudication_Data, 'zone_code', 'zone_name', 'sub_parameter_weighted_average_Adjudication');
@@ -303,7 +321,7 @@ const AllZones = ({
         // Convert the Map to an array for sorting
         return Array.from(combinedMap.values());
       };
-
+      const registration_Data = responses_registration.flatMap((response) => response.data.map((item) => ({ ...item })));
       const scrutiny_assessmentData = responses_scrutiny_assessment.flatMap((response) => response.data.map((item) => ({ ...item })));
       const investigation_Data = responses_investigation.flatMap((response) => response.data.map((item) => ({ ...item })));
       const gst_adjudication_Data = responses_gst_adjudication.flatMap((response) => response.data.map((item) => ({ ...item })));
@@ -317,6 +335,7 @@ const AllZones = ({
 
       // Combine and merge data
       const mergedData = mergeDataByZone(
+        registration_Data,
         scrutiny_assessmentData,
         investigation_Data,
         gst_adjudication_Data,
@@ -336,6 +355,7 @@ const AllZones = ({
 
       // Final data mapping and adding totals
       const finalData = filteredData.map((item) => {
+        item.weighted_average_out_of_12_registration = parseFloat((item.weighted_average_out_of_12_registration * 12) / 10).toFixed(2);
         item.sub_parameter_weighted_average_scrutiny_assessment = parseFloat(item.sub_parameter_weighted_average_scrutiny_assessment).toFixed(2);
         item.sub_parameter_weighted_average_investigation = parseFloat(item.sub_parameter_weighted_average_investigation).toFixed(2);
         item.sub_parameter_weighted_average_Adjudication = parseFloat(item.sub_parameter_weighted_average_Adjudication).toFixed(2);
@@ -349,6 +369,7 @@ const AllZones = ({
 
         // Calculate the total weighted average by adding all weighted averages
         const total_weighted_average =
+          parseFloat(item.weighted_average_out_of_12_registration) +
           parseFloat(item.sub_parameter_weighted_average_scrutiny_assessment) +
           parseFloat(item.sub_parameter_weighted_average_investigation) +
           parseFloat(item.sub_parameter_weighted_average_Adjudication) +
@@ -375,8 +396,12 @@ const AllZones = ({
       console.log("Final Sorted Data total_weighted_average custom", sortedFinalData);
 
       // Set the state for each zone
+
       setData(
         sortedFinalData.map((item, index) => ({ ...item, s_no: index + 1 }))
+      );
+      setData_registration(
+        sortedFinalData.filter((item) => item.weighted_average_out_of_12_registration > 0)
       );
       setData_scrutiny_assessment(
         sortedFinalData.filter((item) => item.sub_parameter_weighted_average_scrutiny_assessment > 0)
@@ -1460,7 +1485,6 @@ const AllZones = ({
       // },
     },
   };
-
   const all = [
     {
       value: "80",
@@ -1523,6 +1547,14 @@ const AllZones = ({
       color: "#cc0077",
     },
   ];
+
+  const rearrangedData_registration = data.map((zone) => {
+    return (
+      data_registration.find((item) => item.zone_code === zone.zone_code) || {
+        weighted_average_out_of_12_registration: 0,
+      }
+    );
+  });
 
   const rearrangedData1 = data.map((zone) => {
     return (
@@ -1799,6 +1831,15 @@ const AllZones = ({
       },
     ],
     dataset: [
+      {
+        seriesname: "Registration",
+        data: rearrangedData_registration
+          .sort((a, b) => b.total_weighted_average - a.total_weighted_average)
+          .map((item) => ({
+            value: item.weighted_average_out_of_12_registration,
+            color: getBarColor(item), // Using getBarColor(item) to pass the entire item
+          })),
+      },
       {
         seriesname: "Return Filing",
         data: rearrangedData1

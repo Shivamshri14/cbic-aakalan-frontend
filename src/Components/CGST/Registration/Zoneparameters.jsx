@@ -443,10 +443,21 @@ const Zoneparameters = ({
           return acc;
         }, {});
 
-        const reducedAllData = Object.values(summedByZone).map((item) => ({
-          ...item,
-          weighted_average_out_of_12: ((item.sub_parameter_weighted_average * 12) / 10).toFixed(2),
-        }));
+        // const reducedAllData = Object.values(summedByZone).map((item) => ({
+        //   ...item,
+        //   sub_parameter_weighted_average.toFixed(2),
+        //   weighted_average_out_of_12: ((item.sub_parameter_weighted_average * 12) / 10).toFixed(2),
+        // }));
+        const reducedAllData = Object.values(summedByZone).map((item) => {
+          const avg = item.sub_parameter_weighted_average || 0;
+
+          return {
+            ...item,
+            sub_parameter_weighted_average: Number(avg.toFixed(2)), // Properly assigned with key
+            weighted_average_out_of_12: ((avg * 12) / 10).toFixed(2),
+          };
+        });
+
 
         console.log("Reduced All Data:", reducedAllData);
 
@@ -1703,10 +1714,20 @@ const Zoneparameters = ({
           return acc;
         }, {});
 
-        const reducedAllData = Object.values(summedByZone).map((item) => ({
-          ...item,
-          weighted_average_out_of_12: ((item.sub_parameter_weighted_average * 12) / 10).toFixed(2),
-        }));
+        // const reducedAllData = Object.values(summedByZone).map((item) => ({
+        //   ...item,
+        //   weighted_average_out_of_12: ((item.sub_parameter_weighted_average * 12) / 10).toFixed(2),
+        // }));
+
+        const reducedAllData = Object.values(summedByZone).map((item) => {
+          const avg = item.sub_parameter_weighted_average || 0;
+
+          return {
+            ...item,
+            sub_parameter_weighted_average: Number(avg.toFixed(2)), // Properly assigned with key
+            weighted_average_out_of_12: ((avg * 12) / 10).toFixed(2),
+          };
+        });
 
         console.log("Reduced All Data:", reducedAllData);
 

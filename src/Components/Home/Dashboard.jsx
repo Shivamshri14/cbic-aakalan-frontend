@@ -70,6 +70,7 @@ export const Dashboard = ({
 
   const [data, setData] = useState([]);
   const [data1, setData1] = useState([]);
+  const [data_registration, setData_registration] = useState([]);
   const [data_scrutiny_assessment, setData_scrutiny_assessment] = useState([]);
   const [data_investigation, setData_investigation] = useState([]);
   const [data_gst_adjudication, setData_gst_adjudication] = useState([]);
@@ -100,6 +101,7 @@ export const Dashboard = ({
 
   const fetchData = async () => {
     try {
+      const endpoints_registration = ["gst1a", "gst1b", "gst1c", "gst1d", "gst1e", "gst1f"];
       const endpoints_scrutiny_assessment = ["gst3a", "gst3b"];
       const endpoints_investigation = ["gst4a", "gst4b", "gst4c", "gst4d"];
       const endpoints_gst_adjudication = ["gst5a", "gst5b"];
@@ -110,6 +112,21 @@ export const Dashboard = ({
       const endpoints_audit = ["gst10a", "gst10b", "gst10c"];
       const endpoints_appeals = ["gst11a", "gst11b", "gst11c", "gst11d"];
       const endpoints_return_filing = ["gst2"];
+
+      // Fetch the data from the endpoints
+      const responses_registration = await Promise.all(
+        endpoints_registration.map((endpoint) =>
+          apiClient
+            .get(`/cbic/${endpoint}`, {
+              params: { month_date: newdate, type: "zone" },
+            })
+            .then((response) => ({
+              data: response.data,
+              gst: endpoint.toUpperCase(),
+            }))
+        )
+      );
+      console.log("Responses registration", responses_registration);
 
       const responses_scrutiny_assessment = await Promise.all(
         endpoints_scrutiny_assessment.map((endpoint) =>
@@ -196,6 +213,7 @@ export const Dashboard = ({
       const filterData = (data) =>
         data.filter((item) => !removeZones.includes(item.zone_name.toLowerCase()));
 
+      const registration_Data = responses_registration.flatMap((response) => response.data.map((item) => ({ ...item })));
       const scrutiny_assessmentData = responses_scrutiny_assessment.flatMap((response) => response.data.map((item) => ({ ...item })));
       const investigation_Data = filterData(responses_investigation.flatMap((response) => response.data.map((item) => ({ ...item }))));
       const gst_adjudication_Data = responses_gst_adjudication.flatMap((response) => response.data.map((item) => ({ ...item })));
@@ -208,6 +226,7 @@ export const Dashboard = ({
       const return_filing_Data = responses_return_filing.flatMap((response) => response.data.map((item) => ({ ...item })));
 
       const mergeDataByZone = (
+        registration_Data,
         scrutiny_assessmentData,
         investigation_Data,
         gst_adjudication_Data,
@@ -228,6 +247,7 @@ export const Dashboard = ({
               combinedMap.set(zoneCode, {
                 zone_code: zoneCode,
                 zone_name: item[zoneNameField],
+                weighted_average_out_of_12_registration: 0,
                 sub_parameter_weighted_average_scrutiny_assessment: 0,
                 sub_parameter_weighted_average_investigation: 0,
                 sub_parameter_weighted_average_Adjudication: 0,
@@ -245,6 +265,7 @@ export const Dashboard = ({
           });
         };
 
+        mergeData(registration_Data, "zone_code", "zone_name", "weighted_average_out_of_12_registration");
         mergeData(scrutiny_assessmentData, "zone_code", "zone_name", "sub_parameter_weighted_average_scrutiny_assessment");
         mergeData(investigation_Data, "zone_code", "zone_name", "sub_parameter_weighted_average_investigation");
         mergeData(gst_adjudication_Data, "zone_code", "zone_name", "sub_parameter_weighted_average_Adjudication");
@@ -260,6 +281,7 @@ export const Dashboard = ({
       };
 
       const mergedData = mergeDataByZone(
+        registration_Data,
         scrutiny_assessmentData,
         investigation_Data,
         gst_adjudication_Data,
@@ -273,6 +295,7 @@ export const Dashboard = ({
       );
 
       const finalData = mergedData.map((item) => {
+        item.weighted_average_out_of_12_registration = parseFloat((item.weighted_average_out_of_12_registration * 12) / 10).toFixed(2);
         item.sub_parameter_weighted_average_scrutiny_assessment = parseFloat(item.sub_parameter_weighted_average_scrutiny_assessment).toFixed(2);
         item.sub_parameter_weighted_average_investigation = parseFloat(item.sub_parameter_weighted_average_investigation).toFixed(2);
         item.sub_parameter_weighted_average_Adjudication = parseFloat(item.sub_parameter_weighted_average_Adjudication).toFixed(2);
@@ -285,6 +308,7 @@ export const Dashboard = ({
         item.weighted_average_out_of_5_return_filing = parseFloat((item.weighted_average_out_of_5_return_filing * 5) / 10).toFixed(2);
 
         const total_weighted_average =
+          parseFloat(item.weighted_average_out_of_12_registration) +
           parseFloat(item.sub_parameter_weighted_average_scrutiny_assessment) +
           parseFloat(item.sub_parameter_weighted_average_investigation) +
           parseFloat(item.sub_parameter_weighted_average_Adjudication) +
@@ -306,6 +330,7 @@ export const Dashboard = ({
       console.log("Final Sorted Data total_weighted_average custom", sortedFinalData);
 
       setData(sortedFinalData.map((item, index) => ({ ...item, s_no: index + 1 })));
+      setData_registration(sortedFinalData.filter((item) => item.weighted_average_out_of_12_registration > 0));
       setData_scrutiny_assessment(sortedFinalData.filter((item) => item.sub_parameter_weighted_average_scrutiny_assessment > 0));
       setData_investigation(sortedFinalData.filter((item) => item.sub_parameter_weighted_average_investigation > 0));
       setData_gst_adjudication(sortedFinalData.filter((item) => item.sub_parameter_weighted_average_Adjudication > 0));
@@ -1671,6 +1696,15 @@ export const Dashboard = ({
     );
   });
 
+  console.log("data_registration", data_registration);
+  const rearrangedData_registration = data.map((zone) => {
+    return (
+      data_registration.find((item) => item.zone_code === zone.zone_code) || {
+        weighted_average_out_of_12_registration: 0,
+      }
+    );
+  });
+
   console.log("data_scrutiny_assessment", data_scrutiny_assessment);
   const rearrangedData_scrutiny_assessment = data.map((zone) => {
     return (
@@ -1903,6 +1937,16 @@ export const Dashboard = ({
     ],
     dataset: [
       {
+        seriesname: "Registration",
+        data: rearrangedData_registration
+          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort by sub_parameter_weighted_average in descending order
+          .slice(0, 5) // Slice the top 5
+          .map((item) => ({
+            value: item.weighted_average_out_of_12_registration,
+            color: "00FF00", // Set color for the bar
+          })),
+      },
+      {
         seriesname: "Return Filing",
         data: rearrangedData1
           .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort by sub_parameter_weighted_average in descending order
@@ -2059,6 +2103,16 @@ export const Dashboard = ({
       },
     ],
     dataset: [
+      {
+        seriesname: "Registration",
+        data: rearrangedData_registration
+          .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort by sub_parameter_weighted_average in descending order
+          .slice(-5) // Slice the top 5
+          .map((item) => ({
+            value: item.weighted_average_out_of_12_registration,
+            color: "FF0000", // Set color for the bar
+          })),
+      },
       {
         seriesname: "Return Filing",
         data: rearrangedData1
