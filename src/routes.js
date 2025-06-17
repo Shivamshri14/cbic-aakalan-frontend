@@ -34,18 +34,15 @@ import ForgetPassword from "./Components/Pages/ForgetPassword.jsx";
 
 
 const RouteData = () => {
-  const [selectedDate, setSelectedDate] = useState(dayjs("2024-04-01"));
+const [selectedDate, setSelectedDate] = useState(dayjs().subtract(2, 'month'));
 
-  const handleChangeDate = (newdate) => {
-
-    if (newdate) {
-      setSelectedDate(newdate);
-    }
-    else {
-      setSelectedDate(dayjs("2024-04-01"));
-    }
-
-  };
+const handleChangeDate = (newdate) => {
+  if (newdate) {
+    setSelectedDate(newdate);
+  } else {
+    setSelectedDate(dayjs().subtract(2, 'month'));
+  }
+};
   // zone || commissionarate toggle option
 
   const [selectedOption, setSelectedOption] = useState("CGST");
