@@ -642,7 +642,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
       // });
       columns.splice(3, 0, {
         key: "absolutevale",
-        label: "BEs pending > 6 months",
+        label: "BEs pending>6 months / total BEs pending",
       });
 
       columns.splice(7, 0, {
@@ -660,7 +660,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
       // });
       columns.splice(3, 0, {
         key: "absolutevale",
-        label: "SBs Pending > 6 months",
+        label: "SBs Pending > 6 months / total SBs pending",
       });
 
       columns.splice(7, 0, {

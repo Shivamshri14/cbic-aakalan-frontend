@@ -1225,7 +1225,7 @@ const CustomSubpara = ({
             case "cus13d":
             columns.splice(3, 0, {
               key: "absolutevale",
-              label: "BEs pending > 6 months",
+              label: "BEs pending>6 months / total BEs pending",
             });
             // columns.splice(6, 0, {
             //   key: "insentavization",
@@ -1239,7 +1239,7 @@ const CustomSubpara = ({
 
             columnscomm.splice(3, 0, {
               key: "absolutevale",
-              label: "BEs pending > 6 months",
+              label: "BEs pending>6 months / total BEs pending ",
             });
             // columnscomm.splice(6, 0, {
             //   key: "insentavization",
@@ -1256,7 +1256,7 @@ const CustomSubpara = ({
             case "cus13e":
             columns.splice(3, 0, {
               key: "absolutevale",
-              label: "SBs Pending > 6 months",
+              label: "SBs Pending > 6 months / total SBs pending",
             });
             // columns.splice(6, 0, {
             //   key: "insentavization",
@@ -1270,7 +1270,7 @@ const CustomSubpara = ({
       
             columnscomm.splice(3, 0, {
               key: "absolutevale",
-              label: "SBs Pending > 6 months",
+              label: "SBs Pending > 6 months / total SBs pending",
             });
             // columnscomm.splice(6, 0, {
             //   key: "insentavization",
@@ -2344,8 +2344,8 @@ const CustomSubpara = ({
       name === "cus13a" ? selectedOption1 === "Zones" ? "Top 3 Zones (Highest % of BEs audited/marked )" : "Top 3 Commissionerates (Highest % of BEs audited/marked)":
       name === "cus13b" ? selectedOption1 === "Zones" ? "Top 3 Zones (Highest % of SBs audited/marked )" : "Top 3 Commissionerates (Highest % of SBs audited/marked)":
       name === "cus13c" ? selectedOption1 === "Zones" ? "Top 3 Zones (Highest % of Recovered/detected (In lakhs))" : "Top 3 Commissionerates (Highest % of BEs Recovered/detected (In lakhs))":
-      name === "cus13d" ? selectedOption1 === "Zones" ? "Top 3 Zones (Least % of BEs pending > 6 months )" : "Top 3 Commissionerates (Least % of BEs pending > 6 months )":
-      name === "cus13e" ? selectedOption1 === "Zones" ? "Top 3 Zones (Least % of SBs Pending > 6 months )" : "Top 3 Commissionerates (Least % of SBs Pending > 6 months)":
+      name === "cus13d" ? selectedOption1 === "Zones" ? "Top 3 Zones (Least % of BEs pending>6 months / total BEs pending )" : "Top 3 Commissionerates (Least % of BEs pending>6 months / total BEs pending )":
+      name === "cus13e" ? selectedOption1 === "Zones" ? "Top 3 Zones (Least % of SBs Pending > 6 months / total SBs pending)" : "Top 3 Commissionerates (Least % of SBs Pending > 6 months / total SBs pending)":
      
               
 
@@ -2423,8 +2423,8 @@ const CustomSubpara = ({
       name === "cus13a" ? selectedOption1 === "Zones" ? "Bottom 3 Zones (Least % of  BEs audited/marked )" : "Bottom 3 Commissionerates (Least % of BEs audited/marked)":
       name === "cus13b" ? selectedOption1 === "Zones" ? "Bottom 3 Zones (Least % of  SBs audited/marked )" : "Bottom 3 Commissionerates (Least % of SBs audited/marked)":
       name === "cus13c" ? selectedOption1 === "Zones" ? "Bottom 3 Zones (Least % of  Recovered/detected (In lakhs))" : "Bottom 3 Commissionerates (Least % of BEs Recovered/detected (In lakhs))":
-      name === "cus13d" ? selectedOption1 === "Zones" ? "Bottom 3 Zones (Highest % of BEs pending > 6 months )" : "Bottom 3 Commissionerates (Highest % of BEs pending > 6 months )":
-      name === "cus13e" ? selectedOption1 === "Zones" ? "Bottom 3 Zones (Highest % of SBs Pending > 6 months )" : "Bottom 3 Commissionerates (Highest % of SBs Pending > 6 months)":
+      name === "cus13d" ? selectedOption1 === "Zones" ? "Bottom 3 Zones (Highest % of BEs pending>6 months / total BEs pending )" : "Bottom 3 Commissionerates (Highest % of BEs pending>6 months / total BEs pending )":
+      name === "cus13e" ? selectedOption1 === "Zones" ? "Bottom 3 Zones (Highest % of SBs Pending > 6 months / total SBs pending)" : "Bottom 3 Commissionerates (Highest % of SBs Pending > 6 months / total SBs pending)":
         selectedOption1 === "Zones"
           ? "Bottom 5 Zones"
           : "Bottom 5 Commissionerates",
@@ -2600,8 +2600,8 @@ const CustomSubpara = ({
                             name === "cus13a" ? (<strong>Top 3 Zones (Highest % of BEs audited/marked)</strong>) :
                             name === "cus13b" ? (<strong>Top 3 Zones (Highest % of SBs audited/marked) </strong>) :
                             name === "cus13c" ? (<strong>Top 3 Zones (Highest % of Recovered/detected (In lakhs) )</strong>) :
-                            name === "cus13d" ? (<strong>Top 3 Zones (Least % of BEs pending &gt; 6 months)</strong>) :
-                            name === "cus13e" ? (<strong>Top 3 Zones (Least % of SBs Pending &gt; 6 months)</strong>) :
+                            name === "cus13d" ? (<strong>Top 3 Zones (Least % of BEs pending &gt; 6 months / total BEs pending)</strong>) :
+                            name === "cus13e" ? (<strong>Top 3 Zones (Least % of SBs Pending &gt; 6 months / total SBs pending)</strong>) :
                             (
                               <strong>Top 5 Zones</strong>
                             )}
@@ -2648,8 +2648,8 @@ const CustomSubpara = ({
                             name === "cus13a" ? (<strong>Top 3 Commissionerates (Highest % of BEs audited/marked)</strong>) :
                             name === "cus13b" ? (<strong>Top 3 Commissionerates  (Highest % of SBs audited/marked) </strong>) :
                             name === "cus13c" ? (<strong>Top 3 Commissionerates (Highest % of Recovered/detected (In lakhs) )</strong>) :
-                            name === "cus13d" ? (<strong>Top 3 Commissionerates  (Least % of BEs pending &gt; 6 months)</strong>) :
-                            name === "cus13e" ? (<strong>Top 3 Commissionerates (Least % of SBs Pending &gt; 6 months)</strong>) :      
+                            name === "cus13d" ? (<strong>Top 3 Commissionerates  (Least % of BEs pending &gt; 6 months / total BEs pending)</strong>) :
+                            name === "cus13e" ? (<strong>Top 3 Commissionerates (Least % of SBs Pending &gt; 6 months / total SBs pending)</strong>) :      
                             (
                               <strong>Top 5 Commissionerates</strong>
                             )}
@@ -2732,8 +2732,8 @@ const CustomSubpara = ({
                             name === "cus13a" ? (<strong>Bottom 3 Zones (Least % of BEs audited/marked)</strong>) :
                             name === "cus13b" ? (<strong>Bottom 3 Zones (Least % of SBs audited/marked) </strong>) :
                             name === "cus13c" ? (<strong>Bottom 3 Zones (Least % of Recovered/detected (In lakhs) )</strong>) :
-                            name === "cus13d" ? (<strong>Bottom 3 Zones (Highest % of BEs pending &gt; 6 months)</strong>) :
-                            name === "cus13e" ? (<strong>Bottom 3 Zones (Highest % of SBs Pending &gt; 6 months)</strong>) :      
+                            name === "cus13d" ? (<strong>Bottom 3 Zones (Highest % of BEs pending &gt; 6 months / total BEs pending)</strong>) :
+                            name === "cus13e" ? (<strong>Bottom 3 Zones (Highest % of SBs Pending &gt; 6 months / total SBs pending)</strong>) :      
                             (
                               <strong>Bottom 5 Zones</strong>
                             )}
@@ -2785,8 +2785,8 @@ const CustomSubpara = ({
                              name === "cus13a" ? (<strong>Bottom 3 Commissionerates (Least % of BEs audited/marked)</strong>) :
                              name === "cus13b" ? (<strong>Bottom 3 Commissionerates(Least % of SBs audited/marked) </strong>) :
                              name === "cus13c" ? (<strong>Bottom 3 Commissionerates (Least % of Recovered/detected(In lakhs) )</strong>) :
-                             name === "cus13d" ? (<strong>Bottom 3 Commissionerates (Highest % of BEs pending &gt; 6 months)</strong>) :
-                             name === "cus13e" ? (<strong>Bottom 3 Commissionerates (Highest % of SBs Pending &gt; 6 months)</strong>) :      
+                             name === "cus13d" ? (<strong>Bottom 3 Commissionerates (Highest % of BEs pending &gt; 6 months / total BEs pending)</strong>) :
+                             name === "cus13e" ? (<strong>Bottom 3 Commissionerates (Highest % of SBs Pending &gt; 6 months / total SBs pending)</strong>) :      
                              (
                               <strong>Bottom 5 Commissionerates</strong>
                             )}
