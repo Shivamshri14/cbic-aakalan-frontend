@@ -363,7 +363,7 @@ const CustomCommscoredetails = ({
         );
       }
       else if (name === "investigation") {
-        const cusendpoints = ["cus6a", "cus6b","cus6c","cus6d","cus6e"];
+        const cusendpoints = ["cus6a", "cus6b","cus6c","cus6d","cus6e","cus6f"];
   
         const responses = await Promise.all(
           cusendpoints.map((endpoint) =>
