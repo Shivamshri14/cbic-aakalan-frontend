@@ -31,6 +31,9 @@ import CustomZonescoredetails from "./Components/CUSTOM/CustomParameters/CustomZ
 import CustomCommscoredetails from "./Components/CUSTOM/CustomParameters/CustomCommscoredetails";
 import ForgetPassword from "./Components/Pages/ForgetPassword.jsx";
 
+import CGSTMonthlyBifurcation from "./Components/Reports/CGSTMonthlyBifurcation.jsx";
+import CustomsMonthlyBifurcation from "./Components/Reports/CustomsMonthlyBifurcation.jsx";
+
 
 
 const RouteData = () => {
@@ -320,6 +323,30 @@ const RouteData = () => {
             />
           }
         />
+
+        <Route
+          path="CGSTMonthlyBifurcation"
+          element={
+            <CGSTMonthlyBifurcation
+              selectedDate={selectedDate}
+              onChangeDate={handleChangeDate}
+              selectedOption={selectedOption}
+              onSelectedOption={handleChange}
+            />
+          }
+        />
+        <Route
+          path="CustomsMonthlyBifurcation"
+          element={
+            <CustomsMonthlyBifurcation
+              selectedDate={selectedDate}
+              onChangeDate={handleChangeDate}
+              selectedOption={selectedOption}
+              onSelectedOption={handleChange}
+            />
+          }
+        />
+
         <Route
           path="comparativereport"
           element={

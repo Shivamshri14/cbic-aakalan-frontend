@@ -1804,6 +1804,9 @@ const AllZones = ({
       },
       caption: "CGST",
       subcaption: "All Zones",
+      
+      showlegend: "0",
+
       yAxisMinValue: "0",
       yAxisMaxValue: "100",
       yAxisStep: "10",
@@ -1973,6 +1976,9 @@ const AllZones = ({
       },
       caption: "Customs",
       subcaption: "All Zones",
+
+      showlegend: "0",
+
       yAxisMinValue: "0",
       yAxisMaxValue: "100",
       yAxisStep: "10",

@@ -1905,6 +1905,8 @@ export const Dashboard = ({
         toolTipBorderColor: "#ffffff",
         toolTipBorderThickness: "0",
       },
+      showlegend: "0",
+
       caption: "CGST",
       subcaption: "Top 5 Zones",
       yAxisMinValue: "0",
@@ -2073,7 +2075,10 @@ export const Dashboard = ({
       tooltip: {
         toolTipBorderColor: "#ffffff",
         toolTipBorderThickness: "0",
-      },
+      }, 
+      
+      showlegend: "0",
+
       caption: "CGST",
       subcaption: "Bottom 5 Zones",
       yAxisMinValue: "0",
@@ -2240,7 +2245,9 @@ export const Dashboard = ({
       tooltip: {
         toolTipBorderColor: "#ffffff",
         toolTipBorderThickness: "0",
-      },
+      },      
+      showlegend: "0",
+
       caption: "Customs",
       subcaption: "Top 5 Zones",
       yAxisMinValue: "0",
@@ -2457,7 +2464,9 @@ export const Dashboard = ({
       tooltip: {
         toolTipBorderColor: "#ffffff",
         toolTipBorderThickness: "0",
-      },
+      },      
+      showlegend: "0",
+
       caption: "Customs",
       subcaption: "Bottom 5 Zones",
       yAxisMinValue: "0",

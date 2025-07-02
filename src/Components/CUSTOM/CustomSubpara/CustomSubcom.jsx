@@ -165,7 +165,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
         label: "Refund Pending > 90 days/total application refund",
       });
       columns.splice(6, 0, {
-        key: "way_to_grade",
+        key: "sub_parameter_weighted_average",
         label: "Weighted Average (out of 10)",
       });
       break;
@@ -189,7 +189,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
         label: "No revenue protective measures/EO fulfillment time is over",
       });
       columns.splice(6, 0, {
-        key: "way_to_grade",
+        key: "sub_parameter_weighted_average",
         label: "Weighted Average (out of 4)",
       });
       break;
@@ -256,7 +256,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
         label: "(Non SVB)>6 months PD/total PA",
       });
       columns.splice(6, 0, {
-        key: "way_to_grade",
+        key: "sub_parameter_weighted_average",
         label: "Weighted Average (out of 3)",
       });
       break;
@@ -266,7 +266,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
         label: "(Non SVB)>6 months PD bonds/total PD bonds",
       });
       columns.splice(6, 0, {
-        key: "way_to_grade",
+        key: "sub_parameter_weighted_average",
         label: "Weighted Average (out of 3)",
       });
 
@@ -291,7 +291,7 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
         label: "Svb pending > 1 year/total pending",
       });
       columns.splice(6, 0, {
-        key: "way_to_grade",
+        key: "sub_parameter_weighted_average",
         label: "Weighted Average (out of 1)",
       });
 
@@ -742,22 +742,179 @@ const CustomSubcom = ({ selectedDate, onChangeDate }) => {
     })),
   };
 
-  const handleExport = () => {
-    // Prepare data for export based on selectedOption and potentially other filters
-    const exportData =
-      data.map((user) => ({
-        // Customize object properties to match desired format
-        SNo: user.s_no,
-        "Commissionerate": user.commissionerate_name,
-        "Zone": user.zone_name,
-        "Absolute Value": user.absolutevale,
-        "Total Score(For the Month) %": user.total_score,
-        "Way to Grade (Marks) Out of 10": user.way_to_grade,
-        "Weighted Average ": user.sub_parameter_weighted_average,
-      }))
+const handleExport = () => {
+  let absoluteValueLabel = "Absolute Value";
+  let weightedAvgLabel = "Weighted Average";
 
-    return exportData;
-  };
+  switch (name) {
+    case "cus1":
+      absoluteValueLabel = "Refund Pending > 90 days/total application refund";
+      weightedAvgLabel = "Weighted Average (out of 10)";
+      break;
+    case "cus2a":
+      absoluteValueLabel = "Notices issued/EO fulfilment time is over";
+      weightedAvgLabel = "Weighted Average (out of 3)";
+      break;
+    case "cus2b":
+      absoluteValueLabel = "No revenue protective measures/EO fulfillment time is over";
+      weightedAvgLabel = "Weighted Average (out of 4)";
+      break;
+    case "cus2c":
+      absoluteValueLabel = "Duty recovered/duty involved in expired licenses (In lakhs)";
+      weightedAvgLabel = "Weighted Average (out of 3)";
+      break;
+    case "cus3a":
+      absoluteValueLabel = "Notices issued/EO time is over";
+      weightedAvgLabel = "Weighted Average (out of 3)";
+      break;
+    case "cus3b":
+      absoluteValueLabel = "No revenue protective measures/EO fulfillment time is over";
+      weightedAvgLabel = "Weighted Average (out of 3)";
+      break;
+    case "cus3c":
+      absoluteValueLabel = "Duty recover/duty involved in expired licenses (In lakhs)";
+      weightedAvgLabel = "Weighted Average (out of 3)";
+      break;
+    case "cus4a":
+      absoluteValueLabel = "(Non SVB)>6 months PD/total PA";
+      weightedAvgLabel = "Weighted Average (out of 3)";
+      break;
+    case "cus4b":
+      absoluteValueLabel = "(Non SVB)>6 months PD bonds/total PD bonds";
+      weightedAvgLabel = "Weighted Average (out of 3)";
+      break;
+    case "cus4c":
+      absoluteValueLabel = "Svb finalised/Pending beginning of month";
+      weightedAvgLabel = "Weighted Average (out of 3)";
+      break;
+    case "cus4d":
+      absoluteValueLabel = "Svb pending > 1 year/total pending";
+      weightedAvgLabel = "Weighted Average (out of 1)";
+      break;
+    case "cus5a":
+      absoluteValueLabel = "ADJ Cases disposed/Cases pending at start of month";
+      weightedAvgLabel = "Weighted Average (out of 3)";
+      break;
+    case "cus5b":
+      absoluteValueLabel = "ADJ Cases Pending > 1 yr/total pending cases)";
+      weightedAvgLabel = "Weighted Average (out of 4)";
+      break;
+    case "cus5c":
+      absoluteValueLabel = "ADJ cases where duty involved >1 cr Pending for > 1 yr/total pending cases";
+      weightedAvgLabel = "Weighted Average (out of 3)";
+      break;
+    case "cus6a":
+      absoluteValueLabel = "Investigation completed/Investigation pending at start of month";
+      weightedAvgLabel = "Weighted Average (out of 2 )";
+      break;
+    case "cus6b":
+      absoluteValueLabel = "Cases pending > 2 years/total pending";
+      weightedAvgLabel = "Weighted Average (out of 2)";
+      break;
+    case "cus6c":
+      absoluteValueLabel = "Detection/Revenue collected (In lakhs)";
+      weightedAvgLabel = "Weighted Average (out of 2)";
+      break;
+    case "cus6d":
+      absoluteValueLabel = "Recovery/Detection(In lakh)";
+      weightedAvgLabel = "Weighted Average (out of 1)";
+      break;
+    case "cus6e":
+      absoluteValueLabel = "Outright smuggling cases of disposed/pending at start of month";
+      weightedAvgLabel = "Weighted Average (out of 1)";
+      break;
+    case "cus6f":
+      absoluteValueLabel = "Commercial fraud cases of disposed/pending at start of month";
+      weightedAvgLabel = "Weighted Average (out of 2)";
+      break;
+    case "cus7a":
+      absoluteValueLabel = "Not launched in 2 months of sanction/total sanction";
+      weightedAvgLabel = "Weighted Average (out of 6)";
+      break;
+    case "cus7b":
+      absoluteValueLabel = "Prosecution launched/arrests";
+      weightedAvgLabel = "Weighted Average (out of 4)";
+      break;
+    case "cus8a":
+      absoluteValueLabel = "Disposal of packages/pending start of month";
+      weightedAvgLabel = "Weighted Average (out of 5)";
+      break;
+    case "cus8b":
+      absoluteValueLabel = "Pending > 6 month/total pending";
+      weightedAvgLabel = "Weighted Average (out of 5)";
+      break;
+    case "cus9a":
+      absoluteValueLabel = "Gold disposed/ripe for disposal at start of month";
+      weightedAvgLabel = "Weighted Average (out of 5)";
+      break;
+    case "cus9b":
+      absoluteValueLabel = "Confiscated narcotics disposed/confiscated narcotics at start of month";
+      weightedAvgLabel = "Weighted Average (out of 5)";
+      break;
+    case "cus10a":
+      absoluteValueLabel = "Arrears recovered/target upto the month (In lakhs)";
+      weightedAvgLabel = "Weighted Average (out of 5)";
+      break;
+    case "cus10b":
+      absoluteValueLabel = "Arrears pending > 1 yr /total pending (In lakhs)";
+      weightedAvgLabel = "Weighted Average (out of 5)";
+      break;
+    case "cus11a":
+      absoluteValueLabel = "No action on expired bonds/total expired W/H bonds";
+      weightedAvgLabel = "Weighted Average (out of 5)";
+      break;
+    case "cus11b":
+      absoluteValueLabel = "Duty recovered/duty involved in W/H bonds (In lakhs)";
+      weightedAvgLabel = "Weighted Average (out of 5)";
+      break;
+    case "cus12a":
+      absoluteValueLabel = "Appeal Cases disposed/pending at start of month";
+      weightedAvgLabel = "Weighted Average (out of 5)";
+      break;
+    case "cus12b":
+      absoluteValueLabel = "Pending > 1 years/total pending";
+      weightedAvgLabel = "Weighted Average (out of 5)";
+      break;
+    case "cus13a":
+      absoluteValueLabel = "BEs audited/marked";
+      weightedAvgLabel = "Weighted Average";
+      break;
+    case "cus13b":
+      absoluteValueLabel = "SBs audited/marked";
+      weightedAvgLabel = "Weighted Average";
+      break;
+    case "cus13c":
+      absoluteValueLabel = "Recovered/detected(In lakhs)";
+      weightedAvgLabel = "Weighted Average";
+      break;
+    case "cus13d":
+      absoluteValueLabel = "BEs pending>6 months / total BEs pending";
+      weightedAvgLabel = "Weighted Average";
+      break;
+    case "cus13e":
+      absoluteValueLabel = "SBs Pending > 6 months / total SBs pending";
+      weightedAvgLabel = "Weighted Average";
+      break;
+    default:
+      absoluteValueLabel = "Absolute Value";
+      weightedAvgLabel = "Weighted Average";
+      break;
+  }
+
+  // Prepare the export data
+  const exportData = data.map((user) => ({
+    SNo: user.s_no,
+    Commissionerate: user.commissionerate_name,
+    Zone: user.zone_name,
+    [absoluteValueLabel]: user.absolutevale,
+    "Total Score(For the Month) %": user.total_score,
+    "Way to Grade (Marks) Out of 10": user.way_to_grade,
+    [weightedAvgLabel]: user.sub_parameter_weighted_average,
+  }));
+
+  return exportData;
+};
+
 
   const exportToXLS = () => {
     const data = handleExport();

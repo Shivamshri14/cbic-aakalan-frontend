@@ -198,7 +198,7 @@ const MonthlyReport = ({
       // Apply color-coding and enhance the data
       const enhancedData = sorted.map((item, index) => {
         const total = item.sub_parameter_weighted_average;
-      
+
         let props = {};
         if (total <= 100 && total >= 75) {
           props = { scope: "row", color: "success" }; // Top entries
@@ -209,13 +209,13 @@ const MonthlyReport = ({
         } else {
           props = { scope: "row", color: "primary" }; // Remaining entries
         }
-      
+
         return {
           ...item,
           _props: props, // Add dynamic background color properties
           s_no: index + 1,
         };
-      });      
+      });
 
       // Filter top 21 entries
       const filteredData = enhancedData.filter(item => item.zonal_rank <= 21);
@@ -226,7 +226,6 @@ const MonthlyReport = ({
       setloading(false);
     }
   };
-
 
   const fetchDataCom = async () => {
     try {
@@ -455,8 +454,6 @@ const MonthlyReport = ({
     }
   };
 
-
-
   useEffect(() => {
     fetchData();
     fetchDataCom();
@@ -488,7 +485,7 @@ const MonthlyReport = ({
     },
     {
       key: "show_details",
-      label: "Show Parameterwise by Bifurcation",
+      label: "Show Parameterwise Score Details",
       filter: false,
       sorter: false,
       //_props: { className: "current-month-score" },
@@ -503,7 +500,7 @@ const MonthlyReport = ({
       // },
     },
   ];
-  
+
 
   const columnsCustom = [
     {
@@ -528,46 +525,46 @@ const MonthlyReport = ({
     },
     {
       key: "show_details",
-      label: "Show Parameterwise by Bifurcation",
+      label: "Show Parameterwise Score Details",
       filter: false,
       sorter: false,
       //_props: { scope: "col" },
-      formatter: (item) => {
-        return (
-          <Link to="/allzones" state={{ data: item }}> 
-            <CButton variant="outline" shape="square" size="sm" color="primary">
-              Show
-            </CButton>
-          </Link>
-        );
-      },
+      // formatter: (item) => {
+      //   return (
+      //     <Link to="/allzones" state={{ data: item }}> 
+      //       <CButton variant="outline" shape="square" size="sm" color="primary">
+      //         Show
+      //       </CButton>
+      //     </Link>
+      //   );
+      // },
     },
   ];
 
-    const scopedColumns = {
-      show_details: (item) => {
-        return (
-          <td className="py-2">
-            <Link
-              to={`/allzones`}
-            >
-              <CButton color="primary" variant="outline" shape="square" size="sm">
-                Show
-              </CButton>
-            </Link>
-          </td>
-        );
-      },
+  const scopedColumns = {
+    show_details: (item) => {
+      return (
+        <td className="py-2">
+          <Link
+            to={`/CGSTMonthlyBifurcation?zone_code=${item.zone_code}&name=${item.zone_name}`}
+          >
+            <CButton color="primary" variant="outline" shape="square" size="sm">
+              Show
+            </CButton>
+          </Link>
+        </td>
+      );
+    },
 
-    };
+  };
 
   const scopedColumnscustoms = {
     show_details: (item) => {
       return (
         <td className="py-2">
           <Link
-            to={`/allzones`}
-          > 
+            to={`/CustomsMonthlyBifurcation?zone_code=${item.zone_code}&name=${item.zone_name}`}
+          >
             <CButton color="primary" variant="outline" shape="square" size="sm">
               Show
             </CButton>
@@ -641,30 +638,30 @@ const MonthlyReport = ({
 
   const handleExport = () => {
     const exportData = data.map((user) => ({
-        Ranking: user.zonal_rank,  // Corrected the field name
-        Zone: user.zone_name,  // Corrected the field name
-        "Current Month Score": user.sub_parameter_weighted_average,  // Corrected the field name
+      Ranking: user.zonal_rank,  // Corrected the field name
+      Zone: user.zone_name,  // Corrected the field name
+      "Current Month Score": user.sub_parameter_weighted_average,  // Corrected the field name
     }));
     return exportData;
-};
+  };
 
-const exportToXLS = () => {
-  // Use the appropriate data based on the selected option
-  const dataToExport = selectedOption === "CGST" ? data : datacustoms;
+  const exportToXLS = () => {
+    // Use the appropriate data based on the selected option
+    const dataToExport = selectedOption === "CGST" ? data : datacustoms;
 
-  const exportData = dataToExport.map((user) => ({
-    Ranking: user.zonal_rank,  // Corrected the field name
-    Zone: user.zone_name,  // Corrected the field name
-    "Current Month Score": user.sub_parameter_weighted_average,  // Corrected the field name
-  }));
+    const exportData = dataToExport.map((user) => ({
+      Ranking: user.zonal_rank,  // Corrected the field name
+      Zone: user.zone_name,  // Corrected the field name
+      "Current Month Score": user.sub_parameter_weighted_average,  // Corrected the field name
+    }));
 
-  const ws = XLSX.utils.json_to_sheet(exportData);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    const ws = XLSX.utils.json_to_sheet(exportData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
 
-  const fileName = selectedOption === "CGST" ? "monthly_report_cgst.xlsx" : "monthly_report_customs.xlsx";
-  XLSX.writeFile(wb, fileName);  // Export with a dynamic filename based on selected option
-};
+    const fileName = selectedOption === "CGST" ? "monthly_report_cgst.xlsx" : "monthly_report_customs.xlsx";
+    XLSX.writeFile(wb, fileName);  // Export with a dynamic filename based on selected option
+  };
 
 
   const checkSpecialChar = (e) => {
