@@ -1183,6 +1183,7 @@ const Zoneparameters = ({
           const sorted1 = response.data.sort(
             (a, b) => a.totalScore - b.totalScore
           );
+          relevantAspects = name.toUpperCase();
           const scoreIndexMap = new Map();
           let currentIndex = 1;
 

@@ -54,38 +54,38 @@ const CustomCommscoredetails = ({
       label: "S.No.",
     },
     {
-      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency"|| name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)" || name === "unclaimed_cargo" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name ==="cus_audit" || name ==="investigation" ? "zone_name" : "zoneName",
+      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution" || name === "DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)" || name === "unclaimed_cargo" || name ==="Adjudication" || name ==="CommissionerAppeals" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name === "cus_audit" || name === "investigation" ? "zone_name" : "zoneName",
       label: "Zone",
     },
     {
-      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)"  || name === "unclaimed_cargo" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds"  || name ==="cus_audit" || name ==="investigation" ? "commissionerate_name" : "commName",
+      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution" || name === "DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)" || name === "unclaimed_cargo" || name ==="Adjudication" || name ==="CommissionerAppeals" ||name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name === "cus_audit" || name === "investigation" ? "commissionerate_name" : "commName",
       label: "Commissionerate",
     },
     {
-      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)"  || name === "unclaimed_cargo" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name ==="cus_audit" || name ==="investigation" ? "gst" : "custom",
+      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution" || name === "DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)" || name === "unclaimed_cargo" || name ==="Adjudication" || name ==="CommissionerAppeals" ||name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name === "cus_audit" || name === "investigation" ? "gst" : "custom",
       label: "Sub Parameters",
     },
     {
-      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)" || name === "unclaimed_cargo"  || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds"  || name ==="cus_audit" || name ==="investigation" ? "absolutevale" : "absval",
+      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution" || name === "DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)" || name === "unclaimed_cargo" || name ==="Adjudication" || name ==="CommissionerAppeals" ||name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name === "cus_audit" || name === "investigation" ? "absolutevale" : "absval",
       label: "Absolute Number",
     },
     {
-      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution"||name ==="DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)" || name === "unclaimed_cargo" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name ==="cus_audit" || name ==="investigation" ? "total_score" : "totalScore",
+      key: name === "export_obligation(AA)" || name === "epcg" || name === "disposal/pendency" || name === "arrest_and_prosecution" || name === "DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication(legacy cases)" || name === "unclaimed_cargo" || name ==="Adjudication" || name ==="CommissionerAppeals" ||name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name === "cus_audit" || name === "investigation" ? "total_score" : "totalScore",
       label: "Percentage for the month",
     },
     // {
     //   key: name === "export_obligation(AA)" || name === "epcg" ? "sub_parameter_weighted_average" : "subParameterWeightedAverage",
     //   label: "Score (Out of 10)",
     // },
-    
-    
+
+
     // Uncomment this if you need a column for Weighted Average
     // {
     //   key: "sub_parameter_weighted_average",
     //   label: "Weighted Average",
     // },
   ];
-  
+
 
   const navigate = useNavigate();
 
@@ -96,7 +96,7 @@ const CustomCommscoredetails = ({
   const fetchDatacomm = async (name) => {
     try {
       // Handle the case where name is neither "export_obligation(AA)", "epcg", "disposal/pendency", or "arrest_and_prosecution"
-      if (name !== "export_obligation(AA)" && name !== "epcg" && name !== "disposal/pendency" && name !== "arrest_and_prosecution" && name !== "DisposalOfConfiscatedGoldAndNDPS" && name !== "adjudication(legacy cases)" && name !=="unclaimed_cargo" && name !=="recovery_of_arrears" && name !=="management_of_warehousing_bonds" && name!=="cus_audit" && name!=="investigation") {
+      if (name !== "export_obligation(AA)" && name !== "epcg" && name !== "disposal/pendency" && name !== "arrest_and_prosecution" && name !== "DisposalOfConfiscatedGoldAndNDPS" && name !== "adjudication(legacy cases)" && name !== "unclaimed_cargo" && name !=="Adjudication" && name !=="CommissionerAppeals" && name !== "recovery_of_arrears" && name !== "management_of_warehousing_bonds" && name !== "cus_audit" && name !== "investigation") {
         const response = await apiClient.get(`/cbic/custom/parameter/${name}`, {
           params: {
             month_date: newdate,
@@ -105,20 +105,20 @@ const CustomCommscoredetails = ({
             come_name: come_name,
           },
         });
-  
+
         if (response) {
           setloading(false);
         }
-  
+
         console.log("Response", response);
         const commname = response.data.map((item) => item.commName);
         setZoneName(commname);
         console.log("Commissionerate Name:", commname);
         console.log("url", response);
-  
+
         relevantAspects = (name === "investigation" ? "INVESTIGATION" : response.data.map((item) => item.ra)[0]);
         console.log("ra:", relevantAspects);
-  
+
         setData(
           response.data.map((item, index) => ({
             ...item,
@@ -128,7 +128,7 @@ const CustomCommscoredetails = ({
       }
       else if (name === "export_obligation(AA)") {
         const cusendpoints = ["cus3a", "cus3b", "cus3c"];
-  
+
         const responses = await Promise.all(
           cusendpoints.map((endpoint) =>
             apiClient
@@ -141,13 +141,13 @@ const CustomCommscoredetails = ({
               }))
           )
         );
-  
+
         console.log("Response", responses);
-  
+
         if (responses) {
           setloading(false);
         }
-  
+
         const allData = responses.flatMap((response) =>
           response.data.map((item) => ({
             ...item,
@@ -155,17 +155,17 @@ const CustomCommscoredetails = ({
           }))
         );
         console.log("FINAL RESPONSE", allData);
-  
+
         const filteredData = allData.filter(
           (item) => item.zone_code === zone_code && item.commissionerate_name === come_name
         );
         console.log("Filtered Data by Zone Code and Commissionerate:", filteredData);
-  
+
         if (filteredData.length === 0) {
           console.error("No data found for the specified zone_code and come_name");
           setloading(false);
         }
-  
+
         setData(
           filteredData.map((item, index) => ({
             ...item,
@@ -223,7 +223,7 @@ const CustomCommscoredetails = ({
       }
       else if (name === "epcg") {
         const cusendpoints = ["cus2a", "cus2b", "cus2c"];
-  
+
         const responses = await Promise.all(
           cusendpoints.map((endpoint) =>
             apiClient
@@ -236,13 +236,13 @@ const CustomCommscoredetails = ({
               }))
           )
         );
-  
+
         console.log("Response", responses);
-  
+
         if (responses) {
           setloading(false);
         }
-  
+
         const allData = responses.flatMap((response) =>
           response.data.map((item) => ({
             ...item,
@@ -250,17 +250,17 @@ const CustomCommscoredetails = ({
           }))
         );
         console.log("FINAL RESPONSE", allData);
-  
+
         const filteredData = allData.filter(
           (item) => item.zone_code === zone_code && item.commissionerate_name === come_name
         );
         console.log("Filtered Data by Zone Code and Commissionerate:", filteredData);
-  
+
         if (filteredData.length === 0) {
           console.error("No data found for the specified zone_code and come_name");
           setloading(false);
         }
-  
+
         setData(
           filteredData.map((item, index) => ({
             ...item,
@@ -270,7 +270,7 @@ const CustomCommscoredetails = ({
       }
       else if (name === "disposal/pendency") {
         const cusendpoints = ["cus4a", "cus4b", "cus4c", "cus4d"];
-  
+
         const responses = await Promise.all(
           cusendpoints.map((endpoint) =>
             apiClient
@@ -283,13 +283,13 @@ const CustomCommscoredetails = ({
               }))
           )
         );
-  
+
         console.log("Response", responses);
-  
+
         if (responses) {
           setloading(false);
         }
-  
+
         const allData = responses.flatMap((response) =>
           response.data.map((item) => ({
             ...item,
@@ -297,17 +297,17 @@ const CustomCommscoredetails = ({
           }))
         );
         console.log("FINAL RESPONSE", allData);
-  
+
         const filteredData = allData.filter(
           (item) => item.zone_code === zone_code && item.commissionerate_name === come_name
         );
         console.log("Filtered Data by Zone Code and Commissionerate:", filteredData);
-  
+
         if (filteredData.length === 0) {
           console.error("No data found for the specified zone_code and come_name");
           setloading(false);
         }
-  
+
         setData(
           filteredData.map((item, index) => ({
             ...item,
@@ -317,7 +317,7 @@ const CustomCommscoredetails = ({
       }
       else if (name === "arrest_and_prosecution") {
         const cusendpoints = ["cus7a", "cus7b"];
-  
+
         const responses = await Promise.all(
           cusendpoints.map((endpoint) =>
             apiClient
@@ -330,13 +330,13 @@ const CustomCommscoredetails = ({
               }))
           )
         );
-  
+
         console.log("Response", responses);
-  
+
         if (responses) {
           setloading(false);
         }
-  
+
         const allData = responses.flatMap((response) =>
           response.data.map((item) => ({
             ...item,
@@ -344,17 +344,17 @@ const CustomCommscoredetails = ({
           }))
         );
         console.log("FINAL RESPONSE", allData);
-  
+
         const filteredData = allData.filter(
           (item) => item.zone_code === zone_code && item.commissionerate_name === come_name
         );
         console.log("Filtered Data by Zone Code and Commissionerate:", filteredData);
-  
+
         if (filteredData.length === 0) {
           console.error("No data found for the specified zone_code and come_name");
           setloading(false);
         }
-  
+
         setData(
           filteredData.map((item, index) => ({
             ...item,
@@ -363,8 +363,8 @@ const CustomCommscoredetails = ({
         );
       }
       else if (name === "investigation") {
-        const cusendpoints = ["cus6a", "cus6b","cus6c","cus6d","cus6e","cus6f"];
-  
+        const cusendpoints = ["cus6a", "cus6b", "cus6c", "cus6d", "cus6e", "cus6f"];
+
         const responses = await Promise.all(
           cusendpoints.map((endpoint) =>
             apiClient
@@ -377,13 +377,13 @@ const CustomCommscoredetails = ({
               }))
           )
         );
-  
+
         console.log("Response", responses);
-  
+
         if (responses) {
           setloading(false);
         }
-  
+
         const allData = responses.flatMap((response) =>
           response.data.map((item) => ({
             ...item,
@@ -391,17 +391,17 @@ const CustomCommscoredetails = ({
           }))
         );
         console.log("FINAL RESPONSE", allData);
-  
+
         const filteredData = allData.filter(
           (item) => item.zone_code === zone_code && item.commissionerate_name === come_name
         );
         console.log("Filtered Data by Zone Code and Commissionerate:", filteredData);
-  
+
         if (filteredData.length === 0) {
           console.error("No data found for the specified zone_code and come_name");
           setloading(false);
         }
-  
+
         setData(
           filteredData.map((item, index) => ({
             ...item,
@@ -411,7 +411,7 @@ const CustomCommscoredetails = ({
       }
       else if (name === "DisposalOfConfiscatedGoldAndNDPS") {
         const cusendpoints = ["cus9a", "cus9b"];
-  
+
         const responses = await Promise.all(
           cusendpoints.map((endpoint) =>
             apiClient
@@ -424,13 +424,13 @@ const CustomCommscoredetails = ({
               }))
           )
         );
-  
+
         console.log("Response", responses);
-  
+
         if (responses) {
           setloading(false);
         }
-  
+
         const allData = responses.flatMap((response) =>
           response.data.map((item) => ({
             ...item,
@@ -438,17 +438,17 @@ const CustomCommscoredetails = ({
           }))
         );
         console.log("FINAL RESPONSE", allData);
-  
+
         const filteredData = allData.filter(
           (item) => item.zone_code === zone_code && item.commissionerate_name === come_name
         );
         console.log("Filtered Data by Zone Code and Commissionerate:", filteredData);
-  
+
         if (filteredData.length === 0) {
           console.error("No data found for the specified zone_code and come_name");
           setloading(false);
         }
-  
+
         setData(
           filteredData.map((item, index) => ({
             ...item,
@@ -464,7 +464,7 @@ const CustomCommscoredetails = ({
           "cus13d",
           "cus13e",
         ];
-  
+
         const responses = await Promise.all(
           cusendpoints.map((endpoint) =>
             apiClient
@@ -477,13 +477,13 @@ const CustomCommscoredetails = ({
               }))
           )
         );
-  
+
         console.log("Response", responses);
-  
+
         if (responses) {
           setloading(false);
         }
-  
+
         const allData = responses.flatMap((response) =>
           response.data.map((item) => ({
             ...item,
@@ -491,17 +491,17 @@ const CustomCommscoredetails = ({
           }))
         );
         console.log("FINAL RESPONSE", allData);
-  
+
         const filteredData = allData.filter(
           (item) => item.zone_code === zone_code && item.commissionerate_name === come_name
         );
         console.log("Filtered Data by Zone Code and Commissionerate:", filteredData);
-  
+
         if (filteredData.length === 0) {
           console.error("No data found for the specified zone_code and come_name");
           setloading(false);
         }
-  
+
         setData(
           filteredData.map((item, index) => ({
             ...item,
@@ -510,8 +510,8 @@ const CustomCommscoredetails = ({
         );
       }
       else if (name === "adjudication(legacy cases)") {
-        const cusendpoints = ["gst6a", "gst6b","gst6c", "gst6d"];
-  
+        const cusendpoints = ["gst6a", "gst6b", "gst6c", "gst6d"];
+
         const responses = await Promise.all(
           cusendpoints.map((endpoint) =>
             apiClient
@@ -524,13 +524,13 @@ const CustomCommscoredetails = ({
               }))
           )
         );
-  
+
         console.log("Response", responses);
-  
+
         if (responses) {
           setloading(false);
         }
-  
+
         const allData = responses.flatMap((response) =>
           response.data.map((item) => ({
             ...item,
@@ -538,17 +538,17 @@ const CustomCommscoredetails = ({
           }))
         );
         console.log("FINAL RESPONSE", allData);
-  
+
         const filteredData = allData.filter(
           (item) => item.zone_code === zone_code && item.commissionerate_name === come_name
         );
         console.log("Filtered Data by Zone Code and Commissionerate:", filteredData);
-  
+
         if (filteredData.length === 0) {
           console.error("No data found for the specified zone_code and come_name");
           setloading(false);
         }
-  
+
         setData(
           filteredData.map((item, index) => ({
             ...item,
@@ -558,7 +558,7 @@ const CustomCommscoredetails = ({
       }
       else if (name === "unclaimed_cargo") {
         const cusendpoints = ["cus8a", "cus8b"];
-  
+
         const responses = await Promise.all(
           cusendpoints.map((endpoint) =>
             apiClient
@@ -571,13 +571,13 @@ const CustomCommscoredetails = ({
               }))
           )
         );
-  
+
         console.log("Response", responses);
-  
+
         if (responses) {
           setloading(false);
         }
-  
+
         const allData = responses.flatMap((response) =>
           response.data.map((item) => ({
             ...item,
@@ -585,17 +585,111 @@ const CustomCommscoredetails = ({
           }))
         );
         console.log("FINAL RESPONSE", allData);
-  
+
         const filteredData = allData.filter(
           (item) => item.zone_code === zone_code && item.commissionerate_name === come_name
         );
         console.log("Filtered Data by Zone Code and Commissionerate:", filteredData);
-  
+
         if (filteredData.length === 0) {
           console.error("No data found for the specified zone_code and come_name");
           setloading(false);
         }
-  
+
+        setData(
+          filteredData.map((item, index) => ({
+            ...item,
+            s_no: index + 1,
+          }))
+        );
+      }
+      else if (name === "adjudication") {
+        const cusendpoints = ["cus5a", "cus5b", "cus5c"];
+
+        const responses = await Promise.all(
+          cusendpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/custom/${endpoint}`, {
+                params: { month_date: newdate, type: "all_commissary" },
+              })
+              .then((response) => ({
+                data: response.data,
+                gst: endpoint.toUpperCase(),
+              }))
+          )
+        );
+
+        console.log("Response", responses);
+
+        if (responses) {
+          setloading(false);
+        }
+
+        const allData = responses.flatMap((response) =>
+          response.data.map((item) => ({
+            ...item,
+            gst: response.gst, // Adding the commissionerate name (gst) to each item
+          }))
+        );
+        console.log("FINAL RESPONSE", allData);
+
+        const filteredData = allData.filter(
+          (item) => item.zone_code === zone_code && item.commissionerate_name === come_name
+        );
+        console.log("Filtered Data by Zone Code and Commissionerate:", filteredData);
+
+        if (filteredData.length === 0) {
+          console.error("No data found for the specified zone_code and come_name");
+          setloading(false);
+        }
+
+        setData(
+          filteredData.map((item, index) => ({
+            ...item,
+            s_no: index + 1,
+          }))
+        );
+      }
+      else if (name === "CommissionerAppeals") {
+        const cusendpoints = ["cus12a", "cus12b"];
+
+        const responses = await Promise.all(
+          cusendpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/custom/${endpoint}`, {
+                params: { month_date: newdate, type: "all_commissary" },
+              })
+              .then((response) => ({
+                data: response.data,
+                gst: endpoint.toUpperCase(),
+              }))
+          )
+        );
+
+        console.log("Response", responses);
+
+        if (responses) {
+          setloading(false);
+        }
+
+        const allData = responses.flatMap((response) =>
+          response.data.map((item) => ({
+            ...item,
+            gst: response.gst, // Adding the commissionerate name (gst) to each item
+          }))
+        );
+        console.log("FINAL RESPONSE", allData);
+
+        const filteredData = allData.filter(
+          (item) => item.zone_code === zone_code && item.commissionerate_name === come_name
+        );
+        console.log("Filtered Data by Zone Code and Commissionerate:", filteredData);
+
+        if (filteredData.length === 0) {
+          console.error("No data found for the specified zone_code and come_name");
+          setloading(false);
+        }
+
         setData(
           filteredData.map((item, index) => ({
             ...item,
@@ -605,7 +699,7 @@ const CustomCommscoredetails = ({
       }
       else if (name === "management_of_warehousing_bonds") {
         const cusendpoints = ["cus11a", "cus11b"];
-  
+
         const responses = await Promise.all(
           cusendpoints.map((endpoint) =>
             apiClient
@@ -618,13 +712,13 @@ const CustomCommscoredetails = ({
               }))
           )
         );
-  
+
         console.log("Response", responses);
-  
+
         if (responses) {
           setloading(false);
         }
-  
+
         const allData = responses.flatMap((response) =>
           response.data.map((item) => ({
             ...item,
@@ -632,17 +726,17 @@ const CustomCommscoredetails = ({
           }))
         );
         console.log("FINAL RESPONSE", allData);
-  
+
         const filteredData = allData.filter(
           (item) => item.zone_code === zone_code && item.commissionerate_name === come_name
         );
         console.log("Filtered Data by Zone Code and Commissionerate:", filteredData);
-  
+
         if (filteredData.length === 0) {
           console.error("No data found for the specified zone_code and come_name");
           setloading(false);
         }
-  
+
         setData(
           filteredData.map((item, index) => ({
             ...item,
@@ -655,11 +749,11 @@ const CustomCommscoredetails = ({
       setloading(false); // Stop loading state on error
     }
   };
-  
-  
-  
-  
-  
+
+
+
+
+
 
   useEffect(() => {
     if (name) {
@@ -699,13 +793,13 @@ const CustomCommscoredetails = ({
       });
 
       break;
-      case "disposal/pendency":
-        columns.splice(6, 0, {
-          key: "sub_parameter_weighted_average",
-          label: "Weighted Average",
-        });
-  
-        break;
+    case "disposal/pendency":
+      columns.splice(6, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average",
+      });
+
+      break;
 
 
     case "DisposalOfConfiscatedGoldAndNDPS":
@@ -716,22 +810,22 @@ const CustomCommscoredetails = ({
 
       break;
 
-      case "export_obligation(AA)":
+    case "export_obligation(AA)":
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
         label: "Weighted Average",
       });
 
       break;
-      case "recovery_of_arrears":
-        columns.splice(6, 0, {
-          key: "sub_parameter_weighted_average",
-          label: "Weighted Average",
-        });
-  
-        break;
-  
-      
+    case "recovery_of_arrears":
+      columns.splice(6, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average",
+      });
+
+      break;
+
+
 
     case "CommissionerAppeals":
       columns.splice(6, 0, {
@@ -741,7 +835,7 @@ const CustomCommscoredetails = ({
 
       break;
 
-      case "epcg":
+    case "epcg":
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
         label: "Weighted Average",
@@ -749,7 +843,7 @@ const CustomCommscoredetails = ({
 
       break;
 
-      case "management_of_warehousing_bonds":
+    case "management_of_warehousing_bonds":
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
         label: "Weighted Average",
@@ -757,14 +851,20 @@ const CustomCommscoredetails = ({
 
       break;
 
-      case "cus_audit":
+    case "cus_audit":
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
         label: "Weighted Average",
       });
       break;
 
-      case "unclaimed_cargo":
+    case "unclaimed_cargo":
+      columns.splice(6, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average",
+      });
+
+          case "Adjudication":
       columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
         label: "Weighted Average",

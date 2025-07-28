@@ -35,6 +35,7 @@ const CGSTMonthlyBifurcation = ({ selectedDate, onChangeDate }) => {
 
   const endpointMap = {
     Registration: ["gst1a", "gst1b", "gst1c", "gst1d", "gst1e", "gst1f"],
+    "Return Filing": ["gst2"],
     "Scrutiny & Assessment": ["gst3a", "gst3b"],
     Investigation: ["gst4a", "gst4b", "gst4c", "gst4d"],
     Adjudication: ["gst5a", "gst5b"],
@@ -44,7 +45,7 @@ const CGSTMonthlyBifurcation = ({ selectedDate, onChangeDate }) => {
     "Arrest & Prosecution": ["gst9a", "gst9b"],
     Audit: ["gst10a", "gst10b", "gst10c"],
     Appeals: ["gst11a", "gst11b", "gst11c", "gst11d"],
-    "Return Filing": ["gst2"],
+    
   };
 
 const fetchData = async () => {

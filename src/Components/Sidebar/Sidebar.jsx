@@ -92,7 +92,7 @@ export const Sidebar = ({ data }) => {
           </li>
 
           <li className="nav-item">
-            <Link to="/cgst" className="nav-link" /* onClick={(e) => e.preventDefault()} style={{ color: "red" }} */>
+            <Link to="/allzonesdashboard" className="nav-link" /* onClick={(e) => e.preventDefault()} style={{ color: "red" }} */>
               <DashboardIcon />
               All Zones Graph
             </Link>

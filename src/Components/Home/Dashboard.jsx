@@ -206,23 +206,27 @@ export const Dashboard = ({
         )
       );
 
-      const removeZones = [
-        "dg north", "dg west", "dg east", "dg south", "DG (HQ)", "DG (HQ)"
-      ].map(zone => zone.toLowerCase());
+      // // const removeZones = [
+      // //   "DG NORTH", "DG WEST", "DG EAST", "DG SOUTH", "DG (HQ)"
+      // // ].map(zone => zone.toLowerCase());
 
-      const filterData = (data) =>
-        data.filter((item) => !removeZones.includes(item.zone_name.toLowerCase()));
+      // const removeZones = mergedData.filter((item) =>
+      //   !["DG NORTH", "DG WEST", "DG EAST", "DG SOUTH", "DG (HQ)"].includes(item.zone_name)
+      // );
+
+      // const filterData = (data) =>
+      //   data.filter((item) => !removeZones.includes(item.zone_name.toLowerCase()));
 
       const registration_Data = responses_registration.flatMap((response) => response.data.map((item) => ({ ...item })));
       const scrutiny_assessmentData = responses_scrutiny_assessment.flatMap((response) => response.data.map((item) => ({ ...item })));
-      const investigation_Data = filterData(responses_investigation.flatMap((response) => response.data.map((item) => ({ ...item }))));
+      const investigation_Data = (responses_investigation.flatMap((response) => response.data.map((item) => ({ ...item }))));
       const gst_adjudication_Data = responses_gst_adjudication.flatMap((response) => response.data.map((item) => ({ ...item })));
       const gst_adjudication_legacy_cases_Data = responses_adjudication_legacy_cases.flatMap((response) => response.data.map((item) => ({ ...item })));
       const refund_Data = responses_refunds.flatMap((response) => response.data.map((item) => ({ ...item })));
       const recovery_of_arrears_Data = responses_recovery_of_arrears.flatMap((response) => response.data.map((item) => ({ ...item })));
-      const arrest_prosecution_Data = filterData(response_arrest_prosecution.flatMap((response) => response.data.map((item) => ({ ...item }))));
+      const arrest_prosecution_Data = (response_arrest_prosecution.flatMap((response) => response.data.map((item) => ({ ...item }))));
       const audit_Data = responses_audit.flatMap((response) => response.data.map((item) => ({ ...item })));
-      const appeals_Data = filterData(responses_appeals.flatMap((response) => response.data.map((item) => ({ ...item }))));
+      const appeals_Data = (responses_appeals.flatMap((response) => response.data.map((item) => ({ ...item }))));
       const return_filing_Data = responses_return_filing.flatMap((response) => response.data.map((item) => ({ ...item })));
 
       const mergeDataByZone = (
@@ -294,7 +298,12 @@ export const Dashboard = ({
         return_filing_Data
       );
 
-      const finalData = mergedData.map((item) => {
+      // ✅ Filter DG zones properly
+      const filteredData = mergedData.filter(
+        (item) => !["DG NORTH", "DG WEST", "DG EAST", "DG SOUTH", "DG (HQ)"].includes(item.zone_name)
+      );
+
+      const finalData = filteredData.map((item) => {
         item.weighted_average_out_of_12_registration = parseFloat((item.weighted_average_out_of_12_registration * 12) / 10).toFixed(2);
         item.sub_parameter_weighted_average_scrutiny_assessment = parseFloat(item.sub_parameter_weighted_average_scrutiny_assessment).toFixed(2);
         item.sub_parameter_weighted_average_investigation = parseFloat(item.sub_parameter_weighted_average_investigation).toFixed(2);
@@ -1899,6 +1908,20 @@ export const Dashboard = ({
 
   const colorsbottom = ["#cc0077", "#ff8800", "#40916c", "#551a8b", "#3d0c02"];
 
+  const getBarColor = (item) => {
+    const score = item.total_weighted_average;
+
+    if (score >= 75 && score <= 100) {
+      return "#00FF00"; // Green for high scores
+    } else if (score >= 50 && score < 75) {
+      return "#FFFF00"; // Yellow for medium scores
+    } else if (score >= 25 && score <= 50) {
+      return "#0000FF"; // Blue for mid-low scores (default)
+    } else {
+      return "#FF0000"; // Red for low scores
+    }
+  };
+
   const dataSource = {
     chart: {
       tooltip: {
@@ -1945,7 +1968,7 @@ export const Dashboard = ({
           .slice(0, 5) // Slice the top 5
           .map((item) => ({
             value: item.weighted_average_out_of_12_registration,
-            color: "00FF00", // Set color for the bar
+            color: getBarColor(item), // Set color for the bar
           })),
       },
       {
@@ -1955,7 +1978,7 @@ export const Dashboard = ({
           .slice(0, 5) // Slice the top 5
           .map((item) => ({
             value: item.weighted_average_out_of_5_return_filing,
-            color: "00FF00", // Set color for the bar
+            color: getBarColor(item), // Set color for the bar
           })),
       },
       {
@@ -1965,7 +1988,7 @@ export const Dashboard = ({
           .slice(0, 5) // Slice the top 5
           .map((item) => ({
             value: item.sub_parameter_weighted_average_scrutiny_assessment,
-            color: "00FF00", // Set color for the bar
+            color: getBarColor(item), // Set color for the bar
           })),
       },
       {
@@ -1975,7 +1998,7 @@ export const Dashboard = ({
           .slice(0, 5) // Slice the top 5
           .map((item) => ({
             value: item.sub_parameter_weighted_average_investigation,
-            color: "00FF00", // Set color for the bar
+            color: getBarColor(item), // Set color for the bar
           })),
       },
       {
@@ -1985,7 +2008,7 @@ export const Dashboard = ({
           .slice(0, 5) // Slice the top 5
           .map((item) => ({
             value: item.sub_parameter_weighted_average_Adjudication,
-            color: "00FF00", // Set color for the bar
+            color: getBarColor(item), // Set color for the bar
           })),
       },
       {
@@ -1995,7 +2018,7 @@ export const Dashboard = ({
           .slice(0, 5) // Slice the top 5
           .map((item) => ({
             value: item.sub_parameter_weighted_average_adjudication_legacy_cases,
-            color: "00FF00", // Set color for the bar
+            color: getBarColor(item), // Set color for the bar
           })),
       },
       {
@@ -2005,7 +2028,7 @@ export const Dashboard = ({
           .slice(0, 5) // Slice the top 5
           .map((item) => ({
             value: item.weighted_average_out_of_5_refunds,
-            color: "00FF00", // Set color for the bar
+            color: getBarColor(item), // Set color for the bar
           })),
       },
       {
@@ -2015,7 +2038,7 @@ export const Dashboard = ({
           .slice(0, 5) // Slice the top 5
           .map((item) => ({
             value: item.weighted_average_out_of_8_recovery_of_arrears,
-            color: "00FF00", // Set color for the bar
+            color: getBarColor(item), // Set color for the bar
           })),
       },
       {
@@ -2025,7 +2048,7 @@ export const Dashboard = ({
           .slice(0, 5) // Slice the top 5
           .map((item) => ({
             value: item.weighted_average_out_of_6_arrest_prosecution,
-            color: "00FF00", // Set color for the bar
+            color: getBarColor(item), // Set color for the bar
           })),
       },
       {
@@ -2035,7 +2058,7 @@ export const Dashboard = ({
           .slice(0, 5) // Slice the top 5
           .map((item) => ({
             value: item.weighted_average_out_of_12_audit,
-            color: "00FF00", // Set color for the bar
+            color: getBarColor(item), // Set color for the bar
           })),
       },
       {
@@ -2045,7 +2068,7 @@ export const Dashboard = ({
           .slice(0, 5) // Slice the top 5
           .map((item) => ({
             value: item.weighted_average_out_of_12_appeals,
-            color: "00FF00", // Set color for the bar
+            color: getBarColor(item), // Set color for the bar
           })),
       },
     ],
@@ -2075,8 +2098,8 @@ export const Dashboard = ({
       tooltip: {
         toolTipBorderColor: "#ffffff",
         toolTipBorderThickness: "0",
-      }, 
-      
+      },
+
       showlegend: "0",
 
       caption: "CGST",
@@ -2115,7 +2138,7 @@ export const Dashboard = ({
           .slice(-5) // Slice the top 5
           .map((item) => ({
             value: item.weighted_average_out_of_12_registration,
-            color: "FF0000", // Set color for the bar
+            color: getBarColor(item) // Set color for the bar
           })),
       },
       {
@@ -2125,7 +2148,7 @@ export const Dashboard = ({
           .slice(-5) // Get the last 5 after sorting
           .map((item) => ({
             value: item.weighted_average_out_of_5_return_filing,
-            color: "FF0000", // Set color for the bar
+            color: getBarColor(item) // Set color for the bar
           })),
       },
       {
@@ -2135,7 +2158,7 @@ export const Dashboard = ({
           .slice(-5) // Get the last 5 after sorting
           .map((item) => ({
             value: item.sub_parameter_weighted_average_scrutiny_assessment,
-            color: "FF0000", // Set color for the bar
+            color: getBarColor(item) // Set color for the bar
           })),
       },
       {
@@ -2145,7 +2168,7 @@ export const Dashboard = ({
           .slice(-5) // Get the last 5 after sorting
           .map((item) => ({
             value: item.sub_parameter_weighted_average_investigation,
-            color: "FF0000", // Set color for the bar
+            color: getBarColor(item) // Set color for the bar
           })),
       },
       {
@@ -2155,7 +2178,7 @@ export const Dashboard = ({
           .slice(-5) // Get the last 5 after sorting
           .map((item) => ({
             value: item.sub_parameter_weighted_average_Adjudication,
-            color: "FF0000", // Set color for the bar
+            color: getBarColor(item) // Set color for the bar
           })),
       },
       {
@@ -2165,7 +2188,7 @@ export const Dashboard = ({
           .slice(-5) // Get the last 5 after sorting
           .map((item) => ({
             value: item.sub_parameter_weighted_average_adjudication_legacy_cases,
-            color: "FF0000", // Set color for the bar
+            color: getBarColor(item) // Set color for the bar
           })),
       },
       {
@@ -2175,7 +2198,7 @@ export const Dashboard = ({
           .slice(-5) // Get the last 5 after sorting
           .map((item) => ({
             value: item.weighted_average_out_of_5_refunds,
-            color: "FF0000", // Set color for the bar
+            color: getBarColor(item) // Set color for the bar
           })),
       },
       {
@@ -2185,7 +2208,7 @@ export const Dashboard = ({
           .slice(-5) // Get the last 5 after sorting
           .map((item) => ({
             value: Number(item.weighted_average_out_of_8_recovery_of_arrears).toFixed(2),
-            color: "FF0000", // Set color for the bar
+            color: getBarColor(item) // Set color for the bar
           })),
       },
       {
@@ -2195,7 +2218,7 @@ export const Dashboard = ({
           .slice(-5) // Get the last 5 after sorting
           .map((item) => ({
             value: item.weighted_average_out_of_6_arrest_prosecution,
-            color: "FF0000", // Set color for the bar
+            color: getBarColor(item) // Set color for the bar
           })),
       },
       {
@@ -2205,7 +2228,7 @@ export const Dashboard = ({
           .slice(-5) // Get the last 5 after sorting
           .map((item) => ({
             value: item.weighted_average_out_of_12_audit,
-            color: "FF0000", // Set color for the bar
+            color: getBarColor(item) // Set color for the bar
           })),
       },
       {
@@ -2215,7 +2238,7 @@ export const Dashboard = ({
           .slice(-5) // Get the last 5 after sorting
           .map((item) => ({
             value: item.weighted_average_out_of_12_appeals,
-            color: "FF0000", // Set color for the bar
+            color: getBarColor(item) // Set color for the bar
           })),
       },
     ],
@@ -2245,7 +2268,7 @@ export const Dashboard = ({
       tooltip: {
         toolTipBorderColor: "#ffffff",
         toolTipBorderThickness: "0",
-      },      
+      },
       showlegend: "0",
 
       caption: "Customs",
@@ -2285,7 +2308,7 @@ export const Dashboard = ({
           .slice(0, 5)
           .map((item, index) => ({
             value: item.weighted_average_out_of_5_cus_timelyrefunds,
-            color: "00FF00"
+            color: getBarColor(item)
           })),
       },
       {
@@ -2295,7 +2318,7 @@ export const Dashboard = ({
           .slice(0, 5)
           .map((item, index) => ({
             value: item.weighted_average_out_of_7_epcg,
-            color: "00FF00"
+            color: getBarColor(item)
           })),
       },
       {
@@ -2305,7 +2328,7 @@ export const Dashboard = ({
           .slice(0, 5)
           .map((item, index) => ({
             value: item.weighted_average_out_of_7_aa,
-            color: "00FF00"
+            color: getBarColor(item)
           })),
       },
       {
@@ -2315,7 +2338,7 @@ export const Dashboard = ({
           .slice(0, 5)
           .map((item, index) => ({
             value: item.weighted_average_out_of_11,
-            color: "00FF00"
+            color: getBarColor(item)
           })),
       },
       {
@@ -2325,7 +2348,7 @@ export const Dashboard = ({
           .slice(0, 5)
           .map((item, index) => ({
             value: item.sub_parameter_weighted_average_AdjudicationData,
-            color: "00FF00"
+            color: getBarColor(item)
           })),
       },
       {
@@ -2335,7 +2358,7 @@ export const Dashboard = ({
           .slice(0, 5)
           .map((item, index) => ({
             value: item.weighted_average_out_of_12_investigation,
-            color: "00FF00"
+            color: getBarColor(item)
           })),
       },
       {
@@ -2345,7 +2368,7 @@ export const Dashboard = ({
           .slice(0, 5)
           .map((item, index) => ({
             value: item.weighted_average_out_of_6_cus_arrest_prosecution,
-            color: "00FF00"
+            color: getBarColor(item)
           })),
       },
       {
@@ -2355,7 +2378,7 @@ export const Dashboard = ({
           .slice(0, 5)
           .map((item, index) => ({
             value: item.weighted_average_out_of_6_cus_unclaimed_cargo,
-            color: "00FF00"
+            color: getBarColor(item)
           })),
       },
       {
@@ -2365,7 +2388,7 @@ export const Dashboard = ({
           .slice(0, 5)
           .map((item, index) => ({
             value: item.weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS,
-            color: "00FF00"
+            color: getBarColor(item)
           })),
       },
       {
@@ -2375,7 +2398,7 @@ export const Dashboard = ({
           .slice(0, 5)
           .map((item, index) => ({
             value: item.weighted_average_out_of_6_cus_recovery_of_arrears,
-            color: "00FF00"
+            color: getBarColor(item)
           })),
       },
       {
@@ -2385,7 +2408,7 @@ export const Dashboard = ({
           .slice(0, 5)
           .map((item, index) => ({
             value: item.weighted_average_out_of_6_cus_management_of_warehousing_bonds,
-            color: "00FF00"
+            color: getBarColor(item)
           })),
       },
       {
@@ -2395,7 +2418,7 @@ export const Dashboard = ({
           .slice(0, 5)
           .map((item, index) => ({
             value: item.weighted_average_out_of_8_cus_CommissionerAppeals,
-            color: "00FF00",
+            color: getBarColor(item)
           })),
       },
       {
@@ -2405,7 +2428,7 @@ export const Dashboard = ({
           .slice(0, 5)
           .map((item, index) => ({
             value: item.weighted_average_out_of_12_cus_audit,
-            color: "00FF00",
+            color: getBarColor(item)
           })),
       },
     ],
@@ -2464,7 +2487,7 @@ export const Dashboard = ({
       tooltip: {
         toolTipBorderColor: "#ffffff",
         toolTipBorderThickness: "0",
-      },      
+      },
       showlegend: "0",
 
       caption: "Customs",
@@ -2502,7 +2525,10 @@ export const Dashboard = ({
           .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
           .slice(-5) // Bottom 5
           .map((item) => {
-            return { value: item.weighted_average_out_of_5_cus_timelyrefunds, color: "FF0000" };
+            return {
+              value: item.weighted_average_out_of_5_cus_timelyrefunds, // Adding missing comma
+              color: getBarColor(item),
+            };
           }),
       },
       {
@@ -2511,7 +2537,7 @@ export const Dashboard = ({
           .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
           .slice(-5) // Bottom 5
           .map((item) => {
-            return { value: item.weighted_average_out_of_7_epcg, color: "FF0000" };
+            return { value: item.weighted_average_out_of_7_epcg, color: getBarColor(item) };
           }),
       },
       {
@@ -2520,7 +2546,7 @@ export const Dashboard = ({
           .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
           .slice(-5) // Bottom 5
           .map((item) => {
-            return { value: item.weighted_average_out_of_7_aa, color: "FF0000" };
+            return { value: item.weighted_average_out_of_7_aa, color: getBarColor(item) };
           }),
       },
       {
@@ -2529,7 +2555,7 @@ export const Dashboard = ({
           .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
           .slice(-5) // Bottom 5
           .map((item) => {
-            return { value: item.weighted_average_out_of_11, color: "FF0000" };
+            return { value: item.weighted_average_out_of_11, color: getBarColor(item) };
           }),
       },
       {
@@ -2538,7 +2564,7 @@ export const Dashboard = ({
           .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
           .slice(-5) // Bottom 5
           .map((item) => {
-            return { value: item.sub_parameter_weighted_average_AdjudicationData, color: "FF0000" };
+            return { value: item.sub_parameter_weighted_average_AdjudicationData, color: getBarColor(item) };
           }),
       },
       {
@@ -2547,7 +2573,7 @@ export const Dashboard = ({
           .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
           .slice(-5) // Bottom 5
           .map((item) => {
-            return { value: item.weighted_average_out_of_12_investigation, color: "FF0000" };
+            return { value: item.weighted_average_out_of_12_investigation, color: getBarColor(item) };
           }),
       },
       {
@@ -2556,7 +2582,7 @@ export const Dashboard = ({
           .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
           .slice(-5) // Bottom 5
           .map((item) => {
-            return { value: item.weighted_average_out_of_6_cus_arrest_prosecution, color: "FF0000" };
+            return { value: item.weighted_average_out_of_6_cus_arrest_prosecution, color: getBarColor(item) };
           }),
       },
       {
@@ -2565,7 +2591,7 @@ export const Dashboard = ({
           .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
           .slice(-5) // Bottom 5
           .map((item) => {
-            return { value: item.weighted_average_out_of_6_cus_unclaimed_cargo, color: "FF0000" };
+            return { value: item.weighted_average_out_of_6_cus_unclaimed_cargo, color: getBarColor(item) };
           }),
       },
       {
@@ -2574,7 +2600,7 @@ export const Dashboard = ({
           .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
           .slice(-5) // Bottom 5
           .map((item) => {
-            return { value: item.weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS, color: "FF0000" };
+            return { value: item.weighted_average_out_of_6_cus_DisposalOfConfiscatedGoldAndNDPS, color: getBarColor(item) };
           }),
       },
       {
@@ -2583,7 +2609,7 @@ export const Dashboard = ({
           .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
           .slice(-5) // Bottom 5
           .map((item) => {
-            return { value: item.weighted_average_out_of_6_cus_recovery_of_arrears, color: "FF0000" };
+            return { value: item.weighted_average_out_of_6_cus_recovery_of_arrears, color: getBarColor(item) };
           }),
       },
       {
@@ -2592,7 +2618,7 @@ export const Dashboard = ({
           .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
           .slice(-5) // Bottom 5
           .map((item) => {
-            return { value: item.weighted_average_out_of_6_cus_management_of_warehousing_bonds, color: "FF0000" };
+            return { value: item.weighted_average_out_of_6_cus_management_of_warehousing_bonds, color: getBarColor(item) };
           }),
       },
       {
@@ -2601,7 +2627,7 @@ export const Dashboard = ({
           .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
           .slice(-5) // Bottom 5
           .map((item) => {
-            return { value: item.weighted_average_out_of_8_cus_CommissionerAppeals, color: "FF0000" };
+            return { value: item.weighted_average_out_of_8_cus_CommissionerAppeals, color: getBarColor(item) };
           }),
       },
       {
@@ -2610,7 +2636,7 @@ export const Dashboard = ({
           .sort((a, b) => b.total_weighted_average - a.total_weighted_average) // Sort in descending order
           .slice(-5) // Bottom 5
           .map((item) => {
-            return { value: item.weighted_average_out_of_12_cus_audit, color: "FF0000" };
+            return { value: item.weighted_average_out_of_12_cus_audit, color: getBarColor(item) };
           }),
       },
     ],

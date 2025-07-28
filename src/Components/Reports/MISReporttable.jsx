@@ -12,6 +12,7 @@ import apiClient from "../../Service/ApiClient";
 import queryString from "query-string";
 import { CSmartTable } from "@coreui/react-pro";
 import Spinner from "../Spinner";
+import * as XLSX from 'xlsx';
 
 const MISReporttable = ({
   selectedDate,
@@ -2665,8 +2666,6 @@ const MISReporttable = ({
           };
         });
 
-        console.log("EnhancedData1", enhancedData1);
-
         // const enhancedData1 = sorted1.map((item, index) => {
         //   const total = sorted1.length;
         //   const firstquarter = total * 0.25;
@@ -3607,12 +3606,14 @@ const MISReporttable = ({
 
 
   const zones = [
-    "CHANDIGARH CE & GST", "DELHI CE & GST", "PANCHKULA CE & GST", "LUCKNOW CE & GST",
-    "MEERUT CE & GST", "VISHAKAPATNAM CE & GST", "HYDERABAD CE & GST", "BENGALURU CE & GST",
-    "THIRUVANANTHAPURAM CE & GST", "CHENNAI CE & GST", "RANCHI CE & GST", "KOLKATA CE & GST",
-    "BHUBANESHWAR CE & GST", "JAIPUR CE & GST", "AHMEDABAD CE & GST", "VADODARA CE & GST",
-    "NAGPUR CE & GST", "MUMBAI CE & GST", "PUNE CE & GST", "BHOPAL CE & GST", "GUWAHATI CE & GST"
-  ];
+    "AHMEDABAD CE & GST", "BENGALURU CE & GST", "BHOPAL CE & GST", "BHUBANESHWAR CE & GST",
+    "CHANDIGARH CE & GST", "CHENNAI CE & GST", "DELHI CE & GST", "GUWAHATI CE & GST",
+    "HYDERABAD CE & GST", "JAIPUR CE & GST", "KOLKATA CE & GST", "LUCKNOW CE & GST",
+    "MEERUT CE & GST", "MUMBAI CE & GST", "NAGPUR CE & GST", "PANCHKULA CE & GST",
+    "PUNE CE & GST", "RANCHI CE & GST", "THIRUVANANTHAPURAM CE & GST", "VADODARA CE & GST",
+    "VISHAKAPATNAM CE & GST"
+  ].sort(); // Sort the zones alphabetically here
+
 
   // Create a lookup table for each month to ensure data alignment
   const createZoneDataMap = (dataArray) => {
@@ -3659,6 +3660,47 @@ const MISReporttable = ({
   console.log("✅ Final Fixed Data:", data);
 
 
+  const exportToXLS = () => {
+    // Determine which data set to use for export
+    const dataToExport =
+      name === "TimelyPaymentOfRefunds" || name === "disposalPendency" || name === "investigation" ||
+      name === "Adjudication" || name === "epcg" || name === "aa" || name === "cus_investigation" ||
+      name === "DisposalOfConfiscatedGoldAndNDPS" || name === "cus_arrestAndProsecution" || name === "unclaimed_cargo" ||
+      name === "CommissionerAppeals" || name === "recovery_Of_Arrears" || name === "mowb" || name === "cus_audit"
+        ? datacustom
+        : data;
+
+    // Prepare the data for export
+    const exportFormattedData = dataToExport.map((item) => {
+      const row = {
+        "Zone Name": item.zone_name,
+      };
+      // Dynamically add columns for each month's weighted average
+      for (let i = 1; i <= 6; i++) {
+        const dateKey = `date_${i}`;
+        const weightedAvgKey = `weighted_average_${i}`;
+        row[item[dateKey]] = item[weightedAvgKey];
+      }
+      return row;
+    });
+
+    // Create a worksheet from the formatted JSON data
+    const ws = XLSX.utils.json_to_sheet(exportFormattedData);
+    // Create a new workbook
+    const wb = XLSX.utils.book_new();
+    // Append the worksheet to the workbook
+    XLSX.utils.book_append_sheet(wb, ws, "MIS Report");
+
+    // Generate a dynamic file name
+    const monthLabel = dayjs(selectedDate).format("MMMM_YYYY");
+    const reportTitle = columns[0].group; // Get the main group title for the report
+    const fileName = `${reportTitle.replace(/[^a-zA-Z0-9]/g, '_')}_${monthLabel}.xlsx`;
+
+    // Write the workbook to an Excel file
+    XLSX.writeFile(wb, fileName);
+  };
+
+
 
   // Function to create a lookup table for each month's data
   const createCustomDataMap = (dataArray) => {
@@ -3671,10 +3713,10 @@ const MISReporttable = ({
   // Create lookup tables for each month
   const dataMapsCustom = [data6, data5, data4, data3, data2, data1].map(createCustomDataMap);
 
-  // Get unique zone names from the API response dynamically
+  // Get unique zone names from the API response dynamically and sort them
   const zonesFromApi = [
     ...new Set([...data6, ...data5, ...data4, ...data3, ...data2, ...data1].map((item) => item.zone_name)),
-  ];
+  ].sort(); // Sort the dynamically retrieved zones alphabetically
 
   // Generate final structured data
   const datacustom = zonesFromApi
@@ -3719,7 +3761,8 @@ const MISReporttable = ({
     })
     .filter((item) => item !== null); // Remove null values
 
-  console.log("✅ Final Fixed datacustom:" , datacustom);
+
+  console.log("✅ Final Fixed datacustom:", datacustom);
 
 
 
@@ -3739,7 +3782,7 @@ const MISReporttable = ({
         arrestAndProsecution: 'CGST("Arrest and Prosecution")',
         audit: 'CGST("Audit")',
         appeals: 'CGST("Appeals")',
-      
+
         // CUSTOMS entries
         TimelyPaymentOfRefunds: 'CUSTOMS("Timely payment of Refunds")',
         epcg: 'CUSTOMS("Management of Export Obligation(EPCG)")',
@@ -3755,7 +3798,7 @@ const MISReporttable = ({
         CommissionerAppeals: 'CUSTOMS("Commissioner (Appeals)")',
         cus_audit: 'CUSTOMS("Audit")'
       }[name] || "CUSTOMS",
-      
+
 
       children: [
         {
@@ -3796,7 +3839,7 @@ const MISReporttable = ({
                   <Link to="/mis-report">
                     <Button
                       variant="contained"
-                      className="ml-4  cust-btn"
+                      className="ml-4 cust-btn"
                       onClick={handleBack}
                     >
                       Back
@@ -3862,33 +3905,40 @@ const MISReporttable = ({
               </div>
             </div> */}
           </div>
-          <div className=" bg-blue report-sec mb p-3">
-            <h2 className="mb-5">MIS Reports</h2>
-            <CSmartTable
-              cleaner
-              clickableRows={false}
-              columns={columns}
-              items={
-                name === "TimelyPaymentOfRefunds" || name === "disposalPendency" || name === "investigation" ||
+          <div className="container-fluid">
+            <div className=" bg-blue report-sec mb p-3">
+              <h2 className="mb-5">MIS Reports</h2>
+              <div className="export-btn m-3">
+                <button onClick={exportToXLS} className="btn btn-primary" style={{ marginRight: "45px" }}>
+                  Export XLS
+                </button>
+              </div>
+              <CSmartTable
+                cleaner
+                clickableRows={false}
+                columns={columns}
+                items={
+                  name === "TimelyPaymentOfRefunds" || name === "disposalPendency" || name === "investigation" ||
                   name === "Adjudication" || name === "epcg" || name === "aa" || name === "cus_investigation" ||
                   name === "DisposalOfConfiscatedGoldAndNDPS" || name === "cus_arrestAndProsecution" || name === "unclaimed_cargo" ||
                   name === "CommissionerAppeals" || name === "recovery_Of_Arrears" || name === "mowb" || name === "cus_audit"
-                  ? datacustom
-                  : data
-              }
-              itemsPerPage={1000}
-              tableFilter
-              tableProps={{
-                className: "add-this-class custom-table",
-                responsive: true,
-                hover: true,
-                align: "middle",
-                border: "primary",
-              }}
-              tableBodyProps={{
-                className: "align-middle",
-              }}
-            />
+                    ? datacustom
+                    : data
+                }
+                itemsPerPage={1000}
+                tableFilter
+                tableProps={{
+                  className: "add-this-class custom-table",
+                  responsive: true,
+                  hover: true,
+                  align: "middle",
+                  border: "primary",
+                }}
+                tableBodyProps={{
+                  className: "align-middle",
+                }}
+              />
+            </div>
           </div>
         </div>
       )}

@@ -129,19 +129,19 @@ const CustomsMonthlyBifurcation = ({ selectedDate, onChangeDate }) => {
     let rowIndex = 1;
 
     const endpointMap = {
-      // "Disposal Pendency": { endpoints: ["cus4a", "cus4b", "cus4c", "cus4d"], scale: 11 },
-      // "Management of Export Obligation(EPCG)": { endpoints: ["cus2a", "cus2b", "cus2c"], scale: 7 },
-      // "Management of Export Obligation(AA)": { endpoints: ["cus3a", "cus3b", "cus3c"], scale: 7 },
+      "Timely payment of Refunds": { endpoints: ["cus1"], scale: 5 },
+      "Management of Export Obligation(EPCG)": { endpoints: ["cus2a", "cus2b", "cus2c"], scale: 7 },
+      "Management of Export Obligation(AA)": { endpoints: ["cus3a", "cus3b", "cus3c"], scale: 7 },
+      "Disposal Pendency": { endpoints: ["cus4a", "cus4b", "cus4c", "cus4d"], scale: 11 },
       Adjudication: { endpoints: ["cus5a", "cus5b", "cus5c"], scale: 10 },
-      // Investigation: { endpoints: ["cus6a", "cus6b", "cus6c", "cus6d", "cus6e", "cus6f"], scale: 12 },
-      // "Arrests and Prosecution": { endpoints: ["cus7a", "cus7b"], scale: 6 },
-      // "Timely payment of Refunds": { endpoints: ["cus1"], scale: 10 },
-      // "Monitoring Of Un-cleared and Unclaimed cargo": { endpoints: ["cus8a", "cus8b"], scale: 6 },
-      // "Disposal Of Confiscated Gold and Narcotics": { endpoints: ["cus9a", "cus9b"], scale: 4 },
-      // "Recovery of Arrears": { endpoints: ["cus10a", "cus10b"], scale: 6 },
-      // "Management Of Warehousing bonds": { endpoints: ["cus11a", "cus11b"], scale: 6 },
-      // "Commissioner (Appeals)": { endpoints: ["cus12a", "cus12b"], scale: 8 },
-      // Audit: { endpoints: ["cus13a", "cus13b", "cus13c", "cus13d", "cus13e"], scale: 12 },
+      Investigation: { endpoints: ["cus6a", "cus6b", "cus6c", "cus6d", "cus6e", "cus6f"], scale: 12 },
+      "Arrests and Prosecution": { endpoints: ["cus7a", "cus7b"], scale: 6 },
+      "Monitoring Of Un-cleared and Unclaimed cargo": { endpoints: ["cus8a", "cus8b"], scale: 6 },
+      "Disposal Of Confiscated Gold and Narcotics": { endpoints: ["cus9a", "cus9b"], scale: 4 },
+      "Recovery of Arrears": { endpoints: ["cus10a", "cus10b"], scale: 6 },
+      "Management Of Warehousing bonds": { endpoints: ["cus11a", "cus11b"], scale: 6 },
+      "Commissioner (Appeals)": { endpoints: ["cus12a", "cus12b"], scale: 8 },
+      Audit: { endpoints: ["cus13a", "cus13b", "cus13c", "cus13d", "cus13e"], scale: 12 },
     };
 
     for (const [category, { endpoints, scale }] of Object.entries(endpointMap)) {
@@ -156,13 +156,22 @@ const CustomsMonthlyBifurcation = ({ selectedDate, onChangeDate }) => {
               },
             })
             .then(res =>
-              res.data.map(item => ({
-                ...item,
-                sub_parameter_weighted_average: parseFloat(
-                  ((item.sub_parameter_weighted_average || 0) * scale / 10).toFixed(2)
-                ),
-              }))
+              res.data.map(item => {
+                let value = item.sub_parameter_weighted_average || 0;
+
+                // For "Timely payment of Refunds", don't apply scale
+                if (category === "Timely payment of Refunds") {
+                  return { ...item, sub_parameter_weighted_average: parseFloat(value) };
+                }
+
+                // For other categories, apply scale
+                return {
+                  ...item,
+                  sub_parameter_weighted_average: parseFloat(((value * scale) / 10).toFixed(2)),
+                };
+              })
             )
+
             .catch(err => {
               console.error(`Error fetching ${endpoint}:`, err);
               return [];
@@ -248,8 +257,29 @@ const CustomsMonthlyBifurcation = ({ selectedDate, onChangeDate }) => {
   };
 
   return (
-    <div className="body flex-grow-1 custom-sec">
-      <div className="msg-box">
+    <div className="body flex-grow-1">
+
+      <div className="row">
+        <div className="msg-box">
+          <div className="lft-box">
+            <h2>Monthly Bifurcation Summary</h2>
+          </div>
+          <div className="rgt-box">
+            <div className="view-btn">
+              <Button
+                variant="contained"
+                className="ml-4  cust-btn"
+                onClick={handleBack}
+              >
+                Back
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      {/* <div className="msg-box">
         <div className="lft-box col-md-11">
           <h3>Monthly Bifurcation Summary</h3>
         </div>
@@ -258,7 +288,7 @@ const CustomsMonthlyBifurcation = ({ selectedDate, onChangeDate }) => {
             Back
           </Button>
         </div>
-      </div>
+      </div> */}
 
       <div className="date-sec">
         <LocalizationProvider dateAdapter={AdapterDayjs}>

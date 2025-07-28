@@ -55,7 +55,7 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
       label: "S.No.",
     },
     {
-      key: name==="investigation"||name==="recovery_of_arrears"||name==="management_of_warehousing_bonds"||name==="export_obligation(AA)"||name ==="unclaimed_cargo"||name==="disposal/pendency"||name==="arrest_and_prosecution"||name==="epcg"  || name ==="cus_audit"  || name ==="DisposalOfConfiscatedGoldAndNDPS"?"zone_name":"zoneName",
+      key: name === "investigation" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name === "export_obligation(AA)" || name === "unclaimed_cargo" || name === "disposal/pendency" || name === "arrest_and_prosecution" || name === "epcg" || name === "cus_audit" || name==="CommissionerAppeals" || name === "DisposalOfConfiscatedGoldAndNDPS" ? "zone_name" : "zoneName",
       label: "Zone",
     },
     // {
@@ -63,15 +63,15 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
     //   label: "Commissionerate Name",
     // },
     {
-      key: name==="investigation"||name==="recovery_of_arrears"||name==="management_of_warehousing_bonds"||name==="export_obligation(AA)"||name ==="unclaimed_cargo"||name==="disposal/pendency"|| name==="arrest_and_prosecution"||name==="epcg"  || name ==="cus_audit"  || name ==="DisposalOfConfiscatedGoldAndNDPS" ?"gst":"custom",
+      key: name === "investigation" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name === "export_obligation(AA)" || name === "unclaimed_cargo" || name === "disposal/pendency" || name === "arrest_and_prosecution" || name === "epcg" || name === "cus_audit" || name==="CommissionerAppeals" || name === "DisposalOfConfiscatedGoldAndNDPS" ? "gst" : "custom",
       label: "Sub Parameters",
     },
     {
-      key: name==="investigation"||name==="recovery_of_arrears"||name==="management_of_warehousing_bonds"||name==="export_obligation(AA)"||name ==="unclaimed_cargo"||name==="disposal/pendency"|| name==="arrest_and_prosecution"||name==="epcg"  || name ==="cus_audit"  || name ==="DisposalOfConfiscatedGoldAndNDPS" ?"absolutevale":"absval",
+      key: name === "investigation" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name === "export_obligation(AA)" || name === "unclaimed_cargo" || name === "disposal/pendency" || name === "arrest_and_prosecution" || name === "epcg" || name === "cus_audit" || name==="CommissionerAppeals" || name === "DisposalOfConfiscatedGoldAndNDPS" ? "absolutevale" : "absval",
       label: "Absolute Number",
     },
     {
-      key: name==="investigation"||name==="recovery_of_arrears"||name==="management_of_warehousing_bonds"|| name==="export_obligation(AA)"||name ==="unclaimed_cargo"||name==="disposal/pendency"|| name==="arrest_and_prosecution"||name==="epcg"  || name ==="cus_audit"  || name ==="DisposalOfConfiscatedGoldAndNDPS" ?"total_score":"totalScore",
+      key: name === "investigation" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name === "export_obligation(AA)" || name === "unclaimed_cargo" || name === "disposal/pendency" || name === "arrest_and_prosecution" || name === "epcg" || name === "cus_audit" || name==="CommissionerAppeals" || name === "DisposalOfConfiscatedGoldAndNDPS" ? "total_score" : "totalScore",
       label: "Percentage for the month",
     },
     // {
@@ -80,11 +80,11 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
     // },
   ];
 
-  
+
 
   const fetchDatazone = async (name) => {
     try {
-    
+
       if (name === "investigation") {
         const cusendpoints = [
           "cus6a",
@@ -107,12 +107,12 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
         console.log("Response", responses);
 
         const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
-        console.log("FINALRESPONSE",allData);
-        relevantAspects = (name==="investigation"?"INVESTIGATION":allData.map((item) => item.ra)[0]);
+        console.log("FINALRESPONSE", allData);
+        relevantAspects = (name === "investigation" ? "INVESTIGATION" : allData.map((item) => item.ra)[0]);
         const filteredData = allData.filter(item => item.zone_code === zone_code);
         console.log("Filtered Data by Zone Code", filteredData);
 
-        setData(filteredData.map((item,index)=>({...item,s_no:index+1})));
+        setData(filteredData.map((item, index) => ({ ...item, s_no: index + 1 })));
       }
       else if (name === "epcg") {
         const cusendpoints = [
@@ -133,12 +133,12 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
         console.log("Response", responses);
 
         const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
-        console.log("FINALRESPONSE",allData);
-        relevantAspects = (name==="investigation"?"INVESTIGATION":allData.map((item) => item.ra)[0]);
+        console.log("FINALRESPONSE", allData);
+        relevantAspects = "Management of Export Obligation(EPCG)";
         const filteredData = allData.filter(item => item.zone_code === zone_code);
         console.log("Filtered Data by Zone Code", filteredData);
 
-        setData(filteredData.map((item,index)=>({...item,s_no:index+1})));
+        setData(filteredData.map((item, index) => ({ ...item, s_no: index + 1 })));
       }
       else if (name === "export_obligation(AA)") {
         const cusendpoints = [
@@ -159,12 +159,12 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
         console.log("Response", responses);
 
         const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
-        console.log("FINALRESPONSE",allData);
-        relevantAspects = (name==="investigation"?"INVESTIGATION":allData.map((item) => item.ra)[0]);
+        console.log("FINALRESPONSE", allData);
+        relevantAspects = "Management of Export Obligation(AA)";
         const filteredData = allData.filter(item => item.zone_code === zone_code);
         console.log("Filtered Data by Zone Code", filteredData);
 
-        setData(filteredData.map((item,index)=>({...item,s_no:index+1})));
+        setData(filteredData.map((item, index) => ({ ...item, s_no: index + 1 })));
       }
       else if (name === "disposal/pendency") {
         const cusendpoints = [
@@ -186,12 +186,12 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
         console.log("Response", responses);
 
         const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
-        console.log("FINALRESPONSE",allData);
-        relevantAspects = (name==="investigation"?"INVESTIGATION":allData.map((item) => item.ra)[0]);
+        console.log("FINALRESPONSE", allData);
+        relevantAspects = "Disposal/Pendency Of Provisional Assessments"
         const filteredData = allData.filter(item => item.zone_code === zone_code);
         console.log("Filtered Data by Zone Code", filteredData);
 
-        setData(filteredData.map((item,index)=>({...item,s_no:index+1})));
+        setData(filteredData.map((item, index) => ({ ...item, s_no: index + 1 })));
       }
       else if (name === "arrest_and_prosecution") {
         const cusendpoints = [
@@ -211,12 +211,12 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
         console.log("Response", responses);
 
         const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
-        console.log("FINALRESPONSE",allData);
-        relevantAspects = (name==="investigation"?"INVESTIGATION":allData.map((item) => item.ra)[0]);
+        console.log("FINALRESPONSE", allData);
+        relevantAspects = "ARREST AND PROSECUTION";
         const filteredData = allData.filter(item => item.zone_code === zone_code);
         console.log("Filtered Data by Zone Code", filteredData);
 
-        setData(filteredData.map((item,index)=>({...item,s_no:index+1})));
+        setData(filteredData.map((item, index) => ({ ...item, s_no: index + 1 })));
       }
       else if (name === "unclaimed_cargo") {
         const cusendpoints = [
@@ -236,12 +236,12 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
         console.log("Response", responses);
 
         const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
-        console.log("FINALRESPONSE",allData);
-        relevantAspects = (name==="investigation"?"INVESTIGATION":allData.map((item) => item.ra)[0]);
+        console.log("FINALRESPONSE", allData);
+        relevantAspects = "Monitoring Of Un-cleared and Unclaimed cargo";
         const filteredData = allData.filter(item => item.zone_code === zone_code);
         console.log("Filtered Data by Zone Code", filteredData);
 
-        setData(filteredData.map((item,index)=>({...item,s_no:index+1})));
+        setData(filteredData.map((item, index) => ({ ...item, s_no: index + 1 })));
       }
       else if (name === "recovery_of_arrears") {
         const cusendpoints = [
@@ -261,12 +261,12 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
         console.log("Response", responses);
 
         const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
-        console.log("FINALRESPONSE",allData);
-        relevantAspects = (name==="investigation"?"INVESTIGATION":allData.map((item) => item.ra)[0]);
+        console.log("FINALRESPONSE", allData);
+        relevantAspects = "Recovery of Arrears";
         const filteredData = allData.filter(item => item.zone_code === zone_code);
         console.log("Filtered Data by Zone Code", filteredData);
 
-        setData(filteredData.map((item,index)=>({...item,s_no:index+1})));
+        setData(filteredData.map((item, index) => ({ ...item, s_no: index + 1 })));
       }
       else if (name === "DisposalOfConfiscatedGoldAndNDPS") {
         const cusendpoints = [
@@ -286,12 +286,12 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
         console.log("Response", responses);
 
         const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
-        console.log("FINALRESPONSE",allData);
-        relevantAspects = (name==="investigation"?"INVESTIGATION":allData.map((item) => item.ra)[0]);
+        console.log("FINALRESPONSE", allData);
+        relevantAspects = "Disposal Of Confiscated Gold and Narcotics";
         const filteredData = allData.filter(item => item.zone_code === zone_code);
         console.log("Filtered Data by Zone Code", filteredData);
 
-        setData(filteredData.map((item,index)=>({...item,s_no:index+1})));
+        setData(filteredData.map((item, index) => ({ ...item, s_no: index + 1 })));
       }
       else if (name === "cus_audit") {
         const cusendpoints = [
@@ -314,12 +314,37 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
         console.log("Response", responses);
 
         const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
-        console.log("FINALRESPONSE",allData);
-        relevantAspects = (name==="investigation"?"INVESTIGATION":allData.map((item) => item.ra)[0]);
+        console.log("FINALRESPONSE", allData);
+        relevantAspects = "Audit";
         const filteredData = allData.filter(item => item.zone_code === zone_code);
         console.log("Filtered Data by Zone Code", filteredData);
 
-        setData(filteredData.map((item,index)=>({...item,s_no:index+1})));
+        setData(filteredData.map((item, index) => ({ ...item, s_no: index + 1 })));
+      }
+      else if (name === "CommissionerAppeals") {
+        const cusendpoints = [
+          "cus12a",
+          "cus12b",
+        ];
+
+        const responses = await Promise.all(
+          cusendpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/custom/${endpoint}`, {
+                params: { month_date: newdate, type: "zone" },
+              })
+              .then((response) => ({ data: response.data, gst: endpoint.toUpperCase() }))
+          )
+        );
+        console.log("Response", responses);
+
+        const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
+        console.log("FINALRESPONSE", allData);
+        relevantAspects = "Commissioner (Appeals)";
+        const filteredData = allData.filter(item => item.zone_code === zone_code);
+        console.log("Filtered Data by Zone Code", filteredData);
+
+        setData(filteredData.map((item, index) => ({ ...item, s_no: index + 1 })));
       }
       else if (name === "management_of_warehousing_bonds") {
         const cusendpoints = [
@@ -339,15 +364,15 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
         console.log("Response", responses);
 
         const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
-        console.log("FINALRESPONSE",allData);
-        relevantAspects = (name==="investigation"?"INVESTIGATION":allData.map((item) => item.ra)[0]);
+        console.log("FINALRESPONSE", allData);
+        relevantAspects = "Management Of Warehousing bonds";
         const filteredData = allData.filter(item => item.zone_code === zone_code);
         console.log("Filtered Data by Zone Code", filteredData);
 
-        setData(filteredData.map((item,index)=>({...item,s_no:index+1})));
+        setData(filteredData.map((item, index) => ({ ...item, s_no: index + 1 })));
       }
-      
-      else{
+
+      else {
         // Make a GET request to the specified endpoint
         const response = await apiClient.get(`/cbic/custom/parameter/${name}`, {
           params: {
@@ -365,7 +390,7 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
 
         // Log the fetched data to the console
         console.log("hello12345678", response.data);
-      } 
+      }
     } catch (error) {
       // Log any errors that occur during fetching
       console.error("Error fetching data:", error);
@@ -395,10 +420,10 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
     }
   };
 
-  switch(name){
-     
+  switch (name) {
+
     case "timelyrefunds":
-      columns.splice(6,0,{
+      columns.splice(6, 0, {
         key: "way_to_grade",
         label: "Weighted Average",
       });
@@ -406,51 +431,51 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
       break;
 
     case "investigation":
-      columns.splice(6,0,{
+      columns.splice(6, 0, {
         key: "sub_parameter_weighted_average",
         label: "Weighted Average",
       });
 
       break;
 
-      case "DisposalOfConfiscatedGoldAndNDPS":
-        columns.splice(6,0,{
-          key: "sub_parameter_weighted_average",
-          label: "Weighted Average",
-        });
-  
-        break;
+    case "DisposalOfConfiscatedGoldAndNDPS":
+      columns.splice(6, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average",
+      });
 
-        case "export_obligation(AA)":
-        columns.splice(6,0,{
-          key: "sub_parameter_weighted_average",
-          label: "Weighted Average",
-        });
-  
-        break;
-        case "cus_audit":
-        columns.splice(6,0,{
-          key: "sub_parameter_weighted_average",
-          label: "Weighted Average",
-        });
-  
-        break;
+      break;
 
-        case "CommissionerAppeals":
-        columns.splice(6,0,{
-          key: "sub_parameter_weighted_average",
-          label: "Weighted Average",
-        });
-  
-        break;
+    case "export_obligation(AA)":
+      columns.splice(6, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average",
+      });
 
-      default:
-        columns.splice(6,0,{
-          key: "sub_parameter_weighted_average",
-          label: "Weighted Average",
-        });
+      break;
+    case "cus_audit":
+      columns.splice(6, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average",
+      });
 
-        break;
+      break;
+
+    case "CommissionerAppeals":
+      columns.splice(6, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average",
+      });
+
+      break;
+
+    default:
+      columns.splice(6, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average",
+      });
+
+      break;
   }
 
   const toggleDetails = (index) => {
@@ -554,8 +579,8 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
     })),
   };
 
-  const checkSpecialChar=(e)=>{
-    if(!/[0-9a-zA-Z]/.test(e.key)){
+  const checkSpecialChar = (e) => {
+    if (!/[0-9a-zA-Z]/.test(e.key)) {
       e.preventDefault();
     }
   }
@@ -602,8 +627,8 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
                       renderInput={(params) => <TextField {...params} />}
                       shouldDisableYear={shouldDisableYear}
                       slotProps={{
-                        field:{
-                          readOnly:true
+                        field: {
+                          readOnly: true
                         }
                       }}
                     />
@@ -749,7 +774,7 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
                 tableBodyProps={{
                   className: "align-middle",
                 }}
-                onKeyDown={(e)=>checkSpecialChar(e)}
+                onKeyDown={(e) => checkSpecialChar(e)}
               />
             </div>
           </div>

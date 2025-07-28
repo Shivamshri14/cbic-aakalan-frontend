@@ -118,7 +118,7 @@ const RouteData = () => {
           }*/}
 
         <Route
-          path="cgst"
+          path="allzonesdashboard"
           element={
             <Dashboard
               selectedDate={selectedDate}

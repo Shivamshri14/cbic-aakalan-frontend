@@ -7,23 +7,18 @@ import "./misreport.scss";
 import dayjs from "dayjs";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import queryString from "query-string";
-import { red } from "@mui/material/colors";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const MISReport = ({
   selectedDate,
   onChangeDate,
   selectedOption1,
   onSelectedOption1,
-  selectedOption, onSelectedOption
+  selectedOption,
+  onSelectedOption
 }) => {
-  const [toggle, setToggle] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
-  const [selectedCheckbox, setSelectedCheckbox] = useState("");
-
   const location = useLocation();
-
   const navigate = useNavigate();
 
   const handleBack = () => {
@@ -35,14 +30,7 @@ const MISReport = ({
   };
 
   const handleClick = (event) => {
-    setToggle(!toggle);
     onSelectedOption(event.target.value);
-    console.log(event.target.value);
-  };
-
-  const handleChange = (e) => {
-    onSelectedOption1(e.target.value);
-    console.log(e.target.value);
   };
 
   const shouldDisableYear = (year) => {
@@ -50,225 +38,261 @@ const MISReport = ({
   };
 
   const options = [
-    { id: 1, label: "Registration", value: "registration" /* , color: "red" */},
+    { id: 1, label: "Registration", value: "registration" },
     { id: 2, label: "Return Filing", value: "returnFiling" },
-    { id: 3, label: "Scrutiny/Assessment", value: "scrutiny", },
-    { id: 4, label: "Investigation", value: "investigation", },
-    { id: 5, label: "Adjudication", value: "adjudication",},
+    { id: 3, label: "Scrutiny/Assessment", value: "scrutiny" },
+    { id: 4, label: "Investigation", value: "investigation" },
+    { id: 5, label: "Adjudication", value: "adjudication" },
     { id: 6, label: "Adjudication (Legacy cases)", value: "adjudicationLegacy" },
-    { id: 7, label: "Refunds", value: "refunds"  },
-    { id: 8, label: "Recovery of Arrears",value: "recoveryOfArrears"},
-    { id: 9, label: "Arrest and Prosecution", value:"arrestAndProsecution"},
-    { id: 10, label: "Audit", value: "audit",},
-    { id: 11, label: "Appeals", value: "appeals" },
+    { id: 7, label: "Refunds", value: "refunds" },
+    { id: 8, label: "Recovery of Arrears", value: "recoveryOfArrears" },
+    { id: 9, label: "Arrest and Prosecution", value: "arrestAndProsecution" },
+    { id: 10, label: "Audit", value: "audit" },
+    { id: 11, label: "Appeals", value: "appeals" }
   ];
 
   const optionscustom = [
     { idc: 12, labelc: "Timely payment of Refunds", value: "TimelyPaymentOfRefunds" },
-    { idc: 13, labelc: "Management of Export Obligation(EPCG)",value:"epcg", },
-    { idc: 14, labelc: "Management of Export Obligation(AA)",value:"aa"},
-    { idc: 15, labelc: "Disposal/Pendency Of Provisional Assessments", value:"disposalPendency" },
+    { idc: 13, labelc: "Management of Export Obligation(EPCG)", value: "epcg" },
+    { idc: 14, labelc: "Management of Export Obligation(AA)", value: "aa" },
+    { idc: 15, labelc: "Disposal/Pendency Of Provisional Assessments", value: "disposalPendency" },
     { idc: 16, labelc: "Adjudication", value: "Adjudication" },
-    { idc: 17, labelc: "Investigation", value:"cus_investigation",}, 
-    { idc: 18, labelc: "Arrests and Prosecution", value: "cus_arrestAndProsecution", },
-    { idc: 19, labelc: "Monitoring Of Un-cleared and Unclaimed cargo", value: "unclaimed_cargo", },
+    { idc: 17, labelc: "Investigation", value: "cus_investigation" },
+    { idc: 18, labelc: "Arrests and Prosecution", value: "cus_arrestAndProsecution" },
+    { idc: 19, labelc: "Monitoring Of Un-cleared and Unclaimed cargo", value: "unclaimed_cargo" },
     { idc: 20, labelc: "Disposal Of Confiscated Gold and NDPS", value: "DisposalOfConfiscatedGoldAndNDPS" },
-    { idc: 21, labelc: "Recovery of Arrears", value: "recovery_Of_Arrears"},
-    { idc: 22, labelc: "Management Of Warehousing bonds",value: "mowb",},
+    { idc: 21, labelc: "Recovery of Arrears", value: "recovery_Of_Arrears" },
+    { idc: 22, labelc: "Management Of Warehousing bonds", value: "mowb" },
     { idc: 23, labelc: "Commissioner (Appeals)", value: "CommissionerAppeals" },
-    { idc: 24, labelc: "Audit",value: "cus_audit"},
+    { idc: 24, labelc: "Audit", value: "cus_audit" }
   ];
 
-  const handleCheckboxChange = (id, label) => {
-    setSelectedId(id); // Set the selected checkbox ID
-    setSelectedCheckbox(label); // Set the selected checkbox label
+  const handleLabelClick = (label) => {
+    navigate(`/MISTable?name=${label}`);
   };
 
   return (
-    <>
-      <div className="body flex-grow-1 inner-box bg-white">
-        <div className="row">
-          <div className="msg-box">
-            <div className="lft-box">
-              <h2>MIS Report</h2>
-            </div>
-            <div className="rgt-box">
-              <div className="view-btn">
-                <Link to="/">
-                  <Button
-                    variant="contained"
-                    className="ml-4  cust-btn"
-                    onClick={handleBack}
-                  >
-                    Back
-                  </Button>
-                </Link>
-              </div>
-            </div>
+    <div className="body flex-grow-1 inner-box bg-white">
+      <div className="row">
+        <div className="msg-box">
+          <div className="lft-box">
+            <h2>MIS Report</h2>
           </div>
-        </div>
-        <div className="date-sec">
-          <div className="lft-sec">
-            <div className="date-main">
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer
-                  components={["DatePicker", "DatePicker", "DatePicker"]}
-                >
-                  <DatePicker
-                    label={"Month and Year"}
-                    views={["month", "year"]}
-                    maxDate={dayjs().subtract(1, "month").startOf("month")}
-                    value={selectedDate}
-                    onChange={handleChangeDate}
-                    renderInput={(params) => <TextField {...params} disabled />}
-                    shouldDisableYear={shouldDisableYear}
-                    slotProps={{
-                      field: {
-                        readOnly: true
-                      }
-                    }}
-                  />
-                </DemoContainer>
-              </LocalizationProvider>
-            </div>
-          </div>
-          {/* <div className="rgt-sec">
-            <div className="switches-container2">
-              <input
-                type="radio"
-                id="switchMonthly"
-                name="switchPlan2"
-                value="Zones"
-                checked={selectedOption1==="Zones"}
-                onChange={handleChange}
-              />
-              <input
-                type="radio"
-                id="switchYearly"
-                name="switchPlan2"
-                value="Commissionerate"
-                checked={selectedOption1==="Commissionerate"}
-                onChange={handleChange}
-              />
-              <label htmlFor="switchMonthly">Zones</label>
-              <label htmlFor="switchYearly">Commissionerate</label>
-              <div className="switch-wrapper2">
-                <div className="switch2">
-                  <div>Zones</div>
-                  <div>Commissionerate</div>
-                </div>
-              </div>
-            </div>
-          </div> */}
-        </div>
-        <div className="bg-blue report-sec mb p-3">
-          <div className="radio-box mt-4">
-            <div id="wrapper-radio">
-              <label className="radio-button-container" disabled>
-                {" "}
-                CGST
-                <input
-                  type="radio"
-                  name="radio"
-                  value="CGST"
-                  checked={selectedOption === "CGST"}
-                  onChange={handleClick}
-                />
-                <span className="checkmark"></span>
-              </label>
-              <label className="radio-button-container">
-                {" "}
-                Customs
-                <input
-                  type="radio"
-                  name="radio"
-                  value="Customs"
-                  checked={selectedOption === "Customs"}
-                  onChange={handleClick}
-                />
-                <span className="checkmark"></span>
-              </label>
-            </div>
-          </div>
-          <div className="row mt-5 ">
-            {selectedOption === "CGST" ? (
-              <>
-                <h3>CGST</h3>
-                <div className="container">
-                  <div className="row">
-                    {options.map((option) => (
-                      <div className="col-md-4 mb-3" key={option.id}>
-                        <div className="form-check">
-                          <input
-                            type="checkbox"
-                            className="form-check-input"
-                            id={`checkbox-${option.id}`}
-                            checked={selectedId === option.id}
-                            onChange={() =>
-                              handleCheckboxChange(option.id, option.value)
-                            }
-                            /* disabled={option.id === 1 || option.id === 7  } */
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor={`checkbox-${option.id}`}
-                            style={{ color: option.color || "black" }}
-                          >
-                            {option.label}
-                          </label>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </>
-            ) : (
-              <>
-                <h3>Customs</h3>
-                <div className="container">
-                  <div className="row">
-                    {optionscustom.map((options) => (
-                      <div className="col-md-5 ml-5 mb-4" key={options.idc}>
-                        <div className="form-check-1">
-                          <input
-                            type="checkbox"
-                            className="form-check-input"
-                            id={`checkbox-${options.idc}`}
-                            checked={selectedId === options.idc}
-                            onChange={() =>
-                              handleCheckboxChange(options.idc, options.value)
-                            }
-                            // disabled={options.idc === 14 || options.idc === 15||   options.idc === 16|| options.idc === 17 }
-                            //  disabled={ options.idc === 17||options.idc === 18 ||options.idc === 23}
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor={`checkbox-${options.idc}`}
-                            style={{ color: options.color || "black" }}
-                          >
-                            {options.labelc}
-                          </label>
-                        </div>
-                      </div>
-                    ))}
-
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-        <div className="mt-20">
-          <div className="view-btn ">
-            <Link to={`/MISTable?name=${selectedCheckbox}`}>
-              <Button variant="contained" className="cust-btn ">
-                View
+          <div className="rgt-box">
+            <div className="view-btn">
+              <Button variant="contained" className="ml-4 cust-btn" onClick={handleBack}>
+                Back
               </Button>
-            </Link>
+            </div>
           </div>
         </div>
       </div>
-    </>
+
+      <div className="date-sec">
+        <div className="lft-sec">
+          <div className="date-main">
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={["DatePicker"]}>
+                <DatePicker
+                  label={"Month and Year"}
+                  views={["month", "year"]}
+                  maxDate={dayjs().subtract(1, "month").startOf("month")}
+                  value={selectedDate}
+                  onChange={handleChangeDate}
+                  renderInput={(params) => <TextField {...params} disabled />}
+                  shouldDisableYear={shouldDisableYear}
+                  slotProps={{
+                    field: {
+                      readOnly: true
+                    }
+                  }}
+                />
+              </DemoContainer>
+            </LocalizationProvider>
+          </div>
+        </div>
+
+        <div className="col-md-4">
+          <div className="switches-container">
+            <input
+              type="radio"
+              id="switchCGST"
+              name="switchPlan"
+              value="CGST"
+              checked={selectedOption === "CGST"}
+              onChange={handleClick}
+            />
+            <input
+              type="radio"
+              id="switchCustoms"
+              name="switchPlan"
+              value="Customs"
+              checked={selectedOption === "Customs"}
+              onChange={handleClick}
+            />
+            <label htmlFor="switchCGST">CGST</label>
+            <label htmlFor="switchCustoms">Customs</label>
+            <div className="switch-wrapper">
+              <div className="switch">
+                <div>CGST</div>
+                <div>Customs</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="report-section" style={{
+        backgroundColor: '#ffffff',
+        padding: '28px 24px',
+        borderRadius: '8px',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+        marginBottom: '32px',
+        border: '1px solid #e5e7eb'
+      }}>
+        <div className="row">
+          {selectedOption === "CGST" ? (
+            <>
+              <h3 style={{
+                color: '#1d4ed8',
+                fontSize: '1.375rem',
+                fontWeight: '600',
+                marginBottom: '24px',
+                paddingBottom: '12px',
+                borderBottom: '1px solid #f3f4f6',
+                letterSpacing: '0.25px'
+              }}>CGST</h3>
+              <div className="container-fluid px-0">
+                <div className="row g-3">
+                  {options.map((option) => (
+                    <div className="col-md-4" key={option.id}>
+                      <div
+                        className="report-item"
+                        style={{
+                          backgroundColor: '#f8fafc',
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '6px',
+                          padding: '18px 16px',
+                          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                          cursor: 'pointer',
+                          height: '100%',
+                          '&:hover': {
+                            borderColor: '#3b82f6',
+                            backgroundColor: '#eff6ff',
+                            transform: 'translateY(-2px)'
+                          }
+                        }}
+                        onClick={() => handleLabelClick(option.value)}
+                      >
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between'
+                        }}>
+                          <span style={{
+                            fontSize: '0.9375rem',
+                            fontWeight: '500',
+                            color: '#1f2937',
+                            lineHeight: '1.5'
+                          }}>{option.label}</span>
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#6b7280"
+                            style={{
+                              transition: 'transform 0.2s ease',
+                              flexShrink: 0
+                            }}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M9 5l7 7-7 7"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <h3 style={{
+                color: '#1d4ed8',
+                fontSize: '1.375rem',
+                fontWeight: '600',
+                marginBottom: '24px',
+                paddingBottom: '12px',
+                borderBottom: '1px solid #f3f4f6',
+                letterSpacing: '0.25px'
+              }}>Customs</h3>
+              <div className="container-fluid px-0">
+                <div className="row g-3">
+                  {optionscustom.map((option) => (
+                    <div className="col-md-4" key={option.idc}>
+                      <div
+                        className="report-item"
+                        style={{
+                          backgroundColor: '#f8fafc',
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '6px',
+                          padding: '18px 16px',
+                          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                          cursor: 'pointer',
+                          height: '100%',
+                          '&:hover': {
+                            borderColor: '#3b82f6',
+                            backgroundColor: '#eff6ff',
+                            transform: 'translateY(-2px)'
+                          }
+                        }}
+                        onClick={() => handleLabelClick(option.value)}
+                      >
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between'
+                        }}>
+                          <span style={{
+                            fontSize: '0.9375rem',
+                            fontWeight: '500',
+                            color: '#1f2937',
+                            lineHeight: '1.5'
+                          }}>{option.labelc}</span>
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#6b7280"
+                            style={{
+                              transition: 'transform 0.2s ease',
+                              flexShrink: 0
+                            }}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M9 5l7 7-7 7"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import apiClient from "../../Service/ApiClient";
 import dayjs from "dayjs";
 
-const Breadcrumb = ({selectedDate, onChangeDate}) => {
+const Breadcrumb = ({ selectedDate, onChangeDate }) => {
   const location = useLocation();
   const { pathname } = location;
   const pathnames = pathname.split("/").filter((x) => x);
@@ -12,14 +12,13 @@ const Breadcrumb = ({selectedDate, onChangeDate}) => {
   const { name } = queryParams;
   const { zone_code, come_name } = queryParams;
   const [zoneName, setZoneName] = useState("");
-  const [zoneName0, setZoneName0]=useState("");
-  const [commName, setCommName]=useState("");
+  const [zoneName0, setZoneName0] = useState("");
+  const [commName, setCommName] = useState("");
 
   const newdate = dayjs(selectedDate).format("YYYY-MM-DD");
 
   const fetchDatasubcom = async (name) => {
     try {
-      // Make a GET request to the specified endpoint
       const response = await apiClient.get(`/cbic/${name}`, {
         params: {
           month_date: newdate,
@@ -29,17 +28,14 @@ const Breadcrumb = ({selectedDate, onChangeDate}) => {
       });
 
       const zonename = response.data.map((item) => item.zone_name)[0];
-      console.log("Zone Name:", zonename);
       setZoneName(zonename);
-      console.log("url", response);
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
-  const fetchBreadcrumb= async(name)=>{
+  const fetchBreadcrumb = async (name) => {
     try {
-      // Make a GET request to the specified endpoint
       const response = await apiClient.get(`/cbic/t_score/${name}`, {
         params: {
           month_date: newdate,
@@ -49,38 +45,32 @@ const Breadcrumb = ({selectedDate, onChangeDate}) => {
       });
 
       const zonename0 = response.data.map((item) => item.zoneName)[0];
-      console.log("Zone Name:", zonename0);
       setZoneName0(zonename0);
-      console.log("url", response);
     } catch (error) {
       console.error("Error:", error);
     }
-  }
+  };
 
-  const fetchComm= async(name)=>{
+  const fetchComm = async (name) => {
     try {
-      // Make a GET request to the specified endpoint
       const response = await apiClient.get(`/cbic/t_score/${name}`, {
         params: {
           month_date: newdate,
           type: "come_name",
           zone_code: zone_code,
-          come_name:come_name,
+          come_name: come_name,
         },
       });
 
       const commname = response.data.map((item) => item.commName)[0];
-      console.log("Zone Name:", commname);
       setCommName(commname);
-      console.log("url", response);
     } catch (error) {
       console.error("Error:", error);
     }
-  }
+  };
 
   const fetchDatazonewisecomm = async (name) => {
     try {
-      // Make a GET request to the specified endpoint
       const response = await apiClient.get(`/cbic/t_score/${name}`, {
         params: {
           month_date: newdate,
@@ -91,8 +81,6 @@ const Breadcrumb = ({selectedDate, onChangeDate}) => {
 
       const zonename = response.data.map((item) => item.zoneName)[0];
       setZoneName(zonename);
-      console.log("url", response);
-
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -101,470 +89,450 @@ const Breadcrumb = ({selectedDate, onChangeDate}) => {
   useEffect(() => {
     if (name) {
       fetchDatasubcom(name);
-    }
-
-    if(name){
       fetchBreadcrumb(name);
-    }
-
-    if(name){
       fetchComm(name);
-    }
-
-    if(name){
       fetchDatazonewisecomm(name);
     }
   }, [name]);
 
   const adjustedPathnames = () => {
     let adjusted = [...pathnames];
-    // console.log("Pathname", pathname);
-    // console.log("Adjusted", adjusted);
 
-    // Insert specific breadcrumbs dynamically
-    if (
-      name === "registration" ||
-      name === "returnFiling" ||
-      name === "scrutiny/assessment" ||
-      name === "investigation" ||
-      name === "adjudication" ||
-      name === "adjudication(legacy cases)" ||
-      name === "refunds" ||
-      name === "recovery of arrears" ||
-      name === "arrest and prosecution" ||
-      name === "audit" ||
-      (name === "appeals" && adjusted.length > 0)
-    ) {
-      adjusted = ["cgst", name];
-      console.log("Parameter", adjusted);
+    if (pathname.includes("CGSTMonthlyBifurcation")) {
+      adjusted = ["MonthlyReport", ...adjusted];
+    } else if (pathname.includes("CustomsMonthlyBifurcation")) {
+      adjusted = ["MonthlyReport", ...adjusted];
+    }
 
-      if(zone_code){
+    // Custom parameters that should redirect to /custompara
+    const customRedirectParams = [
+      "timelyrefunds",
+      "epcg",
+      "export_obligation(AA)",
+      "disposal/pendency",
+      "adjudication",
+      "investigation",
+      "arrest_and_prosecution",
+      "unclaimed_cargo",
+      "DisposalOfConfiscatedGoldAndNDPS",
+      "recovery_of_arrears",
+      "management_of_warehousing_bonds",
+      "CommissionerAppeals",
+      "audit"
+    ];
+
+    // CGST parameters that should redirect to /zoneparameters
+    const gstRedirectParams = [
+      "registration",
+      "returnFiling",
+      "scrutiny/assessment",
+      "investigation",
+      "adjudication",
+      "adjudication(legacy cases)",
+      "refunds",
+      "recovery of arrears",
+      "arrest and prosecution",
+      "audit",
+      "appeals"
+    ];
+
+    const miscustomRedirectParams = [
+      "TimelyPaymentOfRefunds",
+      "epcg",
+      "aa",
+      "disposalPendency",
+      "Adjudication",
+      "cus_investigation",
+      "cus_arrestAndProsecution",
+      "unclaimed_cargo",
+      "DisposalOfConfiscatedGoldAndNDPS",
+      "recovery_Of_Arrears",
+      "mowb",
+      "CommissionerAppeals",
+      "cus_audit"
+    ];
+
+    // CGST parameters that should redirect to /zoneparameters
+    const misgstRedirectParams = [
+      "registration",
+      "returnFiling",
+      "scrutiny",
+      "investigation",
+      "adjudication",
+      "adjudicationLegacy",
+      "refunds",
+      "recoveryOfArrears",
+      "arrestAndProsecution",
+      "audit",
+      "appeals"
+    ];
+
+    // Handle custom parameters redirect
+    if (customRedirectParams.includes(name) && (
+      pathname === "/custompara" ||
+      pathname === "/customzonescoredetails" ||
+      pathname === "/customcommscoredetails" ||
+      pathname === "/customzonewisecomm" ||
+      pathname === "/CustomSubcom"
+    )) {
+      adjusted = [name];
+      if (zone_code && name) {
         adjusted.push(zoneName);
       }
     }
-  
 
-    if(pathname==="/custompara" || pathname==="/customzonescoredetails" || pathname==="/customcommscoredetails"){
-    if (
-      name === "timelyrefunds" ||
-      name === "epcg" ||
-      name === "export_obligation(AA)" ||
-      name === "disposal/pendency" ||
-      name === "adjudication" ||
-      name === "investigation" ||
-      name === "arrest_and_prosecution" ||
-      name === "unclaimed_cargo" ||
-      name === "DisposalOfConfiscatedGoldAndNDPS" ||
-      name === "recovery_of_arrears" ||
-      name==="management_of_warehousing_bonds"||
-      name==="CommissionerAppeals"||
-      (name === "audit" && adjusted.length > 0)
-    ) {
-      adjusted = ["customs", name];
-      console.log("Parameter", adjusted);
-
-      if(zone_code && name){
+    // Handle GST parameters redirect
+    if (gstRedirectParams.includes(name) && (
+      pathname === "/zoneparameters" ||
+      pathname === "/zonescoredetails" ||
+      pathname === "/commscoredetails" ||
+      pathname === "/zonewisecomm" ||
+      pathname === "/Subcom"
+    )) {
+      adjusted = [name];
+      if (zone_code && name) {
         adjusted.push(zoneName);
       }
     }
-   }
 
-   if(pathname==="/MISTable"){
-    if (
-      name === "timelyrefunds" ||
-      name === "epcg" ||
-      name === "export_obligation(AA)" ||
-      name === "disposal/pendency" ||
-      name === "adjudication" ||
-      name === "investigation" ||
-      name === "arrest_and_prosecution" ||
-      name === "unclaimed_cargo" ||
-      name === "DisposalOfConfiscatedGoldAndNDPS" ||
-      name === "recovery_of_arrears" ||
-      name==="management_of_warehousing_bonds"||
-      name==="CommissionerAppeals"||
-      (name === "audit" && adjusted.length > 0)
-    ) {
-      adjusted = ["MIS-Report", name];
-      console.log("Parameter", adjusted);
+    // Handle MIS Table cases with proper naming
+    if (pathname === "/MISTable") {
+      if (miscustomRedirectParams.includes(name)) {
+        // Format Customs parameter names for display
+        const formattedName = name
+          .replace(/_/g, ' ')
+          .replace(/(^|\s)\w/g, char => char.toUpperCase());
+        adjusted = ["MIS-Report", `Customs-${formattedName}`];
+      } else if (misgstRedirectParams.includes(name)) {
+        // Format GST parameter names for display
+        const formattedName = name
+          .replace(/(^|\s)\w/g, char => char.toUpperCase())
+          .replace('legacy cases', '(Legacy Cases)');
+        adjusted = ["MIS-Report", `CGST-${formattedName}`];
+      }
     }
-   }
 
-   if(pathname==="/MISTable")
-   if (
-    name === "registration" ||
-    name === "returnFiling" ||
-    name === "scrutiny/assessment" ||
-    name === "investigation" ||
-    name === "adjudication" ||
-    name === "adjudication(legacy cases)" ||
-    name === "refunds" ||
-    name === "recovery of arrears" ||
-    name === "arrest and prosecution" ||
-    name === "audit" ||
-    (name === "appeals" && adjusted.length > 0)
-  ) {
-    adjusted = ["MIS-Report", name];
-    console.log("Parameter", adjusted);
-  }
-
-    //Registration
-    if (
-      name === "gst1a" ||
-      name === "gst1b" ||
-      name === "gst1c" ||
-      name === "gst1d" ||
-      name === "gst1e" ||
-      (name === "gst1f" && adjusted.length > 0)
-    ) {
-      adjusted = ["cgst", "registration", name];
-
+    // Registration cases
+    if (["gst1a", "gst1b", "gst1c", "gst1d", "gst1e", "gst1f"].includes(name)) {
+      adjusted = ["registration", name];
       if (zone_code) {
         adjusted.push(zoneName);
       }
     }
 
-    if(name==="cus1" && adjusted.length>0){
-      adjusted=["customs","Timely payment of Refunds",name];
+    if (name === "cus1") {
+      adjusted = ["Timely payment of Refunds", name];
       if (zone_code) {
         adjusted.push(zoneName);
       }
     }
 
-    //ReturnFiling
-    if (name === "gst2" && adjusted.length > 0) {
-      adjusted = ["cgst", "returnFiling", name];
-
+    // Return Filing
+    if (name === "gst2") {
+      adjusted = ["returnFiling", name];
       if (zone_code) {
-        adjusted = ["cgst", "returnFiling", name, zoneName];
+        adjusted.push(zoneName);
       }
     }
 
-    if(name==="cus2a"|| name==="cus2b"|| (name==="cus2c" && adjusted.length>0)){
-      adjusted=["customs","Management of Export Obligation(EPCG)",name];
-
-      if(zone_code){
-        adjusted=["customs","Management of Export Obligation(EPCG)",name,zoneName];
+    if (["cus2a", "cus2b", "cus2c"].includes(name)) {
+      adjusted = ["Management of Export Obligation(EPCG)", name];
+      if (zone_code) {
+        adjusted.push(zoneName);
       }
     }
 
     // Scrutiny/Assessment
-    if (name === "gst3a" || (name === "gst3b" && adjusted.length > 0)) {
-      adjusted = ["cgst", "scrutiny/assessment", name];
-
+    if (["gst3a", "gst3b"].includes(name)) {
+      adjusted = ["scrutiny/assessment", name];
       if (zone_code) {
-        adjusted = ["cgst", "scrutiny/assessment", name, zoneName];
+        adjusted.push(zoneName);
       }
     }
 
-    if(name==="cus3a"|| name==="cus3b" ||(name==="cus3c" && adjusted.length>0)){
-      adjusted = ["customs", "Management of Export Obligation(AA)", name];
-
-      if(zone_code){
-        adjusted = ["customs", "Management of Export Obligation(AA)", name,zoneName];
-      }
-    }
-
-    //Investigation
-    if (
-      name === "gst4a" ||
-      name === "gst4b" ||
-      name === "gst4c" ||
-      (name === "gst4d" && adjusted.length > 0)
-    ) {
-      adjusted = ["cgst", "investigation", name];
-
+    if (["cus3a", "cus3b", "cus3c"].includes(name)) {
+      adjusted = ["Management of Export Obligation(AA)", name];
       if (zone_code) {
-        adjusted = ["cgst", "investigation", name, zoneName];
+        adjusted.push(zoneName);
       }
     }
 
-    if(name==="cus4a" || name==="cus4b"|| name==="cus4c" || (name==="cus4d" && adjusted.length>0)){
-      adjusted=["customs","Disposal/Pendency Of Provisional Assessments",name];
-
-      if(zone_code){
-        adjusted=["customs","Disposal/Pendency Of Provisional Assessments",name,zoneName];
-      }
-    }
-
-    //adjudication
-    if (name === "gst5a" || (name === "gst5b" && adjusted.length > 0)) {
-      adjusted = ["cgst", "adjudication", name];
-
+    // Investigation
+    if (["gst4a", "gst4b", "gst4c", "gst4d"].includes(name)) {
+      adjusted = ["investigation", name];
       if (zone_code) {
-        adjusted = ["cgst", "adjudication", name, zoneName];
+        adjusted.push(zoneName);
       }
     }
 
-    if (name === "cus5a" ||name==="cus5b"|| (name === "cus5c" && adjusted.length > 0)) {
-      adjusted = ["customs", "Adjudication", name];
-
+    if (["cus4a", "cus4b", "cus4c", "cus4d"].includes(name)) {
+      adjusted = ["Disposal/Pendency Of Provisional Assessments", name];
       if (zone_code) {
-        adjusted = ["customs", "Adjudication", name, zoneName];
+        adjusted.push(zoneName);
       }
     }
 
-    //adjudication(legacy cases)
-    if (
-      name === "gst6a" ||
-      name === "gst6b" ||
-      name === "gst6c" ||
-      (name === "gst6d" && adjusted.length > 0)
-    ) {
-      adjusted = ["cgst", "adjudication(legacy cases)", name];
-
+    // Adjudication
+    if (["gst5a", "gst5b"].includes(name)) {
+      adjusted = ["adjudication", name];
       if (zone_code) {
-        adjusted = ["cgst", "adjudication(legacy cases)", name, zoneName];
+        adjusted.push(zoneName);
       }
     }
 
-    if (
-      name === "cus6a" ||
-      name === "cus6b" ||
-      name === "cus6c" || name==="cus6d" || name==="cus6e"||
-      (name === "cus6f" && adjusted.length > 0)
-    ) {
-      adjusted = ["customs", "Investigation", name];
-
+    if (["cus5a", "cus5b", "cus5c"].includes(name)) {
+      adjusted = ["Adjudication", name];
       if (zone_code) {
-        adjusted = ["customs", "Investigation", name, zoneName];
+        adjusted.push(zoneName);
       }
     }
 
-    //Refunds
-    if (name === "gst7" && adjusted.length > 0) {
-      adjusted = ["cgst", "refunds", name];
-
+    // Adjudication (legacy cases)
+    if (["gst6a", "gst6b", "gst6c", "gst6d"].includes(name)) {
+      adjusted = ["adjudication(legacy cases)", name];
       if (zone_code) {
-        adjusted = ["cgst", "refunds", name, zoneName];
+        adjusted.push(zoneName);
       }
     }
 
-    if (name === "cus7a" || (name==="cus7b" && adjusted.length > 0)) {
-      adjusted = ["customs", "Arrests and Prosecution", name];
-
+    if (["cus6a", "cus6b", "cus6c", "cus6d", "cus6e", "cus6f"].includes(name)) {
+      adjusted = ["Investigation", name];
       if (zone_code) {
-        adjusted = ["customs", "Arrests and Prosecution", name, zoneName];
+        adjusted.push(zoneName);
       }
     }
 
-    //Recovery of Arrears
-    if (name === "gst8a" || (name === "gst8b" && adjusted.length > 0)) {
-      adjusted = ["cgst", "recovery of arrears", name];
-
+    // Refunds
+    if (name === "gst7") {
+      adjusted = ["refunds", name];
       if (zone_code) {
-        adjusted = ["cgst", "recovery of arrears", name, zoneName];
+        adjusted.push(zoneName);
       }
     }
 
-    if (name === "cus8a" || (name === "cus8b" && adjusted.length > 0)) {
-      adjusted = ["customs", "Monitoring Of Un-cleared and Unclaimed cargo", name];
-
+    if (["cus7a", "cus7b"].includes(name)) {
+      adjusted = ["Arrests and Prosecution", name];
       if (zone_code) {
-        adjusted = ["customs", "Monitoring Of Un-cleared and Unclaimed cargo", name, zoneName];
+        adjusted.push(zoneName);
       }
     }
 
-    //arrest and prosecution
-    if (name === "gst9a" || (name === "gst9b" && adjusted.length > 0)) {
-      adjusted = ["cgst", "arrest and prosecution", name];
-
+    // Recovery of Arrears
+    if (["gst8a", "gst8b"].includes(name)) {
+      adjusted = ["recovery of arrears", name];
       if (zone_code) {
-        adjusted = ["cgst", "arrest and prosecution", name, zoneName];
+        adjusted.push(zoneName);
       }
     }
 
-    if (name === "cus9a" || (name === "cus9b" && adjusted.length > 0)) {
-      adjusted = ["customs", "Disposal Of Confiscated Gold and N (Narcotics)", name];
-
+    if (["cus8a", "cus8b"].includes(name)) {
+      adjusted = ["Monitoring Of Un-cleared and Unclaimed cargo", name];
       if (zone_code) {
-        adjusted = ["customs", "Disposal Of Confiscated Gold and N (Narcotics)", name, zoneName];
+        adjusted.push(zoneName);
       }
     }
 
-    //audit
-    if (
-      name === "gst10a" ||
-      name === "gst10b" ||
-      (name === "gst10c" && adjusted.length > 0)
-    ) {
-      adjusted = ["cgst", "audit", name];
-
+    // Arrest and Prosecution
+    if (["gst9a", "gst9b"].includes(name)) {
+      adjusted = ["arrest and prosecution", name];
       if (zone_code) {
-        adjusted = ["cgst", "audit", name, zoneName];
+        adjusted.push(zoneName);
       }
     }
 
-    if (
-      name === "cus10a" ||
-      (name === "cus10b" && adjusted.length > 0)
-    ) {
-      adjusted = ["customs", "Recovery of Arrears", name];
-
+    if (["cus9a", "cus9b"].includes(name)) {
+      adjusted = ["Disposal Of Confiscated Gold and N (Narcotics)", name];
       if (zone_code) {
-        adjusted = ["customs", "Recovery of Arrears", name, zoneName];
+        adjusted.push(zoneName);
       }
     }
 
-    //appeals
-    if (
-      name === "gst11a" ||
-      name === "gst11b" ||
-      name === "gst11c" ||
-      (name === "gst11d" && adjusted.length > 0)
-    ) {
-      adjusted = ["cgst", "appeals", name];
-
+    // Audit
+    if (["gst10a", "gst10b", "gst10c"].includes(name)) {
+      adjusted = ["audit", name];
       if (zone_code) {
-        adjusted = ["cgst", "appeals", name, zoneName];
+        adjusted.push(zoneName);
       }
     }
 
-    if (
-      name === "cus11a" ||
-      (name === "cus11b" && adjusted.length > 0)
-    ) {
-      adjusted = ["customs", "Management Of Warehousing bonds", name];
-
+    if (["cus10a", "cus10b"].includes(name)) {
+      adjusted = ["Recovery of Arrears", name];
       if (zone_code) {
-        adjusted = ["customs", "Management Of Warehousing bonds", name, zoneName];
+        adjusted.push(zoneName);
       }
     }
 
-    if (
-      name === "cus12a" ||
-      (name === "cus12b" && adjusted.length > 0)
-    ) {
-      adjusted = ["customs", "Commissioner (Appeals)", name];
-
+    // Appeals
+    if (["gst11a", "gst11b", "gst11c", "gst11d"].includes(name)) {
+      adjusted = ["appeals", name];
       if (zone_code) {
-        adjusted = ["customs", "Commissioner (Appeals)", name, zoneName];
+        adjusted.push(zoneName);
       }
     }
 
-    if (
-      name === "cus13a" || name==="cus13b" || name==="cus13c" || name==="cus13d" ||
-      (name === "cus13e" && adjusted.length > 0)
-    ) {
-      adjusted = ["customs", "Audit", name];
-
+    if (["cus11a", "cus11b"].includes(name)) {
+      adjusted = ["Management Of Warehousing bonds", name];
       if (zone_code) {
-        adjusted = ["customs", "Audit", name, zoneName];
+        adjusted.push(zoneName);
+      }
+    }
+
+    if (["cus12a", "cus12b"].includes(name)) {
+      adjusted = ["Commissioner (Appeals)", name];
+      if (zone_code) {
+        adjusted.push(zoneName);
+      }
+    }
+
+    if (["cus13a", "cus13b", "cus13c", "cus13d", "cus13e"].includes(name)) {
+      adjusted = ["Audit", name];
+      if (zone_code) {
+        adjusted.push(zoneName);
+      }
+    }
+
+    // Handle CustomSubcom page
+    if (pathname === "/CustomSubcom" && name) {
+      adjusted = [name];
+      if (zone_code) {
+        adjusted.push(zoneName);
+      }
+    }
+
+    // Handle Subcom page (GST equivalent)
+    if (pathname === "/Subcom" && name) {
+      adjusted = [name];
+      if (zone_code) {
+        adjusted.push(zoneName);
       }
     }
 
     return adjusted;
   };
 
-
   const adjustedPath = adjustedPathnames();
 
   const getCustomLink = (segment) => {
-    switch (segment) {
-      case "registration":
-      case "returnFiling":
-      case "scrutiny/assessment":
-      case "investigation":
-      case "adjudication":
-      case "adjudication(legacy cases)":
-      case "refunds":
-      case "recovery of arrears":
-      case "arrest and prosecution":
-      case "audit":
-      case "appeals":
-        return "/";
+    // Mapping of all custom parameters to their URLs
+    const customParamLinks = {
+      // CGST parameters
+      "registration": "/zoneparameters?name=registration",
+      "returnFiling": "/zoneparameters?name=returnFiling",
+      "scrutiny/assessment": "/zoneparameters?name=scrutiny/assessment",
+      "investigation": "/zoneparameters?name=investigation",
+      "adjudication": "/zoneparameters?name=adjudication",
+      "adjudication(legacy cases)": "/zoneparameters?name=adjudication(legacy cases)",
+      "refunds": "/zoneparameters?name=refunds",
+      "recovery of arrears": "/zoneparameters?name=recovery of arrears",
+      "arrest and prosecution": "/zoneparameters?name=arrest and prosecution",
+      "audit": "/zoneparameters?name=audit",
+      "appeals": "/zoneparameters?name=appeals",
 
-        case "Timely payment of Refunds":
-      case "Management of Export Obligation(EPCG)":
-      case "Management of Export Obligation(AA)":
-      case "Disposal/Pendency Of Provisional Assessments":
-      case "Adjudication":
-      case "Investigation":
-      case "Arrests and Prosecution":
-      case "Monitoring Of Un-cleared and Unclaimed cargo":
-      case "Disposal Of Confiscated Gold and N (Narcotics)":
-      case "Recovery of Arrears":
-      case "Management Of Warehousing bonds":
-        case "Commissioner (Appeals)":
-        case "Audit":
-          return "/customs";
+      // Customs parameters that should redirect to /custompara
+      "timelyrefunds": "/custompara?name=timelyrefunds",
+      "epcg": "/custompara?name=epcg",
+      "export_obligation(AA)": "/custompara?name=export_obligation(AA)",
+      "disposal/pendency": "/custompara?name=disposal/pendency",
+      "adjudication": "/custompara?name=adjudication",
+      "investigation": "/custompara?name=investigation",
+      "arrest_and_prosecution": "/custompara?name=arrest_and_prosecution",
+      "unclaimed_cargo": "/custompara?name=unclaimed_cargo",
+      "DisposalOfConfiscatedGoldAndNDPS": "/custompara?name=DisposalOfConfiscatedGoldAndNDPS",
+      "recovery_of_arrears": "/custompara?name=recovery_of_arrears",
+      "management_of_warehousing_bonds": "/custompara?name=management_of_warehousing_bonds",
+      "CommissionerAppeals": "/custompara?name=CommissionerAppeals",
+      "audit": "/custompara?name=audit",
 
-      case "gst1a":
-      case "gst1b":
-      case "gst1c":
-      case "gst1d":
-      case "gst1e":
-      case "gst1f":
-      case "gst2":
-      case "gst3a":
-      case "gst3b":
-      case "gst4a":
-      case "gst4b":
-      case "gst4c":
-      case "gst4d":
-      case "gst5a":
-      case "gst5b":
-      case "gst6a":
-      case "gst6b":
-      case "gst6c":
-      case "gst6d":
-      case "gst7":
-      case "gst8a":
-      case "gst8b":
-      case "gst9a":
-      case "gst9b":
-      case "gst10a":
-      case "gst10b":
-      case "gst10c":
-      case "gst11a":
-      case "gst11b":
-      case "gst11c":
-      case "gst11d":
-        return `/Subpara?name=${segment}`;
+      // GST sub-parameters
+      "gst1a": `/Subpara?name=gst1a`,
+      "gst1b": `/Subpara?name=gst1b`,
+      "gst1c": `/Subpara?name=gst1c`,
+      "gst1d": `/Subpara?name=gst1d`,
+      "gst1e": `/Subpara?name=gst1e`,
+      "gst1f": `/Subpara?name=gst1f`,
+      "gst2": `/Subpara?name=gst2`,
+      "gst3a": `/Subpara?name=gst3a`,
+      "gst3b": `/Subpara?name=gst3b`,
+      "gst4a": `/Subpara?name=gst4a`,
+      "gst4b": `/Subpara?name=gst4b`,
+      "gst4c": `/Subpara?name=gst4c`,
+      "gst4d": `/Subpara?name=gst4d`,
+      "gst5a": `/Subpara?name=gst5a`,
+      "gst5b": `/Subpara?name=gst5b`,
+      "gst6a": `/Subpara?name=gst6a`,
+      "gst6b": `/Subpara?name=gst6b`,
+      "gst6c": `/Subpara?name=gst6c`,
+      "gst6d": `/Subpara?name=gst6d`,
+      "gst7": `/Subpara?name=gst7`,
+      "gst8a": `/Subpara?name=gst8a`,
+      "gst8b": `/Subpara?name=gst8b`,
+      "gst9a": `/Subpara?name=gst9a`,
+      "gst9b": `/Subpara?name=gst9b`,
+      "gst10a": `/Subpara?name=gst10a`,
+      "gst10b": `/Subpara?name=gst10b`,
+      "gst10c": `/Subpara?name=gst10c`,
+      "gst11a": `/Subpara?name=gst11a`,
+      "gst11b": `/Subpara?name=gst11b`,
+      "gst11c": `/Subpara?name=gst11c`,
+      "gst11d": `/Subpara?name=gst11d`,
 
-        case "cus1":
-          case "cus2a":
-          case "cus2b":
-          case "cus2c":
-          case "cus3a":
-          case "cus3b":
-          case "cus3c":
-          case "cus4a":
-          case "cus4b":
-          case "cus4c":
-          case "cus4d":
-          case "cus5a":
-          case "cus5b":
-          case "cus5c":
-          case "cus6a":
-          case "cus6b":
-          case "cus6c":
-          case "cus6d":
-          case "cus6e":
-          case "cus6f":
-          case "cus7a":
-          case "cus7b":
-          case "cus8a":
-          case "cus8b":
-          case "cus9a":
-          case "cus9b":
-          case "cus10a":
-          case "cus10b":
-          case "cus11a":
-          case "cus11b":
-          case "cus12a":
-            case "cus12b":
-              case "cus13a":
-                case "cus13b":
-                  case "cus13c":
-                    case "cus13d":
-                      case "cus13e":
-            return `/customsubpara?name=${segment}`;
-      default:
-        return `/${adjustedPath
-          .slice(0, adjustedPath.indexOf(segment) + 1)
-          .join("/")}`;
+      // Customs sub-parameters
+      "cus1": `/customsubpara?name=cus1`,
+      "cus2a": `/customsubpara?name=cus2a`,
+      "cus2b": `/customsubpara?name=cus2b`,
+      "cus2c": `/customsubpara?name=cus2c`,
+      "cus3a": `/customsubpara?name=cus3a`,
+      "cus3b": `/customsubpara?name=cus3b`,
+      "cus3c": `/customsubpara?name=cus3c`,
+      "cus4a": `/customsubpara?name=cus4a`,
+      "cus4b": `/customsubpara?name=cus4b`,
+      "cus4c": `/customsubpara?name=cus4c`,
+      "cus4d": `/customsubpara?name=cus4d`,
+      "cus5a": `/customsubpara?name=cus5a`,
+      "cus5b": `/customsubpara?name=cus5b`,
+      "cus5c": `/customsubpara?name=cus5c`,
+      "cus6a": `/customsubpara?name=cus6a`,
+      "cus6b": `/customsubpara?name=cus6b`,
+      "cus6c": `/customsubpara?name=cus6c`,
+      "cus6d": `/customsubpara?name=cus6d`,
+      "cus6e": `/customsubpara?name=cus6e`,
+      "cus6f": `/customsubpara?name=cus6f`,
+      "cus7a": `/customsubpara?name=cus7a`,
+      "cus7b": `/customsubpara?name=cus7b`,
+      "cus8a": `/customsubpara?name=cus8a`,
+      "cus8b": `/customsubpara?name=cus8b`,
+      "cus9a": `/customsubpara?name=cus9a`,
+      "cus9b": `/customsubpara?name=cus9b`,
+      "cus10a": `/customsubpara?name=cus10a`,
+      "cus10b": `/customsubpara?name=cus10b`,
+      "cus11a": `/customsubpara?name=cus11a`,
+      "cus11b": `/customsubpara?name=cus11b`,
+      "cus12a": `/customsubpara?name=cus12a`,
+      "cus12b": `/customsubpara?name=cus12b`,
+      "cus13a": `/customsubpara?name=cus13a`,
+      "cus13b": `/customsubpara?name=cus13b`,
+      "cus13c": `/customsubpara?name=cus13c`,
+      "cus13d": `/customsubpara?name=cus13d`,
+      "cus13e": `/customsubpara?name=cus13e`,
+
+      // Monthly reports
+      "MonthlyReport": "/MonthlyReport",
+      "CustomsMonthlyBifurcation": "/CustomsMonthlyBifurcation",
+      "CGSTMonthlyBifurcation": "/CGSTMonthlyBifurcation",
+
+      // MIS-Report
+      "MIS-Report": "/mis-report"
+    };
+
+    // Add CGST root path
+    if (pathname === "/cgst") {
+      return ["CGST"];
     }
+
+    // Return the custom link if it exists, otherwise build the path
+    return customParamLinks[segment] || `/${adjustedPath
+      .slice(0, adjustedPath.indexOf(segment) + 1)
+      .join("/")}`;
   };
 
   return (
@@ -582,14 +550,18 @@ const Breadcrumb = ({selectedDate, onChangeDate}) => {
                 className={`breadcrumb-item ${isLast ? "active" : ""}`}
               >
                 {isLast ? (
-                  <span>{zone_code?(zoneName ? zoneName : (zoneName0 ? zoneName0 : commName)): name ? name.toUpperCase() : value.toUpperCase()}</span>
+                  <span>
+                    {zone_code
+                      ? (zoneName ? zoneName : (zoneName0 ? zoneName0 : commName))
+                      : (name ? name.toUpperCase() : value.toUpperCase())
+                    }
+                  </span>
                 ) : (
                   <Link to={getCustomLink(value)}>{value.toUpperCase()}</Link>
                 )}
               </li>
             );
           })}
-          
         </ol>
       </nav>
     </div>

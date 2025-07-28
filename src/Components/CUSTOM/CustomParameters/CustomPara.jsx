@@ -3687,7 +3687,7 @@ const CustomPara = ({
 
     commName: (item) => <td>{item.commName}</td>,
     show_details: (item) => {
-      const comeName = ["investigation", "epcg", "registration", "export_obligation(AA)", "disposal/pendency", "arrest_and_prosecution", "unclaimed_cargo", "recovery_of_arrears", "DisposalOfConfiscatedGoldAndNDPS", "management_of_warehousing_bonds", "cus_audit"].includes(name)
+      const comeName = ["investigation", "epcg", "registration", "export_obligation(AA)", "disposal/pendency", "arrest_and_prosecution", "unclaimed_cargo", "recovery_of_arrears", "DisposalOfConfiscatedGoldAndNDPS", "management_of_warehousing_bonds", "cus_audit", "CommissionerAppeals"].includes(name)
         ? encodeURIComponent(item?.commissionerate_name || "")
         : encodeURIComponent(item?.commName || "");
 

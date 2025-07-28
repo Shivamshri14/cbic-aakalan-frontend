@@ -1764,17 +1764,31 @@ const AllZones = ({
   //         : "#FF0000";
   // };
 
-  const getBarColor = (item) => {
+  // const getBarColor = (item) => {
+  //   const score = item.total_weighted_average;
+
+  //   if (score >= 75 && score <= 100) {
+  //     return "#00FF00"; // Green for high scores
+  //   } else if (score >= 50 && score < 75) {
+  //     return "#FFFF00"; // Yellow for medium scores
+  //   } else if (score >= 0 && score <= 25) {
+  //     return "#FF0000"; // Red for low scores
+  //   } else {
+  //     return "#0000FF"; // Blue for mid-low scores (default)
+  //   }
+  // };
+
+    const getBarColor = (item) => {
     const score = item.total_weighted_average;
 
     if (score >= 75 && score <= 100) {
       return "#00FF00"; // Green for high scores
     } else if (score >= 50 && score < 75) {
       return "#FFFF00"; // Yellow for medium scores
-    } else if (score >= 0 && score <= 25) {
-      return "#FF0000"; // Red for low scores
-    } else {
+    } else if (score >= 25 && score <= 50) {
       return "#0000FF"; // Blue for mid-low scores (default)
+    } else {
+      return "#FF0000"; // Red for low scores
     }
   };
 
