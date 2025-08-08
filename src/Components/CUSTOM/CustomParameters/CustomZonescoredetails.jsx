@@ -44,6 +44,8 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
 
   const navigate = useNavigate();
 
+  const [relevantAspect, setRelevantAspect] = useState([]);
+
   const handleBack = () => {
     navigate(-1);
   };
@@ -55,7 +57,7 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
       label: "S.No.",
     },
     {
-      key: name === "investigation" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name === "export_obligation(AA)" || name === "unclaimed_cargo" || name === "disposal/pendency" || name === "arrest_and_prosecution" || name === "epcg" || name === "cus_audit" || name==="CommissionerAppeals" || name === "DisposalOfConfiscatedGoldAndNDPS" ? "zone_name" : "zoneName",
+      key: name === "investigation" || name === "timelyrefunds" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name === "export_obligation(AA)" || name === "unclaimed_cargo" || name === "disposal/pendency" || name === "arrest_and_prosecution" || name === "epcg" || name === "cus_audit" || name === "CommissionerAppeals" || name === "DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication" ? "zone_name" : "zoneName",
       label: "Zone",
     },
     // {
@@ -63,15 +65,15 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
     //   label: "Commissionerate Name",
     // },
     {
-      key: name === "investigation" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name === "export_obligation(AA)" || name === "unclaimed_cargo" || name === "disposal/pendency" || name === "arrest_and_prosecution" || name === "epcg" || name === "cus_audit" || name==="CommissionerAppeals" || name === "DisposalOfConfiscatedGoldAndNDPS" ? "gst" : "custom",
+      key: name === "investigation" || name === "timelyrefunds" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name === "export_obligation(AA)" || name === "unclaimed_cargo" || name === "disposal/pendency" || name === "arrest_and_prosecution" || name === "epcg" || name === "cus_audit" || name === "CommissionerAppeals" || name === "DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication" ? "gst" : "custom",
       label: "Sub Parameters",
     },
     {
-      key: name === "investigation" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name === "export_obligation(AA)" || name === "unclaimed_cargo" || name === "disposal/pendency" || name === "arrest_and_prosecution" || name === "epcg" || name === "cus_audit" || name==="CommissionerAppeals" || name === "DisposalOfConfiscatedGoldAndNDPS" ? "absolutevale" : "absval",
+      key: name === "investigation" || name === "timelyrefunds" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name === "export_obligation(AA)" || name === "unclaimed_cargo" || name === "disposal/pendency" || name === "arrest_and_prosecution" || name === "epcg" || name === "cus_audit" || name === "CommissionerAppeals" || name === "DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication" ? "absolutevale" : "absval",
       label: "Absolute Number",
     },
     {
-      key: name === "investigation" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name === "export_obligation(AA)" || name === "unclaimed_cargo" || name === "disposal/pendency" || name === "arrest_and_prosecution" || name === "epcg" || name === "cus_audit" || name==="CommissionerAppeals" || name === "DisposalOfConfiscatedGoldAndNDPS" ? "total_score" : "totalScore",
+      key: name === "investigation" || name === "timelyrefunds" || name === "recovery_of_arrears" || name === "management_of_warehousing_bonds" || name === "export_obligation(AA)" || name === "unclaimed_cargo" || name === "disposal/pendency" || name === "arrest_and_prosecution" || name === "epcg" || name === "cus_audit" || name === "CommissionerAppeals" || name === "DisposalOfConfiscatedGoldAndNDPS" || name === "adjudication" ? "total_score" : "totalScore",
       label: "Percentage for the month",
     },
     // {
@@ -84,7 +86,6 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
 
   const fetchDatazone = async (name) => {
     try {
-
       if (name === "investigation") {
         const cusendpoints = [
           "cus6a",
@@ -105,6 +106,18 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
           )
         );
         console.log("Response", responses);
+
+        // Include endpoint names with relevant aspects
+        const allAspects = responses.flatMap(res =>
+          res.data?.map(item => ({
+            aspect: item.relevant_aspect,
+            endpoint: res.gst  // Include the endpoint name
+          })).filter(item => item.aspect) || []
+        );
+
+        // Create a unique set of aspect-endpoint pairs
+        const uniqueAspects = Array.from(new Set(allAspects.map(JSON.stringify))).map(JSON.parse);
+        setRelevantAspect(uniqueAspects);
 
         const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
         console.log("FINALRESPONSE", allData);
@@ -132,6 +145,18 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
         );
         console.log("Response", responses);
 
+        // Include endpoint names with relevant aspects
+        const allAspects = responses.flatMap(res =>
+          res.data?.map(item => ({
+            aspect: item.relevant_aspect,
+            endpoint: res.gst  // Include the endpoint name
+          })).filter(item => item.aspect) || []
+        );
+
+        // Create a unique set of aspect-endpoint pairs
+        const uniqueAspects = Array.from(new Set(allAspects.map(JSON.stringify))).map(JSON.parse);
+        setRelevantAspect(uniqueAspects);
+
         const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
         console.log("FINALRESPONSE", allData);
         relevantAspects = "Management of Export Obligation(EPCG)";
@@ -157,6 +182,18 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
           )
         );
         console.log("Response", responses);
+
+        // Include endpoint names with relevant aspects
+        const allAspects = responses.flatMap(res =>
+          res.data?.map(item => ({
+            aspect: item.relevant_aspect,
+            endpoint: res.gst  // Include the endpoint name
+          })).filter(item => item.aspect) || []
+        );
+
+        // Create a unique set of aspect-endpoint pairs
+        const uniqueAspects = Array.from(new Set(allAspects.map(JSON.stringify))).map(JSON.parse);
+        setRelevantAspect(uniqueAspects);
 
         const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
         console.log("FINALRESPONSE", allData);
@@ -185,6 +222,18 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
         );
         console.log("Response", responses);
 
+        // Include endpoint names with relevant aspects
+        const allAspects = responses.flatMap(res =>
+          res.data?.map(item => ({
+            aspect: item.relevant_aspect,
+            endpoint: res.gst  // Include the endpoint name
+          })).filter(item => item.aspect) || []
+        );
+
+        // Create a unique set of aspect-endpoint pairs
+        const uniqueAspects = Array.from(new Set(allAspects.map(JSON.stringify))).map(JSON.parse);
+        setRelevantAspect(uniqueAspects);
+
         const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
         console.log("FINALRESPONSE", allData);
         relevantAspects = "Disposal/Pendency Of Provisional Assessments"
@@ -210,9 +259,23 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
         );
         console.log("Response", responses);
 
+        relevantAspects = "ARREST AND PROSECUTION";
+
+        // Include endpoint names with relevant aspects
+        const allAspects = responses.flatMap(res =>
+          res.data?.map(item => ({
+            aspect: item.relevant_aspect,
+            endpoint: res.gst  // Include the endpoint name
+          })).filter(item => item.aspect) || []
+        );
+
+        // Create a unique set of aspect-endpoint pairs
+        const uniqueAspects = Array.from(new Set(allAspects.map(JSON.stringify))).map(JSON.parse);
+        setRelevantAspect(uniqueAspects);
+
         const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
         console.log("FINALRESPONSE", allData);
-        relevantAspects = "ARREST AND PROSECUTION";
+
         const filteredData = allData.filter(item => item.zone_code === zone_code);
         console.log("Filtered Data by Zone Code", filteredData);
 
@@ -234,6 +297,18 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
           )
         );
         console.log("Response", responses);
+
+        // Include endpoint names with relevant aspects
+        const allAspects = responses.flatMap(res =>
+          res.data?.map(item => ({
+            aspect: item.relevant_aspect,
+            endpoint: res.gst  // Include the endpoint name
+          })).filter(item => item.aspect) || []
+        );
+
+        // Create a unique set of aspect-endpoint pairs
+        const uniqueAspects = Array.from(new Set(allAspects.map(JSON.stringify))).map(JSON.parse);
+        setRelevantAspect(uniqueAspects);
 
         const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
         console.log("FINALRESPONSE", allData);
@@ -260,6 +335,18 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
         );
         console.log("Response", responses);
 
+        // Include endpoint names with relevant aspects
+        const allAspects = responses.flatMap(res =>
+          res.data?.map(item => ({
+            aspect: item.relevant_aspect,
+            endpoint: res.gst  // Include the endpoint name
+          })).filter(item => item.aspect) || []
+        );
+
+        // Create a unique set of aspect-endpoint pairs
+        const uniqueAspects = Array.from(new Set(allAspects.map(JSON.stringify))).map(JSON.parse);
+        setRelevantAspect(uniqueAspects);
+
         const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
         console.log("FINALRESPONSE", allData);
         relevantAspects = "Recovery of Arrears";
@@ -284,6 +371,18 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
           )
         );
         console.log("Response", responses);
+
+        // Include endpoint names with relevant aspects
+        const allAspects = responses.flatMap(res =>
+          res.data?.map(item => ({
+            aspect: item.relevant_aspect,
+            endpoint: res.gst  // Include the endpoint name
+          })).filter(item => item.aspect) || []
+        );
+
+        // Create a unique set of aspect-endpoint pairs
+        const uniqueAspects = Array.from(new Set(allAspects.map(JSON.stringify))).map(JSON.parse);
+        setRelevantAspect(uniqueAspects);
 
         const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
         console.log("FINALRESPONSE", allData);
@@ -313,6 +412,19 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
         );
         console.log("Response", responses);
 
+
+        // Include endpoint names with relevant aspects
+        const allAspects = responses.flatMap(res =>
+          res.data?.map(item => ({
+            aspect: item.relevant_aspect,
+            endpoint: res.gst  // Include the endpoint name
+          })).filter(item => item.aspect) || []
+        );
+
+        // Create a unique set of aspect-endpoint pairs
+        const uniqueAspects = Array.from(new Set(allAspects.map(JSON.stringify))).map(JSON.parse);
+        setRelevantAspect(uniqueAspects);
+
         const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
         console.log("FINALRESPONSE", allData);
         relevantAspects = "Audit";
@@ -337,6 +449,19 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
           )
         );
         console.log("Response", responses);
+
+
+        // Include endpoint names with relevant aspects
+        const allAspects = responses.flatMap(res =>
+          res.data?.map(item => ({
+            aspect: item.relevant_aspect,
+            endpoint: res.gst  // Include the endpoint name
+          })).filter(item => item.aspect) || []
+        );
+
+        // Create a unique set of aspect-endpoint pairs
+        const uniqueAspects = Array.from(new Set(allAspects.map(JSON.stringify))).map(JSON.parse);
+        setRelevantAspect(uniqueAspects);
 
         const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
         console.log("FINALRESPONSE", allData);
@@ -363,6 +488,18 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
         );
         console.log("Response", responses);
 
+        // Include endpoint names with relevant aspects
+        const allAspects = responses.flatMap(res =>
+          res.data?.map(item => ({
+            aspect: item.relevant_aspect,
+            endpoint: res.gst  // Include the endpoint name
+          })).filter(item => item.aspect) || []
+        );
+
+        // Create a unique set of aspect-endpoint pairs
+        const uniqueAspects = Array.from(new Set(allAspects.map(JSON.stringify))).map(JSON.parse);
+        setRelevantAspect(uniqueAspects);
+
         const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
         console.log("FINALRESPONSE", allData);
         relevantAspects = "Management Of Warehousing bonds";
@@ -371,7 +508,80 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
 
         setData(filteredData.map((item, index) => ({ ...item, s_no: index + 1 })));
       }
+      else if (name === "adjudication") {
+        const cusendpoints = [
+          "cus5a",
+          "cus5b",
+          "cus5c",
+        ];
 
+        const responses = await Promise.all(
+          cusendpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/custom/${endpoint}`, {
+                params: { month_date: newdate, type: "zone" },
+              })
+              .then((response) => ({ data: response.data, gst: endpoint.toUpperCase() }))
+          )
+        );
+        console.log("Response", responses);
+
+        // Include endpoint names with relevant aspects
+        const allAspects = responses.flatMap(res =>
+          res.data?.map(item => ({
+            aspect: item.relevant_aspect,
+            endpoint: res.gst  // Include the endpoint name
+          })).filter(item => item.aspect) || []
+        );
+
+        // Create a unique set of aspect-endpoint pairs
+        const uniqueAspects = Array.from(new Set(allAspects.map(JSON.stringify))).map(JSON.parse);
+        setRelevantAspect(uniqueAspects);
+
+        const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
+        console.log("FINALRESPONSE", allData);
+        relevantAspects = name.toUpperCase();
+        const filteredData = allData.filter(item => item.zone_code === zone_code);
+        console.log("Filtered Data by Zone Code", filteredData);
+
+        setData(filteredData.map((item, index) => ({ ...item, s_no: index + 1 })));
+      }
+      else if (name === "timelyrefunds") {
+        const cusendpoints = [
+          "cus1",
+        ];
+
+        const responses = await Promise.all(
+          cusendpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/custom/${endpoint}`, {
+                params: { month_date: newdate, type: "zone" },
+              })
+              .then((response) => ({ data: response.data, gst: endpoint.toUpperCase() }))
+          )
+        );
+        console.log("Response", responses);
+
+        // Include endpoint names with relevant aspects
+        const allAspects = responses.flatMap(res =>
+          res.data?.map(item => ({
+            aspect: item.relevant_aspect,
+            endpoint: res.gst  // Include the endpoint name
+          })).filter(item => item.aspect) || []
+        );
+
+        // Create a unique set of aspect-endpoint pairs
+        const uniqueAspects = Array.from(new Set(allAspects.map(JSON.stringify))).map(JSON.parse);
+        setRelevantAspect(uniqueAspects);
+
+        const allData = responses.flatMap(response => response.data.map(item => ({ ...item, gst: response.gst })));
+        console.log("FINALRESPONSE", allData);
+        relevantAspects = "Timely payment of Refunds";
+        const filteredData = allData.filter(item => item.zone_code === zone_code);
+        console.log("Filtered Data by Zone Code", filteredData);
+
+        setData(filteredData.map((item, index) => ({ ...item, s_no: index + 1 })));
+      }
       else {
         // Make a GET request to the specified endpoint
         const response = await apiClient.get(`/cbic/custom/parameter/${name}`, {
@@ -776,6 +986,22 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
                 }}
                 onKeyDown={(e) => checkSpecialChar(e)}
               />
+
+              {/* <div className="mt-3">
+                {Array.isArray(relevantAspect) && relevantAspect.length > 0 ? (
+                  <>
+                    <h5 style={{ fontWeight: 'bold' }}>Sub parameter(s):</h5>
+                    <ul style={{ listStyleType: 'disc', paddingLeft: '20px' }}>
+                      {relevantAspect.map((item, index) => (
+                        <li key={index}>
+                          <strong>{item.endpoint} :</strong> {item.aspect}
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                ) : null}
+              </div> */}
+
             </div>
           </div>
           {/* )} */}

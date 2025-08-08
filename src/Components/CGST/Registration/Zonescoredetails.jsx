@@ -48,6 +48,11 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
   // const [selected, setSelected] = useState("Zones");
   const [loading, setLoading] = useState(true);
 
+  const [relevantAspect, setRelevantAspect] = useState([]);  // For storing relevant aspect - Changed to Array
+  const [subParameters, setSubParameters] = useState("");
+
+
+
   const location = useLocation();
   const queryParams = queryString.parse(location.search);
 
@@ -69,12 +74,16 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
       key:
         name === "arrest_and_prosecution" ||
           name === "gst_arrest_and_prosecution" ||
+          name === "returnFiling" ||
           name === "adjudication(legacy cases)" ||
+          name === "adjudication" ||
           name === "recovery_of_arrears" ||
+          name === "refunds" ||
           name === "registration" ||
           name === "investigation" ||
           name === "audit" ||
-          name === "scrutiny/assessment"
+          name === "scrutiny/assessment" ||
+          name === "appeals"
           ? "zone_name"
           : "zoneName",
       label: "Zone",
@@ -109,12 +118,12 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
       });
 
       columns.splice(4, 0, {
-        key: "totalScore",
+        key: "total_score",
         label: "Percentage Not Filed",
       });
 
       columns.splice(3, 0, {
-        key: "absval",
+        key: "absolutevale",
         label: "Return Not Filed/Total Return Due",
       });
 
@@ -137,12 +146,12 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
       });
 
       columns.splice(4, 0, {
-        key: "totalScore",
+        key: "total_score",
         label: "Percentage for the month",
       });
 
       columns.splice(3, 0, {
-        key: "absval",
+        key: "absolutevale",
         label: "Refund > 60 days/Total Refunds Pending",
       });
 
@@ -185,33 +194,6 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
 
       break;
 
-    case "adjudication":
-      columns.splice(2, 0, {
-        key: "gst",
-        label: "Sub Parameters",
-      });
-
-      columns.splice(4, 0, {
-        key: "totalScore",
-        label: " Percentage for the month",
-      });
-
-      columns.splice(3, 0, {
-        key: "absval",
-        label: "Absolute Number",
-      });
-      // columns.splice(5, 0, {
-      //   key: "way_to_grade",
-      //   label: "Score out of 10",
-      // });
-
-      columns.splice(6, 0, {
-        key: "sub_parameter_weighted_average",
-        label: "Weighted Average",
-      });
-
-      break;
-
     case "adjudication(legacy cases)":
       columns.splice(2, 0, {
         key: "gst",
@@ -238,6 +220,34 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
         label: "Weighted Average",
       });
       break;
+
+    case "adjudication":
+      columns.splice(2, 0, {
+        key: "gst",
+        label: "Sub Parameters",
+      });
+
+      columns.splice(4, 0, {
+        key: "total_score",
+        label: " Percentage for the month",
+      });
+
+      columns.splice(3, 0, {
+        key: "absolutevale",
+        label: "Absolute Number",
+      });
+
+      // columns.splice(5, 0, {
+      //   key: "way_to_grade",
+      //   label: "Score out of 10",
+      // });
+
+      columns.splice(6, 0, {
+        key: "sub_parameter_weighted_average",
+        label: "Weighted Average",
+      });
+      break;
+
     case "appeals":
       columns.splice(2, 0, {
         key: "gst",
@@ -245,12 +255,12 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
       });
 
       columns.splice(4, 0, {
-        key: "totalScore",
+        key: "total_score",
         label: " Percentage for the month",
       });
 
       columns.splice(3, 0, {
-        key: "absval",
+        key: "absolutevale",
         label: "Absolute Number",
       });
 
@@ -446,7 +456,7 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
 
   const fetchDatazone = async (name) => {
     try {
-      if (name === "arrest_and_prosecution") {
+      if (name === "gst_arrest_and_prosecution") {
         const endpoints = ["gst9a", "gst9b"];
 
         const responses = await Promise.all(
@@ -468,11 +478,23 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
           setLoading(false);
         }
 
-        relevantAspects = "ARREST AND PROSECUTION";
+        relevantAspects = "Arrest and Prosecution";
+
+        // Include endpoint names with relevant aspects
+        const allAspects = responses.flatMap(res =>
+          res.data?.map(item => ({
+            aspect: item.relevant_aspect,
+            endpoint: res.gst  // Include the endpoint name
+          })).filter(item => item.aspect) || []
+        );
+
+        // Create a unique set of aspect-endpoint pairs
+        const uniqueAspects = Array.from(new Set(allAspects.map(JSON.stringify))).map(JSON.parse);
+        setRelevantAspect(uniqueAspects);
 
         const allData = responses.flatMap((response) =>
           response.data.map((item) => ({
-            ...item, // Keep all the data intact
+            ...item,
             gst: response.gst,
           }))
         );
@@ -503,6 +525,18 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
         }
 
         relevantAspects = "RECOVERY OF ARREARS";
+
+        // Include endpoint names with relevant aspects
+        const allAspects = responses.flatMap(res =>
+          res.data?.map(item => ({
+            aspect: item.relevant_aspect,
+            endpoint: res.gst  // Include the endpoint name
+          })).filter(item => item.aspect) || []
+        );
+
+        // Create a unique set of aspect-endpoint pairs
+        const uniqueAspects = Array.from(new Set(allAspects.map(JSON.stringify))).map(JSON.parse);
+        setRelevantAspect(uniqueAspects);
 
         const allData = responses.flatMap((response) =>
           response.data.map((item) => ({
@@ -545,6 +579,18 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
 
         relevantAspects = name.toUpperCase();
 
+        // Include endpoint names with relevant aspects
+        const allAspects = responses.flatMap(res =>
+          res.data?.map(item => ({
+            aspect: item.relevant_aspect,
+            endpoint: res.gst  // Include the endpoint name
+          })).filter(item => item.aspect) || []
+        );
+
+        // Create a unique set of aspect-endpoint pairs
+        const uniqueAspects = Array.from(new Set(allAspects.map(JSON.stringify))).map(JSON.parse);
+        setRelevantAspect(uniqueAspects);
+
         const allData = responses.flatMap((response) =>
           response.data.map((item) => ({
             ...item, // Keep all the data intact
@@ -579,6 +625,18 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
         }
 
         relevantAspects = name.toUpperCase();
+
+        // Include endpoint names with relevant aspects
+        const allAspects = responses.flatMap(res =>
+          res.data?.map(item => ({
+            aspect: item.relevant_aspect,
+            endpoint: res.gst  // Include the endpoint name
+          })).filter(item => item.aspect) || []
+        );
+
+        // Create a unique set of aspect-endpoint pairs
+        const uniqueAspects = Array.from(new Set(allAspects.map(JSON.stringify))).map(JSON.parse);
+        setRelevantAspect(uniqueAspects);
 
         const allData = responses.flatMap((response) =>
           response.data.map((item) => ({
@@ -615,6 +673,18 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
 
         relevantAspects = name.toUpperCase();
 
+        // Include endpoint names with relevant aspects
+        const allAspects = responses.flatMap(res =>
+          res.data?.map(item => ({
+            aspect: item.relevant_aspect,
+            endpoint: res.gst  // Include the endpoint name
+          })).filter(item => item.aspect) || []
+        );
+
+        // Create a unique set of aspect-endpoint pairs
+        const uniqueAspects = Array.from(new Set(allAspects.map(JSON.stringify))).map(JSON.parse);
+        setRelevantAspect(uniqueAspects);
+
         const allData = responses.flatMap((response) =>
           response.data.map((item) => ({
             ...item, // Keep all the data intact
@@ -649,39 +719,17 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
 
         relevantAspects = name.toUpperCase();
 
-        const allData = responses.flatMap((response) =>
-          response.data.map((item) => ({
-            ...item, // Keep all the data intact
-            gst: response.gst,
-          }))
+        // Include endpoint names with relevant aspects
+        const allAspects = responses.flatMap(res =>
+          res.data?.map(item => ({
+            aspect: item.relevant_aspect,
+            endpoint: res.gst  // Include the endpoint name
+          })).filter(item => item.aspect) || []
         );
 
-        const res = allData.filter((item) => item.zone_code === zone_code);
-        console.log("RES", res);
-
-        setData(res.map((item, index) => ({ ...item, s_no: index + 1 })));
-      } else if (name === "gst_arrest_and_prosecution") {
-        const endpoints = ["gst9a", "gst9b"];
-
-        // Make API calls for both endpoints
-        const responses = await Promise.all(
-          endpoints.map((endpoint) =>
-            apiClient
-              .get(`/cbic/${endpoint}`, {
-                params: { month_date: newdate, type: "zone" },
-              })
-              .then((response) => ({
-                data: response.data,
-                gst: endpoint.toUpperCase(),
-              }))
-          )
-        );
-
-        if (responses) {
-          setLoading(false);
-        }
-
-        relevantAspects = name.toUpperCase();
+        // Create a unique set of aspect-endpoint pairs
+        const uniqueAspects = Array.from(new Set(allAspects.map(JSON.stringify))).map(JSON.parse);
+        setRelevantAspect(uniqueAspects);
 
         const allData = responses.flatMap((response) =>
           response.data.map((item) => ({
@@ -716,6 +764,206 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
         }
 
         relevantAspects = name.toUpperCase();
+
+        // Include endpoint names with relevant aspects
+        const allAspects = responses.flatMap(res =>
+          res.data?.map(item => ({
+            aspect: item.relevant_aspect,
+            endpoint: res.gst  // Include the endpoint name
+          })).filter(item => item.aspect) || []
+        );
+
+        // Create a unique set of aspect-endpoint pairs
+        const uniqueAspects = Array.from(new Set(allAspects.map(JSON.stringify))).map(JSON.parse);
+        setRelevantAspect(uniqueAspects);
+
+        const allData = responses.flatMap((response) =>
+          response.data.map((item) => ({
+            ...item, // Keep all the data intact
+            gst: response.gst,
+          }))
+        );
+
+        const res = allData.filter((item) => item.zone_code === zone_code);
+        console.log("RES", res);
+
+        setData(res.map((item, index) => ({ ...item, s_no: index + 1 })));
+      } else if (name === "adjudication") {
+        const endpoints = ["gst5a", "gst5b"];
+
+        // Make API calls for both endpoints
+        const responses = await Promise.all(
+          endpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/${endpoint}`, {
+                params: { month_date: newdate, type: "zone" },
+              })
+              .then((response) => ({
+                data: response.data,
+                gst: endpoint.toUpperCase(),
+              }))
+          )
+        );
+
+        if (responses) {
+          setLoading(false);
+        }
+
+        relevantAspects = name.toUpperCase();
+
+        // Include endpoint names with relevant aspects
+        const allAspects = responses.flatMap(res =>
+          res.data?.map(item => ({
+            aspect: item.relevant_aspect,
+            endpoint: res.gst  // Include the endpoint name
+          })).filter(item => item.aspect) || []
+        );
+
+        // Create a unique set of aspect-endpoint pairs
+        const uniqueAspects = Array.from(new Set(allAspects.map(JSON.stringify))).map(JSON.parse);
+        setRelevantAspect(uniqueAspects);
+
+        const allData = responses.flatMap((response) =>
+          response.data.map((item) => ({
+            ...item, // Keep all the data intact
+            gst: response.gst,
+          }))
+        );
+
+        const res = allData.filter((item) => item.zone_code === zone_code);
+        console.log("RES", res);
+
+        setData(res.map((item, index) => ({ ...item, s_no: index + 1 })));
+      } else if (name === "returnFiling") {
+        const endpoints = ["gst2"];
+
+        // Make API calls for both endpoints
+        const responses = await Promise.all(
+          endpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/${endpoint}`, {
+                params: { month_date: newdate, type: "zone" },
+              })
+              .then((response) => ({
+                data: response.data,
+                gst: endpoint.toUpperCase(),
+              }))
+          )
+        );
+
+        if (responses) {
+          setLoading(false);
+        }
+
+        relevantAspects = "RETURN FILING";
+
+        // Include endpoint names with relevant aspects
+        const allAspects = responses.flatMap(res =>
+          res.data?.map(item => ({
+            aspect: item.relevant_aspect,
+            endpoint: res.gst  // Include the endpoint name
+          })).filter(item => item.aspect) || []
+        );
+
+        // Create a unique set of aspect-endpoint pairs
+        const uniqueAspects = Array.from(new Set(allAspects.map(JSON.stringify))).map(JSON.parse);
+        setRelevantAspect(uniqueAspects);
+
+        const allData = responses.flatMap((response) =>
+          response.data.map((item) => ({
+            ...item, // Keep all the data intact
+            gst: response.gst,
+            sub_parameter_weighted_average: item.sub_parameter_weighted_average
+
+          }))
+        );
+
+        const res = allData.filter((item) => item.zone_code === zone_code);
+        console.log("RES", res);
+
+        setData(res.map((item, index) => ({ ...item, s_no: index + 1 })));
+      } else if (name === "refunds") {
+        const endpoints = ["gst7"];
+
+        // Make API calls for both endpoints
+        const responses = await Promise.all(
+          endpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/${endpoint}`, {
+                params: { month_date: newdate, type: "zone" },
+              })
+              .then((response) => ({
+                data: response.data,
+                gst: endpoint.toUpperCase(),
+              }))
+          )
+        );
+
+        if (responses) {
+          setLoading(false);
+        }
+
+        relevantAspects = name.toUpperCase();
+
+        // Include endpoint names with relevant aspects
+        const allAspects = responses.flatMap(res =>
+          res.data?.map(item => ({
+            aspect: item.relevant_aspect,
+            endpoint: res.gst  // Include the endpoint name
+          })).filter(item => item.aspect) || []
+        );
+
+        // Create a unique set of aspect-endpoint pairs
+        const uniqueAspects = Array.from(new Set(allAspects.map(JSON.stringify))).map(JSON.parse);
+        setRelevantAspect(uniqueAspects);
+
+        const allData = responses.flatMap((response) =>
+          response.data.map((item) => ({
+            ...item, // Keep all the data intact
+            gst: response.gst,
+            sub_parameter_weighted_average: item.sub_parameter_weighted_average
+
+          }))
+        );
+
+        const res = allData.filter((item) => item.zone_code === zone_code);
+        console.log("RES", res);
+
+        setData(res.map((item, index) => ({ ...item, s_no: index + 1 })));
+      } else if (name === "appeals") {
+        const endpoints = ["gst11a", "gst11b", "gst11c", "gst11d"];
+
+        // Make API calls for both endpoints
+        const responses = await Promise.all(
+          endpoints.map((endpoint) =>
+            apiClient
+              .get(`/cbic/${endpoint}`, {
+                params: { month_date: newdate, type: "zone" },
+              })
+              .then((response) => ({
+                data: response.data,
+                gst: endpoint.toUpperCase(),
+              }))
+          )
+        );
+
+        if (responses) {
+          setLoading(false);
+        }
+
+        relevantAspects = name.toUpperCase();
+
+        // Include endpoint names with relevant aspects
+        const allAspects = responses.flatMap(res =>
+          res.data?.map(item => ({
+            aspect: item.relevant_aspect,
+            endpoint: res.gst  // Include the endpoint name
+          })).filter(item => item.aspect) || []
+        );
+
+        // Create a unique set of aspect-endpoint pairs
+        const uniqueAspects = Array.from(new Set(allAspects.map(JSON.stringify))).map(JSON.parse);
+        setRelevantAspect(uniqueAspects);
 
         const allData = responses.flatMap((response) =>
           response.data.map((item) => ({
@@ -955,7 +1203,7 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
         case "returnFiling": {
           return {
             "S.No.": user.s_no,
-            Zone: user.zoneName,
+            Zone: user.zone_name,
             "Return Not Filed (Monthly)/Total Returns Due(Monthly)": user.absval,
             "Percentage Not Filed": user.totalScore,
             "Way to Grade (Marks) Score out of 10": user.way_to_grade,
@@ -990,8 +1238,8 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
             "S.No.": user.s_no,
             Zone: user.zoneName,
             "Sub Parameters": user.gst,
-            "Absolute Number": user.absval,
-            "Percentage for the month": user.totalScore,
+            "Absolute Number": user.absolutevale,
+            "Percentage for the month": user.total_score,
             "Weighted Average (out of 10)": user.sub_parameter_weighted_average,
           };
         }
@@ -1012,8 +1260,8 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
             "S.No.": user.s_no,
             Zone: user.zoneName,
             Parameter: user.gst,
-            "Refund > 60 days/Total Refunds Pending": user.absval,
-            "Percentage for the month": user.totalScore,
+            "Refund > 60 days/Total Refunds Pending": user.absolutevale,
+            "Percentage for the month": user.total_score,
             "Way to Grade (Marks) Score out of 10": user.way_to_grade,
             "Weighted Average (out of 10)": user.sub_parameter_weighted_average,
           };
@@ -1068,8 +1316,8 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
             "S.No.": user.s_no,
             Zone: user.zoneName,
             "Sub Parameters": user.gst,
-            "Absolute Number": user.absval,
-            "Percentage for the month": user.totalScore,
+            "Absolute Number": user.absolutevale,
+            "Percentage for the month": user.total_score,
             "Weighted Average (out of 12)": user.sub_parameter_weighted_average,
           };
         }
@@ -1380,8 +1628,27 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
                   }}
                   onKeyDown={(e) => checkSpecialChar(e)}
                 />
+                {/* <p><strong>{subParameters}subParameters - </strong> {relevantAspect}relevantAspect</p> Display relevant aspect */}
+                {/* <div className="mt-3">
+                  {Array.isArray(relevantAspect) && relevantAspect.length > 0 ? (
+                    <>
+                      <h5 style={{ fontWeight: 'bold' }}>Sub parameter(s):</h5>
+                      <ul style={{ listStyleType: 'disc', paddingLeft: '20px' }}>
+                        {relevantAspect.map((item, index) => (
+                          <li key={index}>
+                            <strong>{item.endpoint} :</strong> {item.aspect}
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  ) : null}
+                </div> */}
               </div>
+
             </div>
+
+
+
             {/* )} */}
           </div>
         </div>

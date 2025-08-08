@@ -111,14 +111,14 @@ const Breadcrumb = ({ selectedDate, onChangeDate }) => {
       "export_obligation(AA)",
       "disposal/pendency",
       "adjudication",
-      "investigation",
+      "Investigation",
       "arrest_and_prosecution",
       "unclaimed_cargo",
       "DisposalOfConfiscatedGoldAndNDPS",
       "recovery_of_arrears",
       "management_of_warehousing_bonds",
       "CommissionerAppeals",
-      "audit"
+      "cus_audit"
     ];
 
     // CGST parameters that should redirect to /zoneparameters
@@ -130,8 +130,8 @@ const Breadcrumb = ({ selectedDate, onChangeDate }) => {
       "adjudication",
       "adjudication(legacy cases)",
       "refunds",
-      "recovery of arrears",
-      "arrest and prosecution",
+      "recovery_of_arrears",
+      "gst_arrest_and_prosecution",
       "audit",
       "appeals"
     ];
@@ -221,7 +221,7 @@ const Breadcrumb = ({ selectedDate, onChangeDate }) => {
     }
 
     if (name === "cus1") {
-      adjusted = ["Timely payment of Refunds", name];
+      adjusted = ["timelyrefunds", name];
       if (zone_code) {
         adjusted.push(zoneName);
       }
@@ -236,7 +236,7 @@ const Breadcrumb = ({ selectedDate, onChangeDate }) => {
     }
 
     if (["cus2a", "cus2b", "cus2c"].includes(name)) {
-      adjusted = ["Management of Export Obligation(EPCG)", name];
+      adjusted = ["epcg", name];
       if (zone_code) {
         adjusted.push(zoneName);
       }
@@ -251,7 +251,7 @@ const Breadcrumb = ({ selectedDate, onChangeDate }) => {
     }
 
     if (["cus3a", "cus3b", "cus3c"].includes(name)) {
-      adjusted = ["Management of Export Obligation(AA)", name];
+      adjusted = ["export_obligation(AA)", name];
       if (zone_code) {
         adjusted.push(zoneName);
       }
@@ -266,7 +266,7 @@ const Breadcrumb = ({ selectedDate, onChangeDate }) => {
     }
 
     if (["cus4a", "cus4b", "cus4c", "cus4d"].includes(name)) {
-      adjusted = ["Disposal/Pendency Of Provisional Assessments", name];
+      adjusted = ["disposal/pendency", name];
       if (zone_code) {
         adjusted.push(zoneName);
       }
@@ -281,7 +281,7 @@ const Breadcrumb = ({ selectedDate, onChangeDate }) => {
     }
 
     if (["cus5a", "cus5b", "cus5c"].includes(name)) {
-      adjusted = ["Adjudication", name];
+      adjusted = ["adjudication", name];
       if (zone_code) {
         adjusted.push(zoneName);
       }
@@ -311,7 +311,7 @@ const Breadcrumb = ({ selectedDate, onChangeDate }) => {
     }
 
     if (["cus7a", "cus7b"].includes(name)) {
-      adjusted = ["Arrests and Prosecution", name];
+      adjusted = ["arrest_and_prosecution", name];
       if (zone_code) {
         adjusted.push(zoneName);
       }
@@ -319,14 +319,14 @@ const Breadcrumb = ({ selectedDate, onChangeDate }) => {
 
     // Recovery of Arrears
     if (["gst8a", "gst8b"].includes(name)) {
-      adjusted = ["recovery of arrears", name];
+      adjusted = ["recovery_of_arrears", name];
       if (zone_code) {
         adjusted.push(zoneName);
       }
     }
 
     if (["cus8a", "cus8b"].includes(name)) {
-      adjusted = ["Monitoring Of Un-cleared and Unclaimed cargo", name];
+      adjusted = ["unclaimed_cargo", name];
       if (zone_code) {
         adjusted.push(zoneName);
       }
@@ -334,14 +334,14 @@ const Breadcrumb = ({ selectedDate, onChangeDate }) => {
 
     // Arrest and Prosecution
     if (["gst9a", "gst9b"].includes(name)) {
-      adjusted = ["arrest and prosecution", name];
+      adjusted = ["gst_arrest_and_prosecution", name];
       if (zone_code) {
         adjusted.push(zoneName);
       }
     }
 
     if (["cus9a", "cus9b"].includes(name)) {
-      adjusted = ["Disposal Of Confiscated Gold and N (Narcotics)", name];
+      adjusted = ["DisposalOfConfiscatedGoldAndNDPS", name];
       if (zone_code) {
         adjusted.push(zoneName);
       }
@@ -356,7 +356,7 @@ const Breadcrumb = ({ selectedDate, onChangeDate }) => {
     }
 
     if (["cus10a", "cus10b"].includes(name)) {
-      adjusted = ["Recovery of Arrears", name];
+      adjusted = ["recovery_of_arrears", name];
       if (zone_code) {
         adjusted.push(zoneName);
       }
@@ -371,21 +371,21 @@ const Breadcrumb = ({ selectedDate, onChangeDate }) => {
     }
 
     if (["cus11a", "cus11b"].includes(name)) {
-      adjusted = ["Management Of Warehousing bonds", name];
+      adjusted = ["management_of_warehousing_bonds", name];
       if (zone_code) {
         adjusted.push(zoneName);
       }
     }
 
     if (["cus12a", "cus12b"].includes(name)) {
-      adjusted = ["Commissioner (Appeals)", name];
+      adjusted = ["CommissionerAppeals", name];
       if (zone_code) {
         adjusted.push(zoneName);
       }
     }
 
     if (["cus13a", "cus13b", "cus13c", "cus13d", "cus13e"].includes(name)) {
-      adjusted = ["Audit", name];
+      adjusted = ["cus_audit", name];
       if (zone_code) {
         adjusted.push(zoneName);
       }
@@ -423,8 +423,8 @@ const Breadcrumb = ({ selectedDate, onChangeDate }) => {
       "adjudication": "/zoneparameters?name=adjudication",
       "adjudication(legacy cases)": "/zoneparameters?name=adjudication(legacy cases)",
       "refunds": "/zoneparameters?name=refunds",
-      "recovery of arrears": "/zoneparameters?name=recovery of arrears",
-      "arrest and prosecution": "/zoneparameters?name=arrest and prosecution",
+      "recovery_of_arrears": "/zoneparameters?name=recovery_of_arrears",
+      "gst_arrest_and_prosecution": "/zoneparameters?name=gst_arrest_and_prosecution",
       "audit": "/zoneparameters?name=audit",
       "appeals": "/zoneparameters?name=appeals",
 
@@ -434,14 +434,14 @@ const Breadcrumb = ({ selectedDate, onChangeDate }) => {
       "export_obligation(AA)": "/custompara?name=export_obligation(AA)",
       "disposal/pendency": "/custompara?name=disposal/pendency",
       "adjudication": "/custompara?name=adjudication",
-      "investigation": "/custompara?name=investigation",
+      "Investigation": "/custompara?name=Investigation",
       "arrest_and_prosecution": "/custompara?name=arrest_and_prosecution",
       "unclaimed_cargo": "/custompara?name=unclaimed_cargo",
       "DisposalOfConfiscatedGoldAndNDPS": "/custompara?name=DisposalOfConfiscatedGoldAndNDPS",
       "recovery_of_arrears": "/custompara?name=recovery_of_arrears",
       "management_of_warehousing_bonds": "/custompara?name=management_of_warehousing_bonds",
       "CommissionerAppeals": "/custompara?name=CommissionerAppeals",
-      "audit": "/custompara?name=audit",
+      "cus_audit": "/custompara?name=cus_audit",
 
       // GST sub-parameters
       "gst1a": `/Subpara?name=gst1a`,

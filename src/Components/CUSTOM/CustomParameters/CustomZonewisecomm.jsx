@@ -983,11 +983,11 @@ const CustomZonewisecomm = ({
         ? data.map((user) => ({
           // Customize object properties to match desired format
           SNo: user.s_no,
-          "Zone Name": user.zoneName,
-          "Commissionerate Name": user.commName,
+          "Zone Name": user.zone_name,
+          "Commissionerate Name": user.commissionerate_name,
           "Total Score": user.totalScore,
-          "Absolute Value": user.absval,
-          Rank: user.zonal_rank,
+          // "Absolute Value": user.absval,
+          // Rank: user.zonal_rank,
         }))
         : // Handle other options (e.g., 'Top 5', 'Bottom 5') with filtered data
         [

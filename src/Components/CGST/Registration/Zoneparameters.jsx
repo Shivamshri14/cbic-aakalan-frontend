@@ -649,6 +649,7 @@ const Zoneparameters = ({
         );
         console.log("FINALRESPONSE", allData);
 
+        // Summing Data by Zone Code
         const summedByZone = allData.reduce((acc, item) => {
           const zoneCode = item.zone_code;
           const value = item.sub_parameter_weighted_average || 0; // Default to 0 if missing
@@ -664,19 +665,24 @@ const Zoneparameters = ({
           return acc;
         }, {});
 
+        // Convert the summed data into an array and calculate weighted_average_out_of_12
         const reducedAllData = Object.values(summedByZone).map((item) => ({
           ...item,
+          // Fix sub_parameter_weighted_average to 2 decimals after summing
+          sub_parameter_weighted_average: parseFloat(item.sub_parameter_weighted_average.toFixed(2)),
           weighted_average_out_of_12: ((item.sub_parameter_weighted_average * 12) / 10).toFixed(2),
         }));
 
         console.log("Reduced All Data:", reducedAllData);
 
+        // Sort the zones by weighted_average_out_of_12 in descending order
         const sorted = reducedAllData.sort(
           (a, b) =>
             b.weighted_average_out_of_12 - a.weighted_average_out_of_12
         );
         console.log("Sorted", sorted);
 
+        // Assign rankings based on weighted_average_out_of_12
         const scoreIndexMap = new Map();
         let currentIndex = 1;
 
@@ -693,16 +699,17 @@ const Zoneparameters = ({
           sorted[i].zonal_rank = scoreIndexMap.get(score);
         }
 
+        // Enhance data with conditional coloring and serial numbers
         const enhancedData = sorted.map((item, index) => {
           const total = item.sub_parameter_weighted_average;
 
           let props = {};
           if (total <= 10 && total >= 7.5) {
-            props = { scope: "row", color: "success" }; // Top 5 entries
+            props = { scope: "row", color: "success" }; // Top entries
           } else if (total < 7.5 && total >= 5) {
             props = { scope: "row", color: "warning" };
           } else if (total >= 0 && total <= 2.5) {
-            props = { scope: "row", color: "danger" }; // Bottom 5 entries
+            props = { scope: "row", color: "danger" }; // Bottom entries
           } else {
             props = { scope: "row", color: "primary" }; // Remaining entries
           }
@@ -715,6 +722,8 @@ const Zoneparameters = ({
         });
 
         setData(enhancedData);
+
+        // Get the top 5 and bottom 5 zones for the bar chart
         const topfive = sorted.slice(0, 5);
         const bottomfive = sorted.slice(-5);
         setBarData([...topfive, ...bottomfive]);
@@ -1196,7 +1205,12 @@ const Zoneparameters = ({
               currentIndex++;
             }
 
-            relevantAspects = name.toUpperCase();
+            // relevantAspects = name.toUpperCase();
+            if (name === "returnFiling") {
+              relevantAspects = "RETURN FILING";  // Specific value for returnFiling
+            } else if (name === "refunds") {
+              relevantAspects = "REFUNDS";  // Specific value for refunds
+            }
 
             // Assign the index to each item based on its score
             sorted1[i].zonal_rank = scoreIndexMap.get(score);
@@ -1897,6 +1911,8 @@ const Zoneparameters = ({
         // Convert the summed data into an array and calculate weighted_average_out_of_12
         const reducedAllData = Object.values(summedByCommissionerate).map((item) => ({
           ...item,
+          // Fix sub_parameter_weighted_average to 2 decimals after summing
+          sub_parameter_weighted_average: parseFloat(item.sub_parameter_weighted_average.toFixed(2)),
           weighted_average_out_of_12: ((item.sub_parameter_weighted_average * 12) / 10).toFixed(1),
         }));
 
