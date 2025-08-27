@@ -987,7 +987,7 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
                 onKeyDown={(e) => checkSpecialChar(e)}
               />
 
-              {/* <div className="mt-3">
+              <div className="mt-3">
                 {Array.isArray(relevantAspect) && relevantAspect.length > 0 ? (
                   <>
                     <h5 style={{ fontWeight: 'bold' }}>Sub parameter(s):</h5>
@@ -1000,7 +1000,7 @@ const CustomZonescoredetails = ({ selectedDate, onChangeDate }) => {
                     </ul>
                   </>
                 ) : null}
-              </div> */}
+              </div>
 
             </div>
           </div>

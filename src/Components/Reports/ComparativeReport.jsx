@@ -14,6 +14,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import apiClient from "../../Service/ApiClient";
 import Spinner from "../Spinner";
+import { sort } from "@amcharts/amcharts4/.internal/core/utils/Iterator";
 
 const ComparativeReport = ({
   selectedDate,
@@ -439,7 +440,7 @@ const ComparativeReport = ({
   }, [newdate]);
 
   const columns = [
-    { key: "s_no", label: "S no." },
+    { key: "s_no", label: "S no.", sorter: false },
     { key: "zone_name", label: "Zone" },
     { key: "sub_parameter_weighted_average_12", label: `${date12}` },
     { key: "sub_parameter_weighted_average_11", label: `${date11}` },
@@ -456,7 +457,7 @@ const ComparativeReport = ({
   ];
 
   const columnscustoms = [
-    { key: "s_no", label: "S no." },
+    { key: "s_no", label: "S no.", sorter: false },
     { key: "zone_name", label: "Zone" },
     { key: "sub_parameter_weighted_average_12", label: `${date12}` },
     { key: "sub_parameter_weighted_average_11", label: `${date11}` },
@@ -758,6 +759,11 @@ const ComparativeReport = ({
                     itemsPerPageSelect
                     itemsPerPage={10}
                     pagination
+                    scopedColumns={{
+                      s_no: (item, index) => {
+                        return <td>{index + 1}</td>; // ✅ Dynamic row index after sorting
+                      },
+                    }}
                     onRowClick={onRowClick}
                     onFilteredItemsChange={(items) => console.log(items)}
                     onSelectedItemsChange={(items) => console.log(items)}
@@ -793,6 +799,11 @@ const ComparativeReport = ({
                     itemsPerPageSelect
                     itemsPerPage={10}
                     pagination
+                    scopedColumns={{
+                      s_no: (item, index) => {
+                        return <td>{index + 1}</td>; // ✅ Dynamic row index after sorting
+                      },
+                    }}
                     onRowClick={onRowClick}
                     onFilteredItemsChange={(items) => console.log(items)}
                     onSelectedItemsChange={(items) => console.log(items)}

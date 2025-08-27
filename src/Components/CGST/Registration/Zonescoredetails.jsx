@@ -1629,7 +1629,7 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
                   onKeyDown={(e) => checkSpecialChar(e)}
                 />
                 {/* <p><strong>{subParameters}subParameters - </strong> {relevantAspect}relevantAspect</p> Display relevant aspect */}
-                {/* <div className="mt-3">
+                <div className="mt-3">
                   {Array.isArray(relevantAspect) && relevantAspect.length > 0 ? (
                     <>
                       <h5 style={{ fontWeight: 'bold' }}>Sub parameter(s):</h5>
@@ -1642,7 +1642,7 @@ const Zonescoredetails = ({ selectedDate, onChangeDate }) => {
                       </ul>
                     </>
                   ) : null}
-                </div> */}
+                </div>
               </div>
 
             </div>

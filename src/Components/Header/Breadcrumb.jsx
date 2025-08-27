@@ -103,6 +103,10 @@ const Breadcrumb = ({ selectedDate, onChangeDate }) => {
     } else if (pathname.includes("CustomsMonthlyBifurcation")) {
       adjusted = ["MonthlyReport", ...adjusted];
     }
+    // ✅ Add this for All Zones Dashboard
+    if (pathname === "/allzonesdashboard") {
+      adjusted = ["All Zones Dashboard"];
+    }
 
     // Custom parameters that should redirect to /custompara
     const customRedirectParams = [
@@ -522,6 +526,8 @@ const Breadcrumb = ({ selectedDate, onChangeDate }) => {
 
       // MIS-Report
       "MIS-Report": "/mis-report"
+
+
     };
 
     // Add CGST root path

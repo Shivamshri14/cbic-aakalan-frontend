@@ -18,6 +18,9 @@ const CGSTMonthlyBifurcation = ({ selectedDate, onChangeDate }) => {
   const [loading, setLoading] = useState(false);
   const newdate = dayjs(selectedDate).format("YYYY-MM-DD");
 
+  const [totalValues, setTotalValues] = useState({ scale: 0, weighted_average: 0 });
+
+
   const location = useLocation();
   const queryParams = queryString.parse(location.search);
   const zone_code = Number(queryParams.zone_code); // ensure numeric zone_code
@@ -45,105 +48,108 @@ const CGSTMonthlyBifurcation = ({ selectedDate, onChangeDate }) => {
     "Arrest & Prosecution": ["gst9a", "gst9b"],
     Audit: ["gst10a", "gst10b", "gst10c"],
     Appeals: ["gst11a", "gst11b", "gst11c", "gst11d"],
-    
+
   };
 
-const fetchData = async () => {
-  setLoading(true);
-  let allRows = [];
-  let rowIndex = 1;
+  const fetchData = async () => {
+    setLoading(true);
+    let allRows = [];
+    let rowIndex = 1;
 
-  const scaleMap = {
-    Audit: 12,
-    "Recovery of Arrears": 8,
-    "Arrest & Prosecution": 6,
-    Refunds: 5,
-    "Return Filing": 5,
-    Appeals: 12,
-    Registration: 12,
-    // Others not scaled (default weight = 10)
-  };
+    const scaleMap = {
+      Audit: 12,
+      "Recovery of Arrears": 8,
+      "Arrest & Prosecution": 6,
+      Refunds: 5,
+      "Return Filing": 5,
+      Appeals: 12,
+      Registration: 12,
+      // Others not scaled (default weight = 10)
+    };
 
-  for (const [category, endpoints] of Object.entries(endpointMap)) {
-    const scale = scaleMap[category] || 10; // Use default 10 if not in scaleMap
+    for (const [category, endpoints] of Object.entries(endpointMap)) {
+      const scale = scaleMap[category] || 10; // Use default 10 if not in scaleMap
 
-    const responses = await Promise.all(
-      endpoints.map((endpoint) =>
-        apiClient
-          .get(`/cbic/${endpoint}`, {
-            params: {
-              month_date: newdate,
-              type: "zone",
-              zone_code,
-            },
-          })
-          .then((res) =>
-            res.data.map(item => ({
-              ...item,
-              sub_parameter_weighted_average: parseFloat(
-                ((item.sub_parameter_weighted_average || 0) * scale / 10).toFixed(2)
-              )
-            }))
-          )
-          .catch((err) => {
-            console.error(`Error fetching ${endpoint}:`, err);
-            return [];
-          })
-      )
-    );
+      const responses = await Promise.all(
+        endpoints.map((endpoint) =>
+          apiClient
+            .get(`/cbic/${endpoint}`, {
+              params: {
+                month_date: newdate,
+                type: "zone",
+                zone_code,
+              },
+            })
+            .then((res) =>
+              res.data.map(item => ({
+                ...item,
+                sub_parameter_weighted_average: parseFloat(
+                  ((item.sub_parameter_weighted_average || 0) * scale / 10).toFixed(2)
+                )
+              }))
+            )
+            .catch((err) => {
+              console.error(`Error fetching ${endpoint}:`, err);
+              return [];
+            })
+        )
+      );
 
-    const filtered = responses.flat().filter(
-      (item) => Number(item.zone_code) === Number(zone_code)
-    );
+      const filtered = responses.flat().filter(
+        (item) => Number(item.zone_code) === Number(zone_code)
+      );
 
-    const grouped = {};
+      const grouped = {};
 
-    filtered.forEach((item) => {
-      const zoneName = item.zone_name;
-      const value = parseFloat(item.sub_parameter_weighted_average || 0);
+      filtered.forEach((item) => {
+        const zoneName = item.zone_name;
+        const value = parseFloat(item.sub_parameter_weighted_average || 0);
 
-      if (!grouped[zoneName]) {
-        grouped[zoneName] = value;
-      } else {
-        grouped[zoneName] += value;
+        if (!grouped[zoneName]) {
+          grouped[zoneName] = value;
+        } else {
+          grouped[zoneName] += value;
+        }
+      });
+
+      for (const [zoneName, totalAvg] of Object.entries(grouped)) {
+        allRows.push({
+          s_no: rowIndex++,
+          zone_name: zoneName,
+          zone_code: zone_code,
+          parameter: category,
+          weighted_average: parseFloat(totalAvg.toFixed(2)),
+          scale: scale,
+          // weighted_average_by_parameter_out_of: scale,
+        });
       }
+    }
+
+    const totalWeightedAverage = allRows.reduce(
+      (sum, row) => sum + (row.weighted_average || 0),
+      0
+    );
+    const totalscale = allRows.reduce((sum, row) => sum + (row.scale || 0), 0);
+
+    // Save total values for summary box
+    setTotalValues({
+      scale: totalscale,
+      weighted_average: parseFloat(totalWeightedAverage.toFixed(2))
     });
 
-    for (const [zoneName, totalAvg] of Object.entries(grouped)) {
-      allRows.push({
-        s_no: rowIndex++,
-        zone_name: zoneName,
-        zone_code: zone_code,
-        parameter: category,
-        weighted_average: parseFloat(totalAvg.toFixed(2)),
-        scale: scale,
-        // weighted_average_by_parameter_out_of: scale,
-      });
-    }
-  }
 
-  // ➕ Add Total Row
-  const totalWeightedAverage = allRows.reduce(
-    (sum, row) => sum + (row.weighted_average || 0),
-    0
-  );
-  const totalscale = allRows.reduce(
-    (sum, row) => sum + (row.scale || 0),
-    0
-  );
+    // allRows.push({
+    //   s_no: "Total",
+    //   zone_name: "",
+    //   zone_code: "",
+    //   parameter: "",
+    //   weighted_average: parseFloat(totalWeightedAverage.toFixed(2)),
+    //   scale: totalscale,
+    // });
 
-  allRows.push({
-    s_no: "Total",
-    zone_name: "",
-    zone_code: "",
-    parameter: "",
-    weighted_average: parseFloat(totalWeightedAverage.toFixed(2)),
-    scale: totalscale,
-  });
-
-  setTableData(allRows);
-  setLoading(false);
-};
+    setTableData(allRows);
+    setLoading(false);
+  };
 
 
   useEffect(() => {
@@ -152,24 +158,24 @@ const fetchData = async () => {
     }
   }, [zone_code, newdate]);
 
-const exportToXLS = () => {
-  const exportData = tableData.map((item) => ({
-    "S.No.": item.s_no,
-    Zone: item.zone_name,
-    Parameter: item.parameter,
-    "Weighted Average Out of (100)": item.scale,
-    "Weighted Average Scored": item.weighted_average,
-  }));
+  const exportToXLS = () => {
+    const exportData = tableData.map((item) => ({
+      "S.No.": item.s_no,
+      Zone: item.zone_name,
+      Parameter: item.parameter,
+      "Weighted Average Out of (100)": item.scale,
+      "Weighted Average Scored": item.weighted_average,
+    }));
 
-  const ws = XLSX.utils.json_to_sheet(exportData);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    const ws = XLSX.utils.json_to_sheet(exportData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
 
-  const monthLabel = dayjs(selectedDate).format("MMMM_YYYY"); // e.g., June_2025
-  const fileName = `CGST_monthly_bifurcation_summary_${monthLabel}.xlsx`;
+    const monthLabel = dayjs(selectedDate).format("MMMM_YYYY"); // e.g., June_2025
+    const fileName = `CGST_monthly_bifurcation_summary_${monthLabel}.xlsx`;
 
-  XLSX.writeFile(wb, fileName);
-};
+    XLSX.writeFile(wb, fileName);
+  };
 
 
   return (
@@ -211,27 +217,43 @@ const exportToXLS = () => {
             </button>
           </div>
 
-          <CSmartTable
-            columns={[
-              { key: "s_no", label: "S.No." },
-              { key: "zone_name", label: "Zone" },
-              { key: "parameter", label: "Parameter (CGST)" },
-              { key: "scale", label: "Weighted Average Out of (100)" },
-              { key: "weighted_average", label: "Weighted Average Scored" },
-            ]}
-            items={tableData}
-            itemsPerPageSelect
-            itemsPerPage={itemsSelect}
-            onItemsPerPageChange={handleItemsChange}
-            pagination
-            tableFilter
-            columnSorter
-            tableProps={{
-              className: "add-this-class",
-              responsive: true,
-              hover: true,
-            }}
-          />
+          <>
+            <div className="export-btn m-3">
+              <button onClick={exportToXLS} className="btn btn-primary">
+                Export XLS
+              </button>
+            </div>
+
+            <CSmartTable
+              columns={[
+                { key: "s_no", label: "S.No." },
+                { key: "zone_name", label: "Zone" },
+                { key: "parameter", label: "Parameter (CGST)" },
+                { key: "scale", label: "Weighted Average Out of (100)" },
+                { key: "weighted_average", label: "Weighted Average Scored" },
+              ]}
+              items={tableData}
+              itemsPerPageSelect
+              itemsPerPage={itemsSelect}
+              onItemsPerPageChange={handleItemsChange}
+              pagination
+              tableFilter
+              columnSorter
+              tableProps={{
+                className: "add-this-class",
+                responsive: true,
+                hover: true,
+              }}
+            />
+
+            {/* ✅ Total Summary Box */}
+            <div className="total-summary mt-3 p-3 border rounded bg-light">
+              <h5>Total -</h5>
+              <p><strong>Weighted Average Out of (100):</strong> {totalValues.scale}</p>
+              <p><strong>Weighted Average Scored:</strong> {totalValues.weighted_average}</p>
+            </div>
+          </>
+
         </>
       )}
     </div>

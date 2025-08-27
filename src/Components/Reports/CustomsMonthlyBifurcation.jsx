@@ -18,16 +18,21 @@ const CustomsMonthlyBifurcation = ({ selectedDate, onChangeDate }) => {
   const [loading, setLoading] = useState(false);
   const newdate = dayjs(selectedDate).format("YYYY-MM-DD");
 
+  const [totalValues, setTotalValues] = useState({ weighted_average: 0, scale: 0 });
+
+
   const location = useLocation();
   const queryParams = queryString.parse(location.search);
   const zone_code = Number(queryParams.zone_code); // ensure numeric zone_code
 
   const [itemsSelect, setItemsSelect] = useState(() => {
     const savedItems = localStorage.getItem("itemsSelect");
-    return savedItems ? Number(savedItems) : 10;
+    return savedItems ? Number(savedItems) : 20; // Default is 20
   });
-  const handleItemsChange = (number) => {
-    setItemsSelect(number);
+
+  const handleItemsChange = (value) => {
+    setItemsSelect(value);
+    localStorage.setItem("itemsSelect", value);
   };
 
   const navigate = useNavigate();
@@ -218,14 +223,20 @@ const CustomsMonthlyBifurcation = ({ selectedDate, onChangeDate }) => {
       0
     );
 
-    allRows.push({
-      s_no: "Total",
-      zone_name: "",
-      zone_code: "",
-      parameter: "",
+    setTotalValues({
       weighted_average: parseFloat(totalWeightedAverage.toFixed(2)),
-      scale: totalscale, // Add total scale to the total row
+      scale: totalscale
     });
+
+
+    // allRows.push({
+    //   s_no: "Total",
+    //   zone_name: "",
+    //   zone_code: "",
+    //   parameter: "",
+    //   weighted_average: parseFloat(totalWeightedAverage.toFixed(2)),
+    //   scale: totalscale, // Add total scale to the total row
+    // });
 
     setTableData(allRows);
     setLoading(false);
@@ -316,27 +327,37 @@ const CustomsMonthlyBifurcation = ({ selectedDate, onChangeDate }) => {
             </button>
           </div>
 
-          <CSmartTable
-            columns={[
-              { key: "s_no", label: "S.No." },
-              { key: "zone_name", label: "Zone" },
-              { key: "parameter", label: "Parameter (Customs)" },
-              { key: "scale", label: "Weighted Average Out Of (100)" },
-              { key: "weighted_average", label: "Weighted Average Scored" },
-            ]}
-            items={tableData}
-            itemsPerPageSelect
-            itemsPerPage={itemsSelect}
-            onItemsPerPageChange={handleItemsChange}
-            pagination
-            tableFilter
-            columnSorter
-            tableProps={{
-              className: "add-this-class",
-              responsive: true,
-              hover: true,
-            }}
-          />
+          <div className="table-wrapper">
+            <CSmartTable
+              columns={[
+                { key: "s_no", label: "S.No." },
+                { key: "zone_name", label: "Zone" },
+                { key: "parameter", label: "Parameter (Customs)" },
+                { key: "scale", label: "Weighted Average Out Of (100)" },
+                { key: "weighted_average", label: "Weighted Average Scored" },
+              ]}
+              items={tableData}
+              itemsPerPageSelect
+              itemsPerPage={itemsSelect}
+              onItemsPerPageChange={handleItemsChange}
+              pagination
+              tableFilter
+              columnSorter
+              tableProps={{
+                className: "add-this-class",
+                responsive: true,
+                hover: true,
+              }}
+            />
+
+            {/* ✅ Total displayed separately */}
+            <div className="total-summary mt-3 p-3 border rounded bg-light">
+              <h5>Total -</h5>
+              <p><strong>Weighted Average Out of (100):</strong> {totalValues.scale}</p>
+              <p><strong>Weighted Average Scored:</strong> {totalValues.weighted_average}</p>
+            </div>
+          </div>
+
         </>
       )}
     </div>
