@@ -3067,8 +3067,10 @@ const Zoneparameters = ({
                   : item.sub_parameter_weighted_average
                 : name === "adjudication(legacy cases)"
                   ? item.sub_parameter_weighted_average
-                  : name === "refunds" || name === "returnFiling"
-                    ? item.way_to_grade
+                : name === "refunds"
+                  ? item.way_to_grade
+                  : name === "returnFiling"
+                    ? item.sub_parameter_weighted_average
                     : name === "appeals" ||
                       name === "arrest_and_prosecution" || name === "gst_arrest_and_prosecution" || name === "adjudication(legacy cases)" ||
                       name === "recovery_of_arrears" ||
@@ -3177,11 +3179,13 @@ const Zoneparameters = ({
                 : item.sub_parameter_weighted_average
               : name === "adjudication(legacy cases)"
                 ? item.sub_parameter_weighted_average
-                : name === "refunds" || name === "returnFiling"
+                : name === "refunds"
                   ? item.way_to_grade
-                  : name === "appeals"
+                  : name === "returnFiling"
                     ? item.sub_parameter_weighted_average
-                    : item.totalScore,
+                    : name === "appeals"
+                      ? item.sub_parameter_weighted_average
+                      : item.totalScore,
           // color: colorsbottomzone[index % colorsbottomzone.length],
           color:
             selectedOption1 === "Zones"

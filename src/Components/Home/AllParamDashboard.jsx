@@ -198,10 +198,10 @@ const AllParamDashboard = ({
                           to="/zoneparameters?name=registration"
                           className="text-white sub-h"
                         >
-                          Registration
+                          1. Registration
                           </Link>{" "}
                       </div>
-                      <ol className="par-list">
+                      <ol className="par-list" style={{ listStyleType: 'lower-alpha' }}>
                         <li className="text-white">
                           <Tooltip
                             title="Number of applications cleared within 07 days vis-à-vis total applications filed with Aadhar verification during the month"
@@ -325,10 +325,10 @@ const AllParamDashboard = ({
                           to="/zoneparameters?name=returnFiling"
                           className="text-white sub-h"
                         >
-                          Return Filing
+                          2. Return Filing
                         </Link>{" "}
                       </div>
-                      <ol className="par-list">
+                      <ol className="par-list" style={{ listStyleType: 'lower-alpha' }}>
                         <li>
                           <Tooltip
                             title="*Percentage of returns which were due but not filed vis-à-vis total returns due (GSTR 3B) "
@@ -385,10 +385,10 @@ const AllParamDashboard = ({
                           to="/zoneparameters?name=scrutiny/assessment"
                           className="text-white sub-h"
                         >
-                          Scrutiny & Assessment
+                          3. Scrutiny & Assessment
                         </Link>{" "}
                       </div>
-                      <ol className="par-list">
+                      <ol className="par-list" style={{ listStyleType: 'lower-alpha' }}>
                         <li className="text-white">
                           <Tooltip
                             title="Number of Returns whose scrutiny completed for the month vis-à-vis total Returns pending for the month (Pro-rata basis)"
@@ -458,10 +458,11 @@ const AllParamDashboard = ({
                           to="/zoneparameters?name=investigation"
                           className="text-white sub-h"
                         >
-                          Investigation
+                          4. Investigation
                         </Link>{" "}
                       </div>
-                      <ol className="par-list b-4">
+                      {/* <ol className="par-list b-4"> */}
+                        <ol className="par-list" style={{ listStyleType: 'lower-alpha' }}>
                         <li className="text-white">
                           <Tooltip
                             title="No. of cases disposed (investigation completed)during the month vis a vis total investigations pending at beginning of the month"
@@ -561,11 +562,11 @@ const AllParamDashboard = ({
                           to="/zoneparameters?name=adjudication"
                           className="text-white sub-h"
                         >
-                          Adjudication
+                          5. Adjudication
                         </Link>
                         {""}
                       </div>
-                      <ol className="par-list">
+                     <ol className="par-list" style={{ listStyleType: 'lower-alpha' }}>
                         <li>
                           <Tooltip
                             title="Number of cases disposed of during the month vis-à-vis total pending cases at the beginning of the month"
@@ -636,10 +637,10 @@ const AllParamDashboard = ({
                           to="/zoneparameters?name=adjudication(legacy cases)"
                           className="text-white sub-h"
                         >
-                          Adjudication(legacy cases)
+                          6. Adjudication(legacy cases)
                         </Link>
                       </div>
-                      <ol className="par-list b-4">
+                     <ol className="par-list" style={{ listStyleType: 'lower-alpha' }}>
                         <li>
                           <Tooltip
                             title="No. of cases disposed of during the month in Service Tax vis-à-vis  total cases in the beginning of the month"
@@ -738,11 +739,11 @@ const AllParamDashboard = ({
                           to="/zoneparameters?name=refunds"
                           className="text-white sub-h"
                         >
-                          Refunds
+                          7. Refunds
                         </Link>
                         {""}
                       </div>
-                      <ol className="par-list">
+                     <ol className="par-list" style={{ listStyleType: 'lower-alpha' }}>
                         <li>
                           <Tooltip
                             title="Number of refunds applications pending beyond 60 days of receipt vis-à-vis total number of refunds applications pending at the end of the month"
@@ -799,11 +800,11 @@ const AllParamDashboard = ({
                           to="/zoneparameters?name=recovery_of_arrears"
                           className="text-white sub-h"
                         >
-                          Recovery of Arrears
+                          8. Recovery of Arrears
                         </Link>
                         {""}
                       </div>
-                      <ol className="par-list">
+                      <ol className="par-list" style={{ listStyleType: 'lower-alpha' }}>
                         <li className="text-white">
                           <Tooltip
                             title="Amount of Recoverable arrears recovered during the month vis-à-vis pro rata target given upto the month for the formation (Zone/Commissionerate)"
@@ -874,11 +875,11 @@ const AllParamDashboard = ({
                           to="/zoneparameters?name=gst_arrest_and_prosecution"
                           className="text-white sub-h"
                         >
-                          Arrest and Prosecution
+                          9. Arrest and Prosecution
                         </Link>
                         {""}
                       </div>
-                      <ol className="par-list b-4">
+                      <ol className="par-list" style={{ listStyleType: 'lower-alpha' }}>
                         <li className="text-white">
                           <Tooltip
                             title="Number of cases where prosecution was not launched within 2 months of prosecution sanction date vis-à-vis total number of prosecution sanctioned cases "
@@ -948,11 +949,11 @@ const AllParamDashboard = ({
                           to="/zoneparameters?name=audit"
                           className="text-white sub-h"
                         >
-                          Audit
+                          10. Audit
                         </Link>
                         {""}
                       </div>
-                      <ol className="par-list b-4">
+                      <ol className="par-list" style={{ listStyleType: 'lower-alpha' }}>
                         <li className="text-white">
                           <Tooltip
                             title="Number of Taxpayers (TPs) audited during the month vis-à-vis total number of Taxpayers (TPs)  allotted for audit upto the month (Pro- Rata)"
@@ -1028,11 +1029,11 @@ const AllParamDashboard = ({
                           to="/zoneparameters?name=appeals"
                           className="text-white sub-h"
                         >
-                          Appeals
+                          11. Appeals
                         </Link>
                         {""}
                       </div>
-                      <ol className="par-list b-4">
+                      <ol className="par-list" style={{ listStyleType: 'lower-alpha' }}>
                         <li>
                           <Tooltip
                             title="Number of appeal cases disposed of during the month vis-à-vis  pending appeal cases  at the beginning for the month"
@@ -1135,10 +1136,10 @@ const AllParamDashboard = ({
                           className="text-white sub-h"
                           to="/custompara?name=timelyrefunds"
                         >
-                          Timely payment of Refunds
+                          1. Timely payment of Refunds
                         </Link>
                       </div>
-                      <ol className="par-list">
+                      <ol className="par-list" style={{ listStyleType: 'lower-alpha' }}>
                         <li>
                           <Tooltip
                             title="Number of Refunds pending beyond 90 days at the end of the month vis-à-vis total number of Refunds at the end of the month"
@@ -1195,10 +1196,10 @@ const AllParamDashboard = ({
                           className="text-white sub-h"
                           to="/custompara?name=epcg"
                         >
-                          Management of Export Obligation(EPCG)
+                          2. Management of Export Obligation(EPCG)
                         </Link>
                       </div>
-                      <ol className="par-list b-4">
+                      <ol className="par-list" style={{ listStyleType: 'lower-alpha' }}>
                         <li className="text-white">
                           <Tooltip
                             title="Number of Notices issued pertaining to EPCG licenses pending for closure beyond stipulated period vis-a -vis total No. of cases where time to produce Export Obligation fulfilment is over"
@@ -1284,10 +1285,10 @@ const AllParamDashboard = ({
                           className="text-white sub-h"
                           to="/custompara?name=export_obligation(AA)"
                         >
-                          Management of Export Obligation(AA)
+                          3. Management of Export Obligation(AA)
                         </Link>
                       </div>
-                      <ol className="par-list">
+                      <ol className="par-list" style={{ listStyleType: 'lower-alpha' }}>
                         <li className="text-white">
                           <Tooltip
                             title="Number of Notices issued pertaining to AA licenses pending for closure beyond stipulated period vis-a -vis total No. of cases where time to produce Export Obligation fulfilment is over"
@@ -1372,10 +1373,10 @@ const AllParamDashboard = ({
                           className="text-white sub-h"
                           to="/custompara?name=disposal/pendency"
                         >
-                          Disposal/Pendency Of Provisional Assessments
+                          4. Disposal/Pendency Of Provisional Assessments
                         </Link>
                       </div>
-                      <ol className="par-list">
+                      <ol className="par-list" style={{ listStyleType: 'lower-alpha' }}>
                         <li className="text-white">
                           <Tooltip
                             title="Number of provisional assessment cases (Non-SVB) not finalised within six months from the date of provisional assessment vis-à-vis total number of provisional assessment cases(non-SVB)"
@@ -1475,10 +1476,10 @@ const AllParamDashboard = ({
                           className="text-white sub-h"
                           to="/custompara?name=adjudication"
                         >
-                          Adjudication
+                          5. Adjudication
                         </Link>
                       </div>
-                      <ol className="par-list">
+                      <ol className="par-list" style={{ listStyleType: 'lower-alpha' }}>
                         <li>
                           <Tooltip
                             title="Total Number of cases of adjudication disposed of during the month vis-à-vis  total pending cases at the beginning of the month"
@@ -1564,10 +1565,10 @@ const AllParamDashboard = ({
                           className="text-white sub-h"
                           to="/custompara?name=investigation"
                         >
-                          Investigation
+                          6. Investigation
                         </Link>
                       </div>
-                      <ol className="par-list">
+                      <ol className="par-list" style={{ listStyleType: 'lower-alpha' }}>
                         <li>
                           <Tooltip
                             title="Number of cases where investigation completed during the month vis-à-vis total investigation cases pending at the beginning of the month."
@@ -1699,10 +1700,10 @@ const AllParamDashboard = ({
                           className="text-white sub-h"
                           to="/custompara?name=arrest_and_prosecution"
                         >
-                          Arrests and Prosecution
+                          7. Arrests and Prosecution
                         </Link>
                       </div>
-                      <ol className="par-list">
+                      <ol className="par-list" style={{ listStyleType: 'lower-alpha' }}>
                         <li className="text-white">
                           <Tooltip
                             title=" Number of cases where prosecution was not launched within 2 months of prosecution sanction date vis-à-vis total number of prosecution cases sanctioned upto the month "
@@ -1771,10 +1772,10 @@ const AllParamDashboard = ({
                           className="text-white sub-h"
                           to="/custompara?name=unclaimed_cargo"
                         >
-                          Monitoring Of Un-cleared and Unclaimed cargo
+                          8. Monitoring Of Un-cleared and Unclaimed cargo
                         </Link>
                       </div>
-                      <ol className="par-list b-4">
+                      <ol className="par-list" style={{ listStyleType: 'lower-alpha' }}>
                         <li className="text-white">
                           <Tooltip
                             title="Number of packages of un-cleared/unclaimed cargo disposed during the month vis-a-vis total number of packages of un-cleared/unclaimed cargo pending at the beginning of the month."
@@ -1848,10 +1849,10 @@ const AllParamDashboard = ({
                           className="text-white sub-h"
                           to="/custompara?name=DisposalOfConfiscatedGoldAndNDPS"
                         >
-                          Disposal Of Confiscated Gold and Narcotics
+                          9. Disposal Of Confiscated Gold and Narcotics
                         </Link>
                       </div>
-                      <ol className="par-list b-4">
+                      <ol className="par-list" style={{ listStyleType: 'lower-alpha' }}>
                         <li>
                           <Tooltip
                             title="Quantity of Gold disposed during the month vis-à-vis total quantity of gold ripe for disposal at the beginning of the month"
@@ -1922,10 +1923,10 @@ const AllParamDashboard = ({
                           className="text-white sub-h"
                           to="/custompara?name=recovery_of_arrears"
                         >
-                          Recovery of Arrears
+                          10. Recovery of Arrears
                         </Link>
                       </div>
-                      <ol className="par-list">
+                      <ol className="par-list" style={{ listStyleType: 'lower-alpha' }}>
                         <li className="text-white">
                           <Tooltip
                             title=" Recoverable arrears recovered vis-à-vis pro rata TAR target  upto the month "
@@ -1995,10 +1996,10 @@ const AllParamDashboard = ({
                           className="text-white sub-h"
                           to="/custompara?name=management_of_warehousing_bonds"
                         >
-                          Management Of Warehousing bonds
+                          11. Management Of Warehousing bonds
                         </Link>
                       </div>
-                      <ol className="par-list b-4">
+                      <ol className="par-list" style={{ listStyleType: 'lower-alpha' }}>
                         <li className="text-white">
                           <Tooltip
                             title="Number of cases where W/H bond has expired and no action taken during the month vis-à-vis total number of cases where W/H bond has expired upto the month"
@@ -2067,10 +2068,10 @@ const AllParamDashboard = ({
                           className="text-white sub-h"
                           to="/custompara?name=CommissionerAppeals"
                         >
-                          Commissioner (Appeals)
+                          12. Commissioner (Appeals)
                         </Link>
                       </div>
-                      <ol className="par-list">
+                     <ol className="par-list" style={{ listStyleType: 'lower-alpha' }}>
                         <li>
                           <Tooltip
                             title=") Number of appeal cases disposed of during the month vis-à-vis  pending cases at the beginning for the month"
@@ -2144,10 +2145,10 @@ const AllParamDashboard = ({
                           className="text-white sub-h"
                           to="/custompara?name=cus_audit"
                         >
-                          Audit
+                          13. Audit
                         </Link>
                       </div>
-                      <ol className="par-list">
+                      <ol className="par-list" style={{ listStyleType: 'lower-alpha' }}>
                         <li className="text-white">
                           <Tooltip
                             title="Number of BEs audited upto the month vis-à-vis total number of BEs marked for audit upto the month"

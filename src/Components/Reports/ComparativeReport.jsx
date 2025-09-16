@@ -16,6 +16,11 @@ import apiClient from "../../Service/ApiClient";
 import Spinner from "../Spinner";
 import { sort } from "@amcharts/amcharts4/.internal/core/utils/Iterator";
 
+import CircularProgress from '@mui/material/CircularProgress';
+import Typography from '@mui/material/Typography';
+import Skeleton from '@mui/material/Skeleton';
+
+
 const ComparativeReport = ({
   selectedDate,
   onChangeDate,
@@ -440,7 +445,11 @@ const ComparativeReport = ({
   }, [newdate]);
 
   const columns = [
-    { key: "s_no", label: "S no.", sorter: false },
+    {
+      key: "s_no", label: "S no.", sorter
+
+        : false
+    },
     { key: "zone_name", label: "Zone" },
     { key: "sub_parameter_weighted_average_12", label: `${date12}` },
     { key: "sub_parameter_weighted_average_11", label: `${date11}` },
@@ -583,248 +592,244 @@ const ComparativeReport = ({
   return (
     <>
       {loading ? (
-        <div>
-          <div className="body flex-grow-1 custom-sec">
-            <div className="msg-box">
-              <div className="lft-box col-md-11">
-                <h3>Comparative Report (Score)</h3>
+        <div className="body flex-grow-1 custom-sec">
+          <div className="msg-box">
+            <div className="lft-box col-md-11">
+              <h3>Comparative Report (Score)</h3>
+            </div>
+            <div className="rgt-box">
+              <div className="view-btn">
+                <Button variant="contained" className="ml-4 cust-btn" onClick={handleBack}>
+                  Back
+                </Button>
               </div>
-              <div className="rgt-box">
-                <div className="view-btn">
-                  <Button
-                    variant="contained"
-                    className="ml-4 cust-btn"
-                    onClick={handleBack}
-                  >
-                    Back
-                  </Button>
+            </div>
+          </div>
+
+          {/* Date + Toggle stay visible while loading (optional) */}
+          <div className="date-sec">
+            <div className="lft-sec">
+              <div className="date-main">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={["DatePicker"]}>
+                    <DatePicker
+                      label={"Month and Year"}
+                      views={["month", "year"]}
+                      maxDate={dayjs().subtract(1, "month").startOf("month")}
+                      value={selectedDate}
+                      onChange={handleChangeDate}
+                      renderInput={(params) => <TextField {...params} />}
+                      shouldDisableYear={shouldDisableYear}
+                      slotProps={{ field: { readOnly: true } }}
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
+              </div>
+            </div>
+
+            <div className="col-md-4">
+              <div className="switches-container">
+                <input
+                  type="radio"
+                  id="switchMonthly"
+                  name="switchPlan"
+                  value="CGST"
+                  checked={selectedOption === "CGST"}
+                  onChange={handleChange}
+                />
+                <input
+                  type="radio"
+                  id="switchYearly"
+                  name="switchPlan"
+                  value="Customs"
+                  checked={selectedOption === "Customs"}
+                  onChange={handleChange}
+                />
+                <label htmlFor="switchMonthly">CGST</label>
+                <label htmlFor="switchYearly">Customs</label>
+                <div className="switch-wrapper">
+                  <div className="switch">
+                    <div>CGST</div>
+                    <div>Customs</div>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="date-sec">
-              <div className="lft-sec">
-                <div className="date-main">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={["DatePicker"]}>
-                      <DatePicker
-                        label={"Month and Year"}
-                        views={["month", "year"]}
-                        maxDate={dayjs().subtract(1, "month").startOf("month")}
-                        value={selectedDate}
-                        onChange={handleChangeDate}
-                        renderInput={(params) => <TextField {...params} />}
-                        shouldDisableYear={shouldDisableYear}
-                        slotProps={{ field: { readOnly: true } }}
-                      />
-                    </DemoContainer>
-                  </LocalizationProvider>
+          </div>
+
+          {/* Polished loading panel */}
+          <div className="loading-panel">
+            <CircularProgress size={48} thickness={4} />
+            <Typography variant="h6" className="loading-title">Generating comparative report…</Typography>
+            <Typography variant="body2" className="loading-sub">
+              Fetching data for {dayjs(selectedDate).format('MMMM YYYY')} — this usually takes a few seconds.
+            </Typography>
+          </div>
+
+          {/* Subtle skeletons to hint table layout */}
+          <div className="loading-skeletons">
+            <Skeleton variant="rectangular" height={56} className="skeleton-row" />
+            <Skeleton variant="rectangular" height={56} className="skeleton-row" />
+            <Skeleton variant="rectangular" height={56} className="skeleton-row" />
+          </div>
+        </div>
+      )
+
+        :
+        (
+          <div>
+            <div className="body flex-grow-1 custom-sec">
+              <div className="msg-box">
+                <div className="lft-box col-md-11">
+                  <h3>Comparative Report (Score)</h3>
+                </div>
+                <div className="rgt-box">
+                  <div className="view-btn">
+                    <Button
+                      variant="contained"
+                      className="ml-4 cust-btn"
+                      onClick={handleBack}
+                    >
+                      Back
+                    </Button>
+                  </div>
                 </div>
               </div>
+              <div className="date-sec">
+                <div className="lft-sec">
+                  <div className="date-main">
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DemoContainer components={["DatePicker"]}>
+                        <DatePicker
+                          label={"Month and Year"}
+                          views={["month", "year"]}
+                          maxDate={dayjs().subtract(1, "month").startOf("month")}
+                          value={selectedDate}
+                          onChange={handleChangeDate}
+                          renderInput={(params) => <TextField {...params} />}
+                          shouldDisableYear={shouldDisableYear}
+                          slotProps={{ field: { readOnly: true } }}
+                        />
+                      </DemoContainer>
+                    </LocalizationProvider>
+                  </div>
+                </div>
 
-              <div className="col-md-4">
-                <div className="switches-container">
-                  <input
-                    type="radio"
-                    id="switchMonthly"
-                    name="switchPlan"
-                    value="CGST"
-                    checked={selectedOption === "CGST"}
-                    onChange={handleChange}
-                  />
-                  <input
-                    type="radio"
-                    id="switchYearly"
-                    name="switchPlan"
-                    value="Customs"
-                    checked={selectedOption === "Customs"}
-                    onChange={handleChange}
-                  />
-                  <label htmlFor="switchMonthly">CGST</label>
-                  <label htmlFor="switchYearly">Customs</label>
-                  <div className="switch-wrapper">
-                    <div className="switch">
-                      <div>CGST</div>
-                      <div>Customs</div>
+                <div className="col-md-4">
+                  <div className="switches-container">
+                    <input
+                      type="radio"
+                      id="switchMonthly"
+                      name="switchPlan"
+                      value="CGST"
+                      checked={selectedOption === "CGST"}
+                      onChange={handleChange}
+                    />
+                    <input
+                      type="radio"
+                      id="switchYearly"
+                      name="switchPlan"
+                      value="Customs"
+                      checked={selectedOption === "Customs"}
+                      onChange={handleChange}
+                    />
+                    <label htmlFor="switchMonthly">CGST</label>
+                    <label htmlFor="switchYearly">Customs</label>
+                    <div className="switch-wrapper">
+                      <div className="switch">
+                        <div>CGST</div>
+                        <div>Customs</div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {selectedOption === "CGST" ? (
-              <div className="box-main bg-blue col1">
-                <div className="row custom-tb mb col">
-
-                  <Spinner />
-
-                </div>
-              </div>
-            ) : (
-              <div className="box-main bg-blue col1">
-                <div className="row custom-tb mb col">
-
-                  <Spinner />
-
-                </div>
-              </div>
-            )}
-            <div className="row"></div>
-          </div>
-        </div>
-      ) : (
-        <div>
-          <div className="body flex-grow-1 custom-sec">
-            <div className="msg-box">
-              <div className="lft-box col-md-11">
-                <h3>Comparative Report (Score)</h3>
-              </div>
-              <div className="rgt-box">
-                <div className="view-btn">
-                  <Button
-                    variant="contained"
-                    className="ml-4 cust-btn"
-                    onClick={handleBack}
-                  >
-                    Back
-                  </Button>
-                </div>
-              </div>
-            </div>
-            <div className="date-sec">
-              <div className="lft-sec">
-                <div className="date-main">
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={["DatePicker"]}>
-                      <DatePicker
-                        label={"Month and Year"}
-                        views={["month", "year"]}
-                        maxDate={dayjs().subtract(1, "month").startOf("month")}
-                        value={selectedDate}
-                        onChange={handleChangeDate}
-                        renderInput={(params) => <TextField {...params} />}
-                        shouldDisableYear={shouldDisableYear}
-                        slotProps={{ field: { readOnly: true } }}
-                      />
-                    </DemoContainer>
-                  </LocalizationProvider>
-                </div>
-              </div>
-
-              <div className="col-md-4">
-                <div className="switches-container">
-                  <input
-                    type="radio"
-                    id="switchMonthly"
-                    name="switchPlan"
-                    value="CGST"
-                    checked={selectedOption === "CGST"}
-                    onChange={handleChange}
-                  />
-                  <input
-                    type="radio"
-                    id="switchYearly"
-                    name="switchPlan"
-                    value="Customs"
-                    checked={selectedOption === "Customs"}
-                    onChange={handleChange}
-                  />
-                  <label htmlFor="switchMonthly">CGST</label>
-                  <label htmlFor="switchYearly">Customs</label>
-                  <div className="switch-wrapper">
-                    <div className="switch">
-                      <div>CGST</div>
-                      <div>Customs</div>
+              {selectedOption === "CGST" ? (
+                <div className="box-main bg-blue col1">
+                  <div className="row custom-tb mb col">
+                    <div className="export-btn">
+                      <button onClick={exportToXLS} className="btn btn-primary m-3">
+                        Export XLS
+                      </button>
                     </div>
+
+                    <CSmartTable
+                      activePage={1}
+                      cleaner
+                      clickableRows={false}
+                      columns={columns}
+                      columnSorter
+                      items={userData}
+                      itemsPerPageSelect
+                      itemsPerPage={10}
+                      pagination
+                      scopedColumns={{
+                        s_no: (item, index) => {
+                          return <td>{index + 1}</td>; // ✅ Dynamic row index after sorting
+                        },
+                      }}
+                      onRowClick={onRowClick}
+                      onFilteredItemsChange={(items) => console.log(items)}
+                      onSelectedItemsChange={(items) => console.log(items)}
+                      sorterValue={{ column: "status", state: "asc" }}
+                      tableFilter
+                      tableProps={{
+                        className: "add-this-class",
+                        responsive: true,
+                        hover: true,
+                        align: "middle",
+                        border: "primary",
+                      }}
+                      onKeyDown={(e) => checkSpecialChar(e)}
+                    />
                   </div>
                 </div>
-              </div>
+              ) : (
+                <div className="box-main bg-blue col1">
+                  <div className="row custom-tb mb col">
+                    <div className="export-btn">
+                      <button onClick={exportToXLS} className="btn btn-primary m-3">
+                        Export XLS
+                      </button>
+                    </div>
+
+                    <CSmartTable
+                      activePage={1}
+                      cleaner
+                      clickableRows={false}
+                      columns={columnscustoms}
+                      columnSorter
+                      items={userDatacustoms}
+                      itemsPerPageSelect
+                      itemsPerPage={10}
+                      pagination
+                      scopedColumns={{
+                        s_no: (item, index) => {
+                          return <td>{index + 1}</td>; // ✅ Dynamic row index after sorting
+                        },
+                      }}
+                      onRowClick={onRowClick}
+                      onFilteredItemsChange={(items) => console.log(items)}
+                      onSelectedItemsChange={(items) => console.log(items)}
+                      sorterValue={{ column: "status", state: "asc" }}
+                      tableFilter
+                      tableProps={{
+                        className: "add-this-class",
+                        responsive: true,
+                        hover: true,
+                        align: "middle",
+                        border: "primary",
+                      }}
+                      onKeyDown={(e) => checkSpecialChar(e)}
+                    />
+                  </div>
+                </div>
+              )}
+              <div className="row"></div>
             </div>
-
-            {selectedOption === "CGST" ? (
-              <div className="box-main bg-blue col1">
-                <div className="row custom-tb mb col">
-                  <div className="export-btn">
-                    <button onClick={exportToXLS} className="btn btn-primary m-3">
-                      Export XLS
-                    </button>
-                  </div>
-
-                  <CSmartTable
-                    activePage={1}
-                    cleaner
-                    clickableRows={false}
-                    columns={columns}
-                    columnSorter
-                    items={userData}
-                    itemsPerPageSelect
-                    itemsPerPage={10}
-                    pagination
-                    scopedColumns={{
-                      s_no: (item, index) => {
-                        return <td>{index + 1}</td>; // ✅ Dynamic row index after sorting
-                      },
-                    }}
-                    onRowClick={onRowClick}
-                    onFilteredItemsChange={(items) => console.log(items)}
-                    onSelectedItemsChange={(items) => console.log(items)}
-                    sorterValue={{ column: "status", state: "asc" }}
-                    tableFilter
-                    tableProps={{
-                      className: "add-this-class",
-                      responsive: true,
-                      hover: true,
-                      align: "middle",
-                      border: "primary",
-                    }}
-                    onKeyDown={(e) => checkSpecialChar(e)}
-                  />
-                </div>
-              </div>
-            ) : (
-              <div className="box-main bg-blue col1">
-                <div className="row custom-tb mb col">
-                  <div className="export-btn">
-                    <button onClick={exportToXLS} className="btn btn-primary m-3">
-                      Export XLS
-                    </button>
-                  </div>
-
-                  <CSmartTable
-                    activePage={1}
-                    cleaner
-                    clickableRows={false}
-                    columns={columnscustoms}
-                    columnSorter
-                    items={userDatacustoms}
-                    itemsPerPageSelect
-                    itemsPerPage={10}
-                    pagination
-                    scopedColumns={{
-                      s_no: (item, index) => {
-                        return <td>{index + 1}</td>; // ✅ Dynamic row index after sorting
-                      },
-                    }}
-                    onRowClick={onRowClick}
-                    onFilteredItemsChange={(items) => console.log(items)}
-                    onSelectedItemsChange={(items) => console.log(items)}
-                    sorterValue={{ column: "status", state: "asc" }}
-                    tableFilter
-                    tableProps={{
-                      className: "add-this-class",
-                      responsive: true,
-                      hover: true,
-                      align: "middle",
-                      border: "primary",
-                    }}
-                    onKeyDown={(e) => checkSpecialChar(e)}
-                  />
-                </div>
-              </div>
-            )}
-            <div className="row"></div>
           </div>
-        </div>
-      )}
+        )}
     </>
   );
 };

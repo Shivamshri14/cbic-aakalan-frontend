@@ -3,12 +3,11 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import React, { useEffect, useState } from "react";
-
 import { CSmartTable } from "@coreui/react-pro";
 import Button from "@mui/material/Button";
 import dayjs from "dayjs";
 import queryString from "query-string";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import * as XLSX from "xlsx";
 import apiClient from "../../Service/ApiClient";
 import Spinner from "../Spinner";
@@ -18,17 +17,12 @@ const CGSTMonthlyBifurcation = ({ selectedDate, onChangeDate }) => {
   const [loading, setLoading] = useState(false);
   const newdate = dayjs(selectedDate).format("YYYY-MM-DD");
 
-  const [totalValues, setTotalValues] = useState({ scale: 0, weighted_average: 0 });
-
-
   const location = useLocation();
   const queryParams = queryString.parse(location.search);
   const zone_code = Number(queryParams.zone_code); // ensure numeric zone_code
 
-  const [itemsSelect, setItemsSelect] = useState(() => {
-    const savedItems = localStorage.getItem("itemsSelect");
-    return savedItems ? Number(savedItems) : 5;
-  });
+  // Set default items per page to 50
+  const [itemsSelect, setItemsSelect] = useState(50);
   const handleItemsChange = (number) => {
     setItemsSelect(number);
   };
@@ -48,7 +42,22 @@ const CGSTMonthlyBifurcation = ({ selectedDate, onChangeDate }) => {
     "Arrest & Prosecution": ["gst9a", "gst9b"],
     Audit: ["gst10a", "gst10b", "gst10c"],
     Appeals: ["gst11a", "gst11b", "gst11c", "gst11d"],
+  };
 
+  // Category map for clickable parameters (as per your requirement)
+  const categoryMap = {
+    "registration": "/zoneparameters?name=registration",
+    "returnfiling": "/zoneparameters?name=returnFiling",
+    "scrutiny_and_assessment": "/zoneparameters?name=scrutiny/assessment",
+    "investigation": "/zoneparameters?name=investigation",
+    "adjudication": "/zoneparameters?name=adjudication",
+    //"adjudication(legacy cases)": "/zoneparameters?name=adjudication(legacy cases)",
+    "adjudication_legacy_cases": "/zoneparameters?name=adjudication(legacy cases)", // ← updated key
+    "refunds": "/zoneparameters?name=refunds",
+    "recovery_of_arrears": "/zoneparameters?name=recovery_of_arrears",
+    "arrest_and_prosecution": "/zoneparameters?name=gst_arrest_and_prosecution",
+    "audit": "/zoneparameters?name=audit",
+    "appeals": "/zoneparameters?name=appeals",
   };
 
   const fetchData = async () => {
@@ -131,26 +140,20 @@ const CGSTMonthlyBifurcation = ({ selectedDate, onChangeDate }) => {
     );
     const totalscale = allRows.reduce((sum, row) => sum + (row.scale || 0), 0);
 
-    // Save total values for summary box
-    setTotalValues({
+    allRows.push({
+      s_no: "Total",
+      zone_name: "",
+      zone_code: "",
+      parameter: "",
+      weighted_average: parseFloat(totalWeightedAverage.toFixed(2)),
       scale: totalscale,
-      weighted_average: parseFloat(totalWeightedAverage.toFixed(2))
+      // Add a custom style or flag to identify the total row
+      boldRow: true,
     });
-
-
-    // allRows.push({
-    //   s_no: "Total",
-    //   zone_name: "",
-    //   zone_code: "",
-    //   parameter: "",
-    //   weighted_average: parseFloat(totalWeightedAverage.toFixed(2)),
-    //   scale: totalscale,
-    // });
 
     setTableData(allRows);
     setLoading(false);
   };
-
 
   useEffect(() => {
     if (zone_code) {
@@ -177,6 +180,24 @@ const CGSTMonthlyBifurcation = ({ selectedDate, onChangeDate }) => {
     XLSX.writeFile(wb, fileName);
   };
 
+  // Add this function to normalize parameter names for mapping
+  const getParamKey = (parameter) => {
+    if (!parameter) return "";
+    let paramKey = parameter
+      .toLowerCase()
+      //.replace(/\s*\(legacy cases\)/, "(legacy cases)")
+      .replace(/&/g, "and")
+      .replace(/[()]/g, " ")          // drop parens but keep content as words
+      .replace(/\s+/g, " ")           // collapse whitespace
+      .trim()
+      .replace(/\s+/g, "_")           // spaces -> underscore
+      .replace(/[^a-z0-9_]/g, "")     // drop stray punctuation
+      .replace(/_+/g, "_")    // collapse underscores
+      .replace(/ /g, "_")
+      .replace(/&/g, "and");
+    if (paramKey === "return_filing") paramKey = "returnfiling";
+    return paramKey;
+  };
 
   return (
     <div className="body flex-grow-1 custom-sec">
@@ -217,42 +238,53 @@ const CGSTMonthlyBifurcation = ({ selectedDate, onChangeDate }) => {
             </button>
           </div>
 
-          <>
-            <div className="export-btn m-3">
-              <button onClick={exportToXLS} className="btn btn-primary">
-                Export XLS
-              </button>
-            </div>
 
-            <CSmartTable
-              columns={[
-                { key: "s_no", label: "S.No." },
-                { key: "zone_name", label: "Zone" },
-                { key: "parameter", label: "Parameter (CGST)" },
-                { key: "scale", label: "Weighted Average Out of (100)" },
-                { key: "weighted_average", label: "Weighted Average Scored" },
-              ]}
-              items={tableData}
-              itemsPerPageSelect
-              itemsPerPage={itemsSelect}
-              onItemsPerPageChange={handleItemsChange}
-              pagination
-              tableFilter
-              columnSorter
-              tableProps={{
-                className: "add-this-class",
-                responsive: true,
-                hover: true,
-              }}
-            />
+          <CSmartTable
+            columns={[
+              { key: "s_no", label: "S.No." },
+              { key: "zone_name", label: "Zone" },
+              { key: "parameter", label: "Parameter (CGST)" },
+              { key: "scale", label: "Weighted Average Out of (100)" },
+              { key: "weighted_average", label: "Weighted Average Scored" },
+            ]}
+            items={tableData.map((row) => ({
+              ...row,
+              _cellProps: row.boldRow
+                ? {
+                  all: {
+                    className: "total-row fw-bold bg-warning strong",
+                    style: {
+                      backgroundColor: "#FFF3CD", // light warning
+                      color: "#000000ff",
+                      fontWeight: "bold",
+                      
+                    },
+                  },
+                }
+                : undefined,
+            }))}
 
-            {/* ✅ Total Summary Box */}
-            <div className="total-summary mt-3 p-3 border rounded bg-light">
-              <h5>Total -</h5>
-              <p><strong>Weighted Average Out of (100):</strong> {totalValues.scale}</p>
-              <p><strong>Weighted Average Scored:</strong> {totalValues.weighted_average}</p>
-            </div>
-          </>
+          itemsPerPageSelect
+          itemsPerPage={itemsSelect}
+          onItemsPerPageChange={handleItemsChange}
+          tableFilter
+          columnSorter={false}
+          pagination={false}
+          clickableRows
+          onRowClick={(item) => {
+            if (item.boldRow) return; // don't navigate on Total row
+            const paramKey = getParamKey(item.parameter);
+            const linkTo = categoryMap[paramKey];
+            if (linkTo) navigate(linkTo); // use React Router
+          }}
+          tableProps={{
+            className: "add-this-class",
+            responsive: true,
+            hover: true,
+          }}
+          />
+
+
 
         </>
       )}
@@ -260,4 +292,8 @@ const CGSTMonthlyBifurcation = ({ selectedDate, onChangeDate }) => {
   );
 };
 
+
 export default CGSTMonthlyBifurcation;
+
+
+

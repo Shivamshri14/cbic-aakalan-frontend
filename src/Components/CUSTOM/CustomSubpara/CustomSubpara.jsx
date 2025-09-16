@@ -121,9 +121,10 @@ const CustomSubpara = ({
          name === "cus4a" ||name === "cus4b" ||name === "cus4c" ||name === "cus4d" || name === "cus5a" || name === "cus5b" || name === "cus5c" || name === "cus6a" 
         || name === "cus6b" ||name === "cus6c" || name === "cus6d" || name === "cus6e" ||name === "cus6f" ||name === "cus7a" ||name === "cus7b" ||name === "cus8a" ||name === "cus8b" || name === "cus9a"
         || name === "cus9b"||name === "cus10a"||name === "cus10b"||name === "cus11a"||name === "cus11b"|| name === "cus12a"|| name === "cus12b" || name==="cus13a"|| name==="cus13b"|| name==="cus13c"|| name==="cus13d"|| name==="cus13e"
-      ) {
-        setData(enhancedData);
-      }
+      ) 
+      // {
+      //   setData(enhancedData);
+      // }
 
       // Log the fetched data to the console
       console.log("hello12345678", response.data);

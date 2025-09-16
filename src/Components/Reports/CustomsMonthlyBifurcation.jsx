@@ -229,14 +229,16 @@ const CustomsMonthlyBifurcation = ({ selectedDate, onChangeDate }) => {
     });
 
 
-    // allRows.push({
-    //   s_no: "Total",
-    //   zone_name: "",
-    //   zone_code: "",
-    //   parameter: "",
-    //   weighted_average: parseFloat(totalWeightedAverage.toFixed(2)),
-    //   scale: totalscale, // Add total scale to the total row
-    // });
+    allRows.push({
+      s_no: "Total",
+      zone_name: "",
+      zone_code: "",
+      parameter: "",
+      weighted_average: parseFloat(totalWeightedAverage.toFixed(2)),
+      scale: totalscale,
+      boldRow: true, // <-- add this
+    });
+
 
     setTableData(allRows);
     setLoading(false);
@@ -266,6 +268,54 @@ const CustomsMonthlyBifurcation = ({ selectedDate, onChangeDate }) => {
 
     XLSX.writeFile(wb, fileName);
   };
+
+
+  // 🔧 Normalize display labels → keys used in categoryMap
+  const getParamKey = (name = "") =>
+    name
+      .toLowerCase()
+      .replace(/\(epcg\)/g, "epcg")
+      .replace(/\(aa\)/g, "aa")
+      .replace(/&/g, "and")
+      .replace(/[()]/g, "")
+      .replace(/\s*of\s*/g, "_of_")
+      .replace(/\s+and\s+/g, "_and_")
+      .replace(/\s*\/\s*/g, "_")
+      .replace(/\s+/g, "_")
+      .replace(/[^a-z0-9_]/g, "")
+      .replace(/_+/g, "_")
+      .trim();
+
+  // 🔗 Where each normalized key should navigate
+  const categoryMap = {
+    // "Timely payment of Refunds"
+    timely_payment_of_refunds: "/custompara?name=timelyrefunds",
+    // "Management of Export Obligation(EPCG)"
+    management_of_export_obligationepcg: "/custompara?name=epcg",
+    // "Management of Export Obligation(AA)"
+    management_of_export_obligationaa: "/custompara?name=export_obligation(AA)",
+    // "Disposal Pendency"
+    disposal_pendency: "/custompara?name=disposal/pendency",
+    // "Adjudication"
+    adjudication: "/custompara?name=adjudication",
+    // "Investigation"
+    investigation: "/custompara?name=investigation",
+    // "Arrests and Prosecution"
+    arrests_and_prosecution: "/custompara?name=arrest_and_prosecution",
+    // "Monitoring Of Un-cleared and Unclaimed cargo"
+    monitoring_of_uncleared_and_unclaimed_cargo: "/custompara?name=unclaimed_cargo",
+    // "Disposal Of Confiscated Gold and Narcotics"
+    disposal_of_confiscated_gold_and_narcotics: "/custompara?name=DisposalOfConfiscatedGoldAndNDPS",
+    // "Recovery of Arrears"
+    recovery_of_arrears: "/custompara?name=recovery_of_arrears",
+    // "Management Of Warehousing bonds"
+    management_of_warehousing_bonds: "/custompara?name=management_of_warehousing_bonds",
+    // "Commissioner (Appeals)"
+    commissioner_appeals: "/custompara?name=CommissionerAppeals",
+    // "Audit"
+    audit: "/custompara?name=cus_audit",
+  };
+
 
   return (
     <div className="body flex-grow-1">
@@ -336,27 +386,63 @@ const CustomsMonthlyBifurcation = ({ selectedDate, onChangeDate }) => {
                 { key: "scale", label: "Weighted Average Out Of (100)" },
                 { key: "weighted_average", label: "Weighted Average Scored" },
               ]}
-              items={tableData}
+              // items={tableData.map((row) => ({
+              //   ...row,
+              //   // per-row styling belongs in _props
+              //   _props: row.boldRow
+              //   className: "total-row fw-bold bg-warning strong",
+              //     ? { className: "fw-bold", style: { cursor: "default" } }
+              //   : {
+              //     style: {
+              //       cursor: categoryMap[getParamKey(row.parameter)]
+              //         ? "pointer"
+              //         : "default",
+              //     },
+              //   },
+              // }))}
+              items={tableData.map((row) => ({
+                ...row,
+                _props: row.boldRow
+                  ? {
+                    className: "total-row fw-bold bg-warning",
+                    style: { cursor: "default" },
+                  }
+                  : {
+                    style: {
+                      cursor: categoryMap[getParamKey(row.parameter)]
+                        ? "pointer"
+                        : "default",
+                    },
+                  },
+                _cellProps: row.boldRow
+                  ? {
+                    all: { className: "bg-warning fw-bold" }, // ensure each <td> is yellow + bold
+                  }
+                  : undefined,
+              }))}
               itemsPerPageSelect
               itemsPerPage={itemsSelect}
               onItemsPerPageChange={handleItemsChange}
-              pagination
               tableFilter
-              columnSorter
+              columnSorter={false}
+              pagination={false}
+              clickableRows
+              onRowClick={(item) => {
+                // ✅ unclickable total row
+                if (item.boldRow) return;
+                const paramKey = getParamKey(item.parameter);
+                const linkTo = categoryMap[paramKey];
+                if (linkTo) navigate(linkTo);
+              }}
               tableProps={{
                 className: "add-this-class",
                 responsive: true,
                 hover: true,
               }}
             />
-
-            {/* ✅ Total displayed separately */}
-            <div className="total-summary mt-3 p-3 border rounded bg-light">
-              <h5>Total -</h5>
-              <p><strong>Weighted Average Out of (100):</strong> {totalValues.scale}</p>
-              <p><strong>Weighted Average Scored:</strong> {totalValues.weighted_average}</p>
-            </div>
           </div>
+
+
 
         </>
       )}

@@ -1365,9 +1365,10 @@ const AllParameters = ({
               : name === "adjudication(legacy cases)" ||
                 name === "audit" || name === "investigation"
                 ? item.sub_parameter_weighted_average
-                : name === "refunds" ||
-                  name === "returnFiling"
+                : name === "refunds"
                   ? item.way_to_grade
+                  : name === "returnFiling"
+                    ? item.sub_parameter_weighted_average
                   : name === "appeals" ||
                     name === "recovery_of_arrears" ||
                     name === "audit" || name === "investigation" ||

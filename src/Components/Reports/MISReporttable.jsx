@@ -3633,7 +3633,8 @@ const MISReporttable = ({
     createZoneDataMap(data1),
   ];
 
-  const data = zones.map((zone) => ({
+  const data = zones.map((zone, idx) => ({
+    s_no: idx + 1,
     zone_name: zone,
     weighted_average_1: dataMaps[0][zone]?.weighted_average || "NA",
     _cellProps: {
@@ -3664,15 +3665,16 @@ const MISReporttable = ({
     // Determine which data set to use for export
     const dataToExport =
       name === "TimelyPaymentOfRefunds" || name === "disposalPendency" || name === "investigation" ||
-      name === "Adjudication" || name === "epcg" || name === "aa" || name === "cus_investigation" ||
-      name === "DisposalOfConfiscatedGoldAndNDPS" || name === "cus_arrestAndProsecution" || name === "unclaimed_cargo" ||
-      name === "CommissionerAppeals" || name === "recovery_Of_Arrears" || name === "mowb" || name === "cus_audit"
+        name === "Adjudication" || name === "epcg" || name === "aa" || name === "cus_investigation" ||
+        name === "DisposalOfConfiscatedGoldAndNDPS" || name === "cus_arrestAndProsecution" || name === "unclaimed_cargo" ||
+        name === "CommissionerAppeals" || name === "recovery_Of_Arrears" || name === "mowb" || name === "cus_audit"
         ? datacustom
         : data;
 
     // Prepare the data for export
     const exportFormattedData = dataToExport.map((item) => {
       const row = {
+        "S. No.": item.s_no,
         "Zone Name": item.zone_name,
       };
       // Dynamically add columns for each month's weighted average
@@ -3720,7 +3722,7 @@ const MISReporttable = ({
 
   // Generate final structured data
   const datacustom = zonesFromApi
-    .map((zone) => {
+    .map((zone , idx) => {
       const weightedAvgValues = [
         dataMapsCustom[0][zone]?.weighted_average ?? null,
         dataMapsCustom[1][zone]?.weighted_average ?? null,
@@ -3736,6 +3738,7 @@ const MISReporttable = ({
       }
 
       return {
+        s_no: idx + 1,
         zone_name: zone,
         _cellProps: {
           weighted_average_1: dataMapsCustom[0][zone]?._cellProps || {},
@@ -3771,36 +3774,41 @@ const MISReporttable = ({
     {
       group: {
         // CGST entries
-        registration: 'CGST("Registration")',
-        returnFiling: 'CGST("Return Filing")',
-        scrutiny: 'CGST("Scrutiny/Assessment")',
-        investigation: 'CGST("Investigation")',
-        adjudication: 'CGST("Adjudication")',
-        adjudicationLegacy: 'CGST("Adjudication (Legacy cases)")',
-        refunds: 'CGST("Refunds")',
-        recoveryOfArrears: 'CGST("Recovery of Arrears")',
-        arrestAndProsecution: 'CGST("Arrest and Prosecution")',
-        audit: 'CGST("Audit")',
-        appeals: 'CGST("Appeals")',
+        registration: 'CGST("Registration Out of 12/100")',
+        returnFiling: 'CGST("Return Filing Out of 5/100")',
+        scrutiny: 'CGST("Scrutiny/Assessment Out of 10/100")',
+        investigation: 'CGST("Investigation Out of 10/100")',
+        adjudication: 'CGST("Adjudication Out of 10/100")',
+        adjudicationLegacy: 'CGST("Adjudication (Legacy cases) Out of 10/100")',
+        refunds: 'CGST("Refunds Out of 5/100")',
+        recoveryOfArrears: 'CGST("Recovery of Arrears Out of 8/100")',
+        arrestAndProsecution: 'CGST("Arrest and Prosecution Out of 6/100")',
+        audit: 'CGST("Audit Out of 12/100")',
+        appeals: 'CGST("Appeals Out of 12/100")',
 
         // CUSTOMS entries
-        TimelyPaymentOfRefunds: 'CUSTOMS("Timely payment of Refunds")',
-        epcg: 'CUSTOMS("Management of Export Obligation(EPCG)")',
-        aa: 'CUSTOMS("Management of Export Obligation(AA)")',
-        disposalPendency: 'CUSTOMS("Disposal/Pendency Of Provisional Assessments")',
-        Adjudication: 'CUSTOMS("Adjudication")',
-        cus_investigation: 'CUSTOMS("Investigation")',
-        cus_arrestAndProsecution: 'CUSTOMS("Arrests and Prosecution")',
-        unclaimed_cargo: 'CUSTOMS("Monitoring Of Un-cleared and Unclaimed cargo")',
-        DisposalOfConfiscatedGoldAndNDPS: 'CUSTOMS("Disposal Of Confiscated Gold and NDPS")',
-        recovery_Of_Arrears: 'CUSTOMS("Recovery of Arrears")',
-        mowb: 'CUSTOMS("Management Of Warehousing bonds")',
-        CommissionerAppeals: 'CUSTOMS("Commissioner (Appeals)")',
-        cus_audit: 'CUSTOMS("Audit")'
+        TimelyPaymentOfRefunds: 'CUSTOMS("Timely payment of Refunds Out of 5/100")',
+        epcg: 'CUSTOMS("Management of Export Obligation(EPCG) Out of 7/100")',
+        aa: 'CUSTOMS("Management of Export Obligation(AA) Out of 7/100")',
+        disposalPendency: 'CUSTOMS("Disposal/Pendency Of Provisional Assessments Out of 11/100")',
+        Adjudication: 'CUSTOMS("Adjudication Out of 10/100")',
+        cus_investigation: 'CUSTOMS("Investigation Out of 12/100")',
+        cus_arrestAndProsecution: 'CUSTOMS("Arrests and Prosecution Out of 6/100")',
+        unclaimed_cargo: 'CUSTOMS("Monitoring Of Un-cleared and Unclaimed cargo Out of 6/100")',
+        DisposalOfConfiscatedGoldAndNDPS: 'CUSTOMS("Disposal Of Confiscated Gold and NDPS Out of 4/100")',
+        recovery_Of_Arrears: 'CUSTOMS("Recovery of Arrears Out of 6/100")',
+        mowb: 'CUSTOMS("Management Of Warehousing bonds Out of 6/100")',
+        CommissionerAppeals: 'CUSTOMS("Commissioner (Appeals) Out of 8/100")',
+        cus_audit: 'CUSTOMS("Audit Out of 12/100")'
       }[name] || "CUSTOMS",
 
 
       children: [
+        {
+          key: "s_no",
+          label: "S. No.",
+          _cellProps: { scope: "col" },
+        },
         {
           key: "zone_name",
           label: "Zone Name",
@@ -3919,9 +3927,9 @@ const MISReporttable = ({
                 columns={columns}
                 items={
                   name === "TimelyPaymentOfRefunds" || name === "disposalPendency" || name === "investigation" ||
-                  name === "Adjudication" || name === "epcg" || name === "aa" || name === "cus_investigation" ||
-                  name === "DisposalOfConfiscatedGoldAndNDPS" || name === "cus_arrestAndProsecution" || name === "unclaimed_cargo" ||
-                  name === "CommissionerAppeals" || name === "recovery_Of_Arrears" || name === "mowb" || name === "cus_audit"
+                    name === "Adjudication" || name === "epcg" || name === "aa" || name === "cus_investigation" ||
+                    name === "DisposalOfConfiscatedGoldAndNDPS" || name === "cus_arrestAndProsecution" || name === "unclaimed_cargo" ||
+                    name === "CommissionerAppeals" || name === "recovery_Of_Arrears" || name === "mowb" || name === "cus_audit"
                     ? datacustom
                     : data
                 }

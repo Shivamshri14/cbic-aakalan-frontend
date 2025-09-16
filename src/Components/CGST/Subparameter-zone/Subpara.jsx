@@ -176,11 +176,12 @@ const Subpara = ({
         name === "gst10a" ||
         name === "gst10b" ||
         name === "gst10c"
-      ) {
-        setData(enhancedData);
-      }
+      ) 
+      // {
+      //   setData(enhancedData);
+      // }
 
-      console.log("COLOR CODE", enhancedData);
+      // console.log("COLOR CODE", enhancedData);
 
       // Log the fetched data to the console
       console.log("hello12345678", response.data);
@@ -580,7 +581,7 @@ const Subpara = ({
 
     columns.splice(6, 0, {
       key: "sub_parameter_weighted_average",
-      label: "Weighted Average(Out of 10)",
+      label: "Weighted Average(Out of 5)",
     });
 
     columnscomm.splice(3, 0, {
@@ -1749,7 +1750,7 @@ const Subpara = ({
                   "Returns Not Filed/Total Returns Due": user.absolutevale,
                   // "Ratio": user.ratio,
                   "Percentage Not Filed": user.total_score,
-                  "Way to Grade (Marks) Score out of 10": user.way_to_grade,
+                  "Way to Grade (Marks) Score out of 5": user.way_to_grade,
                   "Weighted Average(Out of 5)":
                     user.sub_parameter_weighted_average,
                 };
