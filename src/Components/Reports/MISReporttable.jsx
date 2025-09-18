@@ -13,6 +13,7 @@ import queryString from "query-string";
 import { CSmartTable } from "@coreui/react-pro";
 import Spinner from "../Spinner";
 import * as XLSX from 'xlsx';
+import { WidthWide } from "@mui/icons-material";
 
 const MISReporttable = ({
   selectedDate,
@@ -75,6 +76,320 @@ const MISReporttable = ({
     try {
       if (name === "adjudicationLegacy") {
         const endpoints = ["gst6a", "gst6b", "gst6c", "gst6d"];
+        const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
+
+        // Fetch data for all months and endpoints
+        const responses = await Promise.all(
+          months.map((month) =>
+            Promise.all(
+              endpoints.map((endpoint) =>
+                apiClient
+                  .get(`/cbic/${endpoint}`, { params: { month_date: month, type: "zone" } })
+                  .then((response) => ({
+                    data: response.data,
+                    gst: endpoint.toUpperCase(),
+                  }))
+                  .catch((error) => {
+                    console.error(`❌ API error for ${endpoint} (${month}):`, error);
+                    return { data: [], gst: endpoint.toUpperCase() }; // Return empty data on failure
+                  })
+              )
+            )
+          )
+        );
+
+        // Stop loading when all data is received
+        setLoading(false);
+
+        // Function to process data
+        const processData = (responseData) => {
+          const allData = responseData.flatMap((response) =>
+            response.data.map((item) => ({ ...item, gst: response.gst }))
+          );
+
+          console.log("✅ FINAL RESPONSE", allData);
+
+          // Summing sub_parameter_weighted_average by zone_code
+          const summedByZone = allData.reduce((acc, item) => {
+            const zoneCode = item.zone_code;
+            const value = parseFloat(item.sub_parameter_weighted_average) || 0; // Convert to number, default 0
+
+            if (!acc[zoneCode]) {
+              acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
+            }
+            acc[zoneCode].sub_parameter_weighted_average += value;
+
+            return acc;
+          }, {});
+
+          // Formatting and sorting data
+          const reducedAllData = Object.values(summedByZone).map((item) => ({
+            ...item,
+            weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+          }));
+
+          console.log("✅ Reduced All Data:", reducedAllData);
+
+          const sorted = reducedAllData.sort((a, b) => a.zone_code - b.zone_code);
+
+          // Apply coloring based on weighted_average
+          return sorted.map((item, index) => {
+            const total = item.sub_parameter_weighted_average;
+            let props = {};
+
+            if (total >= 7.5) {
+              props = { color: "success" }; // High performance
+            } else if (total >= 5) {
+              props = { color: "warning" };
+            } else if (total <= 2.5) {
+              props = { color: "danger" }; // Low performance
+            } else {
+              props = { color: "primary" }; // Normal
+            }
+
+            return {
+              ...item,
+              _cellProps: props,
+              s_no: index + 1,
+            };
+          });
+        };
+
+        // Process data for each month
+        const enhancedData1 = processData(responses[0]);
+        const enhancedData2 = processData(responses[1]);
+        const enhancedData3 = processData(responses[2]);
+        const enhancedData4 = processData(responses[3]);
+        const enhancedData5 = processData(responses[4]);
+        const enhancedData6 = processData(responses[5]);
+
+        // Debugging Logs
+        console.log("✅ Enhanced Data 1", enhancedData1);
+        console.log("✅ Enhanced Data 2", enhancedData2);
+        console.log("✅ Enhanced Data 3", enhancedData3);
+        console.log("✅ Enhanced Data 4", enhancedData4);
+        console.log("✅ Enhanced Data 5", enhancedData5);
+        console.log("✅ Enhanced Data 6", enhancedData6);
+
+        // Update state with the processed data
+        setData1(enhancedData1);
+        setData2(enhancedData2);
+        setData3(enhancedData3);
+        setData4(enhancedData4);
+        setData5(enhancedData5);
+        setData6(enhancedData6);
+      } else if (name === "registration") {
+        const endpoints = ["gst1a", "gst1b", "gst1c", "gst1d", "gst1e", "gst1f"];
+        const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
+
+        // Fetch data for all months and endpoints
+        const responses = await Promise.all(
+          months.map((month) =>
+            Promise.all(
+              endpoints.map((endpoint) =>
+                apiClient
+                  .get(`/cbic/${endpoint}`, { params: { month_date: month, type: "zone" } })
+                  .then((response) => ({
+                    data: response.data,
+                    gst: endpoint.toUpperCase(),
+                  }))
+                  .catch((error) => {
+                    console.error(`❌ API error for ${endpoint} (${month}):`, error);
+                    return { data: [], gst: endpoint.toUpperCase() }; // Return empty data on failure
+                  })
+              )
+            )
+          )
+        );
+
+        // Stop loading when all data is received
+        setLoading(false);
+
+        // Function to process data
+        const processData = (responseData) => {
+          const allData = responseData.flatMap((response) =>
+            response.data.map((item) => ({ ...item, gst: response.gst }))
+          );
+
+          console.log("✅ FINAL RESPONSE", allData);
+
+          // Summing sub_parameter_weighted_average by zone_code
+          const summedByZone = allData.reduce((acc, item) => {
+            const zoneCode = item.zone_code;
+            const value = parseFloat(item.sub_parameter_weighted_average) || 0; // Convert to number, default 0
+
+            if (!acc[zoneCode]) {
+              acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
+            }
+            acc[zoneCode].sub_parameter_weighted_average += value;
+
+            return acc;
+          }, {});
+
+          // Formatting and sorting data
+          const reducedAllData = Object.values(summedByZone).map((item) => ({
+            ...item,
+            //weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            weighted_average: ((item.sub_parameter_weighted_average * 12) / 10).toFixed(2),
+          }));
+
+          console.log("✅ Reduced All Data:", reducedAllData);
+
+          const sorted = reducedAllData.sort((a, b) => a.zone_code - b.zone_code);
+
+          // Apply coloring based on weighted_average
+          return sorted.map((item, index) => {
+            const total = item.sub_parameter_weighted_average;
+            let props = {};
+
+            if (total >= 7.5) {
+              props = { color: "success" }; // High performance
+            } else if (total >= 5) {
+              props = { color: "warning" };
+            } else if (total <= 2.5) {
+              props = { color: "danger" }; // Low performance
+            } else {
+              props = { color: "primary" }; // Normal
+            }
+
+            return {
+              ...item,
+              _cellProps: props,
+              s_no: index + 1,
+            };
+          });
+        };
+
+        // Process data for each month
+        const enhancedData1 = processData(responses[0]);
+        const enhancedData2 = processData(responses[1]);
+        const enhancedData3 = processData(responses[2]);
+        const enhancedData4 = processData(responses[3]);
+        const enhancedData5 = processData(responses[4]);
+        const enhancedData6 = processData(responses[5]);
+
+        // Debugging Logs
+        console.log("✅ Enhanced Data 1", enhancedData1);
+        console.log("✅ Enhanced Data 2", enhancedData2);
+        console.log("✅ Enhanced Data 3", enhancedData3);
+        console.log("✅ Enhanced Data 4", enhancedData4);
+        console.log("✅ Enhanced Data 5", enhancedData5);
+        console.log("✅ Enhanced Data 6", enhancedData6);
+
+        // Update state with the processed data
+        setData1(enhancedData1);
+        setData2(enhancedData2);
+        setData3(enhancedData3);
+        setData4(enhancedData4);
+        setData5(enhancedData5);
+        setData6(enhancedData6);
+      } else if (name === "returnFiling") {
+        const endpoints = ["gst2"];
+        const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
+
+        // Fetch data for all months and endpoints
+        const responses = await Promise.all(
+          months.map((month) =>
+            Promise.all(
+              endpoints.map((endpoint) =>
+                apiClient
+                  .get(`/cbic/${endpoint}`, { params: { month_date: month, type: "zone" } })
+                  .then((response) => ({
+                    data: response.data,
+                    gst: endpoint.toUpperCase(),
+                  }))
+                  .catch((error) => {
+                    console.error(`❌ API error for ${endpoint} (${month}):`, error);
+                    return { data: [], gst: endpoint.toUpperCase() }; // Return empty data on failure
+                  })
+              )
+            )
+          )
+        );
+
+        // Stop loading when all data is received
+        setLoading(false);
+
+        // Function to process data
+        const processData = (responseData) => {
+          const allData = responseData.flatMap((response) =>
+            response.data.map((item) => ({ ...item, gst: response.gst }))
+          );
+
+          console.log("✅ FINAL RESPONSE", allData);
+
+          // Summing sub_parameter_weighted_average by zone_code
+          const summedByZone = allData.reduce((acc, item) => {
+            const zoneCode = item.zone_code;
+            const value = parseFloat(item.sub_parameter_weighted_average) || 0; // Convert to number, default 0
+
+            if (!acc[zoneCode]) {
+              acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
+            }
+            acc[zoneCode].sub_parameter_weighted_average += value;
+
+            return acc;
+          }, {});
+
+          // Formatting and sorting data
+          const reducedAllData = Object.values(summedByZone).map((item) => ({
+            ...item,
+            weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            //weighted_average: ((item.sub_parameter_weighted_average * 12) / 10).toFixed(2),
+          }));
+
+          console.log("✅ Reduced All Data:", reducedAllData);
+
+          const sorted = reducedAllData.sort((a, b) => a.zone_code - b.zone_code);
+
+          // Apply coloring based on weighted_average
+          return sorted.map((item, index) => {
+            const total = item.sub_parameter_weighted_average;
+            let props = {};
+
+            if (total >= 7.5) {
+              props = { color: "success" }; // High performance
+            } else if (total >= 5) {
+              props = { color: "warning" };
+            } else if (total <= 2.5) {
+              props = { color: "danger" }; // Low performance
+            } else {
+              props = { color: "primary" }; // Normal
+            }
+
+            return {
+              ...item,
+              _cellProps: props,
+              s_no: index + 1,
+            };
+          });
+        };
+
+        // Process data for each month
+        const enhancedData1 = processData(responses[0]);
+        const enhancedData2 = processData(responses[1]);
+        const enhancedData3 = processData(responses[2]);
+        const enhancedData4 = processData(responses[3]);
+        const enhancedData5 = processData(responses[4]);
+        const enhancedData6 = processData(responses[5]);
+
+        // Debugging Logs
+        console.log("✅ Enhanced Data 1", enhancedData1);
+        console.log("✅ Enhanced Data 2", enhancedData2);
+        console.log("✅ Enhanced Data 3", enhancedData3);
+        console.log("✅ Enhanced Data 4", enhancedData4);
+        console.log("✅ Enhanced Data 5", enhancedData5);
+        console.log("✅ Enhanced Data 6", enhancedData6);
+
+        // Update state with the processed data
+        setData1(enhancedData1);
+        setData2(enhancedData2);
+        setData3(enhancedData3);
+        setData4(enhancedData4);
+        setData5(enhancedData5);
+        setData6(enhancedData6);
+      } else if (name === "scrutiny") {
+        const endpoints = ["gst3a", "gst3b"];
         const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
 
         // Fetch data for all months and endpoints
@@ -385,526 +700,6 @@ const MISReporttable = ({
         setData4(enhancedData4);
         setData5(enhancedData5);
         setData6(enhancedData6);
-      } else if (name === "epcg") {
-        const endpoints = ["cus2a", "cus2b", "cus2c"];
-        const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
-
-        // Fetch data for all months and endpoints
-        const responses = await Promise.all(
-          months.map((month) =>
-            Promise.all(
-              endpoints.map((endpoint) =>
-                apiClient
-                  .get(`/cbic/custom/${endpoint}`, { params: { month_date: month, type: "zone" } })
-                  .then((response) => ({
-                    data: response.data,
-                    gst: endpoint.toUpperCase(),
-                  }))
-                  .catch((error) => {
-                    console.error(`❌ API error for ${endpoint} (${month}):`, error);
-                    return { data: [], gst: endpoint.toUpperCase() }; // Return empty data on failure
-                  })
-              )
-            )
-          )
-        );
-
-        // Stop loading when all data is received
-        setLoading(false);
-
-        // Function to process data
-        const processData = (responseData) => {
-          const allData = responseData.flatMap((response) =>
-            response.data.map((item) => ({ ...item, gst: response.gst }))
-          );
-
-          console.log("✅ FINAL RESPONSE", allData);
-
-          // Summing sub_parameter_weighted_average by zone_code
-          const summedByZone = allData.reduce((acc, item) => {
-            const zoneCode = item.zone_code;
-            const value = parseFloat(item.sub_parameter_weighted_average) || 0; // Convert to number, default 0
-
-            if (!acc[zoneCode]) {
-              acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
-            }
-            acc[zoneCode].sub_parameter_weighted_average += value;
-
-            return acc;
-          }, {});
-
-          // Formatting and sorting data
-          const reducedAllData = Object.values(summedByZone).map((item) => ({
-            ...item,
-            weighted_average: item.sub_parameter_weighted_average.toFixed(2),
-          }));
-
-          console.log("✅ Reduced All Data:", reducedAllData);
-
-          const sorted = reducedAllData.sort((a, b) => a.zone_code - b.zone_code);
-
-          // Apply coloring based on weighted_average
-          return sorted.map((item, index) => {
-            const total = item.sub_parameter_weighted_average;
-            let props = {};
-
-            if (total >= 7.5) {
-              props = { color: "success" }; // High performance
-            } else if (total >= 5) {
-              props = { color: "warning" };
-            } else if (total <= 2.5) {
-              props = { color: "danger" }; // Low performance
-            } else {
-              props = { color: "primary" }; // Normal
-            }
-
-            return {
-              ...item,
-              _cellProps: props,
-              s_no: index + 1,
-            };
-          });
-        };
-
-        // Process data for each month
-        const enhancedData1 = processData(responses[0]);
-        const enhancedData2 = processData(responses[1]);
-        const enhancedData3 = processData(responses[2]);
-        const enhancedData4 = processData(responses[3]);
-        const enhancedData5 = processData(responses[4]);
-        const enhancedData6 = processData(responses[5]);
-
-        // Debugging Logs
-        console.log("✅ Enhanced Data 1", enhancedData1);
-        console.log("✅ Enhanced Data 2", enhancedData2);
-        console.log("✅ Enhanced Data 3", enhancedData3);
-        console.log("✅ Enhanced Data 4", enhancedData4);
-        console.log("✅ Enhanced Data 5", enhancedData5);
-        console.log("✅ Enhanced Data 6", enhancedData6);
-
-        // Update state with the processed data
-        setData1(enhancedData1);
-        setData2(enhancedData2);
-        setData3(enhancedData3);
-        setData4(enhancedData4);
-        setData5(enhancedData5);
-        setData6(enhancedData6);
-      } else if (name === "disposalPendency") {
-        const endpoints = ["cus4a", "cus4b", "cus4c", "cus4d"];
-        const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
-
-        // Fetch data for all months and endpoints
-        const responses = await Promise.all(
-          months.map((month) =>
-            Promise.all(
-              endpoints.map((endpoint) =>
-                apiClient
-                  .get(`/cbic/custom/${endpoint}`, { params: { month_date: month, type: "zone" } })
-                  .then((response) => ({
-                    data: response.data,
-                    gst: endpoint.toUpperCase(),
-                  }))
-                  .catch((error) => {
-                    console.error(`❌ API error for ${endpoint} (${month}):`, error);
-                    return { data: [], gst: endpoint.toUpperCase() }; // Return empty data on failure
-                  })
-              )
-            )
-          )
-        );
-
-        // Stop loading when all data is received
-        setLoading(false);
-
-        // Function to process data
-        const processData = (responseData) => {
-          const allData = responseData.flatMap((response) =>
-            response.data.map((item) => ({ ...item, gst: response.gst }))
-          );
-
-          console.log("✅ FINAL RESPONSE", allData);
-
-          // Summing sub_parameter_weighted_average by zone_code
-          const summedByZone = allData.reduce((acc, item) => {
-            const zoneCode = item.zone_code;
-            const value = parseFloat(item.sub_parameter_weighted_average) || 0; // Convert to number, default 0
-
-            if (!acc[zoneCode]) {
-              acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
-            }
-            acc[zoneCode].sub_parameter_weighted_average += value;
-
-            return acc;
-          }, {});
-
-          // Formatting and sorting data
-          const reducedAllData = Object.values(summedByZone).map((item) => ({
-            ...item,
-            weighted_average: item.sub_parameter_weighted_average.toFixed(2),
-          }));
-
-          console.log("✅ Reduced All Data:", reducedAllData);
-
-          const sorted = reducedAllData.sort((a, b) => a.zone_code - b.zone_code);
-
-          // Apply coloring based on weighted_average
-          return sorted.map((item, index) => {
-            const total = item.sub_parameter_weighted_average;
-            let props = {};
-
-            if (total >= 7.5) {
-              props = { color: "success" }; // High performance
-            } else if (total >= 5) {
-              props = { color: "warning" };
-            } else if (total <= 2.5) {
-              props = { color: "danger" }; // Low performance
-            } else {
-              props = { color: "primary" }; // Normal
-            }
-
-            return {
-              ...item,
-              _cellProps: props,
-              s_no: index + 1,
-            };
-          });
-        };
-
-        // Process data for each month
-        const enhancedData1 = processData(responses[0]);
-        const enhancedData2 = processData(responses[1]);
-        const enhancedData3 = processData(responses[2]);
-        const enhancedData4 = processData(responses[3]);
-        const enhancedData5 = processData(responses[4]);
-        const enhancedData6 = processData(responses[5]);
-
-        // Debugging Logs
-        console.log("✅ Enhanced Data 1", enhancedData1);
-        console.log("✅ Enhanced Data 2", enhancedData2);
-        console.log("✅ Enhanced Data 3", enhancedData3);
-        console.log("✅ Enhanced Data 4", enhancedData4);
-        console.log("✅ Enhanced Data 5", enhancedData5);
-        console.log("✅ Enhanced Data 6", enhancedData6);
-
-        // Update state with the processed data
-        setData1(enhancedData1);
-        setData2(enhancedData2);
-        setData3(enhancedData3);
-        setData4(enhancedData4);
-        setData5(enhancedData5);
-        setData6(enhancedData6);
-      } else if (name === "aa") {
-        const endpoints = ["cus3a", "cus3b", "cus3c"];
-        const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
-
-        // Fetch data for all months and endpoints
-        const responses = await Promise.all(
-          months.map((month) =>
-            Promise.all(
-              endpoints.map((endpoint) =>
-                apiClient
-                  .get(`/cbic/custom/${endpoint}`, { params: { month_date: month, type: "zone" } })
-                  .then((response) => ({
-                    data: response.data,
-                    gst: endpoint.toUpperCase(),
-                  }))
-                  .catch((error) => {
-                    console.error(`❌ API error for ${endpoint} (${month}):`, error);
-                    return { data: [], gst: endpoint.toUpperCase() }; // Return empty data on failure
-                  })
-              )
-            )
-          )
-        );
-
-        // Stop loading when all data is received
-        setLoading(false);
-
-        // Function to process data
-        const processData = (responseData) => {
-          const allData = responseData.flatMap((response) =>
-            response.data.map((item) => ({ ...item, gst: response.gst }))
-          );
-
-          console.log("✅ FINAL RESPONSE", allData);
-
-          // Summing sub_parameter_weighted_average by zone_code
-          const summedByZone = allData.reduce((acc, item) => {
-            const zoneCode = item.zone_code;
-            const value = parseFloat(item.sub_parameter_weighted_average) || 0; // Convert to number, default 0
-
-            if (!acc[zoneCode]) {
-              acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
-            }
-            acc[zoneCode].sub_parameter_weighted_average += value;
-
-            return acc;
-          }, {});
-
-          // Formatting and sorting data
-          const reducedAllData = Object.values(summedByZone).map((item) => ({
-            ...item,
-            weighted_average: item.sub_parameter_weighted_average.toFixed(2),
-          }));
-
-          console.log("✅ Reduced All Data:", reducedAllData);
-
-          const sorted = reducedAllData.sort((a, b) => a.zone_code - b.zone_code);
-
-          // Apply coloring based on weighted_average
-          return sorted.map((item, index) => {
-            const total = item.sub_parameter_weighted_average;
-            let props = {};
-
-            if (total >= 7.5) {
-              props = { color: "success" }; // High performance
-            } else if (total >= 5) {
-              props = { color: "warning" };
-            } else if (total <= 2.5) {
-              props = { color: "danger" }; // Low performance
-            } else {
-              props = { color: "primary" }; // Normal
-            }
-
-            return {
-              ...item,
-              _cellProps: props,
-              s_no: index + 1,
-            };
-          });
-        };
-
-        // Process data for each month
-        const enhancedData1 = processData(responses[0]);
-        const enhancedData2 = processData(responses[1]);
-        const enhancedData3 = processData(responses[2]);
-        const enhancedData4 = processData(responses[3]);
-        const enhancedData5 = processData(responses[4]);
-        const enhancedData6 = processData(responses[5]);
-
-        // Debugging Logs
-        console.log("✅ Enhanced Data 1", enhancedData1);
-        console.log("✅ Enhanced Data 2", enhancedData2);
-        console.log("✅ Enhanced Data 3", enhancedData3);
-        console.log("✅ Enhanced Data 4", enhancedData4);
-        console.log("✅ Enhanced Data 5", enhancedData5);
-        console.log("✅ Enhanced Data 6", enhancedData6);
-
-        // Update state with the processed data
-        setData1(enhancedData1);
-        setData2(enhancedData2);
-        setData3(enhancedData3);
-        setData4(enhancedData4);
-        setData5(enhancedData5);
-        setData6(enhancedData6);
-      } else if (name === "registration") {
-        const endpoints = ["gst1a", "gst1b", "gst1c", "gst1d", "gst1e", "gst1f"];
-        const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
-
-        // Fetch data for all months and endpoints
-        const responses = await Promise.all(
-          months.map((month) =>
-            Promise.all(
-              endpoints.map((endpoint) =>
-                apiClient
-                  .get(`/cbic/${endpoint}`, { params: { month_date: month, type: "zone" } })
-                  .then((response) => ({
-                    data: response.data,
-                    gst: endpoint.toUpperCase(),
-                  }))
-                  .catch((error) => {
-                    console.error(`❌ API error for ${endpoint} (${month}):`, error);
-                    return { data: [], gst: endpoint.toUpperCase() }; // Return empty data on failure
-                  })
-              )
-            )
-          )
-        );
-
-        // Stop loading when all data is received
-        setLoading(false);
-
-        // Function to process data
-        const processData = (responseData) => {
-          const allData = responseData.flatMap((response) =>
-            response.data.map((item) => ({ ...item, gst: response.gst }))
-          );
-
-          console.log("✅ FINAL RESPONSE", allData);
-
-          // Summing sub_parameter_weighted_average by zone_code
-          const summedByZone = allData.reduce((acc, item) => {
-            const zoneCode = item.zone_code;
-            const value = parseFloat(item.sub_parameter_weighted_average) || 0; // Convert to number, default 0
-
-            if (!acc[zoneCode]) {
-              acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
-            }
-            acc[zoneCode].sub_parameter_weighted_average += value;
-
-            return acc;
-          }, {});
-
-          // Formatting and sorting data
-          const reducedAllData = Object.values(summedByZone).map((item) => ({
-            ...item,
-            weighted_average: item.sub_parameter_weighted_average.toFixed(2),
-          }));
-
-          console.log("✅ Reduced All Data:", reducedAllData);
-
-          const sorted = reducedAllData.sort((a, b) => a.zone_code - b.zone_code);
-
-          // Apply coloring based on weighted_average
-          return sorted.map((item, index) => {
-            const total = item.sub_parameter_weighted_average;
-            let props = {};
-
-            if (total >= 7.5) {
-              props = { color: "success" }; // High performance
-            } else if (total >= 5) {
-              props = { color: "warning" };
-            } else if (total <= 2.5) {
-              props = { color: "danger" }; // Low performance
-            } else {
-              props = { color: "primary" }; // Normal
-            }
-
-            return {
-              ...item,
-              _cellProps: props,
-              s_no: index + 1,
-            };
-          });
-        };
-
-        // Process data for each month
-        const enhancedData1 = processData(responses[0]);
-        const enhancedData2 = processData(responses[1]);
-        const enhancedData3 = processData(responses[2]);
-        const enhancedData4 = processData(responses[3]);
-        const enhancedData5 = processData(responses[4]);
-        const enhancedData6 = processData(responses[5]);
-
-        // Debugging Logs
-        console.log("✅ Enhanced Data 1", enhancedData1);
-        console.log("✅ Enhanced Data 2", enhancedData2);
-        console.log("✅ Enhanced Data 3", enhancedData3);
-        console.log("✅ Enhanced Data 4", enhancedData4);
-        console.log("✅ Enhanced Data 5", enhancedData5);
-        console.log("✅ Enhanced Data 6", enhancedData6);
-
-        // Update state with the processed data
-        setData1(enhancedData1);
-        setData2(enhancedData2);
-        setData3(enhancedData3);
-        setData4(enhancedData4);
-        setData5(enhancedData5);
-        setData6(enhancedData6);
-      } else if (name === "scrutiny") {
-        const endpoints = ["gst3a", "gst3b"];
-        const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
-
-        // Fetch data for all months and endpoints
-        const responses = await Promise.all(
-          months.map((month) =>
-            Promise.all(
-              endpoints.map((endpoint) =>
-                apiClient
-                  .get(`/cbic/${endpoint}`, { params: { month_date: month, type: "zone" } })
-                  .then((response) => ({
-                    data: response.data,
-                    gst: endpoint.toUpperCase(),
-                  }))
-                  .catch((error) => {
-                    console.error(`❌ API error for ${endpoint} (${month}):`, error);
-                    return { data: [], gst: endpoint.toUpperCase() }; // Return empty data on failure
-                  })
-              )
-            )
-          )
-        );
-
-        // Stop loading when all data is received
-        setLoading(false);
-
-        // Function to process data
-        const processData = (responseData) => {
-          const allData = responseData.flatMap((response) =>
-            response.data.map((item) => ({ ...item, gst: response.gst }))
-          );
-
-          console.log("✅ FINAL RESPONSE", allData);
-
-          // Summing sub_parameter_weighted_average by zone_code
-          const summedByZone = allData.reduce((acc, item) => {
-            const zoneCode = item.zone_code;
-            const value = parseFloat(item.sub_parameter_weighted_average) || 0; // Convert to number, default 0
-
-            if (!acc[zoneCode]) {
-              acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
-            }
-            acc[zoneCode].sub_parameter_weighted_average += value;
-
-            return acc;
-          }, {});
-
-          // Formatting and sorting data
-          const reducedAllData = Object.values(summedByZone).map((item) => ({
-            ...item,
-            weighted_average: item.sub_parameter_weighted_average.toFixed(2),
-          }));
-
-          console.log("✅ Reduced All Data:", reducedAllData);
-
-          const sorted = reducedAllData.sort((a, b) => a.zone_code - b.zone_code);
-
-          // Apply coloring based on weighted_average
-          return sorted.map((item, index) => {
-            const total = item.sub_parameter_weighted_average;
-            let props = {};
-
-            if (total >= 7.5) {
-              props = { color: "success" }; // High performance
-            } else if (total >= 5) {
-              props = { color: "warning" };
-            } else if (total <= 2.5) {
-              props = { color: "danger" }; // Low performance
-            } else {
-              props = { color: "primary" }; // Normal
-            }
-
-            return {
-              ...item,
-              _cellProps: props,
-              s_no: index + 1,
-            };
-          });
-        };
-
-        // Process data for each month
-        const enhancedData1 = processData(responses[0]);
-        const enhancedData2 = processData(responses[1]);
-        const enhancedData3 = processData(responses[2]);
-        const enhancedData4 = processData(responses[3]);
-        const enhancedData5 = processData(responses[4]);
-        const enhancedData6 = processData(responses[5]);
-
-        // Debugging Logs
-        console.log("✅ Enhanced Data 1", enhancedData1);
-        console.log("✅ Enhanced Data 2", enhancedData2);
-        console.log("✅ Enhanced Data 3", enhancedData3);
-        console.log("✅ Enhanced Data 4", enhancedData4);
-        console.log("✅ Enhanced Data 5", enhancedData5);
-        console.log("✅ Enhanced Data 6", enhancedData6);
-
-        // Update state with the processed data
-        setData1(enhancedData1);
-        setData2(enhancedData2);
-        setData3(enhancedData3);
-        setData4(enhancedData4);
-        setData5(enhancedData5);
-        setData6(enhancedData6);
       } else if (name === "refunds") {
         const endpoints = ["gst7"];
         const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
@@ -956,7 +751,8 @@ const MISReporttable = ({
           // Formatting and sorting data
           const reducedAllData = Object.values(summedByZone).map((item) => ({
             ...item,
-            weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            //weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            weighted_average: ((item.sub_parameter_weighted_average * 5) / 10).toFixed(2),
           }));
 
           console.log("✅ Reduced All Data:", reducedAllData);
@@ -1060,7 +856,8 @@ const MISReporttable = ({
           // Formatting and sorting data
           const reducedAllData = Object.values(summedByZone).map((item) => ({
             ...item,
-            weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            //weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            weighted_average: ((item.sub_parameter_weighted_average * 8) / 10).toFixed(2),
           }));
 
           console.log("✅ Reduced All Data:", reducedAllData);
@@ -1164,7 +961,8 @@ const MISReporttable = ({
           // Formatting and sorting data
           const reducedAllData = Object.values(summedByZone).map((item) => ({
             ...item,
-            weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            //weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            weighted_average: ((item.sub_parameter_weighted_average * 6) / 10).toFixed(2),
           }));
 
           console.log("✅ Reduced All Data:", reducedAllData);
@@ -1268,7 +1066,8 @@ const MISReporttable = ({
           // Formatting and sorting data
           const reducedAllData = Object.values(summedByZone).map((item) => ({
             ...item,
-            weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            //weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            weighted_average: ((item.sub_parameter_weighted_average * 12) / 10).toFixed(2),
           }));
 
           console.log("✅ Reduced All Data:", reducedAllData);
@@ -1321,438 +1120,968 @@ const MISReporttable = ({
         setData4(enhancedData4);
         setData5(enhancedData5);
         setData6(enhancedData6);
-      } else if (name === "TimelyPaymentOfRefunds") {
-        const responsei = await apiClient.get(
-          `/cbic/custom/parameter/timelyrefunds`,
-          {
-            params: {
-              month_date: newdate,
-              type: "parameter",
-            },
-          }
+      } else if (name === "appeals") {
+        const endpoints = ["gst11a", "gst11b", "gst11c", "gst11d"];
+        const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
+
+        // Fetch data for all months and endpoints
+        const responses = await Promise.all(
+          months.map((month) =>
+            Promise.all(
+              endpoints.map((endpoint) =>
+                apiClient
+                  .get(`/cbic/${endpoint}`, { params: { month_date: month, type: "zone" } })
+                  .then((response) => ({
+                    data: response.data,
+                    gst: endpoint.toUpperCase(),
+                  }))
+                  .catch((error) => {
+                    console.error(`❌ API error for ${endpoint} (${month}):`, error);
+                    return { data: [], gst: endpoint.toUpperCase() }; // Return empty data on failure
+                  })
+              )
+            )
+          )
         );
 
-        console.log("Response", responsei);
+        // Stop loading when all data is received
+        setLoading(false);
 
-        const responseii = await apiClient.get(
-          `/cbic/custom/parameter/timelyrefunds`,
-          {
-            params: {
-              month_date: previousmonth1,
-              type: "parameter",
-            },
-          }
-        );
-
-        console.log("Response20", responseii);
-
-        const responseiii = await apiClient.get(
-          `/cbic/custom/parameter/timelyrefunds`,
-          {
-            params: {
-              month_date: previousmonth2,
-              type: "parameter",
-            },
-          }
-        );
-
-        console.log("Response20", responseiii);
-
-        const responseiv = await apiClient.get(
-          `/cbic/custom/parameter/timelyrefunds`,
-          {
-            params: {
-              month_date: previousmonth3,
-              type: "parameter",
-            },
-          }
-        );
-
-        console.log("Response20", responseiv);
-
-        const responsev = await apiClient.get(
-          `/cbic/custom/parameter/timelyrefunds`,
-          {
-            params: {
-              month_date: previousmonth4,
-              type: "parameter",
-            },
-          }
-        );
-
-        console.log("Response20", responsev);
-
-        const responsevi = await apiClient.get(
-          `/cbic/custom/parameter/timelyrefunds`,
-          {
-            params: {
-              month_date: previousmonth5,
-              type: "parameter",
-            },
-          }
-        );
-
-        console.log("Response20", responsevi);
-
-        //MIS Reports API
-        const response1 = await apiClient.get(
-          `/cbic/CustomMISReports/${name}`,
-          {
-            params: {
-              month_date: newdate,
-              type: "1_Month",
-            },
-          }
-        );
-
-        const response2 = await apiClient.get(
-          `/cbic/CustomMISReports/${name}`,
-          {
-            params: {
-              month_date: newdate,
-              type: "2_Month",
-            },
-          }
-        );
-
-        const response3 = await apiClient.get(
-          `/cbic/CustomMISReports/${name}`,
-          {
-            params: {
-              month_date: newdate,
-              type: "3_Month",
-            },
-          }
-        );
-
-        const response4 = await apiClient.get(
-          `/cbic/CustomMISReports/${name}`,
-          {
-            params: {
-              month_date: newdate,
-              type: "4_Month",
-            },
-          }
-        );
-
-        const response5 = await apiClient.get(
-          `/cbic/CustomMISReports/${name}`,
-          {
-            params: {
-              month_date: newdate,
-              type: "5_Month",
-            },
-          }
-        );
-
-        const response6 = await apiClient.get(
-          `/cbic/CustomMISReports/${name}`,
-          {
-            params: {
-              month_date: newdate,
-              type: "6_Month",
-            },
-          }
-        );
-
-        console.log("Response1", response1.data);
-        console.log("Response2", response2.data);
-        console.log("Response3", response3.data);
-        console.log("Response4", response4.data);
-        console.log("Response5", response5.data);
-        console.log("Response6", response6.data);
-
-        const sorted1 = responsei.data.sort(
-          (a, b) => b.totalScore - a.totalScore
-        );
-
-        console.log("Sorted1", sorted1);
-        const sorted2 = responseii.data.sort(
-          (a, b) => b.totalScore - a.totalScore
-        );
-        const sorted3 = responseiii.data.sort(
-          (a, b) => b.totalScore - a.totalScore
-        );
-        const sorted4 = responseiv.data.sort(
-          (a, b) => b.totalScore - a.totalScore
-        );
-        const sorted5 = responsev.data.sort(
-          (a, b) => b.totalScore - a.totalScore
-        );
-        const sorted6 = responsevi.data.sort(
-          (a, b) => b.totalScore - a.totalScore
-        );
-
-        const enhancedData1 = sorted1.map((item, index) => {
-          const total = item.way_to_grade;
-
-
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" };
-          } else if (total >= 5 && total < 7.5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" };
-          } else {
-            props = { color: "primary" };
-          }
-
-          return {
-            ...item,
-            _props: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        // const enhancedData1 = sorted1.map((item, index) => {
-        //   const total = sorted1.length;
-        //   const firstquarter = total * 0.25;
-        //   const secondquarter = total * 0.5;
-        //   const thirdquarter = total * 0.75;
-
-        //   let props = {};
-        //   if (index < firstquarter) {
-        //     props = { color: "success" };
-        //   } else if (index >= firstquarter && index < secondquarter) {
-        //     props = { color: "warning" };
-        //   } else if (index >= thirdquarter) {
-        //     props = { color: "danger" };
-        //   } else {
-        //     props = { color: "primary" };
-        //   }
-
-        //   return {
-        //     ...item,
-        //     _props: props, // Add _props field dynamically
-        //     s_no: index + 1,
-        //   };
-        // });
-
-        const enhancedData2 = sorted2.map((item, index) => {
-          const total = item.way_to_grade;
-
-
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" };
-          } else if (total >= 5 && total < 7.5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" };
-          } else {
-            props = { color: "primary" };
-          }
-
-          return {
-            ...item,
-            _props: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const enhancedData3 = sorted3.map((item, index) => {
-          const total = item.way_to_grade;
-
-
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" };
-          } else if (total >= 5 && total < 7.5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" };
-          } else {
-            props = { color: "primary" };
-          }
-
-          return {
-            ...item,
-            _props: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const enhancedData4 = sorted4.map((item, index) => {
-          const total = item.way_to_grade;
-
-
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" };
-          } else if (total >= 5 && total < 7.5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" };
-          } else {
-            props = { color: "primary" };
-          }
-
-          return {
-            ...item,
-            _props: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const enhancedData5 = sorted5.map((item, index) => {
-          const total = item.way_to_grade;
-
-
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" };
-          } else if (total >= 5 && total < 7.5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" };
-          } else {
-            props = { color: "primary" };
-          }
-
-          return {
-            ...item,
-            _props: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const enhancedData6 = sorted6.map((item, index) => {
-          const total = item.way_to_grade;
-
-
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" };
-          } else if (total >= 5 && total < 7.5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" };
-          } else {
-            props = { color: "primary" };
-          }
-
-          return {
-            ...item,
-            _props: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        if (
-          response1 &&
-          response2 &&
-          response3 &&
-          response4 &&
-          response5 &&
-          response6
-        ) {
-          setLoading(false);
-        }
-
-        const matchingdata1 = response1.data.map((item) => {
-          const matchingitem = enhancedData1.find(
-            (item0) => item0.zone_code === item.zone_code
+        // Function to process data
+        const processData = (responseData) => {
+          const allData = responseData.flatMap((response) =>
+            response.data.map((item) => ({ ...item, gst: response.gst }))
           );
-          if (matchingitem) {
+
+          console.log("✅ FINAL RESPONSE", allData);
+
+          // Summing sub_parameter_weighted_average by zone_code
+          const summedByZone = allData.reduce((acc, item) => {
+            const zoneCode = item.zone_code;
+            const value = parseFloat(item.sub_parameter_weighted_average) || 0; // Convert to number, default 0
+
+            if (!acc[zoneCode]) {
+              acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
+            }
+            acc[zoneCode].sub_parameter_weighted_average += value;
+
+            return acc;
+          }, {});
+
+          // Formatting and sorting data
+          const reducedAllData = Object.values(summedByZone).map((item) => ({
+            ...item,
+            //weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            weighted_average: ((item.sub_parameter_weighted_average * 12) / 10).toFixed(2),
+          }));
+
+          console.log("✅ Reduced All Data:", reducedAllData);
+
+          const sorted = reducedAllData.sort((a, b) => a.zone_code - b.zone_code);
+
+          // Apply coloring based on weighted_average
+          return sorted.map((item, index) => {
+            const total = item.sub_parameter_weighted_average;
+            let props = {};
+
+            if (total >= 7.5) {
+              props = { color: "success" }; // High performance
+            } else if (total >= 5) {
+              props = { color: "warning" };
+            } else if (total <= 2.5) {
+              props = { color: "danger" }; // Low performance
+            } else {
+              props = { color: "primary" }; // Normal
+            }
+
             return {
               ...item,
-              _cellProps: matchingitem._props, // Substituting _props as _cellProps
+              _cellProps: props,
+              s_no: index + 1,
             };
-          }
+          });
+        };
 
-          return item;
-        });
+        // Process data for each month
+        const enhancedData1 = processData(responses[0]);
+        const enhancedData2 = processData(responses[1]);
+        const enhancedData3 = processData(responses[2]);
+        const enhancedData4 = processData(responses[3]);
+        const enhancedData5 = processData(responses[4]);
+        const enhancedData6 = processData(responses[5]);
 
-        const matchingdata2 = response2.data.map((item) => {
-          const matchingitem = enhancedData2.find(
-            (item0) => item0.zone_code === item.zone_code
+        // Debugging Logs
+        console.log("✅ Enhanced Data 1", enhancedData1);
+        console.log("✅ Enhanced Data 2", enhancedData2);
+        console.log("✅ Enhanced Data 3", enhancedData3);
+        console.log("✅ Enhanced Data 4", enhancedData4);
+        console.log("✅ Enhanced Data 5", enhancedData5);
+        console.log("✅ Enhanced Data 6", enhancedData6);
+
+        // Update state with the processed data
+        setData1(enhancedData1);
+        setData2(enhancedData2);
+        setData3(enhancedData3);
+        setData4(enhancedData4);
+        setData5(enhancedData5);
+        setData6(enhancedData6);
+      }
+
+      // else if (name === "TimelyPaymentOfRefunds") {
+      //   const responsei = await apiClient.get(
+      //     `/cbic/custom/parameter/timelyrefunds`,
+      //     {
+      //       params: {
+      //         month_date: newdate,
+      //         type: "parameter",
+      //       },
+      //     }
+      //   );
+
+      //   console.log("Response", responsei);
+
+      //   const responseii = await apiClient.get(
+      //     `/cbic/custom/parameter/timelyrefunds`,
+      //     {
+      //       params: {
+      //         month_date: previousmonth1,
+      //         type: "parameter",
+      //       },
+      //     }
+      //   );
+
+      //   console.log("Response20", responseii);
+
+      //   const responseiii = await apiClient.get(
+      //     `/cbic/custom/parameter/timelyrefunds`,
+      //     {
+      //       params: {
+      //         month_date: previousmonth2,
+      //         type: "parameter",
+      //       },
+      //     }
+      //   );
+
+      //   console.log("Response20", responseiii);
+
+      //   const responseiv = await apiClient.get(
+      //     `/cbic/custom/parameter/timelyrefunds`,
+      //     {
+      //       params: {
+      //         month_date: previousmonth3,
+      //         type: "parameter",
+      //       },
+      //     }
+      //   );
+
+      //   console.log("Response20", responseiv);
+
+      //   const responsev = await apiClient.get(
+      //     `/cbic/custom/parameter/timelyrefunds`,
+      //     {
+      //       params: {
+      //         month_date: previousmonth4,
+      //         type: "parameter",
+      //       },
+      //     }
+      //   );
+
+      //   console.log("Response20", responsev);
+
+      //   const responsevi = await apiClient.get(
+      //     `/cbic/custom/parameter/timelyrefunds`,
+      //     {
+      //       params: {
+      //         month_date: previousmonth5,
+      //         type: "parameter",
+      //       },
+      //     }
+      //   );
+
+      //   console.log("Response20", responsevi);
+
+      //   //MIS Reports API
+      //   const response1 = await apiClient.get(
+      //     `/cbic/CustomMISReports/${name}`,
+      //     {
+      //       params: {
+      //         month_date: newdate,
+      //         type: "1_Month",
+      //       },
+      //     }
+      //   );
+
+      //   const response2 = await apiClient.get(
+      //     `/cbic/CustomMISReports/${name}`,
+      //     {
+      //       params: {
+      //         month_date: newdate,
+      //         type: "2_Month",
+      //       },
+      //     }
+      //   );
+
+      //   const response3 = await apiClient.get(
+      //     `/cbic/CustomMISReports/${name}`,
+      //     {
+      //       params: {
+      //         month_date: newdate,
+      //         type: "3_Month",
+      //       },
+      //     }
+      //   );
+
+      //   const response4 = await apiClient.get(
+      //     `/cbic/CustomMISReports/${name}`,
+      //     {
+      //       params: {
+      //         month_date: newdate,
+      //         type: "4_Month",
+      //       },
+      //     }
+      //   );
+
+      //   const response5 = await apiClient.get(
+      //     `/cbic/CustomMISReports/${name}`,
+      //     {
+      //       params: {
+      //         month_date: newdate,
+      //         type: "5_Month",
+      //       },
+      //     }
+      //   );
+
+      //   const response6 = await apiClient.get(
+      //     `/cbic/CustomMISReports/${name}`,
+      //     {
+      //       params: {
+      //         month_date: newdate,
+      //         type: "6_Month",
+      //       },
+      //     }
+      //   );
+
+      //   console.log("Response1", response1.data);
+      //   console.log("Response2", response2.data);
+      //   console.log("Response3", response3.data);
+      //   console.log("Response4", response4.data);
+      //   console.log("Response5", response5.data);
+      //   console.log("Response6", response6.data);
+
+      //   const sorted1 = responsei.data.sort(
+      //     (a, b) => b.totalScore - a.totalScore
+      //   );
+
+      //   console.log("Sorted1", sorted1);
+      //   const sorted2 = responseii.data.sort(
+      //     (a, b) => b.totalScore - a.totalScore
+      //   );
+      //   const sorted3 = responseiii.data.sort(
+      //     (a, b) => b.totalScore - a.totalScore
+      //   );
+      //   const sorted4 = responseiv.data.sort(
+      //     (a, b) => b.totalScore - a.totalScore
+      //   );
+      //   const sorted5 = responsev.data.sort(
+      //     (a, b) => b.totalScore - a.totalScore
+      //   );
+      //   const sorted6 = responsevi.data.sort(
+      //     (a, b) => b.totalScore - a.totalScore
+      //   );
+
+      //   const enhancedData1 = sorted1.map((item, index) => {
+      //     const total = item.way_to_grade;
+
+
+
+      //     let props = {};
+      //     if (total <= 10 && total >= 7.5) {
+      //       props = { color: "success" };
+      //     } else if (total >= 5 && total < 7.5) {
+      //       props = { color: "warning" };
+      //     } else if (total >= 0 && total <= 2.5) {
+      //       props = { color: "danger" };
+      //     } else {
+      //       props = { color: "primary" };
+      //     }
+
+      //     return {
+      //       ...item,
+      //       _props: props, // Add _props field dynamically
+      //       s_no: index + 1,
+      //     };
+      //   });
+
+      //   // const enhancedData1 = sorted1.map((item, index) => {
+      //   //   const total = sorted1.length;
+      //   //   const firstquarter = total * 0.25;
+      //   //   const secondquarter = total * 0.5;
+      //   //   const thirdquarter = total * 0.75;
+
+      //   //   let props = {};
+      //   //   if (index < firstquarter) {
+      //   //     props = { color: "success" };
+      //   //   } else if (index >= firstquarter && index < secondquarter) {
+      //   //     props = { color: "warning" };
+      //   //   } else if (index >= thirdquarter) {
+      //   //     props = { color: "danger" };
+      //   //   } else {
+      //   //     props = { color: "primary" };
+      //   //   }
+
+      //   //   return {
+      //   //     ...item,
+      //   //     _props: props, // Add _props field dynamically
+      //   //     s_no: index + 1,
+      //   //   };
+      //   // });
+
+      //   const enhancedData2 = sorted2.map((item, index) => {
+      //     const total = item.way_to_grade;
+
+
+
+      //     let props = {};
+      //     if (total <= 10 && total >= 7.5) {
+      //       props = { color: "success" };
+      //     } else if (total >= 5 && total < 7.5) {
+      //       props = { color: "warning" };
+      //     } else if (total >= 0 && total <= 2.5) {
+      //       props = { color: "danger" };
+      //     } else {
+      //       props = { color: "primary" };
+      //     }
+
+      //     return {
+      //       ...item,
+      //       _props: props, // Add _props field dynamically
+      //       s_no: index + 1,
+      //     };
+      //   });
+
+      //   const enhancedData3 = sorted3.map((item, index) => {
+      //     const total = item.way_to_grade;
+
+
+
+      //     let props = {};
+      //     if (total <= 10 && total >= 7.5) {
+      //       props = { color: "success" };
+      //     } else if (total >= 5 && total < 7.5) {
+      //       props = { color: "warning" };
+      //     } else if (total >= 0 && total <= 2.5) {
+      //       props = { color: "danger" };
+      //     } else {
+      //       props = { color: "primary" };
+      //     }
+
+      //     return {
+      //       ...item,
+      //       _props: props, // Add _props field dynamically
+      //       s_no: index + 1,
+      //     };
+      //   });
+
+      //   const enhancedData4 = sorted4.map((item, index) => {
+      //     const total = item.way_to_grade;
+
+
+
+      //     let props = {};
+      //     if (total <= 10 && total >= 7.5) {
+      //       props = { color: "success" };
+      //     } else if (total >= 5 && total < 7.5) {
+      //       props = { color: "warning" };
+      //     } else if (total >= 0 && total <= 2.5) {
+      //       props = { color: "danger" };
+      //     } else {
+      //       props = { color: "primary" };
+      //     }
+
+      //     return {
+      //       ...item,
+      //       _props: props, // Add _props field dynamically
+      //       s_no: index + 1,
+      //     };
+      //   });
+
+      //   const enhancedData5 = sorted5.map((item, index) => {
+      //     const total = item.way_to_grade;
+
+
+
+      //     let props = {};
+      //     if (total <= 10 && total >= 7.5) {
+      //       props = { color: "success" };
+      //     } else if (total >= 5 && total < 7.5) {
+      //       props = { color: "warning" };
+      //     } else if (total >= 0 && total <= 2.5) {
+      //       props = { color: "danger" };
+      //     } else {
+      //       props = { color: "primary" };
+      //     }
+
+      //     return {
+      //       ...item,
+      //       _props: props, // Add _props field dynamically
+      //       s_no: index + 1,
+      //     };
+      //   });
+
+      //   const enhancedData6 = sorted6.map((item, index) => {
+      //     const total = item.way_to_grade;
+
+
+
+      //     let props = {};
+      //     if (total <= 10 && total >= 7.5) {
+      //       props = { color: "success" };
+      //     } else if (total >= 5 && total < 7.5) {
+      //       props = { color: "warning" };
+      //     } else if (total >= 0 && total <= 2.5) {
+      //       props = { color: "danger" };
+      //     } else {
+      //       props = { color: "primary" };
+      //     }
+
+      //     return {
+      //       ...item,
+      //       _props: props, // Add _props field dynamically
+      //       s_no: index + 1,
+      //     };
+      //   });
+
+      //   if (
+      //     response1 &&
+      //     response2 &&
+      //     response3 &&
+      //     response4 &&
+      //     response5 &&
+      //     response6
+      //   ) {
+      //     setLoading(false);
+      //   }
+
+      //   const matchingdata1 = response1.data.map((item) => {
+      //     const matchingitem = enhancedData1.find(
+      //       (item0) => item0.zone_code === item.zone_code
+      //     );
+      //     if (matchingitem) {
+      //       return {
+      //         ...item,
+      //         _cellProps: matchingitem._props, // Substituting _props as _cellProps
+      //       };
+      //     }
+
+      //     return item;
+      //   });
+
+      //   const matchingdata2 = response2.data.map((item) => {
+      //     const matchingitem = enhancedData2.find(
+      //       (item0) => item0.zone_code === item.zone_code
+      //     );
+      //     if (matchingitem) {
+      //       return {
+      //         ...item,
+      //         _cellProps: matchingitem._props, // Substituting _props as _cellProps
+      //       };
+      //     }
+
+      //     return item;
+      //   });
+
+      //   const matchingdata3 = response3.data.map((item) => {
+      //     const matchingitem = enhancedData3.find(
+      //       (item0) => item0.zone_code === item.zone_code
+      //     );
+      //     if (matchingitem) {
+      //       return {
+      //         ...item,
+      //         _cellProps: matchingitem._props, // Substituting _props as _cellProps
+      //       };
+      //     }
+
+      //     return item;
+      //   });
+
+      //   const matchingdata4 = response4.data.map((item) => {
+      //     const matchingitem = enhancedData4.find(
+      //       (item0) => item0.zone_code === item.zone_code
+      //     );
+      //     if (matchingitem) {
+      //       return {
+      //         ...item,
+      //         _cellProps: matchingitem._props, // Substituting _props as _cellProps
+      //       };
+      //     }
+
+      //     return item;
+      //   });
+
+      //   const matchingdata5 = response5.data.map((item) => {
+      //     const matchingitem = enhancedData5.find(
+      //       (item0) => item0.zone_code === item.zone_code
+      //     );
+      //     if (matchingitem) {
+      //       return {
+      //         ...item,
+      //         _cellProps: matchingitem._props, // Substituting _props as _cellProps
+      //       };
+      //     }
+
+      //     return item;
+      //   });
+
+      //   const matchingdata6 = response6.data.map((item) => {
+      //     const matchingitem = enhancedData6.find(
+      //       (item0) => item0.zone_code === item.zone_code
+      //     );
+      //     if (matchingitem) {
+      //       return {
+      //         ...item,
+      //         _cellProps: matchingitem._props, // Substituting _props as _cellProps
+      //       };
+      //     }
+
+      //     return item;
+      //   });
+
+      //   console.log("Matching Data1", matchingdata1);
+      //   console.log("Matching Data2", matchingdata2);
+      //   console.log("Matching Data3", matchingdata3);
+      //   console.log("Matching Data4", matchingdata4);
+      //   console.log("Matching Data5", matchingdata5);
+      //   console.log("Matching Data6", matchingdata6);
+
+      //   setData1(matchingdata1);
+      //   setData2(matchingdata2);
+      //   setData3(matchingdata3);
+      //   setData4(matchingdata4);
+      //   setData5(matchingdata5);
+      //   setData6(matchingdata6);
+      // }
+      
+      else if (name === "TimelyPaymentOfRefunds") {
+        const endpoints = ["cus1"];
+        const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
+
+        // Fetch data for all months and endpoints
+        const responses = await Promise.all(
+          months.map((month) =>
+            Promise.all(
+              endpoints.map((endpoint) =>
+                apiClient
+                  .get(`/cbic/custom/${endpoint}`, { params: { month_date: month, type: "zone" } })
+                  .then((response) => ({
+                    data: response.data,
+                    gst: endpoint.toUpperCase(),
+                  }))
+                  .catch((error) => {
+                    console.error(`❌ API error for ${endpoint} (${month}):`, error);
+                    return { data: [], gst: endpoint.toUpperCase() }; // Return empty data on failure
+                  })
+              )
+            )
+          )
+        );
+
+        // Stop loading when all data is received
+        setLoading(false);
+
+        // Function to process data
+        const processData = (responseData) => {
+          const allData = responseData.flatMap((response) =>
+            response.data.map((item) => ({ ...item, gst: response.gst }))
           );
-          if (matchingitem) {
+
+          console.log("✅ FINAL RESPONSE", allData);
+
+          // Summing sub_parameter_weighted_average by zone_code
+          const summedByZone = allData.reduce((acc, item) => {
+            const zoneCode = item.zone_code;
+            const value = parseFloat(item.sub_parameter_weighted_average) || 0; // Convert to number, default 0
+
+            if (!acc[zoneCode]) {
+              acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
+            }
+            acc[zoneCode].sub_parameter_weighted_average += value;
+
+            return acc;
+          }, {});
+
+          // Formatting and sorting data
+          const reducedAllData = Object.values(summedByZone).map((item) => ({
+            ...item,
+            weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            //weighted_average: ((item.sub_parameter_weighted_average * 5) / 10).toFixed(2),
+          }));
+
+          console.log("✅ Reduced All Data:", reducedAllData);
+
+          const sorted = reducedAllData.sort((a, b) => a.zone_code - b.zone_code);
+
+          // Apply coloring based on weighted_average
+          return sorted.map((item, index) => {
+            const total = item.sub_parameter_weighted_average;
+            let props = {};
+
+            if (total >= 7.5) {
+              props = { color: "success" }; // High performance
+            } else if (total >= 5) {
+              props = { color: "warning" };
+            } else if (total <= 2.5) {
+              props = { color: "danger" }; // Low performance
+            } else {
+              props = { color: "primary" }; // Normal
+            }
+
             return {
               ...item,
-              _cellProps: matchingitem._props, // Substituting _props as _cellProps
+              _cellProps: props,
+              s_no: index + 1,
             };
-          }
+          });
+        };
 
-          return item;
-        });
+        // Process data for each month
+        const enhancedData1 = processData(responses[0]);
+        const enhancedData2 = processData(responses[1]);
+        const enhancedData3 = processData(responses[2]);
+        const enhancedData4 = processData(responses[3]);
+        const enhancedData5 = processData(responses[4]);
+        const enhancedData6 = processData(responses[5]);
 
-        const matchingdata3 = response3.data.map((item) => {
-          const matchingitem = enhancedData3.find(
-            (item0) => item0.zone_code === item.zone_code
+        // Debugging Logs
+        console.log("✅ Enhanced Data 1", enhancedData1);
+        console.log("✅ Enhanced Data 2", enhancedData2);
+        console.log("✅ Enhanced Data 3", enhancedData3);
+        console.log("✅ Enhanced Data 4", enhancedData4);
+        console.log("✅ Enhanced Data 5", enhancedData5);
+        console.log("✅ Enhanced Data 6", enhancedData6);
+
+        // Update state with the processed data
+        setData1(enhancedData1);
+        setData2(enhancedData2);
+        setData3(enhancedData3);
+        setData4(enhancedData4);
+        setData5(enhancedData5);
+        setData6(enhancedData6);
+      } else if (name === "epcg") {
+        const endpoints = ["cus2a", "cus2b", "cus2c"];
+        const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
+
+        // Fetch data for all months and endpoints
+        const responses = await Promise.all(
+          months.map((month) =>
+            Promise.all(
+              endpoints.map((endpoint) =>
+                apiClient
+                  .get(`/cbic/custom/${endpoint}`, { params: { month_date: month, type: "zone" } })
+                  .then((response) => ({
+                    data: response.data,
+                    gst: endpoint.toUpperCase(),
+                  }))
+                  .catch((error) => {
+                    console.error(`❌ API error for ${endpoint} (${month}):`, error);
+                    return { data: [], gst: endpoint.toUpperCase() }; // Return empty data on failure
+                  })
+              )
+            )
+          )
+        );
+
+        // Stop loading when all data is received
+        setLoading(false);
+
+        // Function to process data
+        const processData = (responseData) => {
+          const allData = responseData.flatMap((response) =>
+            response.data.map((item) => ({ ...item, gst: response.gst }))
           );
-          if (matchingitem) {
+
+          console.log("✅ FINAL RESPONSE", allData);
+
+          // Summing sub_parameter_weighted_average by zone_code
+          const summedByZone = allData.reduce((acc, item) => {
+            const zoneCode = item.zone_code;
+            const value = parseFloat(item.sub_parameter_weighted_average) || 0; // Convert to number, default 0
+
+            if (!acc[zoneCode]) {
+              acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
+            }
+            acc[zoneCode].sub_parameter_weighted_average += value;
+
+            return acc;
+          }, {});
+
+          // Formatting and sorting data
+          const reducedAllData = Object.values(summedByZone).map((item) => ({
+            ...item,
+            //weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            weighted_average: ((item.sub_parameter_weighted_average * 7) / 10).toFixed(2),
+            //weighted_average_out_of_8: ((item.sub_parameter_weighted_average * 8) / 10).toFixed(2),
+          }));
+
+          console.log("✅ Reduced All Data:", reducedAllData);
+
+          const sorted = reducedAllData.sort((a, b) => a.zone_code - b.zone_code);
+
+          // Apply coloring based on weighted_average
+          return sorted.map((item, index) => {
+            const total = item.sub_parameter_weighted_average;
+            let props = {};
+
+            if (total >= 7.5) {
+              props = { color: "success" }; // High performance
+            } else if (total >= 5) {
+              props = { color: "warning" };
+            } else if (total <= 2.5) {
+              props = { color: "danger" }; // Low performance
+            } else {
+              props = { color: "primary" }; // Normal
+            }
+
             return {
               ...item,
-              _cellProps: matchingitem._props, // Substituting _props as _cellProps
+              _cellProps: props,
+              s_no: index + 1,
             };
-          }
+          });
+        };
 
-          return item;
-        });
+        // Process data for each month
+        const enhancedData1 = processData(responses[0]);
+        const enhancedData2 = processData(responses[1]);
+        const enhancedData3 = processData(responses[2]);
+        const enhancedData4 = processData(responses[3]);
+        const enhancedData5 = processData(responses[4]);
+        const enhancedData6 = processData(responses[5]);
 
-        const matchingdata4 = response4.data.map((item) => {
-          const matchingitem = enhancedData4.find(
-            (item0) => item0.zone_code === item.zone_code
+        // Debugging Logs
+        console.log("✅ Enhanced Data 1", enhancedData1);
+        console.log("✅ Enhanced Data 2", enhancedData2);
+        console.log("✅ Enhanced Data 3", enhancedData3);
+        console.log("✅ Enhanced Data 4", enhancedData4);
+        console.log("✅ Enhanced Data 5", enhancedData5);
+        console.log("✅ Enhanced Data 6", enhancedData6);
+
+        // Update state with the processed data
+        setData1(enhancedData1);
+        setData2(enhancedData2);
+        setData3(enhancedData3);
+        setData4(enhancedData4);
+        setData5(enhancedData5);
+        setData6(enhancedData6);
+      } else if (name === "aa") {
+        const endpoints = ["cus3a", "cus3b", "cus3c"];
+        const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
+
+        // Fetch data for all months and endpoints
+        const responses = await Promise.all(
+          months.map((month) =>
+            Promise.all(
+              endpoints.map((endpoint) =>
+                apiClient
+                  .get(`/cbic/custom/${endpoint}`, { params: { month_date: month, type: "zone" } })
+                  .then((response) => ({
+                    data: response.data,
+                    gst: endpoint.toUpperCase(),
+                  }))
+                  .catch((error) => {
+                    console.error(`❌ API error for ${endpoint} (${month}):`, error);
+                    return { data: [], gst: endpoint.toUpperCase() }; // Return empty data on failure
+                  })
+              )
+            )
+          )
+        );
+
+        // Stop loading when all data is received
+        setLoading(false);
+
+        // Function to process data
+        const processData = (responseData) => {
+          const allData = responseData.flatMap((response) =>
+            response.data.map((item) => ({ ...item, gst: response.gst }))
           );
-          if (matchingitem) {
+
+          console.log("✅ FINAL RESPONSE", allData);
+
+          // Summing sub_parameter_weighted_average by zone_code
+          const summedByZone = allData.reduce((acc, item) => {
+            const zoneCode = item.zone_code;
+            const value = parseFloat(item.sub_parameter_weighted_average) || 0; // Convert to number, default 0
+
+            if (!acc[zoneCode]) {
+              acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
+            }
+            acc[zoneCode].sub_parameter_weighted_average += value;
+
+            return acc;
+          }, {});
+
+          // Formatting and sorting data
+          const reducedAllData = Object.values(summedByZone).map((item) => ({
+            ...item,
+            //weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            weighted_average: ((item.sub_parameter_weighted_average * 7) / 10).toFixed(2),
+          }));
+
+          console.log("✅ Reduced All Data:", reducedAllData);
+
+          const sorted = reducedAllData.sort((a, b) => a.zone_code - b.zone_code);
+
+          // Apply coloring based on weighted_average
+          return sorted.map((item, index) => {
+            const total = item.sub_parameter_weighted_average;
+            let props = {};
+
+            if (total >= 7.5) {
+              props = { color: "success" }; // High performance
+            } else if (total >= 5) {
+              props = { color: "warning" };
+            } else if (total <= 2.5) {
+              props = { color: "danger" }; // Low performance
+            } else {
+              props = { color: "primary" }; // Normal
+            }
+
             return {
               ...item,
-              _cellProps: matchingitem._props, // Substituting _props as _cellProps
+              _cellProps: props,
+              s_no: index + 1,
             };
-          }
+          });
+        };
 
-          return item;
-        });
+        // Process data for each month
+        const enhancedData1 = processData(responses[0]);
+        const enhancedData2 = processData(responses[1]);
+        const enhancedData3 = processData(responses[2]);
+        const enhancedData4 = processData(responses[3]);
+        const enhancedData5 = processData(responses[4]);
+        const enhancedData6 = processData(responses[5]);
 
-        const matchingdata5 = response5.data.map((item) => {
-          const matchingitem = enhancedData5.find(
-            (item0) => item0.zone_code === item.zone_code
+        // Debugging Logs
+        console.log("✅ Enhanced Data 1", enhancedData1);
+        console.log("✅ Enhanced Data 2", enhancedData2);
+        console.log("✅ Enhanced Data 3", enhancedData3);
+        console.log("✅ Enhanced Data 4", enhancedData4);
+        console.log("✅ Enhanced Data 5", enhancedData5);
+        console.log("✅ Enhanced Data 6", enhancedData6);
+
+        // Update state with the processed data
+        setData1(enhancedData1);
+        setData2(enhancedData2);
+        setData3(enhancedData3);
+        setData4(enhancedData4);
+        setData5(enhancedData5);
+        setData6(enhancedData6);
+      } else if (name === "disposalPendency") {
+        const endpoints = ["cus4a", "cus4b", "cus4c", "cus4d"];
+        const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
+
+        // Fetch data for all months and endpoints
+        const responses = await Promise.all(
+          months.map((month) =>
+            Promise.all(
+              endpoints.map((endpoint) =>
+                apiClient
+                  .get(`/cbic/custom/${endpoint}`, { params: { month_date: month, type: "zone" } })
+                  .then((response) => ({
+                    data: response.data,
+                    gst: endpoint.toUpperCase(),
+                  }))
+                  .catch((error) => {
+                    console.error(`❌ API error for ${endpoint} (${month}):`, error);
+                    return { data: [], gst: endpoint.toUpperCase() }; // Return empty data on failure
+                  })
+              )
+            )
+          )
+        );
+
+        // Stop loading when all data is received
+        setLoading(false);
+
+        // Function to process data
+        const processData = (responseData) => {
+          const allData = responseData.flatMap((response) =>
+            response.data.map((item) => ({ ...item, gst: response.gst }))
           );
-          if (matchingitem) {
+
+          console.log("✅ FINAL RESPONSE", allData);
+
+          // Summing sub_parameter_weighted_average by zone_code
+          const summedByZone = allData.reduce((acc, item) => {
+            const zoneCode = item.zone_code;
+            const value = parseFloat(item.sub_parameter_weighted_average) || 0; // Convert to number, default 0
+
+            if (!acc[zoneCode]) {
+              acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
+            }
+            acc[zoneCode].sub_parameter_weighted_average += value;
+
+            return acc;
+          }, {});
+
+          // Formatting and sorting data
+          const reducedAllData = Object.values(summedByZone).map((item) => ({
+            ...item,
+            //weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            Weighted_average: ((item.sub_parameter_weighted_average * 11) / 10).toFixed(2),
+          }));
+
+          console.log("✅ Reduced All Data:", reducedAllData);
+
+          const sorted = reducedAllData.sort((a, b) => a.zone_code - b.zone_code);
+
+          // Apply coloring based on weighted_average
+          return sorted.map((item, index) => {
+            const total = item.sub_parameter_weighted_average;
+            let props = {};
+
+            if (total >= 7.5) {
+              props = { color: "success" }; // High performance
+            } else if (total >= 5) {
+              props = { color: "warning" };
+            } else if (total <= 2.5) {
+              props = { color: "danger" }; // Low performance
+            } else {
+              props = { color: "primary" }; // Normal
+            }
+
             return {
               ...item,
-              _cellProps: matchingitem._props, // Substituting _props as _cellProps
+              _cellProps: props,
+              s_no: index + 1,
             };
-          }
+          });
+        };
 
-          return item;
-        });
+        // Process data for each month
+        const enhancedData1 = processData(responses[0]);
+        const enhancedData2 = processData(responses[1]);
+        const enhancedData3 = processData(responses[2]);
+        const enhancedData4 = processData(responses[3]);
+        const enhancedData5 = processData(responses[4]);
+        const enhancedData6 = processData(responses[5]);
 
-        const matchingdata6 = response6.data.map((item) => {
-          const matchingitem = enhancedData6.find(
-            (item0) => item0.zone_code === item.zone_code
-          );
-          if (matchingitem) {
-            return {
-              ...item,
-              _cellProps: matchingitem._props, // Substituting _props as _cellProps
-            };
-          }
+        // Debugging Logs
+        console.log("✅ Enhanced Data 1", enhancedData1);
+        console.log("✅ Enhanced Data 2", enhancedData2);
+        console.log("✅ Enhanced Data 3", enhancedData3);
+        console.log("✅ Enhanced Data 4", enhancedData4);
+        console.log("✅ Enhanced Data 5", enhancedData5);
+        console.log("✅ Enhanced Data 6", enhancedData6);
 
-          return item;
-        });
-
-        console.log("Matching Data1", matchingdata1);
-        console.log("Matching Data2", matchingdata2);
-        console.log("Matching Data3", matchingdata3);
-        console.log("Matching Data4", matchingdata4);
-        console.log("Matching Data5", matchingdata5);
-        console.log("Matching Data6", matchingdata6);
-
-        setData1(matchingdata1);
-        setData2(matchingdata2);
-        setData3(matchingdata3);
-        setData4(matchingdata4);
-        setData5(matchingdata5);
-        setData6(matchingdata6);
+        // Update state with the processed data
+        setData1(enhancedData1);
+        setData2(enhancedData2);
+        setData3(enhancedData3);
+        setData4(enhancedData4);
+        setData5(enhancedData5);
+        setData6(enhancedData6);
       } else if (name === "Adjudication") {
         const endpoints = ["cus5a", "cus5b", "cus5c"];
         const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
@@ -1908,7 +2237,8 @@ const MISReporttable = ({
           // Formatting and sorting data
           const reducedAllData = Object.values(summedByZone).map((item) => ({
             ...item,
-            weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            //weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            weighted_average: ((item.sub_parameter_weighted_average * 12) / 10).toFixed(2),
           }));
 
           console.log("✅ Reduced All Data:", reducedAllData);
@@ -2012,7 +2342,8 @@ const MISReporttable = ({
           // Formatting and sorting data
           const reducedAllData = Object.values(summedByZone).map((item) => ({
             ...item,
-            weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            //weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            weighted_average: ((item.sub_parameter_weighted_average * 6) / 10).toFixed(2),
           }));
 
           console.log("✅ Reduced All Data:", reducedAllData);
@@ -2116,7 +2447,113 @@ const MISReporttable = ({
           // Formatting and sorting data
           const reducedAllData = Object.values(summedByZone).map((item) => ({
             ...item,
-            weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            //weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            weighted_average: ((item.sub_parameter_weighted_average * 6) / 10).toFixed(2),
+          }));
+
+          console.log("✅ Reduced All Data:", reducedAllData);
+
+          const sorted = reducedAllData.sort((a, b) => a.zone_code - b.zone_code);
+
+          // Apply coloring based on weighted_average
+          return sorted.map((item, index) => {
+            const total = item.sub_parameter_weighted_average;
+            let props = {};
+
+            if (total >= 7.5) {
+              props = { color: "success" }; // High performance
+            } else if (total >= 5) {
+              props = { color: "warning" };
+            } else if (total <= 2.5) {
+              props = { color: "danger" }; // Low performance
+            } else {
+              props = { color: "primary" }; // Normal
+            }
+
+            return {
+              ...item,
+              _cellProps: props,
+              s_no: index + 1,
+            };
+          });
+        };
+
+        // Process data for each month
+        const enhancedData1 = processData(responses[0]);
+        const enhancedData2 = processData(responses[1]);
+        const enhancedData3 = processData(responses[2]);
+        const enhancedData4 = processData(responses[3]);
+        const enhancedData5 = processData(responses[4]);
+        const enhancedData6 = processData(responses[5]);
+
+        // Debugging Logs
+        console.log("✅ Enhanced Data 1", enhancedData1);
+        console.log("✅ Enhanced Data 2", enhancedData2);
+        console.log("✅ Enhanced Data 3", enhancedData3);
+        console.log("✅ Enhanced Data 4", enhancedData4);
+        console.log("✅ Enhanced Data 5", enhancedData5);
+        console.log("✅ Enhanced Data 6", enhancedData6);
+
+        // Update state with the processed data
+        setData1(enhancedData1);
+        setData2(enhancedData2);
+        setData3(enhancedData3);
+        setData4(enhancedData4);
+        setData5(enhancedData5);
+        setData6(enhancedData6);
+      } else if (name === "DisposalOfConfiscatedGoldAndNDPS") {
+        const endpoints = ["cus9a", "cus9b"];
+        const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
+
+        // Fetch data for all months and endpoints
+        const responses = await Promise.all(
+          months.map((month) =>
+            Promise.all(
+              endpoints.map((endpoint) =>
+                apiClient
+                  .get(`/cbic/custom/${endpoint}`, { params: { month_date: month, type: "zone" } })
+                  .then((response) => ({
+                    data: response.data,
+                    gst: endpoint.toUpperCase(),
+                  }))
+                  .catch((error) => {
+                    console.error(`❌ API error for ${endpoint} (${month}):`, error);
+                    return { data: [], gst: endpoint.toUpperCase() }; // Return empty data on failure
+                  })
+              )
+            )
+          )
+        );
+
+        // Stop loading when all data is received
+        setLoading(false);
+
+        // Function to process data
+        const processData = (responseData) => {
+          const allData = responseData.flatMap((response) =>
+            response.data.map((item) => ({ ...item, gst: response.gst }))
+          );
+
+          console.log("✅ FINAL RESPONSE", allData);
+
+          // Summing sub_parameter_weighted_average by zone_code
+          const summedByZone = allData.reduce((acc, item) => {
+            const zoneCode = item.zone_code;
+            const value = parseFloat(item.sub_parameter_weighted_average) || 0; // Convert to number, default 0
+
+            if (!acc[zoneCode]) {
+              acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
+            }
+            acc[zoneCode].sub_parameter_weighted_average += value;
+
+            return acc;
+          }, {});
+
+          // Formatting and sorting data
+          const reducedAllData = Object.values(summedByZone).map((item) => ({
+            ...item,
+            //weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            weighted_average: ((item.sub_parameter_weighted_average * 6) / 10).toFixed(2),
           }));
 
           console.log("✅ Reduced All Data:", reducedAllData);
@@ -2220,7 +2657,8 @@ const MISReporttable = ({
           // Formatting and sorting data
           const reducedAllData = Object.values(summedByZone).map((item) => ({
             ...item,
-            weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            //weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            weighted_average: ((item.sub_parameter_weighted_average * 6) / 10).toFixed(2),
           }));
 
           console.log("✅ Reduced All Data:", reducedAllData);
@@ -2324,7 +2762,113 @@ const MISReporttable = ({
           // Formatting and sorting data
           const reducedAllData = Object.values(summedByZone).map((item) => ({
             ...item,
-            weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            //weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            weighted_average: ((item.sub_parameter_weighted_average * 6) / 10).toFixed(2),
+          }));
+
+          console.log("✅ Reduced All Data:", reducedAllData);
+
+          const sorted = reducedAllData.sort((a, b) => a.zone_code - b.zone_code);
+
+          // Apply coloring based on weighted_average
+          return sorted.map((item, index) => {
+            const total = item.sub_parameter_weighted_average;
+            let props = {};
+
+            if (total >= 7.5) {
+              props = { color: "success" }; // High performance
+            } else if (total >= 5) {
+              props = { color: "warning" };
+            } else if (total <= 2.5) {
+              props = { color: "danger" }; // Low performance
+            } else {
+              props = { color: "primary" }; // Normal
+            }
+
+            return {
+              ...item,
+              _cellProps: props,
+              s_no: index + 1,
+            };
+          });
+        };
+
+        // Process data for each month
+        const enhancedData1 = processData(responses[0]);
+        const enhancedData2 = processData(responses[1]);
+        const enhancedData3 = processData(responses[2]);
+        const enhancedData4 = processData(responses[3]);
+        const enhancedData5 = processData(responses[4]);
+        const enhancedData6 = processData(responses[5]);
+
+        // Debugging Logs
+        console.log("✅ Enhanced Data 1", enhancedData1);
+        console.log("✅ Enhanced Data 2", enhancedData2);
+        console.log("✅ Enhanced Data 3", enhancedData3);
+        console.log("✅ Enhanced Data 4", enhancedData4);
+        console.log("✅ Enhanced Data 5", enhancedData5);
+        console.log("✅ Enhanced Data 6", enhancedData6);
+
+        // Update state with the processed data
+        setData1(enhancedData1);
+        setData2(enhancedData2);
+        setData3(enhancedData3);
+        setData4(enhancedData4);
+        setData5(enhancedData5);
+        setData6(enhancedData6);
+      } else if (name === "CommissionerAppeals") {
+        const endpoints = ["cus12a", "cus12b"];
+        const months = [newdate, previousmonth1, previousmonth2, previousmonth3, previousmonth4, previousmonth5];
+
+        // Fetch data for all months and endpoints
+        const responses = await Promise.all(
+          months.map((month) =>
+            Promise.all(
+              endpoints.map((endpoint) =>
+                apiClient
+                  .get(`/cbic/custom/${endpoint}`, { params: { month_date: month, type: "zone" } })
+                  .then((response) => ({
+                    data: response.data,
+                    gst: endpoint.toUpperCase(),
+                  }))
+                  .catch((error) => {
+                    console.error(`❌ API error for ${endpoint} (${month}):`, error);
+                    return { data: [], gst: endpoint.toUpperCase() }; // Return empty data on failure
+                  })
+              )
+            )
+          )
+        );
+
+        // Stop loading when all data is received
+        setLoading(false);
+
+        // Function to process data
+        const processData = (responseData) => {
+          const allData = responseData.flatMap((response) =>
+            response.data.map((item) => ({ ...item, gst: response.gst }))
+          );
+
+          console.log("✅ FINAL RESPONSE", allData);
+
+          // Summing sub_parameter_weighted_average by zone_code
+          const summedByZone = allData.reduce((acc, item) => {
+            const zoneCode = item.zone_code;
+            const value = parseFloat(item.sub_parameter_weighted_average) || 0; // Convert to number, default 0
+
+            if (!acc[zoneCode]) {
+              acc[zoneCode] = { ...item, sub_parameter_weighted_average: 0 };
+            }
+            acc[zoneCode].sub_parameter_weighted_average += value;
+
+            return acc;
+          }, {});
+
+          // Formatting and sorting data
+          const reducedAllData = Object.values(summedByZone).map((item) => ({
+            ...item,
+            //weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            weighted_average: ((item.sub_parameter_weighted_average * 8) / 10).toFixed(2),
           }));
 
           console.log("✅ Reduced All Data:", reducedAllData);
@@ -2428,7 +2972,8 @@ const MISReporttable = ({
           // Formatting and sorting data
           const reducedAllData = Object.values(summedByZone).map((item) => ({
             ...item,
-            weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            //weighted_average: item.sub_parameter_weighted_average.toFixed(2),
+            weighted_average: ((item.sub_parameter_weighted_average * 12) / 10).toFixed(2),
           }));
 
           console.log("✅ Reduced All Data:", reducedAllData);
@@ -2482,434 +3027,9 @@ const MISReporttable = ({
         setData5(enhancedData5);
         setData6(enhancedData6);
       }
-      else if (
-        name === "CommissionerAppeals" ||
-        name === "DisposalOfConfiscatedGoldAndNDPS"
-      ) {
-        const responsei = await apiClient.get(
-          `/cbic/custom/parameter/${name}`,
-          {
-            params: {
-              month_date: newdate,
-              type: "all_commissary",
-            },
-          }
-        );
 
-        console.log("responsei", responsei);
-
-        const responseii = await apiClient.get(
-          `/cbic/custom/parameter/${name}`,
-          {
-            params: {
-              month_date: previousmonth1,
-              type: "all_commissary",
-            },
-          }
-        );
-
-
-
-        const responseiii = await apiClient.get(
-          `/cbic/custom/parameter/${name}`,
-          {
-            params: {
-              month_date: previousmonth2,
-              type: "all_commissary",
-            },
-          }
-        );
-
-
-
-        const responseiv = await apiClient.get(
-          `/cbic/custom/parameter/${name}`,
-          {
-            params: {
-              month_date: previousmonth3,
-              type: "all_commissary",
-            },
-          }
-        );
-
-
-
-        const responsev = await apiClient.get(
-          `/cbic/custom/parameter/${name}`,
-          {
-            params: {
-              month_date: previousmonth4,
-              type: "all_commissary",
-            },
-          }
-        );
-
-
-
-        const responsevi = await apiClient.get(
-          `/cbic/custom/parameter/${name}`,
-          {
-            params: {
-              month_date: previousmonth5,
-              type: "all_commissary",
-            },
-          }
-        );
-
-
-
-        //MIS Reports API
-        const response1 = await apiClient.get(
-          `/cbic/CustomMISReports/${name}`,
-          {
-            params: {
-              month_date: newdate,
-              type: "1_Month",
-            },
-          }
-        );
-
-        const response2 = await apiClient.get(
-          `/cbic/CustomMISReports/${name}`,
-          {
-            params: {
-              month_date: newdate,
-              type: "2_Month",
-            },
-          }
-        );
-
-        const response3 = await apiClient.get(
-          `/cbic/CustomMISReports/${name}`,
-          {
-            params: {
-              month_date: newdate,
-              type: "3_Month",
-            },
-          }
-        );
-
-        const response4 = await apiClient.get(
-          `/cbic/CustomMISReports/${name}`,
-          {
-            params: {
-              month_date: newdate,
-              type: "4_Month",
-            },
-          }
-        );
-
-        const response5 = await apiClient.get(
-          `/cbic/CustomMISReports/${name}`,
-          {
-            params: {
-              month_date: newdate,
-              type: "5_Month",
-            },
-          }
-        );
-
-        const response6 = await apiClient.get(
-          `/cbic/CustomMISReports/${name}`,
-          {
-            params: {
-              month_date: newdate,
-              type: "6_Month",
-            },
-          }
-        );
-
-        console.log("Response1", response1.data);
-
-        const sorted1 = responsei.data.sort(
-          (a, b) => b.totalScore - a.totalScore
-        );
-
-        console.log("sorted1", sorted1);
-
-        const sorted2 = responseii.data.sort(
-          (a, b) => b.totalScore - a.totalScore
-        );
-        const sorted3 = responseiii.data.sort(
-          (a, b) => b.totalScore - a.totalScore
-        );
-        const sorted4 = responseiv.data.sort(
-          (a, b) => b.totalScore - a.totalScore
-        );
-        const sorted5 = responsev.data.sort(
-          (a, b) => b.totalScore - a.totalScore
-        );
-        const sorted6 = responsevi.data.sort(
-          (a, b) => b.totalScore - a.totalScore
-        );
-
-        const enhancedData1 = response1.data.map((item, index) => {
-          const total = item.weighted_average;
-
-          console.log("total", total);
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" };
-          } else if (total >= 5 && total < 7.5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" };
-          } else {
-            props = { color: "primary" };
-          }
-
-          return {
-            ...item,
-            _props: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        // const enhancedData1 = sorted1.map((item, index) => {
-        //   const total = sorted1.length;
-        //   const firstquarter = total * 0.25;
-        //   const secondquarter = total * 0.5;
-        //   const thirdquarter = total * 0.75;
-
-        //   let props = {};
-        //   if (index < firstquarter) {
-        //     props = { color: "success" };
-        //   } else if (index >= firstquarter && index < secondquarter) {
-        //     props = { color: "warning" };
-        //   } else if (index >= thirdquarter) {
-        //     props = { color: "danger" };
-        //   } else {
-        //     props = { color: "primary" };
-        //   }
-
-        //   return {
-        //     ...item,
-        //     _props: props, // Add _props field dynamically
-        //     s_no: index + 1,
-        //   };
-        // });
-
-        const enhancedData2 = response2.data.map((item, index) => {
-          const total = item.weighted_average;
-
-
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" };
-          } else if (total >= 5 && total < 7.5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" };
-          } else {
-            props = { color: "primary" };
-          }
-
-          return {
-            ...item,
-            _props: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const enhancedData3 = response3.data.map((item, index) => {
-          const total = item.weighted_average;
-
-
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" };
-          } else if (total >= 5 && total < 7.5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" };
-          } else {
-            props = { color: "primary" };
-          }
-
-          return {
-            ...item,
-            _props: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const enhancedData4 = response4.data.map((item, index) => {
-          const total = item.weighted_average;
-
-
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" };
-          } else if (total >= 5 && total < 7.5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" };
-          } else {
-            props = { color: "primary" };
-          }
-
-          return {
-            ...item,
-            _props: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const enhancedData5 = response5.data.map((item, index) => {
-          const total = item.weighted_average;
-
-
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" };
-          } else if (total >= 5 && total < 7.5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" };
-          } else {
-            props = { color: "primary" };
-          }
-
-          return {
-            ...item,
-            _props: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        const enhancedData6 = response6.data.map((item, index) => {
-          const total = item.weighted_average;
-
-
-
-          let props = {};
-          if (total <= 10 && total >= 7.5) {
-            props = { color: "success" };
-          } else if (total >= 5 && total < 7.5) {
-            props = { color: "warning" };
-          } else if (total >= 0 && total <= 2.5) {
-            props = { color: "danger" };
-          } else {
-            props = { color: "primary" };
-          }
-
-          return {
-            ...item,
-            _props: props, // Add _props field dynamically
-            s_no: index + 1,
-          };
-        });
-
-        if (
-          response1 &&
-          response2 &&
-          response3 &&
-          response4 &&
-          response5 &&
-          response6
-        ) {
-          setLoading(false);
-        }
-
-        const matchingdata1 = response1.data.map((item) => {
-          const matchingitem = enhancedData1.find(
-            (item0) => item0.zone_code === item.zone_code
-          );
-          if (matchingitem) {
-            return {
-              ...item,
-              _cellProps: matchingitem._props, // Substituting _props as _cellProps
-            };
-          }
-
-          return item;
-        });
-
-
-        const matchingdata2 = response2.data.map((item) => {
-          const matchingitem = enhancedData2.find(
-            (item0) => item0.zone_code === item.zone_code
-          );
-          if (matchingitem) {
-            return {
-              ...item,
-              _cellProps: matchingitem._props, // Substituting _props as _cellProps
-            };
-          }
-
-          return item;
-        });
-
-        const matchingdata3 = response3.data.map((item) => {
-          const matchingitem = enhancedData3.find(
-            (item0) => item0.zone_code === item.zone_code
-          );
-          if (matchingitem) {
-            return {
-              ...item,
-              _cellProps: matchingitem._props, // Substituting _props as _cellProps
-            };
-          }
-
-          return item;
-        });
-
-        const matchingdata4 = response4.data.map((item) => {
-          const matchingitem = enhancedData4.find(
-            (item0) => item0.zone_code === item.zone_code
-          );
-          if (matchingitem) {
-            return {
-              ...item,
-              _cellProps: matchingitem._props, // Substituting _props as _cellProps
-            };
-          }
-
-          return item;
-        });
-
-        const matchingdata5 = response5.data.map((item) => {
-          const matchingitem = enhancedData5.find(
-            (item0) => item0.zone_code === item.zone_code
-          );
-          if (matchingitem) {
-            return {
-              ...item,
-              _cellProps: matchingitem._props, // Substituting _props as _cellProps
-            };
-          }
-
-          return item;
-        });
-
-        const matchingdata6 = response6.data.map((item) => {
-          const matchingitem = enhancedData6.find(
-            (item0) => item0.zone_code === item.zone_code
-          );
-          if (matchingitem) {
-            return {
-              ...item,
-              _cellProps: matchingitem._props, // Substituting _props as _cellProps
-            };
-          }
-
-          return item;
-        });
-
-        console.log("Matching Data1", matchingdata1);
-
-        setData1(matchingdata1);
-        setData2(matchingdata2);
-        setData3(matchingdata3);
-        setData4(matchingdata4);
-        setData5(matchingdata5);
-        setData6(matchingdata6);
-      } else {
+      
+      else {
         //Zone parameters API
         const responsei = await apiClient.get(`/cbic/t_score/${name}`, {
           params: {
@@ -3722,7 +3842,7 @@ const MISReporttable = ({
 
   // Generate final structured data
   const datacustom = zonesFromApi
-    .map((zone , idx) => {
+    .map((zone, idx) => {
       const weightedAvgValues = [
         dataMapsCustom[0][zone]?.weighted_average ?? null,
         dataMapsCustom[1][zone]?.weighted_average ?? null,
